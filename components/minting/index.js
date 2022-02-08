@@ -4,6 +4,7 @@ import Web3 from "web3";
 import NBMonMinting from "../../abis/NBMonMinting.json";
 
 //TODO: NEEDS TO BE REVISITED
+//THIS IS JUST FOR TESTING PURPOSES...
 
 const randomIntFromInterval = (min, max) => {
 	return Math.floor(Math.random() * (max - min + 1) + min);

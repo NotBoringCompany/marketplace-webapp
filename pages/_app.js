@@ -2,6 +2,9 @@ import { MoralisProvider } from "react-moralis";
 import AppContext, { AppProvider } from "../context/AppContext";
 import { useContext } from "react";
 import "../styles/globals.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/root.scss";
+import "../styles/styles.scss";
 
 function MyApp({ Component, pageProps }) {
 	return (

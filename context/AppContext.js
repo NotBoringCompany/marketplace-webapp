@@ -12,11 +12,13 @@ export const AppProvider = ({ children }) => {
 			try {
 				await Moralis.enableWeb3();
 				const web3 = new Web3(Moralis.provider);
+
 				console.log(web3);
 				setWeb3(web3);
+
+				setWeb3Loading(false);
 			} catch (e) {
 				console.log("error moralis", e);
-				setWeb3Loading(false);
 			}
 		}
 		enableWeb3();
