@@ -1,7 +1,17 @@
+import { useContext, useEffect } from "react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { useMoralis } from "react-moralis";
+import AppContext from "context/AppContext";
 
 export default function Home() {
+	const { authenticate, isAuthenticated, logout } = useMoralis();
+	const { web3 } = useContext(AppContext);
+
+	useEffect(() => {
+		console.log(web3);
+	}, [web3]);
+
 	return (
 		<div className={styles.container}>
 			<Head>
