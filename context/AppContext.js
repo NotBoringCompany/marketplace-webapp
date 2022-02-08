@@ -15,11 +15,10 @@ export const AppProvider = ({ children }) => {
 
 				console.log(web3);
 				setWeb3(web3);
-
-				setWeb3Loading(false);
 			} catch (e) {
 				console.log("error moralis", e);
 			}
+			setWeb3Loading(false);
 		}
 		enableWeb3();
 	}, []);

@@ -22,7 +22,7 @@ function MainApp({ Component, pageProps }) {
 			appId={process.env.NEXT_PUBLIC_APP_ID}
 			serverUrl={process.env.NEXT_PUBLIC_SERVER_URL}
 		>
-			{!web3Loading ? <Component {...pageProps} /> : "loading..."}
+			{!web3Loading ? <Component {...pageProps} /> : "loading for web3 init"}
 		</MoralisProvider>
 	);
 }

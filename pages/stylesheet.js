@@ -60,14 +60,15 @@ const Stylesheet = () => {
 
 			<Link href="/">
 				<a>
-					<TextSecondary className="text-secondary">
+					<TextSecondary className="d-inline-block text-secondary">
 						<u>Forgot Password?</u>
 					</TextSecondary>
 				</a>
 			</Link>
+			<br />
 			<Link href="/">
 				<a>
-					<TextSecondary className="text-gray">
+					<TextSecondary className="d-inline-block text-gray">
 						<u>Another Link</u>
 					</TextSecondary>
 				</a>
