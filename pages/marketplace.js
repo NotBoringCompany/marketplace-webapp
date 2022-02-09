@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "components/Layout";
 const Marketplace = () => {
 	return (
-		<Layout>
+		<Layout title="Marketplace">
 			<h2>Marketplace...</h2>
 		</Layout>
 	);

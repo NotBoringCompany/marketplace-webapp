@@ -30,10 +30,10 @@ const MyNavbar = () => {
 			</Link>
 			<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 			<Navbar.Collapse id="responsive-navbar-nav">
-				<Nav className="me-auto">
+				<Nav className="me-auto mt-3 mt-lg-0">
 					{menu.map((m) => (
 						<Link href={`/${m.path}`}>
-							<a className="mx-3">
+							<a className={`mx-0 my-2 mx-lg-3 my-lg-0`}>
 								<HeadingSuperXXS
 									className={`text-${
 										m.path === "/mint" ? `lighterGreen` : `white`
@@ -45,7 +45,7 @@ const MyNavbar = () => {
 						</Link>
 					))}
 				</Nav>
-				<Nav>
+				<Nav className="mt-3 mt-lg-0">
 					<Link href="/connect">
 						<MyButton text="Connect Wallet" />
 					</Link>
