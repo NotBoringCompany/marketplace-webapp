@@ -3,20 +3,32 @@ import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 const StyledButton = styled(Button)`
 	box-shadow: 0px 5px 4px rgba(173, 173, 173, 0.25);
-	padding: 16px 32px;
+	padding: 8px 24px;
 	border-radius: 0%;
 `;
 const StyledP = styled.p`
 	font-family: "Mada";
 	font-weight: 600;
+	font-size: 18px;
 `;
-const MyButton = ({ text, onClick, className, ...props }) => {
-	const { variant } = props;
+const MyButton = ({
+	text,
+	onClick,
+	variant = "secondary",
+	className,
+	...props
+}) => {
 	let textColor = "text-light";
-	if (variant.includes("outline-")) textColor = variant.split("-")[0];
+	if (variant && variant.includes("outline-"))
+		textColor = variant.split("-")[0];
 	return (
-		<StyledButton onClick={onClick} className={className} {...props}>
-			<StyledP className={textColor}>text</StyledP>
+		<StyledButton
+			variant={variant}
+			onClick={onClick}
+			className={className}
+			{...props}
+		>
+			<StyledP className={textColor}>{text}</StyledP>
 		</StyledButton>
 	);
 };

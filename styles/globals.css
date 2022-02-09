@@ -45,9 +45,6 @@ a {
 	text-decoration: none !important;
 }
 
-p {
-}
-
 * {
 	box-sizing: border-box;
 }
@@ -58,4 +55,9 @@ button p {
 
 .btn-outline-secondary:hover {
 	color: #fff !important;
+}
+
+a:hover > h6 {
+	filter: brightness(80%);
+	transition: all 250ms;
 }

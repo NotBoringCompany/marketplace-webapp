@@ -11,5 +11,9 @@ export default function Home() {
 		console.log(web3);
 	}, [web3]);
 
-	return <Layout></Layout>;
+	return (
+		<Layout>
+			<h2>Home..</h2>
+		</Layout>
+	);
 }
