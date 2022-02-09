@@ -8,6 +8,7 @@ import Nav from "react-bootstrap/Nav";
 import MyButton from "./Buttons/Button";
 import { HeadingSuperXXS } from "./Typography/Headings";
 import { menu } from "./Navbar/menu";
+import { useRouter } from "next/router";
 
 const StyledNav = styled(Navbar)`
 	width: 100%;
@@ -15,7 +16,12 @@ const StyledNav = styled(Navbar)`
 	display: flex;
 `;
 
+const StyledLink = styled(HeadingSuperXXS)`
+	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
+`;
+
 const MyNavbar = () => {
+	const router = useRouter();
 	return (
 		<StyledNav
 			collapseOnSelect
@@ -34,13 +40,14 @@ const MyNavbar = () => {
 					{menu.map((m) => (
 						<Link href={`/${m.path}`}>
 							<a className={`mx-0 my-2 mx-lg-3 my-lg-0`}>
-								<HeadingSuperXXS
+								<StyledLink
+									active={m.path === router.pathname}
 									className={`text-${
 										m.path === "/mint" ? `lighterGreen` : `white`
 									}`}
 								>
 									{m.text}
-								</HeadingSuperXXS>
+								</StyledLink>
 							</a>
 						</Link>
 					))}
