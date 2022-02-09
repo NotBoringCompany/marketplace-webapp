@@ -1,7 +1,7 @@
 import React from "react";
-
+import Layout from "components/Layout";
 const Mint = () => {
-	return <div>mint</div>;
+	return <Layout>mint</Layout>;
 };
 
 export default Mint;
