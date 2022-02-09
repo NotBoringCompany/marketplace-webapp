@@ -1,6 +1,5 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
-import styled from "styled-components";
+import Button from "components/Buttons/Button";
 import {
 	HeadingXL,
 	HeadingLG,
@@ -13,15 +12,6 @@ import Link from "next/link";
 import { TextPrimary, TextSecondary } from "../components/Typography/Texts";
 import TextInput from "components/FormInputs/Input";
 
-const StyledButton = styled(Button)`
-	box-shadow: 0px 5px 4px rgba(173, 173, 173, 0.25);
-	padding: 16px 32px;
-	border-radius: 0%;
-`;
-const StyledP = styled.p`
-	font-family: "Mada";
-	font-weight: 600;
-`;
 const Stylesheet = () => {
 	return (
 		<div className="container my-4">
@@ -76,15 +66,9 @@ const Stylesheet = () => {
 			<hr className="my-5" />
 
 			<div className="d-flex flex-column">
-				<StyledButton variant="secondary">
-					<StyledP className="text-light">Connect Wallet</StyledP>
-				</StyledButton>
-
+				<Button text={"Connect Wallet"} variant="secondary" />
 				<div className="my-2"></div>
-
-				<StyledButton variant="outline-secondary">
-					<StyledP>Some Text</StyledP>
-				</StyledButton>
+				<Button text={"Connect Wallet"} variant="outline-secondary" />
 			</div>
 		</div>
 	);
