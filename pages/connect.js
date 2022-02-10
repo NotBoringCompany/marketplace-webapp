@@ -1,4 +1,6 @@
 import React from "react";
+import Image from "react-bootstrap/Image";
+
 import Layout from "components/Layout";
 
 import Container from "react-bootstrap/Container";
@@ -13,6 +15,8 @@ import MyButton from "components/Buttons/Button";
 
 import SignInBox from "../components/SignIn/SignInBox";
 
+import NBMons from "../public/images/nbmons.png";
+
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
 	padding-bottom: 32px;
@@ -21,27 +25,35 @@ const StyledContainer = styled(Container)`
 
 const Connect = () => {
 	return (
-		<Layout title="Connect | Realm Hunter">
-			<StyledContainer className="bg-primary d-flex flex-column justify-content-center">
+		<Layout showMonsters title="Connect | Realm Hunter">
+			<StyledContainer className="bg-primary d-flex flex-column justify-content-center position-relative">
 				<Row>
-					<Col xl={6} lg={6} md={12}>
+					<Col xl={6} lg={6} md={12} className="d-flex d-lg-block">
 						<MyButton
 							variant="outline-secondary"
 							text="Back to Marketplace"
 							isLink
 							to="/"
+							className="mx-auto"
 						/>
 					</Col>
-					<Col xl={6} lg={6} md={12}>
-						<HeadingSM as="h1" className="text-white">
+					<Col
+						className="mt-5 mt-lg-0 d-flex flex-column d-lg-block align-content-center"
+						xl={6}
+						lg={6}
+						md={12}
+					>
+						<HeadingSM as="h1" className="text-center text-lg-start text-white">
 							Connect
 						</HeadingSM>
-						<TextPrimary className="mt-3 mb-5 text-white">
+						<TextPrimary className="text-center text-lg-start mt-3 mb-5 text-white">
 							Join our Marketplace by connecting your wallet.
 						</TextPrimary>
 						<MyButton text="Connect with Metamask" variant="secondary" />
 
-						<TextPrimary className="my-5 text-white">or</TextPrimary>
+						<TextPrimary className="my-5 text-center text-lg-start text-white">
+							or
+						</TextPrimary>
 						<SignInBox />
 					</Col>
 				</Row>

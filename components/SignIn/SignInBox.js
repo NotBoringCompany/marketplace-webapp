@@ -11,7 +11,10 @@ const Box = styled.div`
 
 const SignInBox = ({ email = "", password = "", className, ...props }) => {
 	return (
-		<Box className={`p-4 bg-primaryComplement ${className}`} {...props}>
+		<Box
+			className={`p-3 p-md-4 p-lg-4 bg-primaryComplement ${className}`}
+			{...props}
+		>
 			<TextInput
 				variant="dark"
 				placeholder="Email"

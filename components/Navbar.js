@@ -18,6 +18,7 @@ const StyledNav = styled(Navbar)`
 	padding: 16px;
 	display: flex;
 	box-shadow: 0px 4px 4px rgba(66, 202, 159, 0.2);
+	z-index: 1;
 `;
 
 const StyledLink = styled(HeadingSuperXXS)`
@@ -59,7 +60,12 @@ const MyNavbar = () => {
 					))}
 				</Nav>
 				<Nav className="mt-3 mt-lg-0">
-					<MyButton text="Connect Wallet" isLink href="/connect" />
+					<MyButton
+						text="Connect Wallet"
+						className="w-100"
+						isLink
+						href="/connect"
+					/>
 				</Nav>
 			</Navbar.Collapse>
 		</StyledNav>
