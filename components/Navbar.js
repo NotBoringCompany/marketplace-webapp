@@ -17,7 +17,7 @@ const StyledNav = styled(Navbar)`
 	width: 100%;
 	padding: 16px;
 	display: flex;
-	box-shadow: 0px 4px 4px rgba(66, 202, 159, 0.2);
+	box-shadow: 0px 4px 4px rgba(66, 202, 159, 0.1);
 	z-index: 1;
 `;
 
