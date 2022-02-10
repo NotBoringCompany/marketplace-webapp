@@ -3,13 +3,13 @@ import FormControl from "react-bootstrap/FormControl";
 import styled from "styled-components";
 const StyledFormControl = styled(FormControl)`
 	border-radius: 0%;
-	padding: 16px;
-	background: ${(props) => (props.variant === "light" ? `#fff` : `#212121`)};
+	padding: 10px 16px;
+	background: ${(props) => (props.variant === "light" ? `#fff` : `#181818`)};
 	border: 2px solid rgba(176, 176, 176, 0.35);
-	color: ${(props) => (props.variant === "light" ? `#212121` : `#fff`)};
+	color: ${(props) => (props.variant === "light" ? `#181818` : `#fff`)};
 
 	&:focus {
-		background: ${(props) => (props.variant === "light" ? `#fff` : `#0D0D0D`)};
+		background: ${(props) => (props.variant === "light" ? `#fff` : `black`)};
 		color: ${(props) => (props.variant === "light" ? `#212121` : `#fff`)};
 	}
 `;

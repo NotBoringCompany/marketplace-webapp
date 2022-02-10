@@ -18,8 +18,7 @@ const Layout = ({
 				<link rel="shortcut icon" href="imgs/favicon.ico" />
 			</Head>
 			<Navbar />
-
-			{children}
+			<div className="bg-primary">{children}</div>
 			<Footer />
 		</div>
 	);

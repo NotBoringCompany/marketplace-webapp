@@ -13,7 +13,7 @@ export default function Home() {
 
 	return (
 		<Layout>
-			<h2>Home..</h2>
+			<h2 className="text-white">Home..</h2>
 		</Layout>
 	);
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import Button from "react-bootstrap/Button";
 import styled from "styled-components";
@@ -16,12 +17,23 @@ const MyButton = ({
 	onClick,
 	variant = "secondary",
 	className,
+	isLink = false,
+	href = "/",
 	...props
 }) => {
 	let textColor = "text-light";
 	if (variant && variant.includes("outline-"))
 		textColor = variant.split("-")[0];
-	return (
+	const LinkComponent = (
+		<Link href={href}>
+			<a>
+				<StyledButton variant={variant} className={className} {...props}>
+					<StyledP className={textColor}>{text}</StyledP>
+				</StyledButton>
+			</a>
+		</Link>
+	);
+	const RegularButton = (
 		<StyledButton
 			variant={variant}
 			onClick={onClick}
@@ -31,6 +43,8 @@ const MyButton = ({
 			<StyledP className={textColor}>{text}</StyledP>
 		</StyledButton>
 	);
+	const rendered = isLink ? <>{LinkComponent}</> : <>{RegularButton}</>;
+	return <>{rendered}</>;
 };
 
 export default MyButton;

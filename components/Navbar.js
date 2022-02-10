@@ -11,12 +11,13 @@ import { HeadingSuperXXS } from "./Typography/Headings";
 import { menu } from "./Navbar/menu";
 import { useRouter } from "next/router";
 
-import Logo from "../public/logo.png";
+import Logo from "../public/images/logo.png";
 
 const StyledNav = styled(Navbar)`
 	width: 100%;
 	padding: 16px;
 	display: flex;
+	box-shadow: 0px 4px 4px rgba(66, 202, 159, 0.2);
 `;
 
 const StyledLink = styled(HeadingSuperXXS)`
@@ -29,7 +30,7 @@ const MyNavbar = () => {
 		<StyledNav
 			collapseOnSelect
 			expand="lg"
-			className="bg-primary"
+			className="bg-primaryComplement"
 			variant="dark"
 		>
 			<Link href="/">
@@ -58,9 +59,7 @@ const MyNavbar = () => {
 					))}
 				</Nav>
 				<Nav className="mt-3 mt-lg-0">
-					<Link href="/connect">
-						<MyButton text="Connect Wallet" />
-					</Link>
+					<MyButton text="Connect Wallet" isLink href="/connect" />
 				</Nav>
 			</Navbar.Collapse>
 		</StyledNav>

@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 
 import { TextPrimary, TextSecondary } from "../components/Typography/Texts";
-import TextInput from "components/FormInputs/Input";
+import TextInput from "components/FormInputs/TextInput";
 
 const Stylesheet = () => {
 	return (
