@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 
@@ -9,6 +10,8 @@ import MyButton from "./Buttons/Button";
 import { HeadingSuperXXS } from "./Typography/Headings";
 import { menu } from "./Navbar/menu";
 import { useRouter } from "next/router";
+
+import Logo from "../public/logo.png";
 
 const StyledNav = styled(Navbar)`
 	width: 100%;
@@ -31,7 +34,9 @@ const MyNavbar = () => {
 		>
 			<Link href="/">
 				<a>
-					<Navbar.Brand>Our Logo</Navbar.Brand>
+					<Navbar.Brand>
+						<Image src={Logo} alt="NBCompany" width={64} height={64} />
+					</Navbar.Brand>
 				</a>
 			</Link>
 			<Navbar.Toggle aria-controls="responsive-navbar-nav" />
