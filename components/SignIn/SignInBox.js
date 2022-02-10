@@ -27,11 +27,7 @@ const SignInBox = ({ email = "", password = "", className, ...props }) => {
 				className="mt-3 mb-1 text-secondary"
 				text="Forgotten your password?"
 			/>
-			<MyButton
-				text="Sign In"
-				className="w-100 mt-3 mb-3 text-secondary"
-				text="Forgotten your password?"
-			/>
+			<MyButton text="Sign In" className="w-100 mt-3 mb-3 text-secondary" />
 			<TextSecondary className="mt-4 text-white">
 				You must previously have connected your wallet to our marketplace to be
 				able to sign in using email and password.

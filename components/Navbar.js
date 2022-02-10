@@ -65,6 +65,7 @@ const MyNavbar = () => {
 						className="w-100"
 						isLink
 						href="/connect"
+						img={"./images/metamask.svg"}
 					/>
 				</Nav>
 			</Navbar.Collapse>

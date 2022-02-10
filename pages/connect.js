@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "react-bootstrap/Image";
 
 import Layout from "components/Layout";
 
@@ -28,13 +27,18 @@ const Connect = () => {
 		<Layout showMonsters title="Connect | Realm Hunter">
 			<StyledContainer className="bg-primary d-flex flex-column justify-content-center position-relative">
 				<Row>
-					<Col xl={6} lg={6} md={12} className="d-flex d-lg-block">
+					<Col
+						xl={6}
+						lg={6}
+						md={12}
+						className="d-flex d-lg-block justify-content-center"
+					>
 						<MyButton
 							variant="outline-secondary"
 							text="Back to Marketplace"
 							isLink
+							backIcon
 							to="/"
-							className="mx-auto"
 						/>
 					</Col>
 					<Col

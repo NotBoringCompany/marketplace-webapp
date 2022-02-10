@@ -2,10 +2,18 @@ import Link from "next/link";
 import React from "react";
 import Button from "react-bootstrap/Button";
 import styled from "styled-components";
+import Image from "react-bootstrap/Image";
+import { MdArrowBackIos } from "react-icons/md";
+
 const StyledButton = styled(Button)`
 	box-shadow: 0px 5px 4px rgba(173, 173, 173, 0.25);
 	padding: 8px 24px;
 	border-radius: 0%;
+	transition: 0.35s all;
+
+	&:hover {
+		transform: scale(1.01) translate(1px, -3px);
+	}
 `;
 const StyledP = styled.p`
 	font-family: "Mada";
@@ -18,6 +26,8 @@ const MyButton = ({
 	variant = "secondary",
 	className,
 	isLink = false,
+	img = null,
+	backIcon = false,
 	href = "/",
 	...props
 }) => {
@@ -27,7 +37,13 @@ const MyButton = ({
 	const LinkComponent = (
 		<Link href={href}>
 			<a>
-				<StyledButton variant={variant} className={className} {...props}>
+				<StyledButton
+					variant={variant}
+					className={`d-flex align-items-center justify-content-center ${className}`}
+					{...props}
+				>
+					{backIcon && <MdArrowBackIos />}
+					{img && <Image src={img} width={32} height={32} className="me-2" />}
 					<StyledP className={textColor}>{text}</StyledP>
 				</StyledButton>
 			</a>
@@ -40,6 +56,7 @@ const MyButton = ({
 			className={className}
 			{...props}
 		>
+			{img && <Image src={img} />}
 			<StyledP className={textColor}>{text}</StyledP>
 		</StyledButton>
 	);
