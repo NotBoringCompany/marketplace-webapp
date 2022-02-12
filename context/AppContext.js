@@ -22,6 +22,7 @@ export const AppProvider = ({ children }) => {
 		}
 		enableWeb3();
 	}, []);
+
 	return (
 		<AppContext.Provider
 			value={{

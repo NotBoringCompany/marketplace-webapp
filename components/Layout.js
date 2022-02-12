@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import Navbar from "./Navbar";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
+
 const NBMonsImage = styled(Image)`
 	position: absolute;
 	bottom: 0;

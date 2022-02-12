@@ -48,7 +48,7 @@ const Stylesheet = () => {
 				className="mb-4"
 			/>
 
-			<Link href="/">
+			<Link href="#">
 				<a>
 					<TextSecondary className="d-inline-block text-secondary">
 						<u>Forgot Password?</u>
@@ -56,7 +56,7 @@ const Stylesheet = () => {
 				</a>
 			</Link>
 			<br />
-			<Link href="/">
+			<Link href="#">
 				<a>
 					<TextSecondary className="d-inline-block text-gray">
 						<u>Another Link</u>

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useMoralis } from "react-moralis";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -25,8 +26,32 @@ const StyledLink = styled(HeadingSuperXXS)`
 	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
 `;
 
+const RightContent = () => {
+	const { isAuthenticated, logout } = useMoralis();
+
+	const connectButton = (
+		<MyButton
+			text="Connect Wallet"
+			className="w-100"
+			isLink
+			img={"./images/metamask.svg"}
+			href="/connect"
+		/>
+	);
+	const logoutButton = (
+		<MyButton text="Sign Out" className="w-100" onClick={logout} />
+	);
+
+	return (
+		<Nav className="mt-3 mt-lg-0">
+			{!isAuthenticated ? connectButton : logoutButton}
+		</Nav>
+	);
+};
+
 const MyNavbar = () => {
 	const router = useRouter();
+
 	return (
 		<StyledNav
 			collapseOnSelect
@@ -45,7 +70,7 @@ const MyNavbar = () => {
 			<Navbar.Collapse id="responsive-navbar-nav">
 				<Nav className="me-auto mt-3 mt-lg-0">
 					{menu.map((m) => (
-						<Link href={`/${m.path}`}>
+						<Link key={m.path} href={`${m.path}`}>
 							<a className={`mx-0 my-2 mx-lg-3 my-lg-0`}>
 								<StyledLink
 									active={m.path === router.pathname}
@@ -59,15 +84,7 @@ const MyNavbar = () => {
 						</Link>
 					))}
 				</Nav>
-				<Nav className="mt-3 mt-lg-0">
-					<MyButton
-						text="Connect Wallet"
-						className="w-100"
-						isLink
-						href="/connect"
-						img={"./images/metamask.svg"}
-					/>
-				</Nav>
+				<RightContent />
 			</Navbar.Collapse>
 		</StyledNav>
 	);

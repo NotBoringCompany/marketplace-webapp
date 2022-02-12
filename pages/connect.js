@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useMoralis } from "react-moralis";
+import { useRouter } from "next/router";
 
 import Layout from "components/Layout";
 
@@ -14,7 +16,7 @@ import MyButton from "components/Buttons/Button";
 
 import SignInBox from "../components/SignIn/SignInBox";
 
-import NBMons from "../public/images/nbmons.png";
+import mustBeUnauthed from "utils/mustBeUnauthed";
 
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
@@ -23,6 +25,15 @@ const StyledContainer = styled(Container)`
 `;
 
 const Connect = () => {
+	const { authenticate, isAuthenticated } = useMoralis();
+	const router = useRouter();
+
+	useEffect(() => {
+		if (isAuthenticated) router.replace("/");
+	}, [isAuthenticated]);
+
+	if (isAuthenticated) return <p>Authenticated</p>;
+
 	return (
 		<Layout showMonsters title="Connect | Realm Hunter">
 			<StyledContainer className="bg-primary d-flex flex-column justify-content-center position-relative">
@@ -53,7 +64,11 @@ const Connect = () => {
 						<TextPrimary className="text-center text-lg-start mt-3 mb-5 text-white">
 							Join our Marketplace by connecting your wallet.
 						</TextPrimary>
-						<MyButton text="Connect with Metamask" variant="secondary" />
+						<MyButton
+							text="Connect with Metamask"
+							variant="secondary"
+							onClick={authenticate}
+						/>
 
 						<TextPrimary className="my-5 text-center text-lg-start text-white">
 							or
@@ -66,4 +81,4 @@ const Connect = () => {
 	);
 };
 
-export default Connect;
+export default mustBeUnauthed(Connect);
