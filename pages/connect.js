@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
 import Layout from "components/Layout";
@@ -33,13 +33,13 @@ const Connect = () => {
 		hasAuthError,
 		authError,
 	} = useMoralis();
-
+	const [triedAuth, setTriedAuth] = useState(false);
 	useEffect(() => {
 		console.log(isWeb3Enabled);
 	}, [isWeb3Enabled, isAuthenticated, enableWeb3]);
 
 	useEffect(() => {
-		if (hasAuthError) {
+		if (hasAuthError && triedAuth) {
 			//TODO, refactor the below...
 			if (authError.message === "Non ethereum enabled browser")
 				alert("Please download Metamask to continue. :)");
@@ -54,11 +54,12 @@ const Connect = () => {
 
 			console.log(authError.message);
 		}
-	}, [hasAuthError]);
+	}, [hasAuthError, triedAuth]);
 
 	if (isAuthenticated) return <p>Authenticated</p>;
 
 	const auth = async () => {
+		setTriedAuth(true);
 		await authenticate({ provider: "metamask" });
 	};
 
