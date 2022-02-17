@@ -9,6 +9,7 @@ const mustBeUnauthed = (Component) => {
 		let description = "";
 		let title = "";
 		switch (router.pathname) {
+			//for SEO in the future... :)
 			case "/connect":
 				title = "Connect | Realm Hunter";
 				description = "Join our Marketplace by connecting your wallet.";

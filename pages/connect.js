@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useMoralis } from "react-moralis";
-import { useRouter } from "next/router";
 
 import Layout from "components/Layout";
 
@@ -25,14 +24,37 @@ const StyledContainer = styled(Container)`
 `;
 
 const Connect = () => {
-	const { authenticate, isAuthenticated } = useMoralis();
-	const router = useRouter();
+	const {
+		authenticate,
+		isAuthenticated,
+		isAuthenticating,
+		isWeb3Enabled,
+		enableWeb3,
+		hasAuthError,
+		authError,
+	} = useMoralis();
 
 	useEffect(() => {
-		if (isAuthenticated) router.replace("/");
-	}, [isAuthenticated]);
+		console.log(isWeb3Enabled);
+	}, [isWeb3Enabled, isAuthenticated, enableWeb3]);
+
+	useEffect(() => {
+		if (hasAuthError) {
+			//TODO, refactor the below...
+			if (authError.message === "Non ethereum enabled browser")
+				alert("Please download Metamask to continue. :)");
+			else
+				alert(
+					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."
+				);
+		}
+	}, [hasAuthError]);
 
 	if (isAuthenticated) return <p>Authenticated</p>;
+
+	const auth = async () => {
+		await authenticate({ provider: "metamask" });
+	};
 
 	return (
 		<Layout showMonsters title="Connect | Realm Hunter">
@@ -64,10 +86,14 @@ const Connect = () => {
 						<TextPrimary className="text-center text-lg-start mt-3 mb-5 text-white">
 							Join our Marketplace by connecting your wallet.
 						</TextPrimary>
+
 						<MyButton
-							text="Connect with Metamask"
+							text={
+								!isAuthenticating ? "Connect with Metamask" : "Connecting..."
+							}
 							variant="secondary"
-							onClick={authenticate}
+							onClick={auth}
+							disabled={isAuthenticating}
 						/>
 
 						<TextPrimary className="my-5 text-center text-lg-start text-white">

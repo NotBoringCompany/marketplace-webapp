@@ -11,12 +11,12 @@ const randomIntFromInterval = (min, max) => {
 };
 
 const index = () => {
-	const { Moralis, authenticate, isAuthenticated, logout } = useMoralis();
+	const { Moralis } = useMoralis();
 
 	const mintingAbi = NBMonMinting;
 
 	const mintNBMon = async () => {
-		await Moralis.enableWeb3();
+		// await Moralis.enableWeb3();
 		const web3 = new Web3(Moralis.provider);
 
 		const contract = new web3.eth.Contract(
@@ -29,13 +29,18 @@ const index = () => {
 			.send({ from: web3.currentProvider.selectedAddress });
 		const NBMonId =
 			parseInt(receipt.events.NBMonMinted.returnValues._nbmonId) - 1;
-		const nbMon = await contract.methods
-			.getNBMon(NBMonId)
-			.call({ from: web3.currentProvider.selectedAddress });
-		console.log("minted", nbMon);
+
+		// const nbMon = await contract.methods
+		// 	.getNBMon(1)
+		// 	.call({ from: web3.currentProvider.selectedAddress });
+		console.log("minted", NBMonId);
 	};
 
-	return <div></div>;
+	return (
+		<div>
+			<button onClick={mintNBMon}>asd</button>{" "}
+		</div>
+	);
 };
 
 export default index;

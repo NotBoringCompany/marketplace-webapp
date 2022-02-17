@@ -1,9 +1,7 @@
-import { useContext, useEffect } from "react";
 import { useMoralis } from "react-moralis";
 
 import Container from "react-bootstrap/Container";
 
-import AppContext from "context/AppContext";
 import Layout from "components/Layout";
 import styled from "styled-components";
 
@@ -15,11 +13,6 @@ const StyledContainer = styled(Container)`
 
 export default function Home() {
 	const { isAuthenticated } = useMoralis();
-	const { web3 } = useContext(AppContext);
-
-	useEffect(() => {
-		console.log(web3);
-	}, [web3]);
 
 	return (
 		<Layout>

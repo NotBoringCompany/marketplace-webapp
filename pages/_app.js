@@ -6,25 +6,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/root.scss";
 import "../styles/styles.scss";
 
-function MyApp({ Component, pageProps }) {
-	return (
-		<AppProvider>
-			<MainApp Component={Component} pageProps={pageProps} />
-		</AppProvider>
-	);
-}
-
-function MainApp({ Component, pageProps }) {
-	// const { web3Loading } = useContext(AppContext);
-
+function Main({ Component, pageProps }) {
 	return (
 		<MoralisProvider
 			appId={process.env.NEXT_PUBLIC_APP_ID}
 			serverUrl={process.env.NEXT_PUBLIC_SERVER_URL}
 		>
-			<Component {...pageProps} />
+			<AppProvider>
+				<Component {...pageProps} />
+			</AppProvider>
 		</MoralisProvider>
 	);
 }
 
-export default MyApp;
+export default Main;

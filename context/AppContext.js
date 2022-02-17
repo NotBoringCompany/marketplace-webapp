@@ -1,38 +1,17 @@
-import { createContext, useState, useEffect } from "react";
-import { Moralis } from "moralis";
-import Web3 from "web3";
+import { createContext, useEffect } from "react";
+import { useMoralis } from "react-moralis";
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-	const [web3, setWeb3] = useState(null);
-	const [web3Loading, setWeb3Loading] = useState(true);
-
+	const { isAuthenticated, isWeb3Enabled, enableWeb3 } = useMoralis();
 	useEffect(() => {
-		async function enableWeb3() {
-			try {
-				await Moralis.enableWeb3();
-				const web3 = new Web3(Moralis.provider);
-
-				console.log(web3);
-				setWeb3(web3);
-			} catch (e) {
-				console.log("error moralis", e);
-			}
-			setWeb3Loading(false);
+		if (!isWeb3Enabled && isAuthenticated) {
+			enableWeb3({ provider: "metamask" });
 		}
-		enableWeb3();
-	}, []);
+		console.log("Web3 enabled: ", isWeb3Enabled);
+	}, [isWeb3Enabled, isAuthenticated]);
 
-	return (
-		<AppContext.Provider
-			value={{
-				web3,
-				web3Loading,
-			}}
-		>
-			{children}
-		</AppContext.Provider>
-	);
+	return <AppContext.Provider value={{}}>{children}</AppContext.Provider>;
 };
 
 export default AppContext;
