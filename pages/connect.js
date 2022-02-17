@@ -43,10 +43,16 @@ const Connect = () => {
 			//TODO, refactor the below...
 			if (authError.message === "Non ethereum enabled browser")
 				alert("Please download Metamask to continue. :)");
-			else
+			else if (
+				authError.message !==
+				"MetaMask Message Signature: User denied message signature."
+			) {
 				alert(
 					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."
 				);
+			}
+
+			console.log(authError.message);
 		}
 	}, [hasAuthError]);
 
