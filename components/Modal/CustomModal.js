@@ -35,7 +35,7 @@ const CustomModal = ({ stateUtils, children, ...props }) => {
 	};
 
 	return (
-		<StyledModal centered show={getter}>
+		<StyledModal onHide={close} centered show={getter}>
 			<StyledModalBody className={`bg-darkGray text-white ${className}`}>
 				<MdOutlineClose className="close text-white mb-1" onClick={close} />
 				{children}

@@ -7,6 +7,7 @@ const Box = styled.div`
 	border: 2px solid rgba(176, 176, 176, 0.35);
 	box-shadow: 0px 4px 4px rgba(66, 202, 159, 0.2);
 	max-width: 560px;
+	border-radius: 8px;
 `;
 
 const SignInBox = ({ email = "", password = "", className, ...props }) => {

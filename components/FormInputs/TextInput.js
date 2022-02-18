@@ -2,7 +2,7 @@ import React from "react";
 import FormControl from "react-bootstrap/FormControl";
 import styled from "styled-components";
 const StyledFormControl = styled(FormControl)`
-	border-radius: 0%;
+	border-radius: 8px;
 	padding: 10px 16px;
 	background: ${(props) => (props.variant === "light" ? `#fff` : `#181818`)};
 	border: 2px solid rgba(176, 176, 176, 0.35);
