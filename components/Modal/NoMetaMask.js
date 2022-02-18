@@ -14,9 +14,12 @@ const CustomHeadingXXS = styled(HeadingXXS)`
 	font-size: 24px;
 `;
 
-const NoMetaMask = () => {
+const NoMetaMask = ({ stateUtils }) => {
 	return (
-		<CustomModal className="d-flex flex-column align-items-center justify-content-center">
+		<CustomModal
+			stateUtils={stateUtils}
+			className="d-flex flex-column align-items-center justify-content-center"
+		>
 			<div className="d-flex mb-3">
 				<Image src={Wallet} width={64} height={64} />
 			</div>
@@ -27,7 +30,13 @@ const NoMetaMask = () => {
 			<TextSecondary className="mt-1 mb-3 text-center">
 				Please set up a <b>MetaMask wallet</b> to connect.
 			</TextSecondary>
-			<MyButton text={"Install MetaMask"} />
+			<MyButton
+				isLink
+				passHref
+				target="_blank"
+				href="https://metamask.io/download/"
+				text={"Install MetaMask"}
+			/>
 		</CustomModal>
 	);
 };

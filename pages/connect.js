@@ -38,6 +38,9 @@ const Connect = () => {
 	} = useMoralis();
 
 	const [triedAuth, setTriedAuth] = useState(false);
+	const [showModalNoMM, setShowModalNoMM] = useState(false);
+
+	const statesModalNoMM = { getter: showModalNoMM, setter: setShowModalNoMM }; // getter + setter
 
 	useEffect(() => {
 		console.log(isWeb3Enabled);
@@ -47,7 +50,7 @@ const Connect = () => {
 		if (hasAuthError && triedAuth) {
 			//TODO, refactor the below...
 			if (authError.message === "Non ethereum enabled browser")
-				alert("Please download Metamask to continue. :)");
+				setShowModalNoMM(true);
 			else if (
 				authError.message !==
 				"MetaMask Message Signature: User denied message signature."
@@ -71,7 +74,7 @@ const Connect = () => {
 	return (
 		<Layout showMonsters title="Connect | Realm Hunter">
 			<StyledContainer className="bg-primary d-flex flex-column justify-content-center position-relative">
-				<NoMetaMask />
+				<NoMetaMask stateUtils={statesModalNoMM} />
 				<Row>
 					<Col
 						xl={6}

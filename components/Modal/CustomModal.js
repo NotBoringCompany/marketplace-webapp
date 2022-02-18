@@ -26,13 +26,18 @@ const StyledModalBody = styled(Modal.Body)`
 
 `;
 
-const CustomModal = ({ children, ...props }) => {
+const CustomModal = ({ stateUtils, children, ...props }) => {
 	const { className } = props;
-	return (
-		<StyledModal centered show>
-			<StyledModalBody className={`bg-darkGray text-white ${className}`}>
-				<MdOutlineClose className="close text-white mb-1" />
+	const { setter, getter } = stateUtils;
 
+	const close = () => {
+		setter(false);
+	};
+
+	return (
+		<StyledModal centered show={getter}>
+			<StyledModalBody className={`bg-darkGray text-white ${className}`}>
+				<MdOutlineClose className="close text-white mb-1" onClick={close} />
 				{children}
 			</StyledModalBody>
 		</StyledModal>

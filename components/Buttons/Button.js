@@ -29,14 +29,17 @@ const MyButton = ({
 	img = null,
 	backIcon = false,
 	href = "/",
+	newTab = false,
+	passHref = false,
+	target = "_self",
 	...props
 }) => {
 	let textColor = "text-light";
 	if (variant && variant.includes("outline-"))
 		textColor = variant.split("-")[0];
 	const LinkComponent = (
-		<Link href={href}>
-			<a>
+		<Link href={href} passHref={passHref}>
+			<a href={href} target={target}>
 				<StyledButton
 					variant={variant}
 					className={`d-flex align-items-center justify-content-center ${className}`}
