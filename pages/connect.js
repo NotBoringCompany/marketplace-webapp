@@ -6,6 +6,7 @@ import Layout from "components/Layout";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
 import styled from "styled-components";
 
 import { HeadingSM } from "components/Typography/Headings";
@@ -16,6 +17,8 @@ import MyButton from "components/Buttons/Button";
 import SignInBox from "../components/SignIn/SignInBox";
 
 import mustBeUnauthed from "utils/mustBeUnauthed";
+
+import NoMetaMask from "components/Modal/NoMetaMask";
 
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
@@ -33,7 +36,9 @@ const Connect = () => {
 		hasAuthError,
 		authError,
 	} = useMoralis();
+
 	const [triedAuth, setTriedAuth] = useState(false);
+
 	useEffect(() => {
 		console.log(isWeb3Enabled);
 	}, [isWeb3Enabled, isAuthenticated, enableWeb3]);
@@ -52,7 +57,7 @@ const Connect = () => {
 				);
 			}
 
-			console.log(authError.message);
+			console.log("Error:", authError.message);
 		}
 	}, [hasAuthError, triedAuth]);
 
@@ -66,6 +71,7 @@ const Connect = () => {
 	return (
 		<Layout showMonsters title="Connect | Realm Hunter">
 			<StyledContainer className="bg-primary d-flex flex-column justify-content-center position-relative">
+				<NoMetaMask />
 				<Row>
 					<Col
 						xl={6}

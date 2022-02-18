@@ -71,3 +71,8 @@ a:hover > h6 {
 	filter: brightness(80%);
 	transition: all 250ms;
 }
+
+.modal-backdrop {
+	background-color: #000000 !important;
+	opacity: 0.85 !important;
+}

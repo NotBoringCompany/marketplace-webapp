@@ -38,7 +38,6 @@ const Layout = ({
 						width={"500px"}
 					/>
 				)}
-
 				<div className="bg-primary">{children}</div>
 			</div>
 

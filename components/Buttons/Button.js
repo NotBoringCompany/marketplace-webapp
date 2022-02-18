@@ -8,7 +8,7 @@ import { MdArrowBackIos } from "react-icons/md";
 const StyledButton = styled(Button)`
 	box-shadow: 0px 5px 4px rgba(173, 173, 173, 0.25);
 	padding: 8px 24px;
-	border-radius: 0%;
+	border-radius: 8px;
 	transition: 0.35s all;
 
 	&:hover {

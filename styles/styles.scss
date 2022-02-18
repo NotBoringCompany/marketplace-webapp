@@ -10,6 +10,8 @@ $danger: #d62518;
 $light: #f8f9fa;
 $dark: #343a40;
 $gray: #aaaaaa;
+$darkGray: #222222;
+
 $lighterGreen: #48edb9;
 
 //custom color to be mapped
@@ -27,10 +29,11 @@ $theme-colors: (
 	light: $light,
 	dark: $dark,
 	gray: $gray,
+	darkGray: $darkGray,
 	// add any additional color below
 	accent: $accent,
 	lighterGreen: $lighterGreen
-		// now bg-accent,btn-accent,etc.. can be called,,,,,,,
+		// now bg-accent,btn-accent,etc.. can be called,,,,,,,,,,,,,,,
 );
 
 // Import Bootstrap and its default variables
