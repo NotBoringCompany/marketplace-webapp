@@ -82,7 +82,7 @@ a:hover > h6 {
 
 	position: fixed;
 	z-index: 1031;
-	top: 105px !important;
+	top: 0 !important;
 	left: 0;
 	box-shadow: 0 0 10px #42ca9f, 0 0 5px #42ca9f !important;
 
@@ -91,5 +91,6 @@ a:hover > h6 {
 }
 
 #nprogress .peg {
-	display: none !important;
+	box-shadow: 0 0 10px #42ca9f, 0 0 5px #42ca9f !important;
+	opacity: 0.5 !important;
 }
