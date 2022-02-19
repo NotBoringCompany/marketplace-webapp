@@ -14,11 +14,12 @@ const StyledFormControl = styled(FormControl)`
 	}
 `;
 
-const TextInput = ({ variant = "light", ...props }) => {
+const TextInput = ({ name = "", variant = "light", ...props }) => {
 	const { className } = props;
 	return (
 		<div>
 			<StyledFormControl
+				name={name}
 				variant={variant}
 				className={`${className}`}
 				{...props}

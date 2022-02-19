@@ -34,17 +34,24 @@ const Connect = () => {
 		isWeb3Enabled,
 		enableWeb3,
 		hasAuthError,
+		login,
 		authError,
 	} = useMoralis();
 
 	const [triedAuth, setTriedAuth] = useState(false);
 	const [showModalNoMM, setShowModalNoMM] = useState(false);
+	const [authDetail, setAuthDetail] = useState({
+		email: "",
+		password: "",
+	});
+
+	const { email, password } = authDetail;
 
 	const statesModalNoMM = { getter: showModalNoMM, setter: setShowModalNoMM }; // getter + setter
 
-	useEffect(() => {
-		console.log(isWeb3Enabled);
-	}, [isWeb3Enabled, isAuthenticated, enableWeb3]);
+	// useEffect(() => {
+	// 	console.log(isWeb3Enabled);
+	// }, [isWeb3Enabled, isAuthenticated, enableWeb3]);
 
 	useEffect(() => {
 		if (hasAuthError && triedAuth) {
@@ -64,12 +71,21 @@ const Connect = () => {
 		}
 	}, [hasAuthError, triedAuth]);
 
-	if (isAuthenticated) return <p>Authenticated</p>;
+	const handleInputChange = (e) => {
+		setAuthDetail({ ...authDetail, [e.target.name]: e.target.value });
+	};
 
-	const auth = async () => {
+	const authCrypto = async () => {
 		setTriedAuth(true);
 		await authenticate({ provider: "metamask" });
 	};
+
+	const authNonCrypto = async (e) => {
+		e.preventDefault();
+		login(email, password);
+	};
+
+	if (isAuthenticated) return <p>Authenticated</p>;
 
 	return (
 		<Layout showMonsters title="Connect | Realm Hunter">
@@ -108,14 +124,19 @@ const Connect = () => {
 								!isAuthenticating ? "Connect with Metamask" : "Connecting..."
 							}
 							variant="secondary"
-							onClick={auth}
+							onClick={authCrypto}
 							disabled={isAuthenticating}
 						/>
 
 						<TextPrimary className="my-5 text-center text-lg-start text-white">
 							or
 						</TextPrimary>
-						<SignInBox />
+						<SignInBox
+							isAuthenticating={isAuthenticating}
+							auth={authNonCrypto}
+							authDetail={authDetail}
+							onTextInputChange={handleInputChange}
+						/>
 					</Col>
 				</Row>
 			</StyledContainer>

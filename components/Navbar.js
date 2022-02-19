@@ -28,6 +28,13 @@ const StyledLink = styled(HeadingSuperXXS)`
 
 const RightContent = () => {
 	const { isAuthenticated, logout } = useMoralis();
+	const router = useRouter();
+
+	const handleLogOut = async () => {
+		await logout();
+
+		router.replace("/connect");
+	};
 
 	const connectButton = (
 		<MyButton
@@ -39,7 +46,7 @@ const RightContent = () => {
 		/>
 	);
 	const logoutButton = (
-		<MyButton text="Sign Out" className="w-100" onClick={logout} />
+		<MyButton text="Sign Out" className="w-100" onClick={handleLogOut} />
 	);
 
 	return (
