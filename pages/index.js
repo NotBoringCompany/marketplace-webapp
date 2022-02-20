@@ -32,7 +32,7 @@ export default function Home() {
 						<br />
 						<hr />
 						Linked email:{" "}
-						{user.attributes.email ? user.attributes.email : "None."}
+						{user.attributes.email ? user.attributes.email : "None"}
 					</p>
 				)}
 			</StyledContainer>
