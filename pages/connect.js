@@ -41,10 +41,10 @@ const Connect = () => {
 	const [authDetail, setAuthDetail] = useState({
 		email: "",
 		password: "",
-		validationErrors: { email: "", password: "" },
+		errors: { email: "", password: "", authFailedMessage: "" },
 	});
 
-	const { email, password, validationErrors } = authDetail;
+	const { email, password, errors } = authDetail;
 
 	const statesModalNoMM = { getter: showModalNoMM, setter: setShowModalNoMM }; // getter + setter
 
@@ -53,20 +53,28 @@ const Connect = () => {
 	// }, [isWeb3Enabled, isAuthenticated, enableWeb3]);
 
 	useEffect(() => {
-		if (hasAuthError && triedAuth) {
+		if (hasAuthError) {
 			//TODO, refactor the below...
-			if (authError.message === "Non ethereum enabled browser")
+			if (triedAuth && authError.message === "Non ethereum enabled browser") {
 				setShowModalNoMM(true);
-			else if (
-				authError.message !==
-				"MetaMask Message Signature: User denied message signature."
-			) {
-				alert(
-					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."
-				);
+				return;
 			}
 
+			if (authError.message === "Invalid username/password.") {
+				setAuthDetail({
+					...authDetail,
+					errors: {
+						...errors,
+						authFailedMessage:
+							"Oops, sorry, your email / password was incorrect. Please double-check your credentials.",
+					},
+				});
+			}
 			console.log("Error:", authError.message);
+
+			/*	alert(
+					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."
+				);*/
 		}
 	}, [hasAuthError, triedAuth]);
 
@@ -86,7 +94,7 @@ const Connect = () => {
 		if (validEmail(email) && !whitespace(password)) {
 			setAuthDetail({
 				...authDetail,
-				validationErrors: {
+				errors: {
 					password: "",
 					email: "",
 				},
@@ -97,7 +105,7 @@ const Connect = () => {
 
 		setAuthDetail({
 			...authDetail,
-			validationErrors: {
+			errors: {
 				password: !whitespace(password) ? "" : "Please enter a valid password!",
 				email: validEmail(email) ? "" : "Please enter a valid email!",
 			},

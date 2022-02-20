@@ -20,7 +20,7 @@ const SignInBox = ({
 	className,
 	...props
 }) => {
-	const { email, password, validationErrors } = authDetail;
+	const { email, password, errors } = authDetail;
 
 	return (
 		<Box
@@ -36,7 +36,7 @@ const SignInBox = ({
 					autocomplete={"off"}
 					type="email"
 					onChange={onTextInputChange}
-					errorDesc={validationErrors.email}
+					errorDesc={errors.email}
 				/>
 				<div className="mb-3" />
 				<TextInput
@@ -47,7 +47,7 @@ const SignInBox = ({
 					type="password"
 					value={password}
 					onChange={onTextInputChange}
-					errorDesc={validationErrors.password}
+					errorDesc={errors.password}
 				/>
 				<LinkCustom
 					href="/"
@@ -61,6 +61,11 @@ const SignInBox = ({
 					disabled={isAuthenticating}
 					className="w-100 mt-3 mb-3 text-secondary"
 				/>
+				{errors.authFailedMessage && (
+					<TextSecondary className="mt-2 text-danger">
+						{errors.authFailedMessage}
+					</TextSecondary>
+				)}
 			</Form>
 
 			<TextSecondary className="mt-4 text-white">
