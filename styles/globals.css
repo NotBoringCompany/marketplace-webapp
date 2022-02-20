@@ -93,3 +93,11 @@ a:hover > h6 {
 #nprogress .peg {
 	display: none !important;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	transition: background-color 5000s ease-in-out 0s;
+	-webkit-text-fill-color: #fff !important;
+}

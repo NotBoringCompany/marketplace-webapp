@@ -30,9 +30,9 @@ const index = () => {
 		const NBMonId =
 			parseInt(receipt.events.NBMonMinted.returnValues._nbmonId) - 1;
 
-		// const nbMon = await contract.methods
-		// 	.getNBMon(1)
-		// 	.call({ from: web3.currentProvider.selectedAddress });
+		const nbMon = await contract.methods
+			.getNBMon(4)
+			.call({ from: web3.currentProvider.selectedAddress });
 		console.log("minted", NBMonId);
 	};
 

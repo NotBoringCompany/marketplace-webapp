@@ -28,6 +28,7 @@ const SignInBox = ({
 		>
 			<Form onSubmit={auth}>
 				<TextInput
+					required
 					name="email"
 					value={email}
 					variant="dark"
@@ -37,6 +38,7 @@ const SignInBox = ({
 					onChange={onTextInputChange}
 				/>
 				<TextInput
+					required
 					name="password"
 					value={password}
 					variant="dark"
