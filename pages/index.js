@@ -13,11 +13,7 @@ const StyledContainer = styled(Container)`
 `;
 
 export default function Home() {
-	const { isAuthenticated, account, user } = useMoralis();
-
-	useEffect(() => {
-		user && console.log(user.attributes);
-	}, [user]);
+	const { isAuthenticated, user } = useMoralis();
 
 	return (
 		<Layout>
@@ -28,7 +24,9 @@ export default function Home() {
 
 				{isAuthenticated && (
 					<p className="text-white">
-						Wallet Address: {user.attributes.ethAddress.toUpperCase()}
+						Wallet Address:{" "}
+						{user.attributes.ethAddress &&
+							user.attributes.ethAddress.toUpperCase()}
 						<br />
 						<hr />
 						Linked email:{" "}

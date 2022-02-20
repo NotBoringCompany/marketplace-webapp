@@ -54,6 +54,8 @@ const Connect = () => {
 
 	useEffect(() => {
 		if (hasAuthError) {
+			console.log("Error:", authError.message);
+
 			//TODO, refactor the below...
 			if (triedAuth && authError.message === "Non ethereum enabled browser") {
 				setShowModalNoMM(true);
@@ -69,8 +71,8 @@ const Connect = () => {
 							"Oops, sorry, your email / password was incorrect. Please double-check your credentials.",
 					},
 				});
+				return;
 			}
-			console.log("Error:", authError.message);
 
 			/*	alert(
 					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."

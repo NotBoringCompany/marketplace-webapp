@@ -4,6 +4,7 @@ import TextInput from "components/FormInputs/TextInput";
 import MyButton from "components/Buttons/Button";
 import Form from "react-bootstrap/Form";
 import { TextSecondary } from "components/Typography/Texts";
+import { NoteText } from "components/Modal/SetupModal";
 
 const Box = styled.div`
 	border: 2px solid rgba(176, 176, 176, 0.35);
@@ -15,7 +16,7 @@ const Box = styled.div`
 const SignUpBox = ({
 	auth,
 	authDetail,
-	isAuthenticating,
+	isUserUpdating,
 	onTextInputChange,
 	className,
 	...props
@@ -53,8 +54,8 @@ const SignUpBox = ({
 				<MyButton
 					type="submit"
 					// onClick={auth}
-					text={!isAuthenticating ? "Link" : "Linking..."}
-					disabled={isAuthenticating}
+					text={!isUserUpdating ? "Link" : "Linking..."}
+					disabled={isUserUpdating}
 					className="w-100 mt-3 mb-3 text-secondary"
 				/>
 				{errors.authFailedMessage && (
@@ -64,10 +65,7 @@ const SignUpBox = ({
 				)}
 			</Form>
 
-			<TextSecondary className="mt-2 text-white">
-				<b>Link an email & password</b> to your account be able to sign-in using
-				these credentials next time.
-			</TextSecondary>
+			<NoteText />
 			<LinkCustom
 				href="/terms-and-conditions"
 				className="mt-3 text-gray"
