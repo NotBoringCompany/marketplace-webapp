@@ -6,7 +6,7 @@ $secondary: #42ca9f;
 $success: #3e8d63;
 $info: #7854e4;
 $warning: #b8c924;
-$danger: #d62518;
+$danger: #ff7d7d;
 $light: #f8f9fa;
 $dark: #343a40;
 $gray: #aaaaaa;
@@ -30,10 +30,8 @@ $theme-colors: (
 	dark: $dark,
 	gray: $gray,
 	darkGray: $darkGray,
-	// add any additional color below
 	accent: $accent,
-	lighterGreen: $lighterGreen
-		// now bg-accent,btn-accent,etc.. can be called,,,,,,,,,,,,,,,
+	lighterGreen: $lighterGreen,
 );
 
 // Import Bootstrap and its default variables

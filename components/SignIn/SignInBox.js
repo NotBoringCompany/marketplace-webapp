@@ -20,7 +20,8 @@ const SignInBox = ({
 	className,
 	...props
 }) => {
-	const { email, password } = authDetail;
+	const { email, password, validationErrors } = authDetail;
+
 	return (
 		<Box
 			className={`p-3 p-md-4 p-lg-4 bg-primaryComplement ${className}`}
@@ -28,17 +29,17 @@ const SignInBox = ({
 		>
 			<Form onSubmit={auth}>
 				<TextInput
-					required
 					name="email"
 					value={email}
 					variant="dark"
 					placeholder="Email"
-					className="mb-3"
+					autocomplete={"off"}
 					type="email"
 					onChange={onTextInputChange}
+					errorDesc={validationErrors.email}
 				/>
+				<div className="mb-3" />
 				<TextInput
-					required
 					name="password"
 					value={password}
 					variant="dark"
@@ -46,6 +47,7 @@ const SignInBox = ({
 					type="password"
 					value={password}
 					onChange={onTextInputChange}
+					errorDesc={validationErrors.password}
 				/>
 				<LinkCustom
 					href="/"

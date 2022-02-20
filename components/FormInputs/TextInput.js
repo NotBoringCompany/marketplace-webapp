@@ -1,6 +1,7 @@
 import React from "react";
 import FormControl from "react-bootstrap/FormControl";
 import styled from "styled-components";
+import { TextSecondary } from "components/Typography/Texts";
 const StyledFormControl = styled(FormControl)`
 	border-radius: 8px;
 	padding: 10px 16px;
@@ -14,7 +15,12 @@ const StyledFormControl = styled(FormControl)`
 	}
 `;
 
-const TextInput = ({ name = "", variant = "light", ...props }) => {
+const TextInput = ({
+	name = "",
+	variant = "light",
+	errorDesc = "",
+	...props
+}) => {
 	const { className } = props;
 	return (
 		<div>
@@ -24,6 +30,9 @@ const TextInput = ({ name = "", variant = "light", ...props }) => {
 				className={`${className}`}
 				{...props}
 			/>
+			{errorDesc && (
+				<TextSecondary className="mt-2 text-danger">{errorDesc}</TextSecondary>
+			)}
 		</div>
 	);
 };

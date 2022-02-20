@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
 import Layout from "components/Layout";
+import { HeadingSM } from "components/Typography/Headings";
+import { TextPrimary } from "components/Typography/Texts";
+import MyButton from "components/Buttons/Button";
+import NoMetaMask from "components/Modal/NoMetaMask";
+import SignInBox from "components/SignIn/SignInBox";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -9,16 +14,9 @@ import Col from "react-bootstrap/Col";
 
 import styled from "styled-components";
 
-import { HeadingSM } from "components/Typography/Headings";
-import { TextPrimary } from "components/Typography/Texts";
-
-import MyButton from "components/Buttons/Button";
-
-import SignInBox from "../components/SignIn/SignInBox";
-
 import mustBeUnauthed from "utils/mustBeUnauthed";
-
-import NoMetaMask from "components/Modal/NoMetaMask";
+import { validEmail } from "utils/validEmail";
+import { whitespace } from "utils/whitespace";
 
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
@@ -31,8 +29,8 @@ const Connect = () => {
 		authenticate,
 		isAuthenticated,
 		isAuthenticating,
-		isWeb3Enabled,
-		enableWeb3,
+		// isWeb3Enabled,
+		// enableWeb3,
 		hasAuthError,
 		login,
 		authError,
@@ -43,9 +41,10 @@ const Connect = () => {
 	const [authDetail, setAuthDetail] = useState({
 		email: "",
 		password: "",
+		validationErrors: { email: "", password: "" },
 	});
 
-	const { email, password } = authDetail;
+	const { email, password, validationErrors } = authDetail;
 
 	const statesModalNoMM = { getter: showModalNoMM, setter: setShowModalNoMM }; // getter + setter
 
@@ -82,7 +81,27 @@ const Connect = () => {
 
 	const authNonCrypto = async (e) => {
 		e.preventDefault();
-		login(email, password);
+		// login(email, password);
+
+		if (validEmail(email) && !whitespace(password)) {
+			setAuthDetail({
+				...authDetail,
+				validationErrors: {
+					password: "",
+					email: "",
+				},
+			});
+			login(email, password);
+			return;
+		}
+
+		setAuthDetail({
+			...authDetail,
+			validationErrors: {
+				password: !whitespace(password) ? "" : "Please enter a valid password!",
+				email: validEmail(email) ? "" : "Please enter a valid email!",
+			},
+		});
 	};
 
 	if (isAuthenticated) return <p>Authenticated</p>;
