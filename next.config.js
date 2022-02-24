@@ -1,3 +1,11 @@
 module.exports = {
-  reactStrictMode: true,
-}
+	reactStrictMode: true,
+	async rewrites() {
+		return [
+			{
+				source: "/account-page/nbmons",
+				destination: "/account-page",
+			},
+		];
+	},
+};

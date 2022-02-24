@@ -21,18 +21,6 @@ export default function Home() {
 				<h2 className="text-white">
 					Home.. you are {isAuthenticated ? `signed in` : `not signed in`}
 				</h2>
-
-				{isAuthenticated && (
-					<p className="text-white">
-						Wallet Address:{" "}
-						{user.attributes.ethAddress &&
-							user.attributes.ethAddress.toUpperCase()}
-						<br />
-						<hr />
-						Linked email:{" "}
-						{user.attributes.email ? user.attributes.email : "None"}
-					</p>
-				)}
 			</StyledContainer>
 		</Layout>
 	);

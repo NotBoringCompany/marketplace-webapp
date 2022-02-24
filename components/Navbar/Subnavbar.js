@@ -3,6 +3,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import { HeadingSuperXXS } from "../Typography/Headings";
 import { submenu } from "./submenu";
+import { useRouter } from "next/router";
 
 const StyledContainer = styled.div`
 	width: 100%;
@@ -14,7 +15,7 @@ const MenuItemContainer = styled.div`
 	display: flex;
 	background: transparent;
 	padding: 24px 16px;
-	transition: all 300ms;
+	transition: background 200ms;
 	&.active {
 		background: #474747;
 		border-bottom: 4px solid #48edb9;
@@ -27,12 +28,23 @@ const MenuItemContainer = styled.div`
 `;
 
 const Subnavbar = () => {
+	const router = useRouter();
+	console.log(router);
 	return (
 		<StyledContainer className="bg-primary2">
 			{submenu.map((s) => (
-				<Link href="/" id={s.url}>
+				<Link
+					href={
+						router.asPath.includes(s.path) ? "#" : `${router.pathname}${s.path}`
+					}
+					id={s.path}
+				>
 					<a>
-						<MenuItemContainer>
+						<MenuItemContainer
+							className={`${
+								s.match.some((m) => router.asPath.includes(m)) && `active`
+							}`}
+						>
 							<HeadingSuperXXS as="p" className="text-white">
 								{s.text}
 							</HeadingSuperXXS>

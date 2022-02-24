@@ -18,6 +18,7 @@ const Layout = ({
 	description = "Description (for SEO)",
 	keywords = "keywords,separated,by,comma,just,like,this",
 	showMonsters = false,
+	showSubnav = false,
 	children,
 }) => {
 	return (
@@ -28,7 +29,7 @@ const Layout = ({
 				<meta name="keywords" content={keywords} />
 				<link rel="shortcut icon" href="imgs/favicon.ico" />
 			</Head>
-			<Navbar />
+			<Navbar showSubnav={showSubnav} />
 			<div className="position-relative">
 				{showMonsters && (
 					<NBMonsImage

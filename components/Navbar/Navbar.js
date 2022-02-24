@@ -30,12 +30,6 @@ const RightContent = () => {
 	const { isAuthenticated, logout } = useMoralis();
 	const router = useRouter();
 
-	const handleLogOut = async () => {
-		await logout();
-
-		router.replace("/connect");
-	};
-
 	const connectButton = (
 		<MyButton
 			text="Connect Wallet"
@@ -45,18 +39,23 @@ const RightContent = () => {
 			href="/connect"
 		/>
 	);
-	const logoutButton = (
-		<MyButton text="Sign Out" className="w-100" onClick={handleLogOut} />
+	const accountPageBtn = (
+		<MyButton
+			text="Account Page"
+			href="/account-page"
+			isLink
+			className="w-100"
+		/>
 	);
 
 	return (
 		<Nav className="mt-3 mt-lg-0">
-			{!isAuthenticated ? connectButton : logoutButton}
+			{!isAuthenticated ? connectButton : accountPageBtn}
 		</Nav>
 	);
 };
 
-const MyNavbar = ({ showSubnav = false }) => {
+const MyNavbar = ({ showSubnav }) => {
 	const router = useRouter();
 
 	return (
