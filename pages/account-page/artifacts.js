@@ -24,7 +24,7 @@ const Artifacts = () => {
 				</h2>
 				<hr />
 				<h3 className="text-white">
-					Here, all of your NBMons will be displayed
+					Here, all of your Artifacts will be displayed
 					<hr />
 				</h3>
 			</StyledContainer>

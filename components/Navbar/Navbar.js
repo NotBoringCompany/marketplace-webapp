@@ -42,7 +42,7 @@ const RightContent = () => {
 	const accountPageBtn = (
 		<MyButton
 			text="Account Page"
-			href="/account-page"
+			href="/account-page/nbmons"
 			isLink
 			className="w-100"
 		/>

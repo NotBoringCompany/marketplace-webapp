@@ -25,7 +25,7 @@ const mustBeUnauthed = (Component) => {
 		if (!isInitializing) {
 			// If user is not logged in, return login component
 			if (isAuthenticated) {
-				router.replace("/account-page");
+				router.replace("/account-page/nbmons");
 			} else {
 				return <Component {...props} />;
 			}
