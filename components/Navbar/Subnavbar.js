@@ -30,19 +30,24 @@ const MenuItemContainer = styled.div`
 const Subnavbar = () => {
 	const router = useRouter();
 	console.log(router);
+	console.log(router.asPath);
 	return (
 		<StyledContainer className="bg-primary2">
 			{submenu.map((s) => (
 				<Link
 					href={
-						router.asPath.includes(s.path) ? "#" : `${router.pathname}${s.path}`
+						router.asPath.includes(s.path)
+							? ""
+							: `../${
+									router.pathname.split("/").filter((p) => p.length > 0)[0]
+							  }${s.path}`
 					}
 					id={s.path}
 				>
 					<a>
 						<MenuItemContainer
 							className={`${
-								s.match.some((m) => router.asPath.includes(m)) && `active`
+								s.match.some((m) => router.asPath === m) && `active`
 							}`}
 						>
 							<HeadingSuperXXS as="p" className="text-white">

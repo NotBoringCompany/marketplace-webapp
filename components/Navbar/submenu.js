@@ -2,7 +2,7 @@ export const submenu = [
 	{
 		text: "NBMons",
 		path: "/nbmons",
-		match: ["/nbmons", "/marketplace", "/account-page"],
+		match: ["/marketplace", "/account-page", "/account-page/nbmons"],
 	},
 	{
 		text: "Artifacts",
