@@ -7,6 +7,7 @@ import Layout from "components/Layout";
 import MyButton from "components/Buttons/Button";
 
 import styled from "styled-components";
+import mustBeAuthed from "utils/mustBeAuthed";
 
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
@@ -56,4 +57,4 @@ const AccountPage = () => {
 	);
 };
 
-export default AccountPage;
+export default mustBeAuthed(AccountPage);

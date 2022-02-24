@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Layout from "components/Layout";
 
 import styled from "styled-components";
+import mustBeAuthed from "utils/mustBeAuthed";
 
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
@@ -32,4 +33,4 @@ const Artifacts = () => {
 	);
 };
 
-export default Artifacts;
+export default mustBeAuthed(Artifacts);
