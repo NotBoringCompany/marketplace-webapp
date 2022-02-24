@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Navbar from "./Navbar/Navbar";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 
