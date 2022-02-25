@@ -24,15 +24,17 @@ const CollapseHeader = styled.div`
 		${(props) => props.open && `transform: rotate(180deg);`}
 	}
 `;
-const Title = styled(HeadingSuperXXS)`
-	font-size: 24px;
+const Separator = styled.div`
+	width: 100%;
+	height: 2px;
+	background: #42ca9f;
 `;
 const CollapseFilter = ({ id, title = "Title", children }) => {
-	const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(true);
 	return (
 		<Container className="text-white">
 			<CollapseHeader open={open ? 1 : 0} onClick={() => setOpen(!open)}>
-				<Title className="text-white">{title}</Title>
+				<HeadingSuperXXS className="text-white">{title}</HeadingSuperXXS>
 				<Image
 					className="caret"
 					src={Caret}
@@ -45,6 +47,7 @@ const CollapseFilter = ({ id, title = "Title", children }) => {
 			<Collapse in={open}>
 				<div id={`collapse-filter-${id}`}>{children}</div>
 			</Collapse>
+			<Separator />
 		</Container>
 	);
 };

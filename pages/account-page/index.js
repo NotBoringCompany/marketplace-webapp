@@ -3,18 +3,22 @@ import { useRouter } from "next/router";
 
 import Layout from "components/Layout";
 import MyButton from "components/Buttons/Button";
-import CollapseFilter from "components/CollapseFilter";
 
 import styled from "styled-components";
 import mustBeAuthed from "utils/mustBeAuthed";
 
 import GenusFilter from "components/Filters/GenusFilter";
 import TypesFilter from "components/Filters/TypesFilter";
+import SpeciesFilter from "components/Filters/SpeciesFilter";
+import GenderFilter from "components/Filters/GenderFilter";
+import RarityFilter from "components/Filters/RarityFilter";
+import MutationFilter from "components/Filters/MutationFilter";
+import { HeadingXXS } from "components/Typography/Headings";
 
 const StyledContainer = styled.div`
 	padding: 32px;
 	min-height: 100vh;
-	padding-left: calc(20% + 32px);
+	padding-left: calc(25% + 32px);
 `;
 const DesktopFilterContainer = styled.div`
 	display: flex;
@@ -22,7 +26,7 @@ const DesktopFilterContainer = styled.div`
 	max-height: 100vh;
 	height: 100vh;
 	overflow: auto;
-	width: 20%;
+	width: 25%;
 	position: absolute;
 	padding: 24px;
 	transition: all 300ms;
@@ -42,8 +46,15 @@ const AccountPage = () => {
 	return (
 		<Layout title="Account Page | Realm Hunter" showSubnav>
 			<DesktopFilterContainer className="bg-primary3">
+				<HeadingXXS as="p" className="mb-3 text-white text-center">
+					Filters
+				</HeadingXXS>
 				<GenusFilter />
 				<TypesFilter />
+				<SpeciesFilter />
+				<GenderFilter />
+				<RarityFilter />
+				<MutationFilter />
 			</DesktopFilterContainer>
 
 			<StyledContainer>
