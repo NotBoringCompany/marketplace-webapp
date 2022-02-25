@@ -1,20 +1,35 @@
 import { useMoralis } from "react-moralis";
 import { useRouter } from "next/router";
 
-import Container from "react-bootstrap/Container";
-
 import Layout from "components/Layout";
 import MyButton from "components/Buttons/Button";
+import CollapseFilter from "components/CollapseFilter";
 
 import styled from "styled-components";
 import mustBeAuthed from "utils/mustBeAuthed";
 
-const StyledContainer = styled(Container)`
-	padding-top: 32px;
-	padding-bottom: 32px;
-	min-height: 100vh;
-`;
+import GenusFilter from "components/Filters/GenusFilter";
+import TypesFilter from "components/Filters/TypesFilter";
 
+const StyledContainer = styled.div`
+	padding: 32px;
+	min-height: 100vh;
+	padding-left: calc(20% + 32px);
+`;
+const DesktopFilterContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	max-height: 100vh;
+	height: 100vh;
+	overflow: auto;
+	width: 20%;
+	position: absolute;
+	padding: 24px;
+	transition: all 300ms;
+	& > * {
+		margin-top: 16px;
+	}
+`;
 const AccountPage = () => {
 	const { isAuthenticated, user, logout } = useMoralis();
 	const router = useRouter();
@@ -26,6 +41,11 @@ const AccountPage = () => {
 	};
 	return (
 		<Layout title="Account Page | Realm Hunter" showSubnav>
+			<DesktopFilterContainer className="bg-primary3">
+				<GenusFilter />
+				<TypesFilter />
+			</DesktopFilterContainer>
+
 			<StyledContainer>
 				<h2 className="text-white">
 					Account Page.. you are{" "}
