@@ -23,22 +23,31 @@ const index = () => {
 			mintingAbi,
 			process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT
 		);
-		const randomEggInt = randomIntFromInterval(0, 9007199254740900);
-		const receipt = await contract.methods
-			.mintOrigin(randomEggInt, web3.currentProvider.selectedAddress)
-			.send({ from: web3.currentProvider.selectedAddress });
-		const NBMonId =
-			parseInt(receipt.events.NBMonMinted.returnValues._nbmonId) - 1;
+		// const randomEggInt = randomIntFromInterval(0, 9007199254740900);
+		// const receipt = await contract.methods
+		// 	.mintOrigin(randomEggInt, web3.currentProvider.selectedAddress)
+		// 	.send({ from: web3.currentProvider.selectedAddress });
+		// const NBMonId =
+		// 	parseInt(receipt.events.NBMonMinted.returnValues._nbmonId) - 1;
 
 		const nbMon = await contract.methods
-			.getNBMon(4)
+			.getNBMon(39)
 			.call({ from: web3.currentProvider.selectedAddress });
-		console.log("minted", NBMonId);
+		console.log("data", nbMon);
 	};
+	const update = () => {
+		const Monster = Moralis.Object.extend("BscNFTOwners");
+		const query = new Moralis.Query(Monster);
 
+		query
+			.get("aQo0cg6dhVgBHoxpKT7uzo8f")
+			.then((r) => console.log(r))
+			.catch((e) => console.log("err", e));
+	};
 	return (
 		<div>
-			<button onClick={mintNBMon}>asd</button>{" "}
+			<button onClick={mintNBMon}>get data</button>{" "}
+			<button onClick={update}>update</button>{" "}
 		</div>
 	);
 };

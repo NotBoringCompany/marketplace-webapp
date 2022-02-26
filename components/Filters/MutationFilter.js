@@ -4,7 +4,7 @@ import CheckBox from "./CheckBox";
 const MutationFilter = () => {
 	return (
 		<CollapseFilter id="mutation" title="Mutation">
-			<div className="d-flex flex-wrap" id={`collapse-filter-mutation`}>
+			<div className="d-grid" id={`collapse-filter-mutation`}>
 				<CheckBox type={"checkbox"} label="NOT MUTATED" />
 				<CheckBox type={"checkbox"} label="MUTATED" />
 			</div>

@@ -5,7 +5,11 @@ import Caret from "../../public/images/caret_down.svg";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import styled from "styled-components";
 
-const Container = styled.div``;
+const Container = styled.div`
+	& .d-grid {
+		grid-template-columns: 1fr 1fr;
+	}
+`;
 
 const CollapseHeader = styled.div`
 	display: flex;
@@ -29,6 +33,7 @@ const Separator = styled.div`
 	height: 2px;
 	background: #42ca9f;
 `;
+
 const CollapseFilter = ({ id, title = "Title", children }) => {
 	const [open, setOpen] = useState(true);
 	return (

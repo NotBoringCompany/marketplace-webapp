@@ -4,7 +4,7 @@ import CheckBox from "./CheckBox";
 const RarityFilter = () => {
 	return (
 		<CollapseFilter id="rarity" title="Rarity">
-			<div className="d-flex flex-wrap" id={`collapse-filter-rarity`}>
+			<div className="d-grid" id={`collapse-filter-rarity`}>
 				<CheckBox type={"checkbox"} label="COMMON" />
 				<CheckBox type={"checkbox"} label="UNCOMMON" />
 				<CheckBox type={"checkbox"} label="RARE" />
