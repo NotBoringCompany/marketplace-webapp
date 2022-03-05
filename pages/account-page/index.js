@@ -13,6 +13,8 @@ import SpeciesFilter from "components/Filters/SpeciesFilter";
 import GenderFilter from "components/Filters/GenderFilter";
 import RarityFilter from "components/Filters/RarityFilter";
 import MutationFilter from "components/Filters/MutationFilter";
+import FertilityFilter from "components/Filters/FertilityFilter";
+
 import { HeadingXXS } from "components/Typography/Headings";
 
 const StyledContainer = styled.div`
@@ -55,6 +57,7 @@ const AccountPage = () => {
 				<GenderFilter />
 				<RarityFilter />
 				<MutationFilter />
+				<FertilityFilter />
 			</DesktopFilterContainer>
 
 			<StyledContainer>
