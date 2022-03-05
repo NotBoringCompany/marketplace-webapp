@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import CollapseFilter from "components/CollapseFilter";
 import ReactSlider from "react-slider";
 import styled from "styled-components";
-import { render } from "nprogress";
-
+import TextInput from "components/FormInputs/TextInput";
+import { TextPrimary } from "components/Typography/Texts";
 const StyledSlider = styled(ReactSlider)`
 	width: 100%;
 	height: 4px;
@@ -40,12 +40,20 @@ const TypesFilter = () => {
 	return (
 		<CollapseFilter id="fertility" title="Fertility">
 			<div id={`collapse-filter-fertility`}>
+				<p style={{ margin: 0, marginTop: -6 }}>&nbsp;</p>
 				<StyledSlider
+					max={80}
+					min={0}
 					onChange={(v) => setValues(v)}
 					defaultValue={values}
 					renderTrack={Track}
 					renderThumb={Thumb}
 				/>
+				<div className="mb-3 d-flex align-items-center justify-content-between">
+					<TextInput type="number" value={values[0]} variant="dark" />
+					<TextPrimary className="mx-3">-</TextPrimary>
+					<TextInput type="number" value={values[1]} variant="dark" />
+				</div>
 			</div>
 		</CollapseFilter>
 	);
