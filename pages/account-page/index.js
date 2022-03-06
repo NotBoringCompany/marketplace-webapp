@@ -16,6 +16,7 @@ import MutationFilter from "components/Filters/MutationFilter";
 import FertilityFilter from "components/Filters/FertilityFilter";
 
 import { HeadingXXS } from "components/Typography/Headings";
+import PriceRangeFilter from "components/Filters/PriceRangeFilter";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -58,6 +59,7 @@ const AccountPage = () => {
 				<RarityFilter />
 				<MutationFilter />
 				<FertilityFilter />
+				<PriceRangeFilter />
 			</DesktopFilterContainer>
 
 			<StyledContainer>

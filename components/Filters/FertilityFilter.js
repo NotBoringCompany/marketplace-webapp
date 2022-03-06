@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import CollapseFilter from "components/CollapseFilter";
-import styled from "styled-components";
 import CustomSlider from "./CustomSlider";
 import RangeInput from "./RangeInput";
 
-const TypesFilter = () => {
+const FertilityFilter = () => {
 	const [values, setValues] = useState([0, 1500]);
 
 	return (
@@ -23,4 +22,4 @@ const TypesFilter = () => {
 	);
 };
 
-export default TypesFilter;
+export default FertilityFilter;
