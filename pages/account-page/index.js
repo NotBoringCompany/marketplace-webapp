@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { useState } from "react";
 import { useMoralis } from "react-moralis";
 import { useRouter } from "next/router";
@@ -16,12 +18,10 @@ import RarityFilter from "components/Filters/RarityFilter";
 import MutationFilter from "components/Filters/MutationFilter";
 import FertilityFilter from "components/Filters/FertilityFilter";
 
-import { HeadingSM, HeadingXXS } from "components/Typography/Headings";
+import { HeadingXXS } from "components/Typography/Headings";
 import PriceRangeFilter from "components/Filters/PriceRangeFilter";
 
-import { mediaBreakpoint, size } from "utils/breakpoints";
-
-import { useWindowSize } from "utils/useWindowSize";
+import { mediaBreakpoint } from "utils/breakpoints";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -38,6 +38,7 @@ const DesktopFilterContainer = styled.div`
 	max-height: 100vh;
 	height: 100vh;
 	overflow: auto;
+	overflow-x: hidden;
 	width: 25%;
 	z-index: 1;
 	position: absolute;
@@ -46,7 +47,7 @@ const DesktopFilterContainer = styled.div`
 		margin-top: 16px;
 	}
 
-	transition: all 300ms;
+	transition: opacity 300ms;
 
 	@media ${mediaBreakpoint.down.xl} {
 		width: 100%;
@@ -65,14 +66,40 @@ const DesktopFilterContainer = styled.div`
 		opacity: 1;
 	}
 `;
+
+const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
+	return (
+		<DesktopFilterContainer
+			className={`bg-primary3 ${filterOpen && `show`} ${
+				opacityOne && `opacityOne`
+			}`}
+		>
+			<HeadingXXS as="p" className="mb-3 text-white text-center">
+				Filters
+			</HeadingXXS>
+			<GenusFilter />
+			<TypesFilter />
+			<SpeciesFilter />
+			<GenderFilter />
+			<RarityFilter />
+			<MutationFilter />
+			<FertilityFilter />
+			<PriceRangeFilter />
+			<MyButton
+				className="d-xl-none d-block mb-3"
+				variant="outline-secondary"
+				text="Apply"
+				onClick={handleFilterButton}
+			/>
+		</DesktopFilterContainer>
+	);
+};
+
 const AccountPage = () => {
 	const { isAuthenticated, user, logout } = useMoralis();
 	const router = useRouter();
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
-
-	const { width } = useWindowSize();
-	const isMobile = width < size.extraLarge;
 
 	const handleLogOut = async () => {
 		await logout();
@@ -99,37 +126,17 @@ const AccountPage = () => {
 	};
 	return (
 		<Layout title="Account Page | Realm Hunter" showSubnav>
-			<DesktopFilterContainer
-				open={filterOpen}
-				className={`bg-primary3 ${filterOpen && `show`} ${
-					opacityOne && `opacityOne`
-				}`}
-			>
-				<HeadingXXS as="p" className="mb-3 text-white text-center">
-					Filters
-				</HeadingXXS>
-				<GenusFilter />
-				<TypesFilter />
-				<SpeciesFilter />
-				<GenderFilter />
-				<RarityFilter />
-				<MutationFilter />
-				<FertilityFilter />
-				<PriceRangeFilter />
-				<MyButton
-					className="d-xl-none d-block"
-					variant="outline-secondary"
-					text="Apply"
-					onClick={handleFilterButton}
-				/>
-			</DesktopFilterContainer>
-
+			<Filters
+				filterOpen={filterOpen}
+				opacityOne={opacityOne}
+				handleFilterButton={handleFilterButton}
+			/>
 			<StyledContainer>
 				<div className="d-flex align-items-center justify-content-between">
-					<HeadingSM as="h1" className="text-white">
+					<HeadingXXS as="h1" className="text-white">
 						Account Page.. you are{" "}
 						{isAuthenticated ? `signed in` : `not signed in`}
-					</HeadingSM>
+					</HeadingXXS>
 					<MyButton
 						variant="outline-secondary"
 						className="d-block d-xl-none"

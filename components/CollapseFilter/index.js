@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Collapse from "react-bootstrap/Collapse";
 import Caret from "../../public/images/caret_down.svg";
@@ -36,6 +36,7 @@ const Separator = styled.div`
 
 const CollapseFilter = ({ id, title = "Title", children }) => {
 	const [open, setOpen] = useState(true);
+
 	return (
 		<Container className="text-white">
 			<CollapseHeader open={open ? 1 : 0} onClick={() => setOpen(!open)}>

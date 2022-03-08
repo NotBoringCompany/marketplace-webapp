@@ -11,6 +11,7 @@ import "../styles/root.scss";
 import "../styles/styles.scss";
 
 function Main({ Component, pageProps }) {
+	// kick off the polyfill!
 	NProgress.configure({
 		minimum: 0.3,
 		easing: "ease",
@@ -21,6 +22,7 @@ function Main({ Component, pageProps }) {
 	Router.events.on("routeChangeStart", () => NProgress.start());
 	Router.events.on("routeChangeComplete", () => NProgress.done());
 	Router.events.on("routeChangeError", () => NProgress.done());
+
 	return (
 		<MoralisProvider
 			appId={process.env.NEXT_PUBLIC_APP_ID}

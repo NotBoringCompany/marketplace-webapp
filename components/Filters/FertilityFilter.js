@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CollapseFilter from "components/CollapseFilter";
 import CustomSlider from "./CustomSlider";
 import RangeInput from "./RangeInput";
 
 const FertilityFilter = () => {
 	const [values, setValues] = useState([0, 1500]);
-
 	return (
 		<CollapseFilter id="fertility" title="Fertility">
 			<div id={`collapse-filter-fertility`}>

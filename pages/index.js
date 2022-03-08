@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 
 import Container from "react-bootstrap/Container";

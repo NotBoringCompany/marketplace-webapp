@@ -1,9 +1,15 @@
 import ReactSlider from "react-slider";
 import styled from "styled-components";
+import { mediaBreakpoint } from "utils/breakpoints";
+
 const StyledSlider = styled(ReactSlider)`
 	width: 100%;
 	height: 4px;
-	margin-bottom: 16px;
+	margin-bottom: 32px;
+
+	@media ${mediaBreakpoint.down.xl} {
+		height: 8px;
+	}
 `;
 
 const StyledThumb = styled.div`
@@ -16,6 +22,16 @@ const StyledThumb = styled.div`
 	color: #fff;
 	border-radius: 50%;
 	cursor: grab;
+
+	@media ${mediaBreakpoint.down.xl} {
+		top: -13px;
+		height: 32px;
+		line-height: 32px;
+		width: 32px;
+		&:focus {
+			outline: none;
+		}
+	}
 `;
 
 const StyledTrack = styled.div`
