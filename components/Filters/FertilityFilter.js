@@ -6,7 +6,7 @@ import RangeInput from "./RangeInput";
 const FertilityFilter = () => {
 	const [values, setValues] = useState([0, 1500]);
 	return (
-		<CollapseFilter id="fertility" title="Fertility">
+		<CollapseFilter allowCollapse={false} id="fertility" title="Fertility">
 			<div id={`collapse-filter-fertility`}>
 				<p style={{ margin: 0, marginTop: -6 }}>&nbsp;</p>
 				<CustomSlider

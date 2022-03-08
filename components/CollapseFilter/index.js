@@ -34,20 +34,32 @@ const Separator = styled.div`
 	background: #42ca9f;
 `;
 
-const CollapseFilter = ({ id, title = "Title", children }) => {
+const CollapseFilter = ({
+	id,
+	title = "Title",
+	children,
+	allowCollapse = true,
+}) => {
 	const [open, setOpen] = useState(true);
 
 	return (
 		<Container className="text-white">
-			<CollapseHeader open={open ? 1 : 0} onClick={() => setOpen(!open)}>
+			<CollapseHeader
+				open={open ? 1 : 0}
+				onClick={() => {
+					if (allowCollapse) setOpen(!open);
+				}}
+			>
 				<HeadingSuperXXS className="text-white">{title}</HeadingSuperXXS>
-				<Image
-					className="caret"
-					src={Caret}
-					width={16}
-					height={16}
-					alt="Caret"
-				/>
+				{allowCollapse && (
+					<Image
+						className="caret"
+						src={Caret}
+						width={16}
+						height={16}
+						alt="Caret"
+					/>
+				)}
 			</CollapseHeader>
 
 			<Collapse in={open}>
