@@ -48,10 +48,6 @@ const Connect = () => {
 
 	const statesModalNoMM = { getter: showModalNoMM, setter: setShowModalNoMM }; // getter + setter
 
-	// useEffect(() => {
-	// 	console.log(isWeb3Enabled);
-	// }, [isWeb3Enabled, isAuthenticated, enableWeb3]);
-
 	useEffect(() => {
 		if (hasAuthError) {
 			console.log("Error:", authError.message);
