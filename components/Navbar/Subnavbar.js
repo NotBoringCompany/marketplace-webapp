@@ -45,6 +45,7 @@ const Subnavbar = () => {
 		<StyledContainer className="bg-primary2">
 			{submenu.map((s) => (
 				<Link
+					key={s.id}
 					href={
 						router.asPath.includes(s.path) ||
 						router.asPath.asPath === "/account-page/nbmons" ||

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useMoralis } from "react-moralis";
 import { useRouter } from "next/router";
 
@@ -15,13 +16,21 @@ import RarityFilter from "components/Filters/RarityFilter";
 import MutationFilter from "components/Filters/MutationFilter";
 import FertilityFilter from "components/Filters/FertilityFilter";
 
-import { HeadingXXS } from "components/Typography/Headings";
+import { HeadingSM, HeadingXXS } from "components/Typography/Headings";
 import PriceRangeFilter from "components/Filters/PriceRangeFilter";
+
+import { mediaBreakpoint, size } from "utils/breakpoints";
+
+import { useWindowSize } from "utils/useWindowSize";
 
 const StyledContainer = styled.div`
 	padding: 32px;
 	min-height: 100vh;
 	padding-left: calc(25% + 32px);
+
+	@media ${mediaBreakpoint.down.xl} {
+		padding: 32px;
+	}
 `;
 const DesktopFilterContainer = styled.div`
 	display: flex;
@@ -30,25 +39,72 @@ const DesktopFilterContainer = styled.div`
 	height: 100vh;
 	overflow: auto;
 	width: 25%;
+	z-index: 1;
 	position: absolute;
 	padding: 24px;
-	transition: all 300ms;
 	& > * {
 		margin-top: 16px;
+	}
+
+	transition: all 300ms;
+
+	@media ${mediaBreakpoint.down.xl} {
+		width: 100%;
+		padding: 16px;
+		max-height: unset;
+		height: auto;
+		display: none;
+		opacity: 0;
+	}
+
+	&.show {
+		display: flex;
+	}
+
+	&.opacityOne {
+		opacity: 1;
 	}
 `;
 const AccountPage = () => {
 	const { isAuthenticated, user, logout } = useMoralis();
 	const router = useRouter();
+	const [filterOpen, setFilterOpen] = useState(false);
+	const [opacityOne, setOpacityOne] = useState(false);
+
+	const { width } = useWindowSize();
+	const isMobile = width < size.extraLarge;
 
 	const handleLogOut = async () => {
 		await logout();
 
 		router.replace("/connect");
 	};
+
+	const handleFilterButton = () => {
+		if (!filterOpen) {
+			setFilterOpen(true);
+
+			setTimeout(() => {
+				setOpacityOne(true);
+			}, 100);
+			return;
+		} else {
+			setOpacityOne(false);
+			window.scrollTo(0, 0);
+
+			setTimeout(() => {
+				setFilterOpen(false);
+			}, 300);
+		}
+	};
 	return (
 		<Layout title="Account Page | Realm Hunter" showSubnav>
-			<DesktopFilterContainer className="bg-primary3">
+			<DesktopFilterContainer
+				open={filterOpen}
+				className={`bg-primary3 ${filterOpen && `show`} ${
+					opacityOne && `opacityOne`
+				}`}
+			>
 				<HeadingXXS as="p" className="mb-3 text-white text-center">
 					Filters
 				</HeadingXXS>
@@ -60,13 +116,28 @@ const AccountPage = () => {
 				<MutationFilter />
 				<FertilityFilter />
 				<PriceRangeFilter />
+				<MyButton
+					className="d-xl-none d-block"
+					variant="outline-secondary"
+					text="Apply"
+					onClick={handleFilterButton}
+				/>
 			</DesktopFilterContainer>
 
 			<StyledContainer>
-				<h2 className="text-white">
-					Account Page.. you are{" "}
-					{isAuthenticated ? `signed in` : `not signed in`}
-				</h2>
+				<div className="d-flex align-items-center justify-content-between">
+					<HeadingSM as="h1" className="text-white">
+						Account Page.. you are{" "}
+						{isAuthenticated ? `signed in` : `not signed in`}
+					</HeadingSM>
+					<MyButton
+						variant="outline-secondary"
+						className="d-block d-xl-none"
+						text="Filter"
+						onClick={handleFilterButton}
+					/>
+				</div>
+
 				<hr />
 				<h3 className="text-white">
 					Here, all of your NBMons will be displayed
