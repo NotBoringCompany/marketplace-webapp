@@ -2,7 +2,6 @@ import Link from "next/link";
 import React from "react";
 import Button from "react-bootstrap/Button";
 import styled from "styled-components";
-import Image from "react-bootstrap/Image";
 import { MdArrowBackIos } from "react-icons/md";
 
 const StyledButton = styled(Button)`

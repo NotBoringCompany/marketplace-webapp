@@ -117,10 +117,10 @@ input[type="number"] {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background: #75d3b5;
+	background: #66bba0;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-	background: #555;
+	background: #5eae95;
 }

@@ -3,7 +3,6 @@ import Image from "next/image";
 
 import CustomModal from "./CustomModal";
 import { HeadingXXS } from "components/Typography/Headings";
-import { TextSecondary } from "components/Typography/Texts";
 import MyButton from "components/Buttons/Button";
 
 import styled from "styled-components";
@@ -15,24 +14,26 @@ const CustomHeadingXXS = styled(HeadingXXS)`
 
 const CheckboxesContainer = styled.div`
 	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 16px;
 `;
 
 const FilterModal = ({ stateUtils, title, data = null }) => {
 	const { setter } = stateUtils;
+
 	return (
 		<CustomModal
 			stateUtils={stateUtils}
 			className="d-flex flex-column align-items-center justify-content-center"
 		>
 			<CustomHeadingXXS className="text-center">{title}</CustomHeadingXXS>
-			<CheckboxesContainer className="d-grid">
+			<CheckboxesContainer className="d-grid mt-2">
 				{data &&
 					data.map((d) => (
-						<CheckBoxImage key={d.id} type={"checkbox"} label={d.name} />
+						<CheckBoxImage imageURL={d.imageUrl} key={d.id} label={d.name} />
 					))}
 			</CheckboxesContainer>
 
-			<MyButton onClick={() => setter(false)} text={"Apply"} />
+			<MyButton className="mt-4" onClick={() => setter(false)} text={"Apply"} />
 		</CustomModal>
 	);
 };

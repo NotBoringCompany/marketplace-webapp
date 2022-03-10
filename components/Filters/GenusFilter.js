@@ -9,7 +9,7 @@ const GenusFilter = () => {
 		{
 			name: "Lamox",
 			id: "lamox",
-			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/1000.png",
+			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/2.png",
 		},
 		{
 			name: "Licorine",
@@ -19,22 +19,22 @@ const GenusFilter = () => {
 		{
 			name: "Birvo",
 			id: "birvo",
-			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/1000.png",
+			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/1.png",
 		},
 		{
 			name: "Dranexx",
 			id: "dranexx",
-			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/1000.png",
+			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/8000.png",
 		},
 		{
 			name: "Heree",
 			id: "heree",
-			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/1000.png",
+			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/0.png",
 		},
 		{
 			name: "Milnas",
 			id: "milnas",
-			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/1000.png",
+			imageUrl: "https://assets.thetanarena.com/skin/smallavatar/7000.png",
 		},
 	];
 	return (
