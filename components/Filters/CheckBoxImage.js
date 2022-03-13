@@ -45,6 +45,10 @@ const Container = styled.div`
 		transform: scale(1) translate(1px, -3px);
 	}
 
+	& *:hover {
+		cursor: pointer;
+	}
+
 	& img {
 		border-bottom-left-radius: 10px;
 		border-bottom-right-radius: 10px;
@@ -80,7 +84,7 @@ const CheckBoxImage = ({ ...props }) => {
 				label=""
 			/>
 			<NameContainer>
-				<TextSecondary>{props.label}</TextSecondary>
+				<TextSecondary as="label">{props.label}</TextSecondary>
 			</NameContainer>
 		</Container>
 	);

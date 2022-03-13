@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import { MdArrowBackIos } from "react-icons/md";
