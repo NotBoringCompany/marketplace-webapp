@@ -22,6 +22,7 @@ import { HeadingXXS } from "components/Typography/Headings";
 import PriceRangeFilter from "components/Filters/PriceRangeFilter";
 
 import { mediaBreakpoint } from "utils/breakpoints";
+import { useFilterStore } from "stores/filterStore";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -68,6 +69,11 @@ const DesktopFilterContainer = styled.div`
 `;
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
+	const { filters } = useFilterStore();
+
+	useEffect(() => {
+		console.log("filters", filters);
+	}, [filters]);
 	return (
 		<DesktopFilterContainer
 			className={`bg-primary3 ${filterOpen && `show`} ${

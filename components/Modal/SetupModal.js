@@ -10,12 +10,12 @@ import MyButton from "components/Buttons/Button";
 
 import styled from "styled-components";
 
-import EmailSetup from "../../public/images/email_setup.svg";
+import EmailSetup from "public/images/email_setup.svg";
 
 import SignUpBox from "components/SignUp/SignUpBox";
 
-import { validEmail } from "../../utils/validEmail";
-import { whitespace } from "../../utils/whitespace";
+import { validEmail } from "utils/validEmail";
+import { whitespace } from "utils/whitespace";
 
 const CustomHeadingXXS = styled(HeadingXXS)`
 	font-size: 24px;

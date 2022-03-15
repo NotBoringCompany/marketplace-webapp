@@ -6,10 +6,10 @@ import {
 	HeadingMD,
 	HeadingSM,
 	HeadingXXS,
-} from "../components/Typography/Headings";
+} from "components/Typography/Headings";
 import Link from "next/link";
 
-import { TextPrimary, TextSecondary } from "../components/Typography/Texts";
+import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import TextInput from "components/FormInputs/TextInput";
 
 const Stylesheet = () => {

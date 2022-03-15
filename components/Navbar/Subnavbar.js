@@ -6,8 +6,8 @@ import { HeadingSuperXXS } from "../Typography/Headings";
 import { submenu } from "./submenu";
 import { useRouter } from "next/router";
 
-import NBMonLogo from "../../public/images/nbmon_logo.png";
-import ArtifactsLogo from "../../public/images/artifacts_logo.png";
+import NBMonLogo from "public/images/nbmon_logo.png";
+import ArtifactsLogo from "public/images/artifacts_logo.png";
 
 const StyledContainer = styled.div`
 	width: 100%;

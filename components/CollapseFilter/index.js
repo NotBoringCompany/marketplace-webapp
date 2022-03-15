@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Collapse from "react-bootstrap/Collapse";
-import Caret from "../../public/images/caret_down.svg";
+import Caret from "public/images/caret_down.svg";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import styled from "styled-components";
 

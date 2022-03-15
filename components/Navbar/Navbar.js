@@ -13,7 +13,7 @@ import { HeadingSuperXXS } from "../Typography/Headings";
 import { menu } from "./menu";
 import { useRouter } from "next/router";
 
-import Logo from "../../public/images/logo.png";
+import Logo from "public/images/logo.png";
 
 const StyledNav = styled(Navbar)`
 	width: 100%;

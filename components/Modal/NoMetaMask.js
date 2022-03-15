@@ -8,7 +8,7 @@ import MyButton from "components/Buttons/Button";
 
 import styled from "styled-components";
 
-import Wallet from "../../public/images/wallet.svg";
+import Wallet from "public/images/wallet.svg";
 
 const CustomHeadingXXS = styled(HeadingXXS)`
 	font-size: 24px;

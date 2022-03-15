@@ -5,8 +5,13 @@ const GenderFilter = () => {
 	return (
 		<CollapseFilter id="gender" title="Gender">
 			<div className="d-grid" id={`collapse-filter-gender`}>
-				<CheckBox type={"checkbox"} label="MALE" />
-				<CheckBox type={"checkbox"} label="FEMALE" />
+				<CheckBox type={"checkbox"} name="gender" value="male" label="MALE" />
+				<CheckBox
+					type={"checkbox"}
+					name="gender"
+					value="female"
+					label="FEMALE"
+				/>
 			</div>
 		</CollapseFilter>
 	);
