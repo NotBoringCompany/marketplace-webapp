@@ -69,11 +69,11 @@ const DesktopFilterContainer = styled.div`
 `;
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
-	const { filters } = useFilterStore();
+	const { selectedFilters, clearFilter, addFilter } = useFilterStore();
 
 	useEffect(() => {
-		console.log("filters", filters);
-	}, [filters]);
+		console.log("selected genders: ", selectedFilters.gender);
+	}, [selectedFilters]);
 	return (
 		<DesktopFilterContainer
 			className={`bg-primary3 ${filterOpen && `show`} ${
@@ -83,6 +83,14 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 			<HeadingXXS as="p" className="mb-3 text-white text-center">
 				Filters
 			</HeadingXXS>
+			<button onClick={clearFilter}>clearfilter</button>
+			<button
+				onClick={() => {
+					addFilter("gender", "male");
+				}}
+			>
+				addFilter
+			</button>
 			<GenusFilter />
 			<TypesFilter />
 			<SpeciesFilter />
