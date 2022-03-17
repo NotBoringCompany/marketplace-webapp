@@ -24,8 +24,8 @@ export const useFilterStore = create((set, get) => ({
 	selectedFilters: {},
 	rangeFilters: {
 		fertility: {
-			min: 0,
-			max: 1500,
+			currentMin: 0,
+			currentMax: 1500,
 		},
 	},
 
