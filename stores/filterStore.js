@@ -7,6 +7,40 @@ export const useFilterStore = create((set, get) => ({
 		rarity: ["common", "uncommon", "rare", "epic", "legendary", "mythical"],
 		mutation: ["mutated", "not_mutated"],
 	},
+	availableFiltersWithImage: {
+		genus: [
+			{
+				name: "Lamox",
+				id: "lamox",
+				imageUrl: "https://assets.thetanarena.com/skin/smallavatar/2.png",
+			},
+			{
+				name: "Licorine",
+				id: "licorine",
+				imageUrl: "https://assets.thetanarena.com/skin/smallavatar/1000.png",
+			},
+			{
+				name: "Birvo",
+				id: "birvo",
+				imageUrl: "https://assets.thetanarena.com/skin/smallavatar/1.png",
+			},
+			{
+				name: "Dranexx",
+				id: "dranexx",
+				imageUrl: "https://assets.thetanarena.com/skin/smallavatar/8000.png",
+			},
+			{
+				name: "Heree",
+				id: "heree",
+				imageUrl: "https://assets.thetanarena.com/skin/smallavatar/0.png",
+			},
+			{
+				name: "Milnas",
+				id: "milnas",
+				imageUrl: "https://assets.thetanarena.com/skin/smallavatar/7000.png",
+			},
+		],
+	},
 	/*
 		selectedFilters' shape example is like this
 	
@@ -84,6 +118,7 @@ export const useFilterStore = create((set, get) => ({
 	},
 	clearFilter: () => {
 		set((state) => ({
+			...state,
 			selectedFilters: {},
 			rangeFilters: {
 				fertility: {
