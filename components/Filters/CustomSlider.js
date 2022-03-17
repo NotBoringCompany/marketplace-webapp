@@ -41,7 +41,7 @@ const StyledTrack = styled.div`
 	border-radius: 999px;
 `;
 
-import React, { useEffect } from "react";
+import React from "react";
 
 const CustomSlider = ({ values = [0, 0], onChange = () => {} }) => {
 	const Thumb = (props) => <StyledThumb {...props}></StyledThumb>;
@@ -50,15 +50,11 @@ const CustomSlider = ({ values = [0, 0], onChange = () => {} }) => {
 		<StyledTrack {...props} index={state.index} />
 	);
 
-	useEffect(() => {
-		console.log(values[0]);
-	}, [values]);
-
 	return (
 		<StyledSlider
 			max={3000}
 			min={0}
-			onChange={(v) => onChange(v)}
+			onChange={(e) => onChange(e)}
 			value={values}
 			renderTrack={Track}
 			renderThumb={Thumb}

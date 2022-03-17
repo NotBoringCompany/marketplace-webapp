@@ -28,6 +28,7 @@ export const useFilterStore = create((set, get) => ({
 			currentMax: 1500,
 		},
 	},
+	clearing: false,
 
 	addFilter: (data) => {
 		const { prop, item } = data;
@@ -72,7 +73,25 @@ export const useFilterStore = create((set, get) => ({
 			}
 		}
 	},
+	setRangeFilter: (data) => {
+		const { prop, max, min } = data;
+		set((state) => ({
+			rangeFilters: {
+				...state.rangeFilters,
+				[prop]: { currentMin: min, currentMax: max },
+			},
+		}));
+	},
 	clearFilter: () => {
-		set({ selectedFilters: {} });
+		set((state) => ({
+			selectedFilters: {},
+			rangeFilters: {
+				fertility: {
+					currentMin: 0,
+					currentMax: 1500,
+				},
+			},
+			clearing: !state.clearing,
+		}));
 	},
 }));

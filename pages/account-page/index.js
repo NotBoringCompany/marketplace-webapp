@@ -65,13 +65,13 @@ const DesktopFilterContainer = styled.div`
 `;
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
-	const { selectedFilters, clearFilter, addFilter } = useFilterStore();
+	const { selectedFilters, clearFilter, rangeFilters } = useFilterStore();
 
 	useEffect(() => {
 		console.log("**********");
-		console.log("selected species: ", selectedFilters.species);
-		console.log("selected genders: ", selectedFilters.gender);
-	}, [selectedFilters]);
+		console.log("sF", selectedFilters);
+		console.log("rF", rangeFilters);
+	}, [selectedFilters, rangeFilters]);
 	return (
 		<DesktopFilterContainer
 			className={`bg-primary3 ${filterOpen && `show`} ${
