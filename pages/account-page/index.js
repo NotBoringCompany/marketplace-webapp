@@ -12,17 +12,13 @@ import mustBeAuthed from "utils/mustBeAuthed";
 
 import GenusFilter from "components/Filters/GenusFilter";
 import TypesFilter from "components/Filters/TypesFilter";
-import SpeciesFilter from "components/Filters/SpeciesFilter";
-import GenderFilter from "components/Filters/GenderFilter";
-import RarityFilter from "components/Filters/RarityFilter";
-import MutationFilter from "components/Filters/MutationFilter";
 import FertilityFilter from "components/Filters/FertilityFilter";
 
 import { HeadingXXS } from "components/Typography/Headings";
-import PriceRangeFilter from "components/Filters/PriceRangeFilter";
 
 import { mediaBreakpoint } from "utils/breakpoints";
 import { useFilterStore } from "stores/filterStore";
+import CheckBoxFilters from "components/Filters/CheckBoxFilters";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -72,6 +68,8 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const { selectedFilters, clearFilter, addFilter } = useFilterStore();
 
 	useEffect(() => {
+		console.log("**********");
+		console.log("selected species: ", selectedFilters.species);
 		console.log("selected genders: ", selectedFilters.gender);
 	}, [selectedFilters]);
 	return (
@@ -84,21 +82,10 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 				Filters
 			</HeadingXXS>
 			<button onClick={clearFilter}>clearfilter</button>
-			<button
-				onClick={() => {
-					addFilter("gender", "male");
-				}}
-			>
-				addFilter
-			</button>
 			<GenusFilter />
 			<TypesFilter />
-			<SpeciesFilter />
-			<GenderFilter />
-			<RarityFilter />
-			<MutationFilter />
+			<CheckBoxFilters />
 			<FertilityFilter />
-			<PriceRangeFilter />
 			<MyButton
 				className="d-xl-none d-block mb-3"
 				variant="outline-secondary"

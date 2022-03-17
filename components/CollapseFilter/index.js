@@ -50,7 +50,9 @@ const CollapseFilter = ({
 					if (allowCollapse) setOpen(!open);
 				}}
 			>
-				<HeadingSuperXXS className="text-white">{title}</HeadingSuperXXS>
+				<HeadingSuperXXS className="text-white text-capitalize">
+					{title}
+				</HeadingSuperXXS>
 				{allowCollapse && (
 					<Image
 						className="caret"

@@ -2,9 +2,16 @@ import React, { useState } from "react";
 import CollapseFilter from "components/CollapseFilter";
 import CustomSlider from "./CustomSlider";
 import RangeInput from "./RangeInput";
+import { useFilterStore } from "stores/filterStore";
 
 const FertilityFilter = () => {
-	const [values, setValues] = useState([0, 1500]);
+	const fertilityRange = useFilterStore(
+		(state) => state.rangeFilters.fertility
+	);
+	const [values, setValues] = useState([
+		fertilityRange.min,
+		fertilityRange.max,
+	]);
 	return (
 		<CollapseFilter allowCollapse={false} id="fertility" title="Fertility">
 			<div id={`collapse-filter-fertility`}>

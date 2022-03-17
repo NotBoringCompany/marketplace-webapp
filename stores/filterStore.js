@@ -2,11 +2,14 @@ import create from "zustand";
 
 export const useFilterStore = create((set, get) => ({
 	availableFilters: {
+		species: ["origin", "hybrid", "wild"],
 		gender: ["male", "female"],
+		rarity: ["common", "uncommon", "rare", "epic", "legendary", "mythical"],
+		mutation: ["mutated", "not_mutated"],
 	},
-	selectedFilters: {},
 	/*
-	selectedFilters' shape example is like this
+		selectedFilters' shape example is like this
+	
 		{
 		gender: {
 			male: true	
@@ -18,8 +21,17 @@ export const useFilterStore = create((set, get) => ({
 		etc..
 	}
 	*/
+	selectedFilters: {},
+	rangeFilters: {
+		fertility: {
+			min: 0,
+			max: 1500,
+		},
+	},
+
 	addFilter: (data) => {
 		const { prop, item } = data;
+		//from the example above, item is "male", and prop is "gender"
 		!(prop.toString() in get().selectedFilters) &&
 			set((state) => ({
 				selectedFilters: { ...state.selectedFilters, [prop]: [] },
@@ -36,17 +48,28 @@ export const useFilterStore = create((set, get) => ({
 	},
 	removeFilter: (data) => {
 		const { prop, item } = data;
-		const itemExistsInFilter = item in get().selectedFilters[prop];
-		if (prop.toString() in get().selectedFilters && itemExistsInFilter) {
-			delete get().selectedFilters[prop][item];
-			if (Object.keys(get().selectedFilters[prop]) === 0)
-				delete get().selectedFilters[prop];
-			set((state) => ({
-				selectedFilters: {
-					...state.selectedFilters,
-					[prop]: get().selectedFilters[prop],
-				},
-			}));
+		const propAndItemExist =
+			prop.toString() in get().selectedFilters &&
+			item in get().selectedFilters[prop];
+		if (propAndItemExist) {
+			delete get().selectedFilters[prop][item]; // delete the actual item
+			if (Object.keys(get().selectedFilters[prop]).length === 0) {
+				// if that prop is empty e.g gender: {}
+				delete get().selectedFilters[prop]; // delete that prop itself
+				//asdas
+				set((state) => ({
+					selectedFilters: {
+						...state.selectedFilters, // and reapply state
+					},
+				}));
+			} else {
+				set((state) => ({
+					selectedFilters: {
+						...state.selectedFilters,
+						[prop]: get().selectedFilters[prop], // reapply state using the remaining items for that prop
+					},
+				}));
+			}
 		}
 	},
 	clearFilter: () => {
