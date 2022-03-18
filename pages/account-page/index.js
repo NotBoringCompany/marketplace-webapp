@@ -21,6 +21,7 @@ import { HeadingXXS } from "components/Typography/Headings";
 import { mediaBreakpoint } from "utils/breakpoints";
 import { useFilterStore } from "stores/filterStore";
 import CheckBoxFilters from "components/Filters/CheckBoxFilters";
+import NBMonPreviewCard from "components/NBMonPreviewCard";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -99,6 +100,12 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	);
 };
 
+const GalleryContainer = styled.div`
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-gap: 24px;
+`;
+
 const AccountPage = () => {
 	const { isAuthenticated, user, logout } = useMoralis();
 	const router = useRouter();
@@ -151,8 +158,7 @@ const AccountPage = () => {
 			<StyledContainer>
 				<div className="d-flex align-items-center justify-content-between">
 					<HeadingXXS as="h1" className="text-white">
-						Account Page.. you are{" "}
-						{isAuthenticated ? `signed in` : `not signed in`}
+						NBMons
 					</HeadingXXS>
 					<MyButton
 						variant="outline-secondary"
@@ -161,11 +167,12 @@ const AccountPage = () => {
 						onClick={handleFilterButton}
 					/>
 				</div>
+				<GalleryContainer className="mt-4">
+					{allNBMons.map((nbMon) => (
+						<NBMonPreviewCard nbMon={nbMon} key={nbMon.nbmonId} />
+					))}
+				</GalleryContainer>
 
-				<hr />
-				{allNBMons.map((nbMon) => (
-					<div className="text-white">{nbMon.genus}</div>
-				))}
 				{/* {isAuthenticated && (
 					<p className="text-white">
 						Wallet Address:{" "}
