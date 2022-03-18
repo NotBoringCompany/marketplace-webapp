@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Image from "next/image";
+import { useState, useEffect, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import styled from "styled-components";
 import { TextSecondary } from "components/Typography/Texts";
-
+import { useFilterStore } from "stores/filterStore";
+import { genusImages } from "configs";
 const StyledCheckBox = styled(Form.Check)`
 	display: flex;
 	align-items: center;
@@ -66,21 +66,39 @@ const NameContainer = styled.div`
 	border-bottom-right-radius: 10px;
 `;
 
-const CheckBoxImage = ({ ...props }) => {
+const CheckBoxImage = ({ kind, ...props }) => {
+	const addFilter = useFilterStore((state) => state.addFilter);
+	const removeFilter = useFilterStore((state) => state.removeFilter);
+	const clearingFilter = useFilterStore((state) => state.clearing);
 	const [checked, setChecked] = useState(false);
+	const checkBoxRef = useRef(null);
 
-	const handleCheckboxClicked = () => {
-		setChecked(!checked);
+	useEffect(() => {
+		setChecked(false);
+	}, [clearingFilter]);
+
+	const handleCheckboxClicked = (e) => {
+		setChecked(e.target.checked);
+		e.stopPropagation();
+		if (e.target.checked) {
+			addFilter({ prop: kind, item: e.target.value });
+		} else {
+			removeFilter({ prop: kind, item: e.target.value });
+		}
 	};
 
+	const handleClickContainer = () => checkBoxRef && checkBoxRef.current.click();
+
 	return (
-		<Container onClick={handleCheckboxClicked}>
-			<img src={props.imageURL} alt="NBMon" />
+		<Container onClick={handleClickContainer}>
+			<img src={genusImages[props.label.toLowerCase()].imageurl} alt="NBMon" />
 			<StyledCheckBox
+				ref={checkBoxRef}
 				checked={checked}
 				type={"checkbox"}
-				onClick={handleCheckboxClicked}
+				onChange={(e) => handleCheckboxClicked(e)}
 				{...props}
+				value={props.label.toLowerCase()}
 				label=""
 			/>
 			<NameContainer>

@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 
 import CustomModal from "./CustomModal";
 import { HeadingXXS } from "components/Typography/Headings";
@@ -17,7 +16,7 @@ const CheckboxesContainer = styled.div`
 	grid-gap: 16px;
 `;
 
-const FilterModal = ({ stateUtils, title, data = null }) => {
+const FilterModal = ({ stateUtils, kind, title, data = null }) => {
 	const { setter } = stateUtils;
 
 	return (
@@ -29,7 +28,7 @@ const FilterModal = ({ stateUtils, title, data = null }) => {
 			<CheckboxesContainer className="d-grid mt-2">
 				{data &&
 					data.map((d) => (
-						<CheckBoxImage imageURL={d.imageUrl} key={d.id} label={d.name} />
+						<CheckBoxImage kind={kind} key={d.id} label={d.name} />
 					))}
 			</CheckboxesContainer>
 
