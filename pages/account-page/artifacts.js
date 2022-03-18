@@ -28,6 +28,18 @@ const Artifacts = () => {
 					Here, all of your Artifacts will be displayed
 					<hr />
 				</h3>
+
+				{/* {isAuthenticated && (
+					<p className="text-white">
+						Wallet Address:{" "}
+						{user.attributes.ethAddress &&
+							user.attributes.ethAddress.toUpperCase()}
+						<br />
+						<hr />
+						Linked email:{" "}
+						{user.attributes.email ? user.attributes.email : "None"}
+					</p>
+				)} */}
 			</StyledContainer>
 		</Layout>
 	);

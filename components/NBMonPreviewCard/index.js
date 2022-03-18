@@ -17,7 +17,7 @@ const NBMonPreviewCard = ({ nbMon }) => {
 			<p>Genus: {nbMon.genus}</p>
 			<p>Gender: {nbMon.gender}</p>
 			<p>Rarity: {nbMon.rarity}</p>
-			<p>Mutation: {nbMon.mutated}</p>
+			<p>Mutation: {nbMon.mutation.toString()}</p>
 			<p>Species: {nbMon.species}</p>
 			<p>Fertility: {nbMon.fertility}</p>
 		</Card>

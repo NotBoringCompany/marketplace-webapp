@@ -11,6 +11,7 @@ import MyButton from "components/Buttons/Button";
 
 import styled from "styled-components";
 import mustBeAuthed from "utils/mustBeAuthed";
+import filterNBMons from "utils/filterNBMons";
 
 import GenusFilter from "components/Filters/GenusFilter";
 import TypesFilter from "components/Filters/TypesFilter";
@@ -19,9 +20,12 @@ import FertilityFilter from "components/Filters/FertilityFilter";
 import { HeadingXXS } from "components/Typography/Headings";
 
 import { mediaBreakpoint } from "utils/breakpoints";
-import { useFilterStore } from "stores/filterStore";
 import CheckBoxFilters from "components/Filters/CheckBoxFilters";
 import NBMonPreviewCard from "components/NBMonPreviewCard";
+import { TextPrimary } from "components/Typography/Texts";
+import Loading from "components/Loading";
+
+import { useFilterStore } from "stores/filterStore";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -68,13 +72,7 @@ const DesktopFilterContainer = styled.div`
 `;
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
-	const { selectedFilters, clearFilter, rangeFilters } = useFilterStore();
-
-	useEffect(() => {
-		console.log("**********");
-		console.log("sF", selectedFilters);
-		console.log("rF", rangeFilters);
-	}, [selectedFilters, rangeFilters]);
+	const clearFilter = useFilterStore((state) => state.clearFilter);
 
 	return (
 		<DesktopFilterContainer
@@ -112,7 +110,10 @@ const AccountPage = () => {
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
 	const [allNBMons, setAllNBMons] = useState([]);
-	const { isLoading, error, data } = useQuery("allMyNBMons", () =>
+	const [allFilteredNBMons, setAllFilteredNBMons] = useState([]);
+	const { selectedFilters, rangeFilters } = useFilterStore();
+
+	const { isLoading, error } = useQuery("allMyNBMons", () =>
 		fetch("https://run.mocky.io/v3/822bd2f3-47fc-476a-8022-40d1698a8e74").then(
 			async (res) => {
 				const fetchedData = await res.json();
@@ -121,20 +122,21 @@ const AccountPage = () => {
 		)
 	);
 
-	if (isLoading) return "Loading...";
-
-	if (error) return "An error has occurred: " + error.message;
+	useEffect(() => {
+		if (!isLoading) {
+			const filtered = filterNBMons(selectedFilters, rangeFilters, allNBMons);
+			setAllFilteredNBMons(filtered);
+		}
+	}, [selectedFilters, rangeFilters, isLoading]);
 
 	const handleLogOut = async () => {
 		await logout();
-
 		router.replace("/connect");
 	};
 
 	const handleFilterButton = () => {
 		if (!filterOpen) {
 			setFilterOpen(true);
-
 			setTimeout(() => {
 				setOpacityOne(true);
 			}, 100);
@@ -157,9 +159,6 @@ const AccountPage = () => {
 			/>
 			<StyledContainer>
 				<div className="d-flex align-items-center justify-content-between">
-					<HeadingXXS as="h1" className="text-white">
-						NBMons
-					</HeadingXXS>
 					<MyButton
 						variant="outline-secondary"
 						className="d-block d-xl-none"
@@ -167,23 +166,34 @@ const AccountPage = () => {
 						onClick={handleFilterButton}
 					/>
 				</div>
+
 				<GalleryContainer className="mt-4">
-					{allNBMons.map((nbMon) => (
-						<NBMonPreviewCard nbMon={nbMon} key={nbMon.nbmonId} />
-					))}
+					{!isLoading ? (
+						<>
+							{allFilteredNBMons.map((nbMon) => (
+								<NBMonPreviewCard nbMon={nbMon} key={nbMon.nbmonId} />
+							))}
+						</>
+					) : (
+						<Loading />
+					)}
 				</GalleryContainer>
 
-				{/* {isAuthenticated && (
-					<p className="text-white">
-						Wallet Address:{" "}
-						{user.attributes.ethAddress &&
-							user.attributes.ethAddress.toUpperCase()}
-						<br />
-						<hr />
-						Linked email:{" "}
-						{user.attributes.email ? user.attributes.email : "None"}
-					</p>
-				)} */}
+				{error && (
+					<TextPrimary className="mt-4 text-white text-center">
+						An error occured while fetching your NBMons. Please refresh this
+						page.
+					</TextPrimary>
+				)}
+
+				{!isLoading &&
+					Object.keys(selectedFilters).length > 0 &&
+					allFilteredNBMons.length < 1 && (
+						<TextPrimary className="mt-4 text-white text-center">
+							No Result 🙈
+						</TextPrimary>
+					)}
+
 				<MyButton
 					text="Sign Out"
 					onClick={handleLogOut}
