@@ -106,7 +106,11 @@ const CheckBoxImage = ({ kind, ...props }) => {
 
 	return (
 		<Container onClick={handleClickContainer}>
-			<img src={genusImages[props.label.toLowerCase()].imageurl} alt="NBMon" />
+			<img
+				style={{ width: "100%", height: "100%" }}
+				src={genusImages[props.label.toLowerCase()].imageurl}
+				alt="NBMon"
+			/>
 			<StyledCheckBox
 				ref={checkBoxRef}
 				checked={checked}
