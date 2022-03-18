@@ -70,6 +70,9 @@ const CheckBoxImage = ({ kind, ...props }) => {
 	const addFilter = useFilterStore((state) => state.addFilter);
 	const removeFilter = useFilterStore((state) => state.removeFilter);
 	const clearingFilter = useFilterStore((state) => state.clearing);
+	const selectedGenus = useFilterStore((state) =>
+		state.selectedFilters.genus ? state.selectedFilters.genus : {}
+	);
 	const [checked, setChecked] = useState(false);
 	const checkBoxRef = useRef(null);
 
@@ -77,9 +80,21 @@ const CheckBoxImage = ({ kind, ...props }) => {
 		setChecked(false);
 	}, [clearingFilter]);
 
+	useEffect(() => {
+		if (Object.keys(selectedGenus).length > 0) {
+			const isChecked = Object.keys(selectedGenus).includes(
+				props.label.toLowerCase()
+			);
+			setChecked(isChecked);
+		}
+	}, []);
+
 	const handleCheckboxClicked = (e) => {
-		setChecked(e.target.checked);
 		e.stopPropagation();
+	};
+
+	const handleOnChange = (e) => {
+		setChecked(e.target.checked);
 		if (e.target.checked) {
 			addFilter({ prop: kind, item: e.target.value });
 		} else {
@@ -96,7 +111,8 @@ const CheckBoxImage = ({ kind, ...props }) => {
 				ref={checkBoxRef}
 				checked={checked}
 				type={"checkbox"}
-				onChange={(e) => handleCheckboxClicked(e)}
+				onClick={(e) => handleCheckboxClicked(e)}
+				onChange={(e) => handleOnChange(e)}
 				{...props}
 				value={props.label.toLowerCase()}
 				label=""

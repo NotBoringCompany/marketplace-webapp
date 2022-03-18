@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Container from "react-bootstrap/Container";
-import Layout from "./Layout";
+
 const StyledContainer = styled.div`
 	height: 100vh;
 	display: flex;
