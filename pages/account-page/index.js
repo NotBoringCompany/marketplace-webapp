@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useMoralis } from "react-moralis";
 import { useRouter } from "next/router";
 
+import { useQuery } from "react-query";
+
 import Layout from "components/Layout";
 import MyButton from "components/Buttons/Button";
 
@@ -72,6 +74,7 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 		console.log("sF", selectedFilters);
 		console.log("rF", rangeFilters);
 	}, [selectedFilters, rangeFilters]);
+
 	return (
 		<DesktopFilterContainer
 			className={`bg-primary3 ${filterOpen && `show`} ${
@@ -101,6 +104,19 @@ const AccountPage = () => {
 	const router = useRouter();
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
+	const [allNBMons, setAllNBMons] = useState([]);
+	const { isLoading, error, data } = useQuery("allMyNBMons", () =>
+		fetch("https://run.mocky.io/v3/822bd2f3-47fc-476a-8022-40d1698a8e74").then(
+			async (res) => {
+				const fetchedData = await res.json();
+				setAllNBMons(fetchedData.result);
+			}
+		)
+	);
+
+	if (isLoading) return "Loading...";
+
+	if (error) return "An error has occurred: " + error.message;
 
 	const handleLogOut = async () => {
 		await logout();
@@ -147,11 +163,10 @@ const AccountPage = () => {
 				</div>
 
 				<hr />
-				<h3 className="text-white">
-					Here, all of your NBMons will be displayed
-					<hr />
-				</h3>
-				{isAuthenticated && (
+				{allNBMons.map((nbMon) => (
+					<div className="text-white">{nbMon.genus}</div>
+				))}
+				{/* {isAuthenticated && (
 					<p className="text-white">
 						Wallet Address:{" "}
 						{user.attributes.ethAddress &&
@@ -161,7 +176,7 @@ const AccountPage = () => {
 						Linked email:{" "}
 						{user.attributes.email ? user.attributes.email : "None"}
 					</p>
-				)}
+				)} */}
 				<MyButton
 					text="Sign Out"
 					onClick={handleLogOut}

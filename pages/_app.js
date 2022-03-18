@@ -1,6 +1,8 @@
 import Router from "next/router";
 
 import { MoralisProvider } from "react-moralis";
+import { QueryClient, QueryClientProvider } from "react-query";
+
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 // import { useContext } from "react";
@@ -8,6 +10,8 @@ import "styles/globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "styles/root.scss";
 import "styles/styles.scss";
+
+const queryClient = new QueryClient();
 
 function Main({ Component, pageProps }) {
 	NProgress.configure({
@@ -22,12 +26,14 @@ function Main({ Component, pageProps }) {
 	Router.events.on("routeChangeError", () => NProgress.done());
 
 	return (
-		<MoralisProvider
-			appId={process.env.NEXT_PUBLIC_APP_ID}
-			serverUrl={process.env.NEXT_PUBLIC_SERVER_URL}
-		>
-			<Component {...pageProps} />
-		</MoralisProvider>
+		<QueryClientProvider client={queryClient}>
+			<MoralisProvider
+				appId={process.env.NEXT_PUBLIC_APP_ID}
+				serverUrl={process.env.NEXT_PUBLIC_SERVER_URL}
+			>
+				<Component {...pageProps} />
+			</MoralisProvider>
+		</QueryClientProvider>
 	);
 }
 
