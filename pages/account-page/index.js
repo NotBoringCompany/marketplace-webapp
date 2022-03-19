@@ -30,7 +30,7 @@ import { useFilterStore } from "stores/filterStore";
 const StyledContainer = styled.div`
 	padding: 32px;
 	min-height: 100vh;
-	padding-left: calc(25% + 32px);
+	padding-left: calc(22% + 32px);
 
 	@media ${mediaBreakpoint.down.xl} {
 		padding: 32px;
@@ -43,7 +43,7 @@ const DesktopFilterContainer = styled.div`
 	height: 100vh;
 	overflow: auto;
 	overflow-x: hidden;
-	width: 25%;
+	width: 22%;
 	z-index: 1;
 	position: absolute;
 	padding: 24px;
@@ -102,6 +102,16 @@ const GalleryContainer = styled.div`
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	grid-gap: 24px;
+
+	@media ${mediaBreakpoint.down.xl} {
+		grid-template-columns: repeat(2, 1fr);
+		grid-gap: 16px;
+	}
+
+	@media ${mediaBreakpoint.down.sm} {
+		grid-template-columns: repeat(1, 1fr);
+		grid-gap: 16px;
+	}
 `;
 
 const AccountPage = () => {
@@ -127,7 +137,7 @@ const AccountPage = () => {
 			const filtered = filterNBMons(selectedFilters, rangeFilters, allNBMons);
 			setAllFilteredNBMons(filtered);
 		}
-	}, [selectedFilters, rangeFilters, isLoading]);
+	}, [selectedFilters, rangeFilters, isLoading, allNBMons]);
 
 	const handleLogOut = async () => {
 		await logout();

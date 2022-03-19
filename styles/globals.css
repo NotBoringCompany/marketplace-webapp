@@ -40,6 +40,13 @@
 	font-style: italic;
 }
 
+@font-face {
+	font-family: "Mada";
+	src: url("./fonts/Mada-SemiBold.ttf") format("truetype");
+	font-weight: 600;
+	font-style: normal;
+}
+
 html {
 	height: 100%;
 	overflow: auto;
