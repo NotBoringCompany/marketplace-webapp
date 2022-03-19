@@ -4,6 +4,7 @@ import { HeadingSuperXXS } from "components/Typography/Headings";
 import { IoMdMale, IoMdFemale } from "react-icons/io";
 import { TextSecondary } from "components/Typography/Texts";
 import { mediaBreakpoint } from "utils/breakpoints";
+import Pill from "components/Pill";
 
 const Card = styled.div`
 	padding: 24px;
@@ -17,8 +18,7 @@ const Card = styled.div`
 	& svg {
 		font-size: 24px;
 	}
-	background: linear-gradient(180deg, #191818 0%, #272626 100%);
-
+	background: linear-gradient(180deg, #1f1f1f 0%, #272626 100%);
 	& .genusName {
 		font-size: 23px;
 	}
@@ -42,9 +42,10 @@ const MutatedText = styled(TextSecondary)`
 	font-weight: 600;
 	font-size: 14px;
 `;
-const NBMonPreviewCard = ({ nbMon }) => {
+const NBMonPreviewCard = ({ nbMon, ...props }) => {
+	const { className } = props;
 	return (
-		<Card className="bg-gray text-white">
+		<Card className={`bg-gray text-white ${className}`}>
 			<div className="justify-content-center d-flex align-items-center">
 				<HeadingSuperXXS as="p" className=" genusName">
 					{nbMon.genus}
@@ -55,17 +56,16 @@ const NBMonPreviewCard = ({ nbMon }) => {
 					)}
 				</HeadingSuperXXS>
 			</div>
-			<div className="w-100 my-2 d-flex flex-column align-items-center justify-content-center">
-				<TextSecondary>
-					#{nbMon.nbmonId} - {nbMon.fertility} Fertility
-				</TextSecondary>
-				<MutatedText className="mt-1">
-					{nbMon.mutation === "mutated" ? "Mutated" : "Not mutated"}
-				</MutatedText>
+			<TextSecondary className="text-center my-2">
+				#{nbMon.nbmonId} - {nbMon.fertility} Fertility
+			</TextSecondary>
+			<div className="d-flex align-items-center justify-content-center">
+				<Pill content={nbMon.rarity} />
+				<Pill content={nbMon.species} />
 			</div>
-			<div className="d-flex">
-				<p>Rarity: {nbMon.rarity}</p> <p>Species: {nbMon.species}</p>
-			</div>
+			<MutatedText className="text-center mt-2">
+				{nbMon.mutation === "mutated" ? "Mutated" : "Not mutated"}
+			</MutatedText>
 		</Card>
 	);
 };

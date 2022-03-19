@@ -26,6 +26,8 @@ import { TextPrimary } from "components/Typography/Texts";
 import Loading from "components/Loading";
 
 import { useFilterStore } from "stores/filterStore";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -34,6 +36,10 @@ const StyledContainer = styled.div`
 
 	@media ${mediaBreakpoint.down.xl} {
 		padding: 32px;
+	}
+
+	& h1 {
+		font-size: 22px;
 	}
 `;
 const DesktopFilterContainer = styled.div`
@@ -98,22 +104,6 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	);
 };
 
-const GalleryContainer = styled.div`
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	grid-gap: 24px;
-
-	@media ${mediaBreakpoint.down.xl} {
-		grid-template-columns: repeat(2, 1fr);
-		grid-gap: 16px;
-	}
-
-	@media ${mediaBreakpoint.down.sm} {
-		grid-template-columns: repeat(1, 1fr);
-		grid-gap: 16px;
-	}
-`;
-
 const AccountPage = () => {
 	const { isAuthenticated, user, logout } = useMoralis();
 	const router = useRouter();
@@ -127,7 +117,11 @@ const AccountPage = () => {
 		fetch("https://run.mocky.io/v3/822bd2f3-47fc-476a-8022-40d1698a8e74").then(
 			async (res) => {
 				const fetchedData = await res.json();
-				setAllNBMons(fetchedData.result);
+				setAllNBMons(
+					fetchedData.result.sort(
+						(a, b) => parseInt(a.nbmonId) > parseInt(b.nbmonId)
+					)
+				);
 			}
 		)
 	);
@@ -135,7 +129,9 @@ const AccountPage = () => {
 	useEffect(() => {
 		if (!isLoading) {
 			const filtered = filterNBMons(selectedFilters, rangeFilters, allNBMons);
-			setAllFilteredNBMons(filtered);
+			setAllFilteredNBMons(
+				filtered.sort((a, b) => parseInt(a.nbmonId) > parseInt(b.nbmonId))
+			);
 		}
 	}, [selectedFilters, rangeFilters, isLoading, allNBMons]);
 
@@ -168,7 +164,7 @@ const AccountPage = () => {
 				handleFilterButton={handleFilterButton}
 			/>
 			<StyledContainer>
-				<div className="d-flex align-items-center justify-content-between">
+				<div className="d-flex align-items-center justify-content-between mb-3">
 					<MyButton
 						variant="outline-secondary"
 						className="d-block d-xl-none"
@@ -177,22 +173,27 @@ const AccountPage = () => {
 					/>
 				</div>
 
-				<GalleryContainer className="mt-4">
+				<HeadingXXS as="h1" className="text-white mb-3">
+					{allFilteredNBMons.length} NBMons
+				</HeadingXXS>
+				<Row>
 					{!isLoading ? (
 						<>
 							{allFilteredNBMons.map((nbMon) => (
-								<NBMonPreviewCard nbMon={nbMon} key={nbMon.nbmonId} />
+								<Col className="mb-3" xl={3} lg={4} md={6} sm={12}>
+									<NBMonPreviewCard nbMon={nbMon} key={nbMon.nbmonId} />
+								</Col>
 							))}
 						</>
 					) : (
 						<Loading />
 					)}
-				</GalleryContainer>
+				</Row>
 
 				{error && (
 					<TextPrimary className="mt-4 text-white text-center">
 						An error occured while fetching your NBMons. Please refresh this
-						page.
+						page. {error.toString()}
 					</TextPrimary>
 				)}
 
