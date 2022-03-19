@@ -11,6 +11,7 @@ const Card = styled.div`
 	display: flex;
 	flex-direction: column;
 	border-radius: 16px;
+	transition: 0.35s all;
 
 	p {
 		margin: 0;
@@ -19,6 +20,7 @@ const Card = styled.div`
 		font-size: 24px;
 	}
 	background: linear-gradient(180deg, #1f1f1f 0%, #272626 100%);
+
 	& .genusName {
 		font-size: 23px;
 	}
@@ -36,12 +38,13 @@ const Card = styled.div`
 	& .female {
 		color: #ff8eed;
 	}
+
+	&:hover {
+		cursor: pointer;
+		transform: translate(2px, -5px);
+	}
 `;
 
-const MutatedText = styled(TextSecondary)`
-	font-weight: 600;
-	font-size: 14px;
-`;
 const NBMonPreviewCard = ({ nbMon, ...props }) => {
 	const { className } = props;
 	return (
@@ -59,13 +62,14 @@ const NBMonPreviewCard = ({ nbMon, ...props }) => {
 			<TextSecondary className="text-center my-2">
 				#{nbMon.nbmonId} - {nbMon.fertility} Fertility
 			</TextSecondary>
-			<div className="d-flex align-items-center justify-content-center">
+			<div className="d-flex align-items-center mt-2 justify-content-center">
 				<Pill content={nbMon.rarity} />
 				<Pill content={nbMon.species} />
 			</div>
-			<MutatedText className="text-center mt-2">
-				{nbMon.mutation === "mutated" ? "Mutated" : "Not mutated"}
-			</MutatedText>
+			<div className="mt-2"></div>
+			<Pill
+				content={nbMon.mutation === "mutated" ? "Mutated" : "Not mutated"}
+			/>
 		</Card>
 	);
 };

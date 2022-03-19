@@ -24,11 +24,24 @@ const IndividualCheckBox = ({ item, kind }) => {
 	const removeFilter = useFilterStore((state) => state.removeFilter);
 	const clearingFilter = useFilterStore((state) => state.clearing);
 
+	const allSelectedKind = useFilterStore((state) =>
+		state.selectedFilters[kind] ? state.selectedFilters[kind] : {}
+	);
+
 	const [checked, setChecked] = useState(false);
 
 	useEffect(() => {
 		setChecked(false);
 	}, [clearingFilter]);
+
+	useEffect(() => {
+		if (Object.keys(allSelectedKind).length > 0) {
+			console.log("AAAA");
+			console.log(allSelectedKind);
+			const isChecked = Object.keys(allSelectedKind).includes(item);
+			setChecked(isChecked);
+		}
+	}, []);
 
 	const handleClicked = (e) => {
 		setChecked(e.target.checked);

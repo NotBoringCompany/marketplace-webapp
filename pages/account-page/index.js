@@ -119,7 +119,7 @@ const AccountPage = () => {
 				const fetchedData = await res.json();
 				setAllNBMons(
 					fetchedData.result.sort(
-						(a, b) => parseInt(a.nbmonId) > parseInt(b.nbmonId)
+						(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)
 					)
 				);
 			}
@@ -130,7 +130,7 @@ const AccountPage = () => {
 		if (!isLoading) {
 			const filtered = filterNBMons(selectedFilters, rangeFilters, allNBMons);
 			setAllFilteredNBMons(
-				filtered.sort((a, b) => parseInt(a.nbmonId) > parseInt(b.nbmonId))
+				filtered.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
 			);
 		}
 	}, [selectedFilters, rangeFilters, isLoading, allNBMons]);
