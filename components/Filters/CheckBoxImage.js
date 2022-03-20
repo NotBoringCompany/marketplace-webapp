@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import styled from "styled-components";
 import { TextSecondary } from "components/Typography/Texts";
 import { useFilterStore } from "stores/filterStore";
-import { genusImages } from "configs";
+import { images } from "configs";
 const StyledCheckBox = styled(Form.Check)`
 	display: flex;
 	align-items: center;
@@ -50,8 +50,7 @@ const Container = styled.div`
 	}
 
 	& img {
-		border-bottom-left-radius: 10px;
-		border-bottom-right-radius: 10px;
+		border-radius: 10px;
 	}
 `;
 
@@ -70,8 +69,8 @@ const CheckBoxImage = ({ kind, ...props }) => {
 	const addFilter = useFilterStore((state) => state.addFilter);
 	const removeFilter = useFilterStore((state) => state.removeFilter);
 	const clearingFilter = useFilterStore((state) => state.clearing);
-	const selectedGenus = useFilterStore((state) =>
-		state.selectedFilters.genus ? state.selectedFilters.genus : {}
+	const selectedFilters = useFilterStore((state) =>
+		state.selectedFilters[kind] ? state.selectedFilters[kind] : {}
 	);
 	const [checked, setChecked] = useState(false);
 	const checkBoxRef = useRef(null);
@@ -81,8 +80,8 @@ const CheckBoxImage = ({ kind, ...props }) => {
 	}, [clearingFilter]);
 
 	useEffect(() => {
-		if (Object.keys(selectedGenus).length > 0) {
-			const isChecked = Object.keys(selectedGenus).includes(
+		if (Object.keys(selectedFilters).length > 0) {
+			const isChecked = Object.keys(selectedFilters).includes(
 				props.label.toLowerCase()
 			);
 			setChecked(isChecked);
@@ -108,8 +107,12 @@ const CheckBoxImage = ({ kind, ...props }) => {
 		<Container onClick={handleClickContainer}>
 			<img
 				style={{ width: "100%", height: "100%" }}
-				src={genusImages[props.label.toLowerCase()].imageurl}
-				alt="NBMon"
+				src={
+					images[kind]
+						? images[kind][props.label.toLowerCase()].imageurl
+						: images.default.imageurl
+				}
+				alt="Image"
 			/>
 			<StyledCheckBox
 				ref={checkBoxRef}

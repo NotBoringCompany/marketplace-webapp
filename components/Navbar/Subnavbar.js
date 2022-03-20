@@ -33,8 +33,6 @@ const MenuItemContainer = styled.div`
 
 const Subnavbar = () => {
 	const router = useRouter();
-	console.log(router);
-	console.log(router.asPath);
 
 	const imageMapper = {
 		nbmons: NBMonLogo,

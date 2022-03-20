@@ -13,8 +13,7 @@ import styled from "styled-components";
 import mustBeAuthed from "utils/mustBeAuthed";
 import filterNBMons from "utils/filterNBMons";
 
-import GenusFilter from "components/Filters/GenusFilter";
-import TypesFilter from "components/Filters/TypesFilter";
+import FiltersWithModal from "components/Filters/FiltersWithModal";
 import FertilityFilter from "components/Filters/FertilityFilter";
 
 import { HeadingXXS } from "components/Typography/Headings";
@@ -90,8 +89,7 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 				Filters
 			</HeadingXXS>
 			<button onClick={clearFilter}>clearfilter</button>
-			<GenusFilter />
-			<TypesFilter />
+			<FiltersWithModal />
 			<CheckBoxFilters />
 			<FertilityFilter />
 			<MyButton
@@ -114,7 +112,7 @@ const AccountPage = () => {
 	const { selectedFilters, rangeFilters } = useFilterStore();
 
 	const { isLoading, error } = useQuery("allMyNBMons", () =>
-		fetch("https://run.mocky.io/v3/822bd2f3-47fc-476a-8022-40d1698a8e74").then(
+		fetch("https://run.mocky.io/v3/98c11fc3-2b7c-4bb4-9bc7-9f118f48c208").then(
 			async (res) => {
 				const fetchedData = await res.json();
 				setAllNBMons(

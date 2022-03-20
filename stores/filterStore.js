@@ -4,6 +4,7 @@ export const useFilterStore = create((set, get) => ({
 	availableFilters: {
 		species: ["origin", "hybrid", "wild"],
 		gender: ["male", "female"],
+
 		rarity: ["common", "uncommon", "rare", "epic", "legendary", "mythical"],
 		mutation: ["mutated", "not_mutated"],
 	},
@@ -32,6 +33,60 @@ export const useFilterStore = create((set, get) => ({
 			{
 				name: "Milnas",
 				id: "milnas",
+			},
+		],
+		types: [
+			{
+				name: "Null",
+				id: "null",
+			},
+			{
+				name: "Neutral",
+				id: "neutral",
+			},
+			{
+				name: "Wind",
+				id: "wind",
+			},
+			{
+				name: "Earth",
+				id: "earth",
+			},
+			{
+				name: "Water",
+				id: "water",
+			},
+			{
+				name: "Fire",
+				id: "fire",
+			},
+			{
+				name: "Nature",
+				id: "nature",
+			},
+			{
+				name: "Electric",
+				id: "electric",
+			},
+			{
+				name: "Mental",
+				id: "mental",
+			},
+			{
+				name: "Digital",
+				id: "digital",
+			},
+			{
+				name: "Melee",
+				id: "melee",
+			},
+			{
+				name: "Crystal",
+				id: "crystal",
+			},
+			{
+				name: "Toxic",
+				id: "crystal",
 			},
 		],
 	},

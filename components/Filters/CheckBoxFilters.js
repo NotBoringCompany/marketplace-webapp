@@ -36,8 +36,6 @@ const IndividualCheckBox = ({ item, kind }) => {
 
 	useEffect(() => {
 		if (Object.keys(allSelectedKind).length > 0) {
-			console.log("AAAA");
-			console.log(allSelectedKind);
 			const isChecked = Object.keys(allSelectedKind).includes(item);
 			setChecked(isChecked);
 		}
