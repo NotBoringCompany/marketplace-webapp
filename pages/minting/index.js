@@ -11,12 +11,13 @@ const randomIntFromInterval = (min, max) => {
 };
 
 const index = () => {
-	const { Moralis } = useMoralis();
+	const { Moralis, user } = useMoralis();
 
 	const mintingAbi = NBMonMinting;
 
 	const mintNBMon = async () => {
-		// await Moralis.enableWeb3();
+		await Moralis.enableWeb3();
+
 		const web3 = new Web3(Moralis.provider);
 
 		const contract = new web3.eth.Contract(
@@ -30,10 +31,18 @@ const index = () => {
 		// const NBMonId =
 		// 	parseInt(receipt.events.NBMonMinted.returnValues._nbmonId) - 1;
 
-		const nbMon = await contract.methods
-			.getNBMon(39)
-			.call({ from: web3.currentProvider.selectedAddress });
-		console.log("data", nbMon);
+		const res = await fetch(
+			"https://sxcvpb1zwixk.usemoralis.com:2053/server/functions/getOwnerNBMons?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&address=0x5fa5c1998d4c11f59c17FDE8b3f07588C23837D5"
+		);
+
+		const arrayOfIds = (await res.json()).result;
+
+		arrayOfIds.forEach(async (nbMonId) => {
+			const nbMon = await contract.methods
+				.getNBMon(nbMonId)
+				.call({ from: user.attributes.ethAddresss });
+			console.log("data", nbMon);
+		});
 	};
 	const update = () => {
 		const Monster = Moralis.Object.extend("BscNFTOwners");
