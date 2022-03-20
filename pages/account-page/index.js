@@ -16,7 +16,7 @@ import filterNBMons from "utils/filterNBMons";
 import FiltersWithModal from "components/Filters/FiltersWithModal";
 import FertilityFilter from "components/Filters/FertilityFilter";
 
-import { HeadingXXS } from "components/Typography/Headings";
+import { HeadingSuperXXS, HeadingXXS } from "components/Typography/Headings";
 
 import { mediaBreakpoint } from "utils/breakpoints";
 import CheckBoxFilters from "components/Filters/CheckBoxFilters";
@@ -76,6 +76,17 @@ const DesktopFilterContainer = styled.div`
 	}
 `;
 
+const ClearFilterButton = styled.button`
+	background: transparent;
+	border: none;
+	padding: 0;
+	color: #fff;
+
+	& p {
+		font-size: 18px;
+	}
+`;
+
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const clearFilter = useFilterStore((state) => state.clearFilter);
 
@@ -85,10 +96,14 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 				opacityOne && `opacityOne`
 			}`}
 		>
-			<HeadingXXS as="p" className="mb-3 text-white text-center">
-				Filters
-			</HeadingXXS>
-			<button onClick={clearFilter}>clearfilter</button>
+			<div className="d-flex mb-3 justify-content-center">
+				<HeadingXXS as="p" className="ms-auto text-white text-center">
+					Filters
+				</HeadingXXS>
+				<ClearFilterButton className="mt-1 ms-auto" onClick={clearFilter}>
+					<HeadingSuperXXS as="p">Clear</HeadingSuperXXS>
+				</ClearFilterButton>
+			</div>
 			<FiltersWithModal />
 			<CheckBoxFilters />
 			<FertilityFilter />
@@ -103,7 +118,7 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 };
 
 const AccountPage = () => {
-	const { isAuthenticated, user, logout } = useMoralis();
+	const logout = useMoralis().logout;
 	const router = useRouter();
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
