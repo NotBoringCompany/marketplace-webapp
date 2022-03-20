@@ -178,8 +178,15 @@ const AccountPage = () => {
 					{!isLoading ? (
 						<>
 							{allFilteredNBMons.map((nbMon) => (
-								<Col className="mb-4" xl={3} lg={4} md={6} sm={12}>
-									<NBMonPreviewCard nbMon={nbMon} key={nbMon.nbmonId} />
+								<Col
+									key={nbMon.nbmonId}
+									className="mb-4"
+									xl={3}
+									lg={4}
+									md={6}
+									sm={12}
+								>
+									<NBMonPreviewCard nbMon={nbMon} />
 								</Col>
 							))}
 						</>

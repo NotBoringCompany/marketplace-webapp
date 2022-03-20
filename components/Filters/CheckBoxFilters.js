@@ -7,7 +7,7 @@ const CheckBoxFilters = () => {
 	return (
 		<>
 			{Object.keys(availableFilters).map((kind) => (
-				<CollapseFilter id={kind} title={kind}>
+				<CollapseFilter key={kind} id={kind} title={kind}>
 					<div className="d-grid" id={`collapse-filter-${kind}`}>
 						{availableFilters[kind].map((item) => (
 							<IndividualCheckBox item={item} kind={kind} key={item} />
