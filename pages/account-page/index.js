@@ -119,6 +119,7 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 
 const AccountPage = () => {
 	const logout = useMoralis().logout;
+	const user = useMoralis().user;
 	const router = useRouter();
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
@@ -127,16 +128,16 @@ const AccountPage = () => {
 	const { selectedFilters, rangeFilters } = useFilterStore();
 
 	const { isLoading, error } = useQuery("allMyNBMons", () =>
-		fetch("https://run.mocky.io/v3/98c11fc3-2b7c-4bb4-9bc7-9f118f48c208").then(
-			async (res) => {
-				const fetchedData = await res.json();
-				setAllNBMons(
-					fetchedData.result.sort(
-						(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)
-					)
-				);
-			}
-		)
+		fetch(
+			`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getAllNbmons/${user.attributes.ethAddress}`
+		).then(async (res) => {
+			const fetchedData = await res.json();
+			setAllNBMons(
+				fetchedData.result.sort(
+					(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)
+				)
+			);
+		})
 	);
 
 	useEffect(() => {

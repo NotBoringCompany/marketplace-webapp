@@ -1,5 +1,5 @@
 export const images = {
-	genus: {
+	genera: {
 		lamox: {
 			imageurl: "https://assets.thetanarena.com/skin/smallavatar/2.png",
 		},
@@ -18,6 +18,21 @@ export const images = {
 
 		milnas: {
 			imageurl: "https://assets.thetanarena.com/skin/smallavatar/7000.png",
+		},
+		piklish: {
+			imageurl: "https://assets.thetanarena.com/skin/smallavatar/13000.png",
+		},
+		pongu: {
+			imageurl: "https://assets.thetanarena.com/skin/smallavatar/12000.png",
+		},
+		prawdek: {
+			imageurl: "https://assets.thetanarena.com/skin/smallavatar/15000.png",
+		},
+		roggo: {
+			imageurl: "https://assets.thetanarena.com/skin/smallavatar/23000.png",
+		},
+		todillo: {
+			imageurl: "https://assets.thetanarena.com/skin/smallavatar/22000.png",
 		},
 	},
 	default: {

@@ -6,10 +6,10 @@ export const useFilterStore = create((set, get) => ({
 		gender: ["male", "female"],
 
 		rarity: ["common", "uncommon", "rare", "epic", "legendary", "mythical"],
-		mutation: ["mutated", "not_mutated"],
+		mutation: ["mutated", "not mutated"],
 	},
 	availableFiltersWithImage: {
-		genus: [
+		genera: [
 			{
 				name: "Lamox",
 				id: "lamox",
@@ -33,6 +33,26 @@ export const useFilterStore = create((set, get) => ({
 			{
 				name: "Milnas",
 				id: "milnas",
+			},
+			{
+				name: "Piklish",
+				id: "piklish",
+			},
+			{
+				name: "Pongu",
+				id: "pongu",
+			},
+			{
+				name: "Prawdek",
+				id: "prawdek",
+			},
+			{
+				name: "Roggo",
+				id: "roggo",
+			},
+			{
+				name: "Todillo",
+				id: "todillo",
 			},
 		],
 		types: [
@@ -108,7 +128,7 @@ export const useFilterStore = create((set, get) => ({
 	rangeFilters: {
 		fertility: {
 			currentMin: 0,
-			currentMax: 1500,
+			currentMax: 3000,
 		},
 	},
 	clearing: false,
@@ -172,7 +192,7 @@ export const useFilterStore = create((set, get) => ({
 			rangeFilters: {
 				fertility: {
 					currentMin: 0,
-					currentMax: 1500,
+					currentMax: 3000,
 				},
 			},
 			clearing: !state.clearing,

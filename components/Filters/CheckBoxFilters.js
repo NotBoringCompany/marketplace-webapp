@@ -58,11 +58,7 @@ const IndividualCheckBox = ({ item, kind }) => {
 			checked={checked}
 			id={`${kind}-${item}`}
 			value={item}
-			label={
-				item.toString() === "not_mutated"
-					? "NOT MUTATED"
-					: item.toString().toUpperCase()
-			}
+			label={item.toString().toUpperCase()}
 		/>
 	);
 };

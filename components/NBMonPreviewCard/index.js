@@ -51,8 +51,8 @@ const NBMonPreviewCard = ({ nbMon, ...props }) => {
 	return (
 		<Card className={`bg-gray text-white ${className}`}>
 			<div className="justify-content-center d-flex align-items-center">
-				<HeadingSuperXXS as="p" className=" genusName">
-					{nbMon.genus}
+				<HeadingSuperXXS as="p" className="text-capitalize genusName">
+					{nbMon.genera}
 					{nbMon.gender === "male" ? (
 						<IoMdMale className="ms-2 male" />
 					) : (
