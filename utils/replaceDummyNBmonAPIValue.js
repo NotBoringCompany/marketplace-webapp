@@ -8,7 +8,6 @@ const keyValuePairDummy = {
 export default function replaceDummy(data) {
 	data.result.map((item) => {
 		let types = [];
-
 		Object.keys(item).forEach((key) => {
 			const value = item[key];
 			if (value.length === 1 && mightBeDummy.has(key)) {
@@ -21,6 +20,5 @@ export default function replaceDummy(data) {
 		});
 		return (item.types = types);
 	});
-
 	return data;
 }
