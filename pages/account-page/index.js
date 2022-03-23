@@ -28,6 +28,8 @@ import { useFilterStore } from "stores/filterStore";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
+import replaceDummy from "utils/replaceDummyNBmonAPIValue";
+
 const StyledContainer = styled.div`
 	padding: 32px;
 	min-height: 100vh;
@@ -131,9 +133,10 @@ const AccountPage = () => {
 		"allMyNBMons",
 		() =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getAllNbmons/${user.attributes.ethAddress}`
+				`https://sxcvpb1zwixk.usemoralis.com:2053/server/functions/getOwnerNBMons?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&address=${user.attributes.ethAddress}`
 			).then(async (res) => {
-				const fetchedData = await res.json();
+				let fetchedData = await res.json();
+				fetchedData = replaceDummy(fetchedData);
 				setAllNBMons(
 					fetchedData.result.sort(
 						(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)

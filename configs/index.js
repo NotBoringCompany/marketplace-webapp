@@ -17,7 +17,7 @@ export const images = {
 		},
 
 		milnas: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/7000.png",
+			imageurl: "https://svgshare.com/i/fWp.svg",
 		},
 		piklish: {
 			imageurl: "https://assets.thetanarena.com/skin/smallavatar/13000.png",
