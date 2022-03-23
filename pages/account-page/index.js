@@ -127,27 +127,30 @@ const AccountPage = () => {
 	const [allFilteredNBMons, setAllFilteredNBMons] = useState([]);
 	const { selectedFilters, rangeFilters } = useFilterStore();
 
-	const { isLoading, error } = useQuery("allMyNBMons", () =>
-		fetch(
-			`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getAllNbmons/${user.attributes.ethAddress}`
-		).then(async (res) => {
-			const fetchedData = await res.json();
-			setAllNBMons(
-				fetchedData.result.sort(
-					(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)
-				)
-			);
-		})
+	const { isFetching, error } = useQuery(
+		"allMyNBMons",
+		() =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getAllNbmons/${user.attributes.ethAddress}`
+			).then(async (res) => {
+				const fetchedData = await res.json();
+				setAllNBMons(
+					fetchedData.result.sort(
+						(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)
+					)
+				);
+			}),
+		{ refetchOnWindowFocus: false }
 	);
 
 	useEffect(() => {
-		if (!isLoading) {
+		if (!isFetching) {
 			const filtered = filterNBMons(selectedFilters, rangeFilters, allNBMons);
 			setAllFilteredNBMons(
 				filtered.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
 			);
 		}
-	}, [selectedFilters, rangeFilters, isLoading, allNBMons]);
+	}, [selectedFilters, rangeFilters, isFetching, allNBMons]);
 
 	const handleLogOut = async () => {
 		await logout();
@@ -191,7 +194,7 @@ const AccountPage = () => {
 					{allFilteredNBMons.length} NBMons
 				</HeadingXXS>
 				<Row>
-					{!isLoading ? (
+					{!isFetching ? (
 						<>
 							{allFilteredNBMons.map((nbMon) => (
 								<Col
@@ -218,7 +221,7 @@ const AccountPage = () => {
 					</TextPrimary>
 				)}
 
-				{!isLoading &&
+				{!isFetching &&
 					Object.keys(selectedFilters).length > 0 &&
 					allFilteredNBMons.length < 1 && (
 						<TextPrimary className="mt-4 text-white text-center">

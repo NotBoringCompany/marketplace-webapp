@@ -1,6 +1,17 @@
 import { useMoralis } from "react-moralis";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
+import styled from "styled-components";
+
+const StyledContainer = styled.div`
+	height: 100vh;
+	display: flex;
+	& div {
+		width: 100%;
+		margin: auto;
+		height: 100%;
+	}
+`;
 const mustBeUnauthed = (Component) => {
 	const Unauthed = (props) => {
 		const { isAuthenticated, isInitializing } = useMoralis();
@@ -19,7 +30,11 @@ const mustBeUnauthed = (Component) => {
 		}
 
 		if (isInitializing) {
-			return <Loading />;
+			return (
+				<StyledContainer>
+					<Loading />
+				</StyledContainer>
+			);
 		}
 		// Login data added to props via redux-store (or use react context for example)
 		if (!isInitializing) {
