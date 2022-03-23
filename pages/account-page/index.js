@@ -137,6 +137,7 @@ const AccountPage = () => {
 			).then(async (res) => {
 				let fetchedData = await res.json();
 				fetchedData = replaceDummy(fetchedData);
+				console.log(fetchedData);
 				setAllNBMons(
 					fetchedData.result.sort(
 						(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)
