@@ -2,6 +2,16 @@ import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
+import styled from "styled-components";
+const StyledContainer = styled.div`
+	height: 100vh;
+	display: flex;
+	& div {
+		width: 100%;
+		margin: auto;
+		height: 100%;
+	}
+`;
 const mustBeAuthed = (Component) => {
 	const Authed = (props) => {
 		const { isAuthenticated, isInitializing } = useMoralis();
@@ -17,7 +27,11 @@ const mustBeAuthed = (Component) => {
 		}
 
 		if (isInitializing) {
-			return <Loading />;
+			return (
+				<StyledContainer>
+					<Loading />
+				</StyledContainer>
+			);
 		}
 		if (!isInitializing) {
 			// If user is not logged in, return login component
