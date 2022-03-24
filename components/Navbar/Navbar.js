@@ -41,7 +41,7 @@ const RightContent = () => {
 	);
 	const accountPageBtn = (
 		<MyButton
-			text="Account Page"
+			text="Account Details"
 			href="/account-page/nbmons"
 			isLink
 			className="w-100"
@@ -49,7 +49,7 @@ const RightContent = () => {
 	);
 
 	return (
-		<Nav className="mt-3 mt-lg-0">
+		<Nav className="mt-3 mt-lg-0 ms-auto">
 			{!isAuthenticated ? connectButton : accountPageBtn}
 		</Nav>
 	);
@@ -57,6 +57,7 @@ const RightContent = () => {
 
 const MyNavbar = ({ showSubnav }) => {
 	const router = useRouter();
+	const { isAuthenticated } = useMoralis();
 
 	return (
 		<div className="d-flex flex-column">
@@ -75,22 +76,35 @@ const MyNavbar = ({ showSubnav }) => {
 				</Link>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
-					<Nav className="me-auto mt-3 mt-lg-0">
-						{menu.map((m) => (
-							<Link key={m.path} href={`${m.path}`}>
-								<a className={`mx-0 my-2 mx-lg-3 my-lg-0`}>
-									<StyledLink
-										active={m.path === router.pathname}
-										className={`text-${
-											m.path === "/mint" ? `lighterGreen` : `white`
-										}`}
-									>
-										{m.text}
-									</StyledLink>
-								</a>
-							</Link>
-						))}
-					</Nav>
+					{/* {isAuthenticated && (
+						<Nav className="me-auto mt-3 mt-lg-0">
+							{menu.map((m) => (
+								<Link key={m.path} href={`${m.path}`}>
+									<a className={`mx-0 my-2 mx-lg-3 my-lg-0`}>
+										<StyledLink
+											active={m.path === router.pathname}
+											className={`text-${
+												m.path === "/mint" ? `lighterGreen` : `white`
+											}`}
+										>
+											{m.text}
+										</StyledLink>
+									</a>
+								</Link>
+							))}
+						</Nav>
+					)} */}
+					<a
+						href={"https://www.nbcompany.io/"}
+						target="_blank"
+						rel="noopener noreferrer"
+						className={`mx-0 my-2 mx-lg-3 my-lg-0`}
+					>
+						<StyledLink active={false} className={`text-white`}>
+							NBCompany Website
+						</StyledLink>
+					</a>
+
 					<RightContent />
 				</Navbar.Collapse>
 			</StyledNav>

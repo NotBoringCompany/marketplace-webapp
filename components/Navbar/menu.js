@@ -1,14 +1,14 @@
 export const menu = [
 	{
-		text: "Dashboard",
-		path: "/",
+		text: "My Account",
+		path: "/account-page",
 	},
-	{
-		text: "Marketplace",
-		path: "/marketplace",
-	},
-	{
-		text: "Mint",
-		path: "/mint",
-	},
+	// {
+	// 	text: "Marketplace",
+	// 	path: "/marketplace",
+	// },
+	// {
+	// 	text: "Mint",
+	// 	path: "/mint",
+	// },
 ];

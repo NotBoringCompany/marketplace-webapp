@@ -117,7 +117,7 @@ const Connect = () => {
 			<StyledContainer className="bg-primary d-flex flex-column justify-content-center position-relative">
 				<NoMetaMask stateUtils={statesModalNoMM} />
 				<Row>
-					<Col
+					{/* <Col
 						xl={6}
 						lg={6}
 						md={12}
@@ -130,12 +130,10 @@ const Connect = () => {
 							backIcon
 							to="/"
 						/>
-					</Col>
+					</Col> */}
 					<Col
-						className="mt-5 mt-lg-0 d-flex flex-column d-lg-block align-content-center"
-						xl={6}
-						lg={6}
-						md={12}
+						className="mt-5 mt-lg-0 d-flex flex-column align-items-center"
+						xl={12}
 					>
 						<HeadingSM as="h1" className="text-center text-lg-start text-white">
 							Connect

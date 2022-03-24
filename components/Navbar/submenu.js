@@ -12,15 +12,15 @@ export const submenu = [
 			"/marketplace/nbmons#",
 		],
 	},
-	{
-		text: "Artifacts",
-		id: "artifacts",
-		path: "/artifacts",
-		match: [
-			"/account-page/artifacts",
-			"/marketplace/artifacts",
-			"/account-page/artifacts#",
-			"/marketplace/artifacts#",
-		],
-	},
+	// {
+	// 	text: "Artifacts",
+	// 	id: "artifacts",
+	// 	path: "/artifacts",
+	// 	match: [
+	// 		"/account-page/artifacts",
+	// 		"/marketplace/artifacts",
+	// 		"/account-page/artifacts#",
+	// 		"/marketplace/artifacts#",
+	// 	],
+	// },
 ];

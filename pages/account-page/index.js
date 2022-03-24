@@ -195,9 +195,12 @@ const AccountPage = () => {
 					/>
 				</div>
 
-				<HeadingXXS as="h1" className="text-white mb-3">
-					{allFilteredNBMons.length} NBMons
-				</HeadingXXS>
+				{!isFetching && (
+					<HeadingXXS as="h1" className="text-white mb-3">
+						{allFilteredNBMons.length} NBMons
+					</HeadingXXS>
+				)}
+
 				<Row>
 					{!isFetching ? (
 						<>

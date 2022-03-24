@@ -77,9 +77,9 @@ const NBMonPreviewCard = ({ nbMon, ...props }) => {
 			<TextSecondary className="text-center my-2">
 				#{nbMon.nbmonId} - {nbMon.fertility} Fertility
 			</TextSecondary>
-			<div className="d-flex align-items-center mt-2 justify-content-center">
-				<Pill content={nbMon.rarity} />
+			<div className="d-flex flex-wrap align-items-center mt-2 justify-content-center">
 				<Pill content={nbMon.species} />
+				<Pill content={nbMon.rarity} />
 			</div>
 			<div className="mt-2"></div>
 			<Pill
