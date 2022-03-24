@@ -51,7 +51,7 @@ const CollapseFilter = ({
 				}}
 			>
 				<HeadingSuperXXS className="text-white text-capitalize">
-					{title}
+					{title === "genera" ? "Genus" : title}
 				</HeadingSuperXXS>
 				{allowCollapse && (
 					<Image

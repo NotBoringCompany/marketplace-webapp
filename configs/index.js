@@ -1,41 +1,39 @@
+const ASSET_URL = "https://raw.githubusercontent.com/shonsirsha/dumps/main";
 export const images = {
 	genera: {
 		lamox: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/2.png",
+			imageurl: `${ASSET_URL}/lamox.png`,
 		},
 		licorine: {
-			imageurl:
-				"https://raw.githubusercontent.com/shonsirsha/dumps/main/licorine.svg",
+			imageurl: `${ASSET_URL}/licorine.png`,
 		},
 		birvo: {
-			imageurl:
-				"https://raw.githubusercontent.com/shonsirsha/dumps/main/birvo.svg",
+			imageurl: `${ASSET_URL}/birvo.png`,
 		},
 		dranexx: {
-			imageurl:
-				"https://raw.githubusercontent.com/shonsirsha/dumps/main/dranexx.png",
+			imageurl: `${ASSET_URL}/dranexx.png`,
 		},
 		heree: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/0.png",
+			imageurl: `${ASSET_URL}/heree.png`,
 		},
 
 		milnas: {
-			imageurl: "https://svgshare.com/i/fYw.svg",
+			imageurl: `${ASSET_URL}/milnas.png`,
 		},
-		piklish: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/13000.png",
+		schoggi: {
+			imageurl: `${ASSET_URL}/schoggi.png`,
 		},
 		pongu: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/12000.png",
+			imageurl: `${ASSET_URL}/pongu.png`,
 		},
 		prawdek: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/15000.png",
+			imageurl: `${ASSET_URL}/prawdek.png`,
 		},
 		roggo: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/23000.png",
+			imageurl: `${ASSET_URL}/roggo.png`,
 		},
 		todillo: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/22000.png",
+			imageurl: `${ASSET_URL}/todillo.png`,
 		},
 	},
 	default: {

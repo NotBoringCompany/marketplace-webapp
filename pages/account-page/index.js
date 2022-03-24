@@ -64,7 +64,8 @@ const DesktopFilterContainer = styled.div`
 		width: 100%;
 		padding: 16px;
 		max-height: unset;
-		height: auto;
+		height: 100%;
+
 		display: none;
 		opacity: 0;
 	}

@@ -41,7 +41,7 @@ const CheckBoxFiltersWithImage = ({ data, kind }) => {
 		<CollapseFilter id={kind} title={kind}>
 			<FilterModal
 				data={data}
-				title={`Select ${kind}`}
+				title={`Select ${kind === "genera" ? "Genus" : kind}`}
 				stateUtils={stateUtils}
 				kind={kind}
 			/>
@@ -69,10 +69,14 @@ const CheckBoxFiltersWithImage = ({ data, kind }) => {
 			<div className="mb-3" id={`collapse-filter-${kind}`}>
 				<MyButton
 					className="w-100"
-					text={`Select ${kind.split("")[0].toUpperCase()}${kind
-						.split("")
-						.splice(1)
-						.join("")}`}
+					text={`Select ${
+						kind === "genera"
+							? "Genus"
+							: `${kind.split("")[0].toUpperCase()}${kind
+									.split("")
+									.splice(1)
+									.join("")}`
+					}`}
 					onClick={() => setShowModal(true)}
 				/>
 			</div>
