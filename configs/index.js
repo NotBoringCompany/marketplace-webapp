@@ -4,20 +4,23 @@ export const images = {
 			imageurl: "https://assets.thetanarena.com/skin/smallavatar/2.png",
 		},
 		licorine: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/1000.png",
+			imageurl:
+				"https://raw.githubusercontent.com/shonsirsha/dumps/main/licorine.svg",
 		},
 		birvo: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/1.png",
+			imageurl:
+				"https://raw.githubusercontent.com/shonsirsha/dumps/main/birvo.svg",
 		},
 		dranexx: {
-			imageurl: "https://assets.thetanarena.com/skin/smallavatar/8000.png",
+			imageurl:
+				"https://raw.githubusercontent.com/shonsirsha/dumps/main/dranexx.png",
 		},
 		heree: {
 			imageurl: "https://assets.thetanarena.com/skin/smallavatar/0.png",
 		},
 
 		milnas: {
-			imageurl: "https://svgshare.com/i/fWp.svg",
+			imageurl: "https://svgshare.com/i/fYw.svg",
 		},
 		piklish: {
 			imageurl: "https://assets.thetanarena.com/skin/smallavatar/13000.png",

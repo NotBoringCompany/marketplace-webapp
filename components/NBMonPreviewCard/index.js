@@ -8,7 +8,7 @@ import Pill from "components/Pill";
 import { Image } from "react-bootstrap";
 
 const Card = styled.div`
-	padding: 24px;
+	padding: 16px;
 	display: flex;
 	flex-direction: column;
 	border-radius: 16px;
@@ -47,7 +47,7 @@ const Card = styled.div`
 	}
 
 	& .nbmonImg {
-		border-radius: 100%;
+		border-radius: 40%;
 		filter: drop-shadow(10px 5px 10px rgba(107, 11, 255, 0.5));
 	}
 `;
@@ -58,10 +58,12 @@ const NBMonPreviewCard = ({ nbMon, ...props }) => {
 		<Card className={`bg-gray text-white align-items-center ${className}`}>
 			<Image
 				className="nbmonImg"
-				src={"https://svgshare.com/i/fY4.svg"}
+				src={
+					"https://raw.githubusercontent.com/shonsirsha/dumps/main/dranexx.png"
+				}
 				alt="nbmon"
-				width={180}
-				height={180}
+				width={160}
+				height={160}
 			/>
 			<div className="mt-4 justify-content-center d-flex align-items-center">
 				<HeadingSuperXXS as="p" className="text-capitalize genusName">
