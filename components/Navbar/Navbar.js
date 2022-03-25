@@ -23,6 +23,7 @@ const StyledNav = styled(Navbar)`
 `;
 
 const StyledLink = styled(HeadingSuperXXS)`
+	font-size: 18px;
 	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
 `;
 
@@ -40,12 +41,7 @@ const RightContent = () => {
 		/>
 	);
 	const accountPageBtn = (
-		<MyButton
-			text="Account Details"
-			href="/account-page/nbmons"
-			isLink
-			className="w-100"
-		/>
+		<MyButton text="Account Details" href="/nbmons" isLink className="w-100" />
 	);
 
 	return (
@@ -101,7 +97,7 @@ const MyNavbar = ({ showSubnav }) => {
 						className={`mx-0 my-2 mx-lg-3 my-lg-0`}
 					>
 						<StyledLink active={false} className={`text-white`}>
-							NBCompany Website
+							NBCompany Homepage
 						</StyledLink>
 					</a>
 

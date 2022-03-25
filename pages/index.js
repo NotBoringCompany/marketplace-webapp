@@ -17,7 +17,7 @@ export default function Home() {
 	const router = useRouter();
 	useEffect(() => {
 		if (isAuthenticated) {
-			router.push("/account-page");
+			router.push("/nbmons");
 		} else {
 			router.push("/connect");
 		}

@@ -5,11 +5,12 @@ export const submenu = [
 		path: "/nbmons",
 		match: [
 			"/marketplace",
-			"/account-page",
-			"/marketplace/nbmons",
-			"/account-page/nbmons",
-			"/account-page/nbmons#",
-			"/marketplace/nbmons#",
+			"/nbmons",
+			// 	"/marketplace/nbmons",
+			// 	"/account-page/nbmons",
+			// 	"/account-page/nbmons#",
+			// 	"/marketplace/nbmons#",
+			// ],
 		],
 	},
 	// {

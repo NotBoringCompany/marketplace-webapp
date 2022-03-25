@@ -46,7 +46,7 @@ const Subnavbar = () => {
 					key={s.id}
 					href={
 						router.asPath.includes(s.path) ||
-						router.asPath.asPath === "/account-page/nbmons" ||
+						router.asPath.asPath === "/nbmons" ||
 						router.asPath.asPath === "/marketplace/nbmons"
 							? "#"
 							: `../${
