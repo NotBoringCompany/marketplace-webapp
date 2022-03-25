@@ -83,6 +83,7 @@ const NBMonPreviewCard = ({ nbMon, ...props }) => {
 			</div>
 			<div className="mt-2"></div>
 			<Pill
+				className="mt-2 mx-auto"
 				content={nbMon.mutation === "mutated" ? "Mutated" : "Not mutated"}
 			/>
 		</Card>

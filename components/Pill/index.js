@@ -75,14 +75,15 @@ const StyledPill = styled.div`
 		filter: drop-shadow(0px 0px 25px #2bffd9);
 	}
 `;
-const Pill = ({ content }) => {
+const Pill = ({ content, ...props }) => {
+	const { className } = props;
 	return (
 		<StyledPill
-			className={`mx-1 ${
+			className={`mx-1 ${className} ${
 				content.toLowerCase().includes("mutate")
 					? content.toLowerCase() === "not mutated"
-						? `mutation not-mutated mt-2 mx-auto`
-						: `mutation mutated mt-2 mx-auto`
+						? `mutation not-mutated`
+						: `mutation mutated`
 					: `${content}`
 			}`}
 		>
