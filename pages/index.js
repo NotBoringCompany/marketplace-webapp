@@ -6,6 +6,7 @@ import Container from "react-bootstrap/Container";
 import Layout from "components/Layout";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import Loading from "components/Loading";
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
 	padding-bottom: 32px;
@@ -23,5 +24,11 @@ export default function Home() {
 		}
 	}, [isAuthenticated]);
 
-	return <Layout></Layout>;
+	return (
+		<Layout>
+			<StyledContainer>
+				<Loading />
+			</StyledContainer>
+		</Layout>
+	);
 }

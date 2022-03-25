@@ -5,7 +5,7 @@ import { IoMdMale, IoMdFemale } from "react-icons/io";
 import { TextSecondary } from "components/Typography/Texts";
 import { mediaBreakpoint } from "utils/breakpoints";
 import Pill from "components/Pill";
-import { Image } from "react-bootstrap";
+import Image from "react-bootstrap/Image";
 import { images } from "configs";
 
 const Card = styled.div`
@@ -48,7 +48,7 @@ const Card = styled.div`
 	}
 
 	& .nbmonImg {
-		border-radius: 40%;
+		border-radius: 100%;
 		filter: drop-shadow(10px 5px 10px rgba(107, 11, 255, 0.5));
 	}
 `;

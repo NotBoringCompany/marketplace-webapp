@@ -10,6 +10,7 @@ const StyledPill = styled.div`
 	text-align: center;
 	font-weight: 600;
 	font-size: 14px;
+	color: #fff;
 	&.common {
 		background: #808080;
 	}
@@ -63,7 +64,7 @@ const StyledPill = styled.div`
 			#ffd700 0.01%,
 			#ff71e0 100%
 		);
-		filter: drop-shadow(0px 0px 20px #ffd700);
+		filter: drop-shadow(0px 0px 12px #ffd700);
 	}
 	&.mythical {
 		background: linear-gradient(
@@ -84,7 +85,7 @@ const Pill = ({ content, ...props }) => {
 					? content.toLowerCase() === "not mutated"
 						? `mutation not-mutated`
 						: `mutation mutated`
-					: `${content}`
+					: `${content.toLowerCase()}`
 			}`}
 		>
 			{content}

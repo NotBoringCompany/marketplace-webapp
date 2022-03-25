@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Image } from "react-bootstrap";
+import Image from "react-bootstrap/Image";
 const StyledContainer = styled.div`
 	display: flex;
 

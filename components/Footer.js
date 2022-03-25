@@ -1,6 +1,6 @@
 import React from "react";
 import { TextSecondary } from "./Typography/Texts";
-import { Container } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
 const Footer = () => {
 	return (
 		<div className="py-4 d-flex bg-primaryComplement">
