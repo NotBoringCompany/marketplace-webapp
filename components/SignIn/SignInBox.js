@@ -45,7 +45,6 @@ const SignInBox = ({
 					variant="dark"
 					placeholder="Password"
 					type="password"
-					value={password}
 					onChange={onTextInputChange}
 					errorDesc={errors.password}
 				/>
