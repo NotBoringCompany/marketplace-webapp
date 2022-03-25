@@ -5,6 +5,7 @@ import { useMoralis } from "react-moralis";
 import { useRouter } from "next/router";
 
 import { useQuery } from "react-query";
+import Link from "next/link";
 
 import Layout from "components/Layout";
 import MyButton from "components/Buttons/Button";
@@ -213,7 +214,12 @@ const AccountPage = () => {
 									md={6}
 									sm={12}
 								>
-									<NBMonPreviewCard nbMon={nbMon} />
+									{" "}
+									<Link href={`/nbmons/${nbMon.nbmonId}`}>
+										<a>
+											<NBMonPreviewCard nbMon={nbMon} />
+										</a>
+									</Link>
 								</Col>
 							))}
 						</>

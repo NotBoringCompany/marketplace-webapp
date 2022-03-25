@@ -24,6 +24,7 @@ const StyledNav = styled(Navbar)`
 
 const StyledLink = styled(HeadingSuperXXS)`
 	font-size: 18px;
+	font-weight: lighter;
 	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
 `;
 
@@ -97,7 +98,7 @@ const MyNavbar = ({ showSubnav }) => {
 						className={`mx-0 my-2 mx-lg-3 my-lg-0`}
 					>
 						<StyledLink active={false} className={`text-white`}>
-							NBCompany Homepage
+							NBC Homepage
 						</StyledLink>
 					</a>
 
