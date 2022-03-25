@@ -29,7 +29,7 @@ import { useFilterStore } from "stores/filterStore";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import replaceDummy from "utils/replaceDummyNBmonAPIValue";
+import { replaceDummy } from "utils/replaceDummyNBmonAPIValue";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -93,7 +93,6 @@ const ClearFilterButton = styled.button`
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const clearFilter = useFilterStore((state) => state.clearFilter);
-
 	return (
 		<DesktopFilterContainer
 			className={`bg-primary3 ${filterOpen && `show`} ${
@@ -135,7 +134,7 @@ const AccountPage = () => {
 		"allMyNBMons",
 		() =>
 			fetch(
-				`https://sxcvpb1zwixk.usemoralis.com:2053/server/functions/getOwnerNBMons?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&address=${user.attributes.ethAddress}`
+				`${process.env.NEXT_PUBLIC_REST_API_PREFIX_URL}/getOwnerNBMons?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&address=${user.attributes.ethAddress}`
 			).then(async (res) => {
 				let fetchedData = await res.json();
 				fetchedData = replaceDummy(fetchedData);
@@ -231,7 +230,7 @@ const AccountPage = () => {
 				{error && (
 					<TextPrimary className="mt-4 text-white text-center">
 						An error occured while fetching your NBMons. Please refresh this
-						page. {error.toString()}
+						page.
 					</TextPrimary>
 				)}
 

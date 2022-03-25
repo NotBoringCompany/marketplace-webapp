@@ -29,7 +29,7 @@ const NBMonImage = styled(Image)`
 	height: 240px;
 	position: relative;
 	top: -121px;
-	margin-right: 16px;
+	margin-right: 8px;
 `;
 
 const Description = styled(TextSecondary)`
@@ -83,14 +83,15 @@ const StyledTabs = styled(Tabs)`
 	}
 `;
 
-const NBMonLargeCard = () => {
+const NBMonLargeCard = ({ nbMon }) => {
+	console.log("NBM", nbMon);
 	return (
 		<div className="py-4 d-flex w-100 align-items-center justify-content-center">
 			<CardContainer className="bg-primaryComplement">
-				<NBMonImage src={images.genera.lamox.imageurl} alt="NBMon" />
+				<NBMonImage src={images.genera[nbMon.genera].imageurl} alt="NBMon" />
 				<div className="afterImage text-center w-100">
-					<HeadingMD as="h1" className="text-white">
-						Lamox
+					<HeadingMD as="h1" className="text-white text-capitalize">
+						{nbMon.genera}
 					</HeadingMD>
 					<Description className="mt-2 text-white mx-auto">
 						A combination of a fox and a dog. Very loyal to their owners but
@@ -100,7 +101,7 @@ const NBMonLargeCard = () => {
 				<TabsContainer>
 					<StyledTabs defaultActiveKey="basic_info">
 						<Tab eventKey="basic_info" title="Basic Info">
-							<BasicInfo />
+							<BasicInfo nbMon={nbMon} />
 						</Tab>
 						<Tab eventKey="stats" title="Stats"></Tab>
 						<Tab eventKey="game_stats" title="Game Stats"></Tab>
@@ -145,15 +146,22 @@ const StatsItem = styled(HeadingSuperXXS)`
 	font-size: 18px;
 	font-weight: 300;
 `;
-const BasicInfo = () => {
+const BasicInfo = ({ nbMon }) => {
+	const birthDate = () => {
+		const properDate = parseInt(nbMon.hatchedAt) * 1000;
+		const day = new Date(properDate).getDate();
+		const month = new Date(properDate).getMonth() + 1;
+		const year = new Date(properDate).getFullYear();
+		return `${day}/${month}/${year}`;
+	};
 	return (
 		<BasicInfoContainer>
 			<StatsContainer>
 				<StatsHeading as="p" className="text-white">
 					Genus
 				</StatsHeading>
-				<StatsItem as="p" className="text-white">
-					Lamox
+				<StatsItem as="p" className="text-capitalize text-white">
+					{nbMon.genera}
 				</StatsItem>
 			</StatsContainer>
 
@@ -161,21 +169,21 @@ const BasicInfo = () => {
 				<StatsHeading as="p" className="text-white">
 					Species
 				</StatsHeading>
-				<Pill content={"Origin"} />
+				<Pill content={nbMon.species} />
 			</StatsContainer>
 
 			<StatsContainer>
 				<StatsHeading as="p" className="text-white">
 					Rarity
 				</StatsHeading>
-				<Pill content={"Legendary"} />
+				<Pill content={nbMon.rarity} />
 			</StatsContainer>
 
 			<StatsContainer>
 				<StatsHeading as="p" className="text-white">
 					Mutation
 				</StatsHeading>
-				<Pill content={"not mutated"} />
+				<Pill content={nbMon.mutation} />
 			</StatsContainer>
 
 			<StatsContainer>
@@ -183,7 +191,7 @@ const BasicInfo = () => {
 					NBMonID
 				</StatsHeading>
 				<StatsItem as="p" className="text-white">
-					4
+					{nbMon.nbmonId}
 				</StatsItem>
 			</StatsContainer>
 
@@ -192,10 +200,14 @@ const BasicInfo = () => {
 					Gender
 				</StatsHeading>
 				<div className="d-flex align-items-center">
-					<StatsItem as="p" className="text-white">
-						Male
+					<StatsItem as="p" className="text-white text-capitalize">
+						{nbMon.gender}
 					</StatsItem>
-					<IoMdMale className="male ms-2" />
+					{nbMon.gender === "male" ? (
+						<IoMdMale className="male ms-2" />
+					) : (
+						<IoMdFemale className="female ms-2" />
+					)}
 				</div>
 			</StatsContainer>
 
@@ -204,7 +216,7 @@ const BasicInfo = () => {
 					Birthdate
 				</StatsHeading>
 				<StatsItem as="p" className="text-white">
-					{new Date(Date.now()).getFullYear()}
+					{birthDate()}
 				</StatsItem>
 			</StatsContainer>
 
