@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { mediaBreakpoint } from "utils/breakpoints";
 
 const StyledPill = styled.div`
 	padding: 4px 16px;
@@ -93,6 +94,12 @@ const StyledPill = styled.div`
 	}
 	&.nature {
 		background: #3bcf65;
+	}
+
+	@media ${mediaBreakpoint.down.md} {
+		&.types {
+			min-width: 96px;
+		}
 	}
 `;
 const Pill = ({ content, types = false, ...props }) => {

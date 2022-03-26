@@ -6,7 +6,7 @@ const Footer = () => {
 		<div className="py-4 d-flex bg-primaryComplement">
 			<Container className="bg-primaryComplement w-100 d-flex">
 				<TextSecondary className="text-white mx-auto">
-					This is a footer &copy; NBCompany 2022
+					&copy; Realm Hunter by NBCompany
 				</TextSecondary>
 			</Container>
 		</div>

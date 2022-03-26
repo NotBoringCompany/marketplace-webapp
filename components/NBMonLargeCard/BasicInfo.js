@@ -19,7 +19,7 @@ const BasicInfo = ({ nbMon }) => {
 		return `${day}/${month}/${year}`;
 	};
 	return (
-		<BasicInfoContainer className="p-4 pt-0">
+		<BasicInfoContainer className="p-0 p-lg-4  pt-0">
 			<StatsContainer>
 				<StatsHeading as="p" className="text-white">
 					Genus

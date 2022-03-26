@@ -10,7 +10,7 @@ const StyledHeadingSuperXXS = styled(HeadingSuperXXS)`
 
 const Stats = ({ nbMon }) => {
 	return (
-		<div className="d-flex flex-column align-items-center p-4 pt-0">
+		<div className="d-flex flex-column align-items-center p-0 p-lg-4 pt-0">
 			<StyledHeadingSuperXXS as="p" className="text-white mt-3">
 				Types
 			</StyledHeadingSuperXXS>

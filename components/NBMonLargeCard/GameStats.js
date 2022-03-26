@@ -9,7 +9,7 @@ const StyledHeadingSuperXXS = styled(HeadingSuperXXS)`
 `;
 const GameStats = ({ nbMon }) => {
 	return (
-		<div className="d-flex flex-column align-items-center p-4 pt-0">
+		<div className="d-flex flex-column align-items-center p-0 p-lg-4 pt-0">
 			<StyledHeadingSuperXXS as="p" className="text-white mt-3">
 				Potentials
 			</StyledHeadingSuperXXS>
@@ -42,31 +42,43 @@ const GameStats = ({ nbMon }) => {
 				<StatsItem>{nbMon.speedPotential}</StatsItem>
 			</StatsContainer>
 
-			<StyledHeadingSuperXXS as="p" className="text-white mt-3">
+			<StyledHeadingSuperXXS as="p" className="text-white mt-3 mb-md-3 mb-0">
 				Passives
 			</StyledHeadingSuperXXS>
 
-			<div className="d-flex justify-content-center my-3">
-				<Pill content={nbMon.firstPassive} className="me-3" />
-				<Pill content={nbMon.secondPassive} className="me-3" />
+			<div className="d-flex justify-content-center flex-wrap flex-md-nowrap">
+				<Pill content={nbMon.firstPassive} className="me-3 mt-3 mt-md-0" />
+				<Pill content={nbMon.secondPassive} className="me-3 mt-3 mt-md-0" />
 			</div>
 
-			<StyledHeadingSuperXXS as="p" className="text-white mt-3">
+			<StyledHeadingSuperXXS as="p" className="text-white mt-3 mb-md-3 mb-0">
 				Inherited Passives
 			</StyledHeadingSuperXXS>
 
-			<div className="d-flex justify-content-center my-3">
-				<Pill content={nbMon.firstInheritedPassive} className="me-3" />
-				<Pill content={nbMon.secondInheritedPassive} className="me-3" />
+			<div className="d-flex justify-content-center flex-wrap flex-md-nowrap">
+				<Pill
+					content={nbMon.firstInheritedPassive}
+					className="me-3 mt-3 mt-md-0"
+				/>
+				<Pill
+					content={nbMon.secondInheritedPassive}
+					className="me-3 mt-3 mt-md-0"
+				/>
 			</div>
 
-			<StyledHeadingSuperXXS as="p" className="text-white mt-3">
+			<StyledHeadingSuperXXS as="p" className="text-white mt-3 mb-md-3 mb-0">
 				Inherited Moves
 			</StyledHeadingSuperXXS>
 
-			<div className="d-flex justify-content-center mt-3">
-				<Pill content={nbMon.firstInheritedMove} className="me-3" />
-				<Pill content={nbMon.secondInheritedMove} className="me-3" />
+			<div className="d-flex justify-content-center flex-wrap flex-md-nowrap">
+				<Pill
+					content={nbMon.firstInheritedMove}
+					className="me-3 mt-3 mt-md-0"
+				/>
+				<Pill
+					content={nbMon.secondInheritedMove}
+					className="me-3 mt-3 mt-md-0"
+				/>
 			</div>
 		</div>
 	);

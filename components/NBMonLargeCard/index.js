@@ -9,7 +9,7 @@ import Tabs from "react-bootstrap/Tabs";
 import BasicInfo from "./BasicInfo";
 import Stats from "./Stats";
 import GameStats from "./GameStats";
-
+import { mediaBreakpoint } from "utils/breakpoints";
 const CardContainer = styled.div`
 	padding: 16px;
 	display: flex;
@@ -24,6 +24,7 @@ const CardContainer = styled.div`
 		position: relative;
 		top: -89px;
 	}
+	margin-bottom: 24px;
 `;
 
 const NBMonImage = styled(Image)`
@@ -52,6 +53,10 @@ const TabsContainer = styled.div`
 	& .tab-content {
 		margin-top: 16px;
 		width: 100%;
+	}
+
+	@media ${mediaBreakpoint.down.md} {
+		padding: 16px;
 	}
 `;
 
@@ -87,6 +92,22 @@ const StyledTabs = styled(Tabs)`
 		border: none;
 		color: #fff;
 		background: #42ca9f;
+	}
+
+	@media ${mediaBreakpoint.down.lg} {
+		& > li {
+			width: 100%;
+			margin-right: 0;
+			margin-bottom: 8px;
+		}
+
+		& > li:last-child {
+			margin-bottom: 0;
+		}
+
+		& > li > button {
+			width: 100%;
+		}
 	}
 `;
 
