@@ -5,12 +5,18 @@ import Navbar from "./Navbar/Navbar";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 
+import { mediaBreakpoint } from "utils/breakpoints";
+
 const NBMonsImage = styled(Image)`
 	position: absolute;
 	bottom: 0;
 	left: -3%;
 	bottom: -70px;
 	z-index: 1;
+	width: 400px;
+	@media ${mediaBreakpoint.down.xl} {
+		width: 310px;
+	}
 `;
 
 const Layout = ({
@@ -36,7 +42,6 @@ const Layout = ({
 						src="./images/nbmons.png"
 						alt="NBMons!"
 						className="d-none d-lg-block"
-						width={"500px"}
 					/>
 				)}
 				<div className="bg-primary">{children}</div>
