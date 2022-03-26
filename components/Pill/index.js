@@ -5,7 +5,7 @@ const StyledPill = styled.div`
 	padding: 4px 16px;
 	border-radius: 48px;
 	text-transform: capitalize;
-	background: blue;
+	background: gray;
 	min-width: 72px;
 	text-align: center;
 	font-weight: 600;

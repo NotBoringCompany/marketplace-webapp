@@ -114,7 +114,7 @@ const NBMonLargeCard = ({ nbMon }) => {
 							<Stats nbMon={nbMon} />
 						</Tab>
 						<Tab eventKey="game_stats" title="Game Stats">
-							<GameStats />
+							<GameStats nbMon={nbMon} />
 						</Tab>
 					</StyledTabs>
 				</TabsContainer>
