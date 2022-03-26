@@ -6,14 +6,16 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-
+import Dropdown from "react-bootstrap/Dropdown";
 import MyButton from "../Buttons/Button";
 import Subnavbar from "./Subnavbar";
 import { HeadingSuperXXS } from "../Typography/Headings";
-import { menu } from "./menu";
+import { mediaBreakpoint } from "utils/breakpoints";
+// import { menu } from "./menu";
 import { useRouter } from "next/router";
 
 import Logo from "public/images/logo.png";
+import { TextSecondary } from "components/Typography/Texts";
 
 const StyledNav = styled(Navbar)`
 	width: 100%;
@@ -27,9 +29,38 @@ const StyledLink = styled(HeadingSuperXXS)`
 	font-weight: lighter;
 	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
 `;
+const StyledDropdown = styled(Dropdown)`
+	& .my-dropdown {
+		padding-left: 90px;
+	}
 
+	& .dropdown-menu {
+		background: #2a2a2a !important;
+		color: #fff;
+	}
+
+	& .content {
+		padding: 0 16px;
+
+		p {
+			font-size: 14px;
+		}
+	}
+
+	@media ${mediaBreakpoint.down.lg} {
+		& .my-dropdown {
+			padding-left: 0;
+		}
+
+		& .content {
+			p {
+				font-size: 16px;
+			}
+		}
+	}
+`;
 const RightContent = () => {
-	const { isAuthenticated, logout } = useMoralis();
+	const { isAuthenticated, logout, user } = useMoralis();
 	const router = useRouter();
 
 	const connectButton = (
@@ -42,12 +73,46 @@ const RightContent = () => {
 		/>
 	);
 	const accountPageBtn = (
-		<MyButton text="Account Details" href="/nbmons" isLink className="w-100" />
+		<MyButton text="Sign Out" onClick={logout} className="w-100" />
 	);
 
 	return (
 		<Nav className="mt-3 mt-lg-0 ms-auto">
-			{!isAuthenticated ? connectButton : accountPageBtn}
+			{!isAuthenticated ? (
+				connectButton
+			) : (
+				<StyledDropdown>
+					<Dropdown.Toggle
+						className="my-dropdown border-none text-white "
+						variant="transparent"
+						id="dropdown-basic"
+					>
+						Account Details
+					</Dropdown.Toggle>
+
+					<Dropdown.Menu>
+						<div className="content pt-2">
+							<TextSecondary>
+								Wallet Address:{" "}
+								{user.attributes &&
+									user.attributes.ethAddress.split("").splice(0, 6).join("")}
+								...
+								{user.attributes.ethAddress.split("").splice(-5).join("")}
+							</TextSecondary>
+							<TextSecondary></TextSecondary>
+						</div>
+						<hr />
+						<div className="content">
+							<TextSecondary>
+								Connected Email:{" "}
+								{user.attributes.email ? user.attributes.email : "-"}
+							</TextSecondary>
+						</div>
+						<hr />
+						<div className="content pb-2">{accountPageBtn}</div>
+					</Dropdown.Menu>
+				</StyledDropdown>
+			)}
 		</Nav>
 	);
 };
@@ -71,6 +136,7 @@ const MyNavbar = ({ showSubnav }) => {
 						</Navbar.Brand>
 					</a>
 				</Link>
+
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
 					{/* {isAuthenticated && (

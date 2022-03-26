@@ -11,6 +11,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "styles/root.scss";
 import "styles/styles.scss";
 
+import { AppProvider } from "context/AppContext";
+
 const queryClient = new QueryClient();
 
 function Main({ Component, pageProps }) {
@@ -31,7 +33,9 @@ function Main({ Component, pageProps }) {
 				appId={process.env.NEXT_PUBLIC_APP_ID}
 				serverUrl={process.env.NEXT_PUBLIC_SERVER_URL}
 			>
-				<Component {...pageProps} />
+				<AppProvider>
+					<Component {...pageProps} />
+				</AppProvider>
 			</MoralisProvider>
 		</QueryClientProvider>
 	);

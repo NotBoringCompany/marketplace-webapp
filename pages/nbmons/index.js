@@ -241,12 +241,6 @@ const AccountPage = () => {
 							No Result 🙈
 						</TextPrimary>
 					)}
-
-				<MyButton
-					text="Sign Out"
-					onClick={handleLogOut}
-					className="w-100 mt-5"
-				/>
 			</StyledContainer>
 		</Layout>
 	);
