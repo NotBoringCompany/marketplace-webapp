@@ -99,7 +99,7 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 				opacityOne && `opacityOne`
 			}`}
 		>
-			<div className="d-flex mb-3 justify-content-center">
+			<div className="d-flex mb-4 justify-content-center">
 				<HeadingXXS as="p" className="ms-auto text-white text-center">
 					Filters
 				</HeadingXXS>

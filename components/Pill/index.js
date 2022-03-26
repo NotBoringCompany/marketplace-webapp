@@ -75,12 +75,31 @@ const StyledPill = styled.div`
 		);
 		filter: drop-shadow(0px 0px 25px #2bffd9);
 	}
+
+	&.types {
+		min-width: 120px;
+		font-size: 16px;
+	}
+	&.spirit {
+		background: #874fcf;
+	}
+
+	&.electric {
+		background: #e4bd1c;
+	}
+
+	&.fire {
+		background: #c64242;
+	}
+	&.nature {
+		background: #3bcf65;
+	}
 `;
-const Pill = ({ content, ...props }) => {
+const Pill = ({ content, types = false, ...props }) => {
 	const { className } = props;
 	return (
 		<StyledPill
-			className={`mx-1 ${className} ${
+			className={`mx-1 ${className} ${types && `types`} ${
 				content.toLowerCase().includes("mutate")
 					? content.toLowerCase() === "not mutated"
 						? `mutation not-mutated`
