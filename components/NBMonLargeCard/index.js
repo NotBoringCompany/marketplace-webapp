@@ -2,12 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 import { images } from "configs";
-import { HeadingMD, HeadingSuperXXS } from "components/Typography/Headings";
+import { HeadingMD } from "components/Typography/Headings";
 import { TextSecondary } from "components/Typography/Texts";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import BasicInfo from "./BasicInfo";
 import Stats from "./Stats";
+import GameStats from "./GameStats";
 
 const CardContainer = styled.div`
 	padding: 16px;
@@ -112,7 +113,9 @@ const NBMonLargeCard = ({ nbMon }) => {
 						<Tab eventKey="stats" title="Stats">
 							<Stats nbMon={nbMon} />
 						</Tab>
-						<Tab eventKey="game_stats" title="Game Stats"></Tab>
+						<Tab eventKey="game_stats" title="Game Stats">
+							<GameStats />
+						</Tab>
 					</StyledTabs>
 				</TabsContainer>
 			</CardContainer>

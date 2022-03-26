@@ -2,39 +2,12 @@ import React from "react";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import styled from "styled-components";
 import Pill from "components/Pill";
+import { StatsContainer, StatsHeading, StatsItem } from "./TabItemComponents";
+
 const StyledHeadingSuperXXS = styled(HeadingSuperXXS)`
 	font-size: 24px;
 `;
 
-const StatsContainer = styled.div`
-	display: flex;
-	border-bottom: 2px solid #808080;
-	justify-content: space-between;
-	width: 100%;
-	padding-bottom: 16px;
-	margin-top: 16px;
-	align-items: center;
-
-	& .male {
-		color: #6597f8;
-	}
-
-	& .female {
-		color: #ff8eed;
-	}
-
-	& svg {
-		font-size: 24px;
-	}
-`;
-const StatsHeading = styled(HeadingSuperXXS)`
-	font-size: 18px;
-`;
-
-const StatsItem = styled(HeadingSuperXXS)`
-	font-size: 18px;
-	font-weight: 300;
-`;
 const Stats = ({ nbMon }) => {
 	return (
 		<div className="d-flex flex-column align-items-center p-4 pt-0">

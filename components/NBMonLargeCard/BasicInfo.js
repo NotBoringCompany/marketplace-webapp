@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { HeadingSuperXXS } from "components/Typography/Headings";
+import { StatsContainer, StatsHeading, StatsItem } from "./TabItemComponents";
 import Pill from "components/Pill";
 import { IoMdMale, IoMdFemale } from "react-icons/io";
 
@@ -8,36 +8,6 @@ const BasicInfoContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-`;
-const StatsContainer = styled.div`
-	display: flex;
-	border-bottom: 2px solid #808080;
-	justify-content: space-between;
-	width: 100%;
-	padding-bottom: 16px;
-
-	margin-top: 16px;
-	align-items: center;
-
-	& .male {
-		color: #6597f8;
-	}
-
-	& .female {
-		color: #ff8eed;
-	}
-
-	& svg {
-		font-size: 24px;
-	}
-`;
-const StatsHeading = styled(HeadingSuperXXS)`
-	font-size: 18px;
-`;
-
-const StatsItem = styled(HeadingSuperXXS)`
-	font-size: 18px;
-	font-weight: 300;
 `;
 
 const BasicInfo = ({ nbMon }) => {
@@ -119,7 +89,8 @@ const BasicInfo = ({ nbMon }) => {
 					Current owner
 				</StatsHeading>
 				<StatsItem as="p" className="text-white">
-					{new Date(Date.now()).getFullYear()}
+					{nbMon.owner.split("").splice(0, 5).join("")}...
+					{nbMon.owner.split("").splice(-4).join("")}
 				</StatsItem>
 			</StatsContainer>
 
