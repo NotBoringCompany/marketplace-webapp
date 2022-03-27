@@ -33,7 +33,7 @@ import { replaceDummy } from "utils/replaceDummyNBmonAPIValue";
 
 const StyledContainer = styled.div`
 	padding: 32px;
-	min-height: 100vh;
+	min-height: 1321px;
 	padding-left: calc(24% + 32px);
 
 	& .pagingContainer > svg:first-child {
