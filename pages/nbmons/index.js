@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-
+import { useMoralis } from "react-moralis";
 import { useState } from "react";
-
 import { useQuery } from "react-query";
+
 import Link from "next/link";
 
 import Layout from "components/Layout";
@@ -132,6 +132,8 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 };
 
 const AccountPage = () => {
+	const { user } = useMoralis();
+
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
 	const [allNBMons, setAllNBMons] = useState([]);
@@ -157,7 +159,7 @@ const AccountPage = () => {
 		"allMyNBMons",
 		() =>
 			fetch(
-				`https://run.mocky.io/v3/7d0ce7a9-b4fd-4ce3-8b98-7063836f61f6`
+				`${process.env.NEXT_PUBLIC_REST_API_PREFIX_URL}/getOwnerNBMons?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&address=${user.attributes.ethAddress}`
 			).then(async (res) => {
 				let fetchedData = await res.json();
 				fetchedData = replaceDummy(fetchedData);
@@ -248,6 +250,8 @@ const AccountPage = () => {
 			console.log("min");
 		}
 	};
+
+	console.log("TOTAL PAGE", totalPage);
 	return (
 		<Layout title="Account Page | Realm Hunter" showSubnav>
 			<Filters
@@ -270,13 +274,18 @@ const AccountPage = () => {
 						<HeadingXXS as="h1" className="text-white ">
 							{allFilteredNBMons.length} NBMons
 						</HeadingXXS>
-						<div className="pagingContainer d-flex mx-auto align-items-center">
-							<FaChevronLeft className="text-white" onClick={handleBackbtn} />
-							<HeadingSuperXXS className="text-white mx-3">
-								{current + 1} of {totalPage + 1}
-							</HeadingSuperXXS>
-							<FaChevronRight className="text-white" onClick={handleNextBtn} />
-						</div>
+						{totalPage >= 0 && (
+							<div className="pagingContainer d-flex mx-auto align-items-center">
+								<FaChevronLeft className="text-white" onClick={handleBackbtn} />
+								<HeadingSuperXXS className="text-white mx-3">
+									{current + 1} of {totalPage + 1}
+								</HeadingSuperXXS>
+								<FaChevronRight
+									className="text-white"
+									onClick={handleNextBtn}
+								/>
+							</div>
+						)}
 					</div>
 				)}
 
@@ -313,13 +322,19 @@ const AccountPage = () => {
 					</TextPrimary>
 				)}
 
-				{!isFetching &&
+				{!isFetching && totalPage < 0 && (
+					<TextPrimary className="mt-4 text-white text-center">
+						No results found 😔
+					</TextPrimary>
+				)}
+
+				{/* {!isFetching &&
 					Object.keys(selectedFilters).length > 0 &&
 					allFilteredNBMons.length < 1 && (
 						<TextPrimary className="mt-4 text-white text-center">
 							No Result 🙈
 						</TextPrimary>
-					)}
+					)} */}
 			</StyledContainer>
 		</Layout>
 	);
