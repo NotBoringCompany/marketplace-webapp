@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import styled from "styled-components";
 import { TextSecondary } from "components/Typography/Texts";
 import { useFilterStore } from "stores/filterStore";
-import { images } from "configs";
+import { data } from "configs";
 const StyledCheckBox = styled(Form.Check)`
 	display: flex;
 	align-items: center;
@@ -108,9 +108,9 @@ const CheckBoxImage = ({ kind, ...props }) => {
 			<img
 				style={{ width: "100%", height: "100%" }}
 				src={
-					images[kind]
-						? images[kind][props.label.toLowerCase()].imageurl
-						: images.default.imageurl
+					data[kind]
+						? data[kind][props.label.toLowerCase()].imageurl
+						: data.default.imageurl
 				}
 				alt="Image"
 			/>

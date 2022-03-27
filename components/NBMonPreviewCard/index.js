@@ -6,7 +6,7 @@ import { TextSecondary } from "components/Typography/Texts";
 import { mediaBreakpoint } from "utils/breakpoints";
 import Pill from "components/Pill";
 import Image from "react-bootstrap/Image";
-import { images } from "configs";
+import { data } from "configs";
 
 const Card = styled.div`
 	padding: 16px;
@@ -59,7 +59,7 @@ const NBMonPreviewCard = ({ nbMon, ...props }) => {
 		<Card className={`bg-gray text-white align-items-center ${className}`}>
 			<Image
 				className="nbmonImg"
-				src={images.genera[nbMon.genera].imageurl}
+				src={data.genera[nbMon.genera].imageurl}
 				alt="nbmon"
 				width={160}
 				height={160}

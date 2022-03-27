@@ -3,7 +3,7 @@ import CollapseFilter from "components/CollapseFilter";
 import MyButton from "components/Buttons/Button";
 import FilterModal from "components/Modal/FilterModal";
 import { useFilterStore } from "stores/filterStore";
-import { images } from "configs";
+import { data } from "configs";
 import styled from "styled-components";
 import { TextSecondary } from "components/Typography/Texts";
 const PreviewImage = styled.img`
@@ -52,9 +52,9 @@ const CheckBoxFiltersWithImage = ({ data, kind }) => {
 							key={g}
 							alt={g}
 							src={
-								images[kind]
-									? images[kind][g.toLowerCase()].imageurl
-									: images.default.imageurl
+								data[kind]
+									? data[kind][g.toLowerCase()].imageurl
+									: data.default.imageurl
 							}
 							width={32}
 							height={32}

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
-import { images } from "configs";
+import { data } from "configs";
 import { HeadingMD } from "components/Typography/Headings";
 import { TextSecondary } from "components/Typography/Texts";
 import Tab from "react-bootstrap/Tab";
@@ -122,14 +122,13 @@ const NBMonLargeCard = ({ nbMon }) => {
 	return (
 		<div className="py-4 d-flex w-100 align-items-center justify-content-center">
 			<CardContainer className="bg-primaryComplement">
-				<NBMonImage src={images.genera[nbMon.genera].imageurl} alt="NBMon" />
+				<NBMonImage src={data.genera[nbMon.genera].imageurl} alt="NBMon" />
 				<div className="afterImage text-center w-100">
 					<HeadingMD as="h1" className="text-white text-capitalize">
 						{nbMon.genera}
 					</HeadingMD>
 					<Description className="mt-2 text-white mx-auto">
-						A combination of a fox and a dog. Very loyal to their owners but
-						does not like excessive physical touch.
+						{data.genera[nbMon.genera].description}
 					</Description>
 				</div>
 				<TabsContainer>
