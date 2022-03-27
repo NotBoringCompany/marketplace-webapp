@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 
 import { useState } from "react";
-import { useMoralis } from "react-moralis";
-import { useRouter } from "next/router";
 
 import { useQuery } from "react-query";
 import Link from "next/link";
@@ -29,6 +27,8 @@ import { useFilterStore } from "stores/filterStore";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
+import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
+
 import { replaceDummy } from "utils/replaceDummyNBmonAPIValue";
 
 const StyledContainer = styled.div`
@@ -36,6 +36,17 @@ const StyledContainer = styled.div`
 	min-height: 100vh;
 	padding-left: calc(22% + 32px);
 
+	& .pagingContainer > svg:first-child {
+		margin-left: -100px;
+	}
+
+	& .pagingContainer svg {
+		font-size: 24px;
+	}
+
+	& .pagingContainer svg:hover {
+		cursor: pointer;
+	}
 	@media ${mediaBreakpoint.down.xl} {
 		padding: 32px;
 	}
@@ -47,8 +58,7 @@ const StyledContainer = styled.div`
 const DesktopFilterContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	max-height: 100vh;
-	height: 100vh;
+	height: 100%;
 	overflow: auto;
 	overflow-x: hidden;
 	width: 22%;
@@ -121,20 +131,32 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 };
 
 const AccountPage = () => {
-	const logout = useMoralis().logout;
-	const user = useMoralis().user;
-	const router = useRouter();
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
 	const [allNBMons, setAllNBMons] = useState([]);
+	const [page, setPage] = useState({
+		show: 12,
+		current: 0,
+		totalPage: null,
+	});
 	const [allFilteredNBMons, setAllFilteredNBMons] = useState([]);
+	const [shownNBMons, setshownNBMons] = useState([]);
 	const { selectedFilters, rangeFilters } = useFilterStore();
+	const { show, current, totalPage } = page;
 
+	const totalPageCounter = (fetchedDataLength, show) => {
+		if (fetchedDataLength % show > 0) {
+			return parseInt(fetchedDataLength / show) + 1;
+		}
+		return parseInt(fetchedDataLength / show);
+	};
+
+	// `${process.env.NEXT_PUBLIC_REST_API_PREFIX_URL}/getOwnerNBMons?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&address=${user.attributes.ethAddress}
 	const { isFetching, error } = useQuery(
 		"allMyNBMons",
 		() =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_REST_API_PREFIX_URL}/getOwnerNBMons?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&address=${user.attributes.ethAddress}`
+				`https://run.mocky.io/v3/7d0ce7a9-b4fd-4ce3-8b98-7063836f61f6`
 			).then(async (res) => {
 				let fetchedData = await res.json();
 				fetchedData = replaceDummy(fetchedData);
@@ -144,6 +166,10 @@ const AccountPage = () => {
 						(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)
 					)
 				);
+				setPage({
+					...page,
+					totalPage: totalPageCounter(fetchedData.result.length, show) - 1, // first page is page 0.,
+				});
 			}),
 		{ refetchOnWindowFocus: false }
 	);
@@ -154,13 +180,32 @@ const AccountPage = () => {
 			setAllFilteredNBMons(
 				filtered.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
 			);
+			setPage({
+				...page,
+				current: 0,
+				totalPage: totalPageCounter(filtered.length, show) - 1, // first page is page 0.,
+			});
 		}
 	}, [selectedFilters, rangeFilters, isFetching, allNBMons]);
 
-	const handleLogOut = async () => {
-		await logout();
-		router.replace("/connect");
-	};
+	useEffect(() => {
+		setshownNBMons(allFilteredNBMons.slice(0, show)); // these r the nbmons that are shown in THAT page.
+	}, [allFilteredNBMons]);
+
+	useEffect(() => {
+		if (current === 1) {
+			setshownNBMons(allFilteredNBMons.slice(show, show + show));
+		} else {
+			//2 and above
+			setshownNBMons(
+				allFilteredNBMons.slice(show * current, show * (current + 1))
+			);
+
+			console.log(show * current);
+			console.log("exclusive until", show * (current + 1));
+		}
+		// these r the nbmons that are shown in THAT page.
+	}, [current]);
 
 	const handleFilterButton = () => {
 		if (!filterOpen) {
@@ -176,6 +221,30 @@ const AccountPage = () => {
 			setTimeout(() => {
 				setFilterOpen(false);
 			}, 300);
+		}
+	};
+	const handleNextBtn = () => {
+		console.log(totalPage);
+
+		if (totalPage === 0 || !totalPage || totalPage < 0) {
+			return;
+		}
+
+		if (current !== totalPage) {
+			setPage({ ...page, current: current + 1 });
+		} else {
+			console.log("max");
+		}
+	};
+	const handleBackbtn = () => {
+		if (totalPage === 0 || !totalPage || totalPage < 0) {
+			return;
+		}
+
+		if (current <= totalPage && current > 0) {
+			setPage({ ...page, current: current - 1 });
+		} else {
+			console.log("min");
 		}
 	};
 	return (
@@ -196,15 +265,24 @@ const AccountPage = () => {
 				</div>
 
 				{!isFetching && (
-					<HeadingXXS as="h1" className="text-white mb-3">
-						{allFilteredNBMons.length} NBMons
-					</HeadingXXS>
+					<div className="d-flex align-items-center mb-5">
+						<HeadingXXS as="h1" className="text-white ">
+							{allFilteredNBMons.length} NBMons
+						</HeadingXXS>
+						<div className="pagingContainer d-flex mx-auto align-items-center">
+							<FaChevronLeft className="text-white" onClick={handleBackbtn} />
+							<HeadingSuperXXS className="text-white mx-3">
+								{current + 1} of {totalPage + 1}
+							</HeadingSuperXXS>
+							<FaChevronRight className="text-white" onClick={handleNextBtn} />
+						</div>
+					</div>
 				)}
 
 				<Row>
 					{!isFetching ? (
 						<>
-							{allFilteredNBMons.map((nbMon) => (
+							{shownNBMons.map((nbMon) => (
 								<Col
 									key={nbMon.nbmonId}
 									className="mb-4"

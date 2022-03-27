@@ -74,7 +74,7 @@ const StyledPill = styled.div`
 			#8dd186 40.1%,
 			#2482b7 100%
 		);
-		filter: drop-shadow(0px 0px 25px #2bffd9);
+		filter: drop-shadow(0px 0px 18px #2bffd9);
 	}
 
 	&.types {

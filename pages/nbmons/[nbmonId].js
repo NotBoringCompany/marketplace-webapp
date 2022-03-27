@@ -34,7 +34,7 @@ const IndividualNBMon = () => {
 
 	if (isFetching || !isReady)
 		return (
-			<Layout title={`NBMon | Realm Hunter`}>
+			<Layout title={`NBMon #... | Realm Hunter`}>
 				<Loading />
 			</Layout>
 		);
