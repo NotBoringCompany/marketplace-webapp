@@ -33,6 +33,12 @@ const NBMonImage = styled(Image)`
 	position: relative;
 	top: -121px;
 	margin-right: 8px;
+
+	@media ${mediaBreakpoint.down.xl} {
+		width: 190px;
+		height: 190px;
+		top: -105px;
+	}
 `;
 
 const Description = styled(TextSecondary)`
