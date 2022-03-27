@@ -34,7 +34,7 @@ import { replaceDummy } from "utils/replaceDummyNBmonAPIValue";
 const StyledContainer = styled.div`
 	padding: 32px;
 	min-height: 100vh;
-	padding-left: calc(22% + 32px);
+	padding-left: calc(24% + 32px);
 
 	& .pagingContainer > svg:first-child {
 		margin-left: -100px;
@@ -59,9 +59,8 @@ const DesktopFilterContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	overflow: auto;
-	overflow-x: hidden;
-	width: 22%;
+	overflow-y: scroll;
+	width: 24%;
 	z-index: 1;
 	position: absolute;
 	padding: 24px;
@@ -79,6 +78,8 @@ const DesktopFilterContainer = styled.div`
 
 		display: none;
 		opacity: 0;
+		overflow: auto;
+		overflow-x: hidden;
 	}
 
 	&.show {
