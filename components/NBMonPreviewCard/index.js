@@ -49,7 +49,53 @@ const Card = styled.div`
 
 	& .nbmonImg {
 		border-radius: 100%;
-		filter: drop-shadow(10px 5px 10px rgba(107, 11, 255, 0.5));
+	}
+
+	& .lamox {
+		filter: drop-shadow(10px 5px 10px rgba(107, 11, 255, 0.6));
+	}
+
+	& .birvo {
+		filter: drop-shadow(10px 5px 10px rgba(79, 190, 189, 0.5));
+	}
+
+	& .heree {
+		filter: drop-shadow(10px 5px 10px rgba(79, 190, 189, 0.5));
+	}
+
+	& .heree {
+		filter: drop-shadow(10px 5px 10px rgba(54, 134, 27, 0.8));
+	}
+
+	& .pongu {
+		filter: drop-shadow(10px 5px 10px rgba(245, 245, 245, 0.2));
+	}
+
+	& .milnas {
+		filter: drop-shadow(10px 5px 10px rgba(230, 69, 53, 0.35));
+	}
+	& .dranexx {
+		filter: drop-shadow(10px 5px 10px rgba(242, 221, 194, 0.25));
+	}
+
+	& .schoggi {
+		filter: drop-shadow(10px 5px 10px rgba(254, 212, 128, 0.4));
+	}
+
+	& .licorine {
+		filter: drop-shadow(10px 5px 10px rgba(253, 145, 38, 0.5));
+	}
+
+	& .prawdek {
+		filter: drop-shadow(10px 5px 10px rgba(251, 228, 179, 0.4));
+	}
+
+	& .roggo {
+		filter: drop-shadow(10px 5px 10px rgba(186, 231, 142, 0.4));
+	}
+
+	& .todillo {
+		filter: drop-shadow(10px 5px 10px rgba(147, 96, 67, 0.8));
 	}
 `;
 
@@ -58,7 +104,7 @@ const NBMonPreviewCard = ({ nbMon, ...props }) => {
 	return (
 		<Card className={`bg-gray text-white align-items-center ${className}`}>
 			<Image
-				className="nbmonImg"
+				className={`nbmonImg ${nbMon.genera}`}
 				src={data.genera[nbMon.genera].imageurl}
 				alt="nbmon"
 				width={160}
