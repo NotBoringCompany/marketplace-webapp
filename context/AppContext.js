@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useChain } from "react-moralis";
+import Moralis from "moralis";
 import { useRouter } from "next/router";
 import SetupModal from "components/Modal/SetupModal";
 
@@ -8,20 +9,41 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
 	const router = useRouter();
 	const [showSetupModal, setShowSetupModal] = useState(false);
-	const { isAuthenticated, isWeb3Enabled, enableWeb3, user } = useMoralis();
+	const {
+		isAuthenticated,
+		isWeb3Enabled,
+		enableWeb3,
+		user,
+		isAuthenticating,
+		isWeb3EnableLoading,
+	} = useMoralis();
+	const { chainId, chain } = useChain();
 
 	const statesModalNoMM = { getter: showSetupModal, setter: setShowSetupModal }; // getter + setter
 	useEffect(() => {
-		if (!isWeb3Enabled && isAuthenticated) {
-			enableWeb3({ provider: "metamask" });
+		setTimeout(() => {
+			if (!isWeb3Enabled && isAuthenticated && !isAuthenticating) {
+				console.log("ASDAS");
+				enableWeb3({ provider: "metamask" });
+			}
+		}, 100);
+
+		async function fetchMyAPI() {
+			await Moralis.enableWeb3({ provider: "metamask" });
 		}
-		console.log("Web3 enabled: ", isWeb3Enabled);
 	}, [isWeb3Enabled, isAuthenticated]);
 
 	useEffect(() => {
 		if (isAuthenticated && user && !user.attributes.email)
 			setShowSetupModal(true);
-	}, [isAuthenticated, router.pathname]);
+	}, [isAuthenticated, router.pathname, chainId]);
+
+	useEffect(() => {
+		if (isWeb3Enabled) {
+			console.log("CID", chainId);
+			console.log("chain", chain);
+		}
+	}, [chainId, chain, isWeb3Enabled]);
 
 	return (
 		<AppContext.Provider value={{}}>

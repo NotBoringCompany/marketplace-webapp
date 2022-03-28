@@ -28,7 +28,8 @@ const NoMetaMask = ({ stateUtils }) => {
 				MetaMask not found
 			</CustomHeadingXXS>
 			<TextSecondary className="mt-1 mb-3 text-center">
-				Please set up a <b>MetaMask wallet</b> to connect.
+				Please set up a <b>MetaMask wallet as a browser extension</b> to
+				connect.
 			</TextSecondary>
 			<MyButton
 				isLink

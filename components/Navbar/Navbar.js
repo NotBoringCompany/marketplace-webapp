@@ -79,7 +79,8 @@ const RightContent = () => {
 	return (
 		<Nav className="mt-3 mt-lg-0 ms-auto">
 			{!isAuthenticated ? (
-				connectButton
+				// connectButton
+				<></>
 			) : (
 				<StyledDropdown>
 					<Dropdown.Toggle

@@ -163,7 +163,6 @@ const AccountPage = () => {
 			).then(async (res) => {
 				let fetchedData = await res.json();
 				fetchedData = replaceDummy(fetchedData);
-				console.log(fetchedData);
 				setAllNBMons(
 					fetchedData.result.sort(
 						(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)
@@ -203,9 +202,6 @@ const AccountPage = () => {
 			setshownNBMons(
 				allFilteredNBMons.slice(show * current, show * (current + 1))
 			);
-
-			console.log(show * current);
-			console.log("exclusive until", show * (current + 1));
 		}
 		// these r the nbmons that are shown in THAT page.
 	}, [current]);
@@ -227,16 +223,12 @@ const AccountPage = () => {
 		}
 	};
 	const handleNextBtn = () => {
-		console.log(totalPage);
-
 		if (totalPage === 0 || !totalPage || totalPage < 0) {
 			return;
 		}
 
 		if (current !== totalPage) {
 			setPage({ ...page, current: current + 1 });
-		} else {
-			console.log("max");
 		}
 	};
 	const handleBackbtn = () => {
@@ -246,12 +238,9 @@ const AccountPage = () => {
 
 		if (current <= totalPage && current > 0) {
 			setPage({ ...page, current: current - 1 });
-		} else {
-			console.log("min");
 		}
 	};
 
-	console.log("TOTAL PAGE", totalPage);
 	return (
 		<Layout title="Account Page | Realm Hunter" showSubnav>
 			<Filters

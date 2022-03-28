@@ -56,10 +56,10 @@ const MyButton = ({
 		<StyledButton
 			variant={variant}
 			onClick={onClick}
-			className={className}
+			className={`d-flex align-items-center justify-content-center ${className}`}
 			{...props}
 		>
-			{img && <Image src={img} />}
+			{img && <Image src={img} width={32} height={32} className="me-2" />}
 			<StyledP className={textColor}>{text}</StyledP>
 		</StyledButton>
 	);

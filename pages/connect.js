@@ -146,6 +146,7 @@ const Connect = () => {
 							text={
 								!isAuthenticating ? "Connect with Metamask" : "Connecting..."
 							}
+							img={"./images/metamask.svg"}
 							variant="secondary"
 							onClick={authCrypto}
 							disabled={isAuthenticating}

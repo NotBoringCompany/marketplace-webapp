@@ -68,8 +68,8 @@ const SignInBox = ({
 			</Form>
 
 			<TextSecondary className="mt-4 text-white">
-				You must previously have connected your wallet to our marketplace to be
-				able to sign in using email and password.
+				You must previously have connected your wallet, as well as your email
+				address to our marketplace to be able to sign in using email & password.
 			</TextSecondary>
 			<LinkCustom
 				href="/terms-and-conditions"
