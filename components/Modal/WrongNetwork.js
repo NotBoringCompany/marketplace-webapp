@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useChain, useMoralis } from "react-moralis";
-import { useRouter } from "next/router";
+import React, { useEffect } from "react";
+import { useChain } from "react-moralis";
 import Image from "next/image";
 
 import CustomModal from "./CustomModal";
@@ -10,7 +9,7 @@ import MyButton from "components/Buttons/Button";
 
 import styled from "styled-components";
 
-import EmailSetup from "public/images/email_setup.svg";
+import WrongNetworkImg from "public/images/wrong_network.svg";
 
 const CustomHeadingXXS = styled(HeadingXXS)`
 	font-size: 24px;
@@ -36,7 +35,7 @@ const WrongNetwork = ({ stateUtils }) => {
 			className="d-flex flex-column align-items-center justify-content-center"
 		>
 			<div className="d-flex mb-3">
-				<Image src={EmailSetup} width={66} height={50} />
+				<Image src={WrongNetworkImg} alt="icon" width={66} height={50} />
 			</div>
 
 			<CustomHeadingXXS className="text-center">

@@ -116,7 +116,7 @@ const SetupModal = ({ stateUtils }) => {
 			className="d-flex flex-column align-items-center justify-content-center"
 		>
 			<div className="d-flex mb-3">
-				<Image src={EmailSetup} width={66} height={50} />
+				<Image src={EmailSetup} alt="icon" width={66} height={50} />
 			</div>
 
 			<CustomHeadingXXS className="text-center">
