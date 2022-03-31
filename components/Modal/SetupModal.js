@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
+import React, { useEffect, useState, useContext } from "react";
+import { useChain, useMoralis } from "react-moralis";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
@@ -16,6 +16,7 @@ import SignUpBox from "components/SignUp/SignUpBox";
 
 import { validEmail } from "utils/validEmail";
 import { whitespace } from "utils/whitespace";
+import AppContext from "context/AppContext";
 
 const CustomHeadingXXS = styled(HeadingXXS)`
 	font-size: 24px;
@@ -31,6 +32,9 @@ export const NoteText = () => (
 const SetupModal = ({ stateUtils }) => {
 	const router = useRouter();
 	const { isUserUpdating, setUserData, userError, user } = useMoralis();
+	const { setShowWrongNetworkModal, showWrongNetworkModal } =
+		useContext(AppContext);
+	const { chainId } = useChain();
 	const [authDetail, setAuthDetail] = useState({
 		email: "",
 		password: "",
@@ -71,29 +75,35 @@ const SetupModal = ({ stateUtils }) => {
 
 	const link = async (e) => {
 		e.preventDefault();
-		if (validCreds) {
+		if (chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) {
+			setShowWrongNetworkModal(!showWrongNetworkModal);
+		} else {
+			if (validCreds) {
+				setAuthDetail({
+					...authDetail,
+					errors: {
+						password: "",
+						email: "",
+					},
+				});
+				await setUserData({
+					email,
+					password,
+				});
+
+				return;
+			}
+
 			setAuthDetail({
 				...authDetail,
 				errors: {
-					password: "",
-					email: "",
+					password: !whitespace(password)
+						? ""
+						: "Please enter a valid password!",
+					email: validEmail(email) ? "" : "Please enter a valid email!",
 				},
 			});
-			await setUserData({
-				email,
-				password,
-			});
-
-			return;
 		}
-
-		setAuthDetail({
-			...authDetail,
-			errors: {
-				password: !whitespace(password) ? "" : "Please enter a valid password!",
-				email: validEmail(email) ? "" : "Please enter a valid email!",
-			},
-		});
 	};
 
 	const handleInputChange = (e) => {

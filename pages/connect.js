@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
+import React, { useContext, useEffect, useState } from "react";
+import { useMoralis, useChain } from "react-moralis";
 
 import Layout from "components/Layout";
 import { HeadingSM } from "components/Typography/Headings";
@@ -17,6 +17,7 @@ import styled from "styled-components";
 import mustBeUnauthed from "utils/mustBeUnauthed";
 import { validEmail } from "utils/validEmail";
 import { whitespace } from "utils/whitespace";
+import AppContext from "context/AppContext";
 
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
@@ -29,12 +30,14 @@ const Connect = () => {
 		authenticate,
 		isAuthenticated,
 		isAuthenticating,
-		// isWeb3Enabled,
-		// enableWeb3,
 		hasAuthError,
 		login,
 		authError,
+		isWeb3Enabled,
 	} = useMoralis();
+	const { setShowWrongNetworkModal, showWrongNetworkModal } =
+		useContext(AppContext);
+	const { chainId } = useChain();
 
 	const [triedAuth, setTriedAuth] = useState(false);
 	const [showModalNoMM, setShowModalNoMM] = useState(false);
@@ -50,7 +53,7 @@ const Connect = () => {
 
 	useEffect(() => {
 		if (hasAuthError) {
-			console.log("Error:", authError.message);
+			// console.log("Error:", authError.message);
 
 			//TODO, refactor the below...
 			if (triedAuth && authError.message === "Non ethereum enabled browser") {
@@ -76,13 +79,24 @@ const Connect = () => {
 		}
 	}, [hasAuthError, triedAuth]);
 
+	useEffect(() => {
+		async function auth() {
+			await authenticate({ provider: "metamask" });
+		}
+		if (chainId === process.env.NEXT_PUBLIC_CHAIN_ID && triedAuth) {
+			auth();
+			setTriedAuth(false);
+		}
+	}, [chainId, triedAuth]);
+
 	const handleInputChange = (e) => {
 		setAuthDetail({ ...authDetail, [e.target.name]: e.target.value });
 	};
 
 	const authCrypto = async () => {
 		setTriedAuth(true);
-		await authenticate({ provider: "metamask" });
+		if (isWeb3Enabled && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID)
+			setShowWrongNetworkModal(true);
 	};
 
 	const authNonCrypto = async (e) => {
