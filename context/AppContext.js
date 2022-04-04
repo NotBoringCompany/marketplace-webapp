@@ -4,6 +4,7 @@ import Moralis from "moralis";
 import { useRouter } from "next/router";
 import SetupModal from "components/Modal/SetupModal";
 import WrongNetwork from "components/Modal/WrongNetwork";
+import NoMetaMask from "components/Modal/NoMetaMask";
 
 const AppContext = createContext();
 
@@ -11,11 +12,17 @@ export const AppProvider = ({ children }) => {
 	const router = useRouter();
 	const [showSetupModal, setShowSetupModal] = useState(false);
 	const [showWrongNetworkModal, setShowWrongNetworkModal] = useState(false);
+	const [showModalNoMM, setShowModalNoMM] = useState(false);
 
 	const { isAuthenticated, isWeb3Enabled, enableWeb3, user } = useMoralis();
 	const { chainId, chain } = useChain();
 
-	const statesModalNoMM = { getter: showSetupModal, setter: setShowSetupModal }; // getter + setter
+	const statesModalSetup = {
+		getter: showSetupModal,
+		setter: setShowSetupModal,
+	}; // getter + setter
+	const statesModalNoMM = { getter: showModalNoMM, setter: setShowModalNoMM }; // getter + setter
+
 	const statesModalWrongNetwork = {
 		getter: showWrongNetworkModal,
 		setter: setShowWrongNetworkModal,
@@ -47,10 +54,16 @@ export const AppProvider = ({ children }) => {
 
 	return (
 		<AppContext.Provider
-			value={{ showWrongNetworkModal, setShowWrongNetworkModal }}
+			value={{
+				showWrongNetworkModal,
+				setShowWrongNetworkModal,
+				setShowModalNoMM,
+			}}
 		>
-			<SetupModal stateUtils={statesModalNoMM} />
+			<SetupModal stateUtils={statesModalSetup} />
 			<WrongNetwork stateUtils={statesModalWrongNetwork} />
+			<NoMetaMask stateUtils={statesModalNoMM} />
+
 			{children}
 		</AppContext.Provider>
 	);

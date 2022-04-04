@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { useMoralis } from "react-moralis";
 
@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import Logo from "public/images/logo.png";
 import { TextSecondary } from "components/Typography/Texts";
 
-import AppContext from "context/AppContext";
+import MetamaskButton from "components/Buttons/MetamaskButton";
 
 const StyledNav = styled(Navbar)`
 	width: 100%;
@@ -70,65 +70,9 @@ const StyledDropdown = styled(Dropdown)`
 `;
 
 const RightContent = () => {
-	const {
-		isAuthenticated,
-		logout,
-		user,
-		isWeb3Enabled,
-		chainId,
-		hasAuthError,
-		authError,
-		authenticate,
-		isAuthenticating,
-	} = useMoralis();
+	const { isAuthenticated, logout, user } = useMoralis();
 	const router = useRouter();
-	const [triedAuth, setTriedAuth] = useState(false);
-	const [showModalNoMM, setShowModalNoMM] = useState(false);
-	const { setShowWrongNetworkModal, showWrongNetworkModal } =
-		useContext(AppContext);
 
-	useEffect(() => {
-		if (hasAuthError) {
-			// console.log("Error:", authError.message);
-
-			//TODO, refactor the below...
-			if (triedAuth && authError.message === "Non ethereum enabled browser") {
-				setShowModalNoMM(true);
-				return;
-			}
-
-			/*	alert(
-					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."
-				);*/
-		}
-	}, [hasAuthError, triedAuth]);
-
-	useEffect(() => {
-		async function auth() {
-			await authenticate({ provider: "metamask" });
-		}
-		if (chainId === process.env.NEXT_PUBLIC_CHAIN_ID && triedAuth) {
-			auth();
-			setTriedAuth(false);
-		}
-	}, [chainId, triedAuth]);
-
-	const authCrypto = async () => {
-		setTriedAuth(true);
-		if (isWeb3Enabled && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID)
-			setShowWrongNetworkModal(true);
-	};
-
-	const connectButton = (
-		<MyButton
-			className="w-10 mb-lg-0 mb-3"
-			pill
-			onClick={authCrypto}
-			disabled={isAuthenticating}
-			img={"./images/metamask.svg"}
-			text={!isAuthenticating ? "Login with Metamask" : "Connecting..."}
-		/>
-	);
 	const accountPageBtn = (
 		<MyButton text="Sign Out" onClick={logout} className="w-100" />
 	);
@@ -161,7 +105,7 @@ const RightContent = () => {
 							Litepaper
 						</a>
 					</StyledLink>
-					{connectButton}
+					<MetamaskButton />
 				</div>
 			) : (
 				<StyledDropdown>
@@ -182,7 +126,6 @@ const RightContent = () => {
 								...
 								{user.attributes.ethAddress.split("").splice(-5).join("")}
 							</TextSecondary>
-							<TextSecondary></TextSecondary>
 						</div>
 						<hr />
 						<div className="content">
@@ -201,8 +144,8 @@ const RightContent = () => {
 };
 
 const MyNavbar = ({ showSubnav }) => {
-	const router = useRouter();
-	const { isAuthenticated } = useMoralis();
+	// const router = useRouter();
+	// const { isAuthenticated } = useMoralis();
 
 	return (
 		<div className="d-flex flex-column">

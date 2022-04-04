@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useMoralis, useChain } from "react-moralis";
+import React, { useEffect, useState } from "react";
+import { useMoralis } from "react-moralis";
 
 import Layout from "components/Layout";
 import { HeadingSM } from "components/Typography/Headings";
 import { TextPrimary } from "components/Typography/Texts";
-import MyButton from "components/Buttons/Button";
+import MetamaskButton from "components/Buttons/MetamaskButton";
 import NoMetaMask from "components/Modal/NoMetaMask";
 import SignInBox from "components/SignIn/SignInBox";
 
@@ -17,7 +17,6 @@ import styled from "styled-components";
 import mustBeUnauthed from "utils/mustBeUnauthed";
 import { validEmail } from "utils/validEmail";
 import { whitespace } from "utils/whitespace";
-import AppContext from "context/AppContext";
 
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
@@ -26,20 +25,9 @@ const StyledContainer = styled(Container)`
 `;
 
 const Connect = () => {
-	const {
-		authenticate,
-		isAuthenticated,
-		isAuthenticating,
-		hasAuthError,
-		login,
-		authError,
-		isWeb3Enabled,
-	} = useMoralis();
-	const { setShowWrongNetworkModal, showWrongNetworkModal } =
-		useContext(AppContext);
-	const { chainId } = useChain();
+	const { isAuthenticated, isAuthenticating, hasAuthError, login, authError } =
+		useMoralis();
 
-	const [triedAuth, setTriedAuth] = useState(false);
 	const [showModalNoMM, setShowModalNoMM] = useState(false);
 	const [authDetail, setAuthDetail] = useState({
 		email: "",
@@ -56,10 +44,6 @@ const Connect = () => {
 			// console.log("Error:", authError.message);
 
 			//TODO, refactor the below...
-			if (triedAuth && authError.message === "Non ethereum enabled browser") {
-				setShowModalNoMM(true);
-				return;
-			}
 
 			if (authError.message === "Invalid username/password.") {
 				setAuthDetail({
@@ -77,26 +61,10 @@ const Connect = () => {
 					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."
 				);*/
 		}
-	}, [hasAuthError, triedAuth]);
-
-	useEffect(() => {
-		async function auth() {
-			await authenticate({ provider: "metamask" });
-		}
-		if (chainId === process.env.NEXT_PUBLIC_CHAIN_ID && triedAuth) {
-			auth();
-			setTriedAuth(false);
-		}
-	}, [chainId, triedAuth]);
+	}, [hasAuthError]);
 
 	const handleInputChange = (e) => {
 		setAuthDetail({ ...authDetail, [e.target.name]: e.target.value });
-	};
-
-	const authCrypto = async () => {
-		setTriedAuth(true);
-		if (isWeb3Enabled && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID)
-			setShowWrongNetworkModal(true);
 	};
 
 	const authNonCrypto = async (e) => {
@@ -145,6 +113,7 @@ const Connect = () => {
 							to="/"
 						/>
 					</Col> */}
+
 					<Col
 						className="mt-5 mt-lg-0 d-flex flex-column align-items-center"
 						xl={12}
@@ -152,21 +121,11 @@ const Connect = () => {
 						<HeadingSM as="h1" className="text-center text-lg-start text-white">
 							Connect
 						</HeadingSM>
-						<TextPrimary className="text-center text-lg-start mt-3 mb-5 text-white">
+						<TextPrimary className="text-center text-lg-start mt-3 mb-4 text-white">
 							Join our Marketplace by connecting your wallet.
 						</TextPrimary>
-
-						<MyButton
-							text={
-								!isAuthenticating ? "Connect with Metamask" : "Connecting..."
-							}
-							img={"./images/metamask.svg"}
-							variant="secondary"
-							onClick={authCrypto}
-							disabled={isAuthenticating}
-						/>
-
-						<TextPrimary className="my-5 text-center text-lg-start text-white">
+						<MetamaskButton big />
+						<TextPrimary className="my-4 text-center text-lg-start text-white">
 							or
 						</TextPrimary>
 						<SignInBox
