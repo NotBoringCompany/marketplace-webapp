@@ -44,7 +44,9 @@ const Layout = ({
 						className="d-none d-lg-block"
 					/>
 				)}
-				<div className="bg-primary">{children}</div>
+				<div className="bg-primary" style={{ minHeight: "100vh" }}>
+					{children}
+				</div>
 			</div>
 
 			<Footer />

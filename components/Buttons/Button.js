@@ -18,7 +18,7 @@ const StyledButton = styled(Button)`
 const StyledP = styled.p`
 	font-family: "Mada";
 	font-weight: 600;
-	font-size: 18px;
+	font-size: ${(props) => (props.big ? `21px` : `18px`)};
 `;
 const MyButton = ({
 	text,
@@ -51,7 +51,9 @@ const MyButton = ({
 				>
 					{backIcon && <MdArrowBackIos />}
 					{img && <Image src={img} width={32} height={32} className="me-2" />}
-					<StyledP className={textColor}>{text}</StyledP>
+					<StyledP big={big ? 1 : 0} className={textColor}>
+						{text}
+					</StyledP>
 				</StyledButton>
 			</a>
 		</Link>
@@ -66,7 +68,9 @@ const MyButton = ({
 			{...props}
 		>
 			{img && <Image src={img} width={32} height={32} className="me-2" />}
-			<StyledP className={textColor}>{text}</StyledP>
+			<StyledP big={big ? 1 : 0} className={textColor}>
+				{text}
+			</StyledP>
 		</StyledButton>
 	);
 	const rendered = isLink ? <>{LinkComponent}</> : <>{RegularButton}</>;

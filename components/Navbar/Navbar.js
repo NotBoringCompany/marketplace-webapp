@@ -15,6 +15,7 @@ import { mediaBreakpoint } from "utils/breakpoints";
 import { useRouter } from "next/router";
 
 import Logo from "public/images/logo.png";
+import InventoryLogo from "public/images/inventory.svg";
 import { TextSecondary } from "components/Typography/Texts";
 
 import MetamaskButton from "components/Buttons/MetamaskButton";
@@ -40,7 +41,7 @@ const StyledLinkBold = styled(HeadingSuperXXS)`
 
 const StyledDropdown = styled(Dropdown)`
 	& .my-dropdown {
-		padding-left: 90px;
+		padding-left: 0;
 	}
 
 	& .dropdown-menu {
@@ -73,8 +74,13 @@ const RightContent = () => {
 	const { isAuthenticated, logout, user } = useMoralis();
 	const router = useRouter();
 
+	const handleLogOut = async () => {
+		await logout();
+		router.push("/connect");
+	};
+
 	const accountPageBtn = (
-		<MyButton text="Sign Out" onClick={logout} className="w-100" />
+		<MyButton text="Log Out" pill onClick={handleLogOut} className="w-100" />
 	);
 
 	return (
@@ -108,36 +114,79 @@ const RightContent = () => {
 					<MetamaskButton />
 				</div>
 			) : (
-				<StyledDropdown>
-					<Dropdown.Toggle
-						className="my-dropdown border-none text-white "
-						variant="transparent"
-						id="dropdown-basic"
+				<div className="d-flex align-items-center flex-lg-row flex-column">
+					<StyledLinkBold
+						active={false}
+						className={`text-white me-lg-4 mb-lg-0 mb-3`}
 					>
-						Account Details
-					</Dropdown.Toggle>
+						<a
+							className="text-white"
+							href="https://nbcompany.io/"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							NBC
+						</a>
+					</StyledLinkBold>
+					<StyledLink className={`text-white me-lg-4 mb-lg-0 mb-3`}>
+						<a
+							className="text-white"
+							href="https://litepaper.nbcompany.io"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Litepaper
+						</a>
+					</StyledLink>
+					<Link href={`/nbmons`}>
+						<a className="text-white d-flex align-items-center mb-lg-0 mb-3">
+							<Image
+								src={InventoryLogo}
+								alt="Inventory"
+								width={18}
+								height={18}
+								className=""
+							/>
 
-					<Dropdown.Menu>
-						<div className="content pt-2">
-							<TextSecondary>
-								Wallet Address:{" "}
-								{user.attributes &&
-									user.attributes.ethAddress.split("").splice(0, 6).join("")}
-								...
-								{user.attributes.ethAddress.split("").splice(-5).join("")}
-							</TextSecondary>
-						</div>
-						<hr />
-						<div className="content">
-							<TextSecondary>
-								Connected Email:{" "}
-								{user.attributes.email ? user.attributes.email : "-"}
-							</TextSecondary>
-						</div>
-						<hr />
-						<div className="content pb-2">{accountPageBtn}</div>
-					</Dropdown.Menu>
-				</StyledDropdown>
+							<StyledLink className={`text-white ms-2 me-lg-4`}>
+								Inventory
+							</StyledLink>
+						</a>
+					</Link>
+
+					<div className="content">{accountPageBtn}</div>
+
+					{/* <StyledDropdown>
+						<Dropdown.Toggle
+							className="my-dropdown border-none text-white "
+							variant="transparent"
+							id="dropdown-basic"
+						>
+							Account Details
+						</Dropdown.Toggle>
+
+						<Dropdown.Menu>
+							<div className="content pt-2">
+								<TextSecondary>
+									Wallet Address:{" "}
+									{user.attributes &&
+										user.attributes.ethAddress.split("").splice(0, 6).join("")}
+									...
+									{user.attributes.ethAddress.split("").splice(-5).join("")}
+								</TextSecondary>
+							</div>
+							<hr />
+							<div className="content">
+								<TextSecondary>
+									Connected Email:{" "}
+									{user.attributes.email ? user.attributes.email : "-"}
+								</TextSecondary>
+							</div>
+							<hr />
+							<div className="content pb-2">{accountPageBtn}</div>
+						</Dropdown.Menu>
+					</StyledDropdown> */}
+				</div>
 			)}
 		</Nav>
 	);
@@ -158,7 +207,7 @@ const MyNavbar = ({ showSubnav }) => {
 				<Link href="/">
 					<a>
 						<Navbar.Brand>
-							<Image src={Logo} alt="NBCompany" width={64} height={64} />
+							<Image src={Logo} alt="NBCompany" width={72} height={72} />
 						</Navbar.Brand>
 					</a>
 				</Link>
