@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { useMoralis } from "react-moralis";
 
@@ -17,6 +17,8 @@ import { useRouter } from "next/router";
 import Logo from "public/images/logo.png";
 import { TextSecondary } from "components/Typography/Texts";
 
+import AppContext from "context/AppContext";
+
 const StyledNav = styled(Navbar)`
 	width: 100%;
 	padding: 16px;
@@ -29,6 +31,13 @@ const StyledLink = styled(HeadingSuperXXS)`
 	font-weight: lighter;
 	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
 `;
+
+const StyledLinkBold = styled(HeadingSuperXXS)`
+	font-size: 18px;
+	font-weight: bold;
+	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
+`;
+
 const StyledDropdown = styled(Dropdown)`
 	& .my-dropdown {
 		padding-left: 90px;
@@ -59,17 +68,65 @@ const StyledDropdown = styled(Dropdown)`
 		}
 	}
 `;
+
 const RightContent = () => {
-	const { isAuthenticated, logout, user } = useMoralis();
+	const {
+		isAuthenticated,
+		logout,
+		user,
+		isWeb3Enabled,
+		chainId,
+		hasAuthError,
+		authError,
+		authenticate,
+		isAuthenticating,
+	} = useMoralis();
 	const router = useRouter();
+	const [triedAuth, setTriedAuth] = useState(false);
+	const [showModalNoMM, setShowModalNoMM] = useState(false);
+	const { setShowWrongNetworkModal, showWrongNetworkModal } =
+		useContext(AppContext);
+
+	useEffect(() => {
+		if (hasAuthError) {
+			// console.log("Error:", authError.message);
+
+			//TODO, refactor the below...
+			if (triedAuth && authError.message === "Non ethereum enabled browser") {
+				setShowModalNoMM(true);
+				return;
+			}
+
+			/*	alert(
+					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."
+				);*/
+		}
+	}, [hasAuthError, triedAuth]);
+
+	useEffect(() => {
+		async function auth() {
+			await authenticate({ provider: "metamask" });
+		}
+		if (chainId === process.env.NEXT_PUBLIC_CHAIN_ID && triedAuth) {
+			auth();
+			setTriedAuth(false);
+		}
+	}, [chainId, triedAuth]);
+
+	const authCrypto = async () => {
+		setTriedAuth(true);
+		if (isWeb3Enabled && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID)
+			setShowWrongNetworkModal(true);
+	};
 
 	const connectButton = (
 		<MyButton
-			text="Connect Wallet"
-			className="w-100"
-			isLink
+			className="w-10 mb-lg-0 mb-3"
+			pill
+			onClick={authCrypto}
+			disabled={isAuthenticating}
 			img={"./images/metamask.svg"}
-			href="/connect"
+			text={!isAuthenticating ? "Login with Metamask" : "Connecting..."}
 		/>
 	);
 	const accountPageBtn = (
@@ -80,7 +137,32 @@ const RightContent = () => {
 		<Nav className="mt-3 mt-lg-0 ms-auto">
 			{!isAuthenticated ? (
 				// connectButton
-				<></>
+				<div className="d-flex align-items-center flex-lg-row flex-column">
+					<StyledLinkBold
+						active={false}
+						className={`text-white me-lg-4 mb-lg-0 mb-3`}
+					>
+						<a
+							className="text-white"
+							href="https://nbcompany.io/"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							NBC
+						</a>
+					</StyledLinkBold>
+					<StyledLink className={`text-white me-lg-4 mb-lg-0 mb-3`}>
+						<a
+							className="text-white"
+							href="https://litepaper.nbcompany.io"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Litepaper
+						</a>
+					</StyledLink>
+					{connectButton}
+				</div>
 			) : (
 				<StyledDropdown>
 					<Dropdown.Toggle
@@ -158,16 +240,6 @@ const MyNavbar = ({ showSubnav }) => {
 							))}
 						</Nav>
 					)} */}
-					<a
-						href={"https://www.nbcompany.io/"}
-						target="_blank"
-						rel="noopener noreferrer"
-						className={`mx-0 my-2 mx-lg-3 my-lg-0`}
-					>
-						<StyledLink active={false} className={`text-white`}>
-							NBC Homepage
-						</StyledLink>
-					</a>
 
 					<RightContent />
 				</Navbar.Collapse>

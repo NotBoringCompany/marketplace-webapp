@@ -6,9 +6,8 @@ import styled from "styled-components";
 import { MdArrowBackIos } from "react-icons/md";
 
 const StyledButton = styled(Button)`
-	box-shadow: 0px 5px 4px rgba(173, 173, 173, 0.25);
-	padding: 8px 24px;
-	border-radius: 9px;
+	padding: ${(props) => (props.pill ? `6px 22px` : `8px 24px;`)};
+	border-radius: ${(props) => (props.pill ? `60px` : `9px`)};
 	transition: 0.35s all;
 
 	&:hover {
@@ -32,6 +31,7 @@ const MyButton = ({
 	newTab = false,
 	passHref = false,
 	target = "_self",
+	pill = false,
 	...props
 }) => {
 	let textColor = "text-light";
@@ -41,6 +41,7 @@ const MyButton = ({
 		<Link href={href} passHref={passHref}>
 			<a href={href} target={target}>
 				<StyledButton
+					pill={pill ? 1 : 0}
 					variant={variant}
 					className={`d-flex align-items-center justify-content-center ${className}`}
 					{...props}
@@ -54,6 +55,7 @@ const MyButton = ({
 	);
 	const RegularButton = (
 		<StyledButton
+			pill={pill ? 1 : 0}
 			variant={variant}
 			onClick={onClick}
 			className={`d-flex align-items-center justify-content-center ${className}`}
