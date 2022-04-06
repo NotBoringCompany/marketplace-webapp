@@ -17,7 +17,7 @@ const StyledButton = styled(Button)`
 `;
 const StyledP = styled.p`
 	font-family: "Mada";
-	font-weight: 600;
+	font-weight: ${(props) => (props.thin ? `400` : `600`)};
 	font-size: ${(props) => (props.big ? `21px` : `18px`)};
 `;
 const MyButton = ({
@@ -27,6 +27,7 @@ const MyButton = ({
 	className,
 	isLink = false,
 	img = null,
+	icon = null,
 	backIcon = false,
 	href = "/",
 	newTab = false,
@@ -34,14 +35,16 @@ const MyButton = ({
 	target = "_self",
 	pill = false,
 	big = false,
+	thinText = false,
 	...props
 }) => {
 	let textColor = "text-light";
 	if (variant && variant.includes("outline-"))
 		textColor = variant.split("-")[0];
+	target = newTab ? `_blank` : target;
 	const LinkComponent = (
 		<Link href={href} passHref={passHref}>
-			<a href={href} target={target}>
+			<a href={href} target={target} rel="noopener noreferrer">
 				<StyledButton
 					big={big ? 1 : 0}
 					pill={pill ? 1 : 0}
@@ -50,8 +53,9 @@ const MyButton = ({
 					{...props}
 				>
 					{backIcon && <MdArrowBackIos />}
+					{icon && icon}
 					{img && <Image src={img} width={32} height={32} className="me-2" />}
-					<StyledP big={big ? 1 : 0} className={textColor}>
+					<StyledP big={big ? 1 : 0} className={textColor} thin={thinText}>
 						{text}
 					</StyledP>
 				</StyledButton>
@@ -67,8 +71,9 @@ const MyButton = ({
 			className={`d-flex align-items-center justify-content-center ${className}`}
 			{...props}
 		>
+			{icon && icon}
 			{img && <Image src={img} width={32} height={32} className="me-2" />}
-			<StyledP big={big ? 1 : 0} className={textColor}>
+			<StyledP big={big ? 1 : 0} className={textColor} thin={thinText}>
 				{text}
 			</StyledP>
 		</StyledButton>

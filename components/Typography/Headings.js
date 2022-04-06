@@ -46,3 +46,7 @@ export const HeadingSuperXXS = styled.h6`
 	font-weight: bold;
 	margin: 0;
 `;
+
+export const Heading18 = styled(HeadingSuperXXS)`
+	font-size: 18px;
+`;

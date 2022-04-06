@@ -47,6 +47,13 @@
 	font-style: normal;
 }
 
+@font-face {
+	font-family: "Mada";
+	src: url("./fonts/Mada-Medium.ttf") format("truetype");
+	font-weight: 500;
+	font-style: normal;
+}
+
 html {
 	height: 100%;
 	overflow: auto;

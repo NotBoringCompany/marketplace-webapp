@@ -1,21 +1,30 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useMoralis, useWeb3Contract, useWeb3Transfer } from "react-moralis";
-import Web3 from "web3";
+// import Web3 from "web3";
 
 import Image from "react-bootstrap/Image";
 import Layout from "components/Layout";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
-import { HeadingMD } from "components/Typography/Headings";
+import {
+	Heading18,
+	HeadingMD,
+	HeadingSuperXXS,
+} from "components/Typography/Headings";
 import MetamaskButton from "components/Buttons/MetamaskButton";
-import MintingGenesis from "../abis/MintingGenesis.json";
+import { BlurContainer } from "components/BlurContainer";
+import { TextSecondary } from "components/Typography/Texts";
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import MyButton from "components/Buttons/Button";
+// import MintingGenesis from "../abis/MintingGenesis.json";
 
-const GENESIS_CONTRACT_ADDRESS_ETH =
-	"0xc62620D685e08BaEB324D6EBAfB3dba1d333932c";
+// const GENESIS_CONTRACT_ADDRESS_ETH =
+// 	"0xc62620D685e08BaEB324D6EBAfB3dba1d333932c";
 
 const StyledContainer = styled.video`
-	position: fixed;
+	position: absolute;
 	right: 0;
 	bottom: 0;
 	min-width: 100%;
@@ -23,10 +32,11 @@ const StyledContainer = styled.video`
 `;
 
 const ContentContainer = styled.div`
-	position: fixed;
-	top: 113px;
+	position: absolute;
+	top: 0;
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 	width: 100%;
 	align-items: center;
 	padding: 20px;
@@ -37,6 +47,21 @@ const StyledHeadingMD = styled(HeadingMD)`
 		font-weight: lighter;
 	}
 	font-size: 38px;
+`;
+
+const StyledHeadingSuperXXS = styled(HeadingSuperXXS)`
+	font-size: 14px;
+	font-weight: 500;
+`;
+
+const Shard = styled.div`
+	width: 0;
+	position: absolute;
+	height: 0;
+	bottom: 0;
+	right: 0;
+	border-bottom: 310px solid rgba(255, 255, 255, 0.16);
+	border-left: 400px solid transparent;
 `;
 
 export default function Home() {
@@ -168,31 +193,32 @@ export default function Home() {
 
 	return (
 		<Layout>
-			{!isInitializing && (
-				<StyledContainer loop muted>
-					<source
-						src="https://uploads-ssl.webflow.com/6186cb7acaa11f0e5fecf726/6186cc609578c419bfb5f681_Realm%20Hunter%20Town-transcode.mp4"
-						type="video/mp4"
-					/>
-				</StyledContainer>
-			)}
-
-			<ContentContainer>
-				{!isInitializing ? (
-					<>
-						<Image
-							src={"./images/rh_logo2.png"}
-							alt="logo"
-							width={360}
-							height={260}
+			<div className="position-relative" style={{ minHeight: "100vh" }}>
+				{!isInitializing && (
+					<StyledContainer loop muted>
+						<source
+							src="https://uploads-ssl.webflow.com/6186cb7acaa11f0e5fecf726/6186cc609578c419bfb5f681_Realm%20Hunter%20Town-transcode.mp4"
+							type="video/mp4"
 						/>
-						<StyledHeadingMD className="text-white mt-1 mb-4">
-							<span className="skinny">
-								Genesis NBMon egg minting starts on
-							</span>{" "}
-							April 22, 4PM UTC
-						</StyledHeadingMD>
-						{/* 
+					</StyledContainer>
+				)}
+
+				<ContentContainer>
+					{!isInitializing ? (
+						<>
+							<Image
+								src={"./images/rh_logo2.png"}
+								alt="logo"
+								width={360}
+								height={260}
+							/>
+							<StyledHeadingMD className="text-white mt-1 mb-4 text-center">
+								<span className="skinny">
+									Genesis NBMon egg minting starts on
+								</span>{" "}
+								April 22, 4PM UTC
+							</StyledHeadingMD>
+							{/* 
 						{user && (
 							<>
 								<button
@@ -207,12 +233,45 @@ export default function Home() {
 								<button onClick={fn}>sign tx</button>
 							</>
 						)} */}
-						{!isAuthenticated && <MetamaskButton big />}
-					</>
-				) : (
-					<Loading />
-				)}
-			</ContentContainer>
+							{!isAuthenticated && <MetamaskButton big />}
+							{isAuthenticated && (
+								<>
+									<BlurContainer className="text-white">
+										<div className="d-flex align-items-center">
+											<IoIosCheckmarkCircleOutline className="me-2 checkmark-icon" />
+											<Heading18 as="p">You are logged in</Heading18>
+										</div>
+										<TextSecondary className="mt-1">
+											{user &&
+												user.attributes &&
+												user.attributes.ethAddress.toUpperCase()}
+										</TextSecondary>
+									</BlurContainer>
+								</>
+							)}
+							<div className="d-flex flex-column mt-auto ms-auto me-3 mb-0">
+								<MyButton
+									icon={<AiOutlineArrowRight className="text-white me-2" />}
+									pill
+									thinText
+									newTab
+									isLink
+									href="https://realmhunter.io"
+									text="visit realmhunter.io"
+								/>
+								<StyledHeadingSuperXXS as="p" className="text-white mt-2">
+									for more information about the game
+								</StyledHeadingSuperXXS>
+							</div>
+						</>
+					) : (
+						<Loading />
+					)}
+				</ContentContainer>
+				<Shard />
+			</div>
+
+			{/*Other sections live from here on*/}
 		</Layout>
 	);
 }

@@ -15,3 +15,11 @@ export const TextSecondary = styled.p`
 	font-weight: 300;
 	margin: 0;
 `;
+
+export const TextNormal = styled.p`
+	font-family: "Mada";
+	font-size: 23px;
+	line-height: 30px;
+	font-weight: 400;
+	margin: 0;
+`;
