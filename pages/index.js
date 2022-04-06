@@ -195,7 +195,7 @@ export default function Home() {
 		<Layout>
 			<div className="position-relative" style={{ minHeight: "100vh" }}>
 				{!isInitializing && (
-					<StyledContainer loop muted>
+					<StyledContainer autoPlay loop muted>
 						<source
 							src="https://uploads-ssl.webflow.com/6186cb7acaa11f0e5fecf726/6186cc609578c419bfb5f681_Realm%20Hunter%20Town-transcode.mp4"
 							type="video/mp4"
@@ -249,20 +249,22 @@ export default function Home() {
 									</BlurContainer>
 								</>
 							)}
-							<div className="d-flex flex-column mt-auto ms-auto me-3 mb-0">
-								<MyButton
-									icon={<AiOutlineArrowRight className="text-white me-2" />}
-									pill
-									thinText
-									newTab
-									isLink
-									href="https://realmhunter.io"
-									text="visit realmhunter.io"
-								/>
-								<StyledHeadingSuperXXS as="p" className="text-white mt-2">
-									for more information about the game
-								</StyledHeadingSuperXXS>
-							</div>
+							{!isInitializing && (
+								<div className="d-flex flex-column mt-auto ms-auto me-3 mb-0">
+									<MyButton
+										icon={<AiOutlineArrowRight className="text-white me-2" />}
+										pill
+										thinText
+										newTab
+										isLink
+										href="https://realmhunter.io"
+										text="visit realmhunter.io"
+									/>
+									<StyledHeadingSuperXXS as="p" className="text-white mt-2">
+										for more information about the game
+									</StyledHeadingSuperXXS>
+								</div>
+							)}
 						</>
 					) : (
 						<Loading />
