@@ -37,6 +37,7 @@ const ContentContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+	z-index: 2;
 	width: 100%;
 	align-items: center;
 	padding: 20px;
@@ -202,10 +203,7 @@ export default function Home() {
 						loop
 						muted
 					>
-						<source
-							src="https://uploads-ssl.webflow.com/6186cb7acaa11f0e5fecf726/6186cc609578c419bfb5f681_Realm%20Hunter%20Town-transcode.mp4"
-							type="video/mp4"
-						/>
+						<source src="./images/bg.mp4" type="video/mp4" />
 					</StyledContainer>
 				)}
 
