@@ -8,7 +8,6 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import BasicInfo from "./BasicInfo";
 import Stats from "./Stats";
-import GameStats from "./GameStats";
 import { mediaBreakpoint } from "utils/breakpoints";
 const CardContainer = styled.div`
 	padding: 16px;
@@ -139,9 +138,9 @@ const NBMonLargeCard = ({ nbMon }) => {
 						<Tab eventKey="stats" title="Stats">
 							<Stats nbMon={nbMon} />
 						</Tab>
-						<Tab eventKey="game_stats" title="Game Stats">
+						{/* <Tab eventKey="game_stats" title="Game Stats">
 							<GameStats nbMon={nbMon} />
-						</Tab>
+						</Tab> */}
 					</StyledTabs>
 				</TabsContainer>
 			</CardContainer>
