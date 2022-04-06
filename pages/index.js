@@ -67,7 +67,7 @@ const Shard = styled.div`
 export default function Home() {
 	const { isAuthenticated, user, isInitializing, Moralis } = useMoralis();
 	const router = useRouter();
-	const [videoLoaded, setVideoLoaded] = false;
+	const [videoLoaded, setVideoLoaded] = useState(false);
 
 	// const { data, error, runContractFunction, isFetching, isLoading } =
 	// 	useWeb3Contract({
