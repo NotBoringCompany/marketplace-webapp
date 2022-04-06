@@ -1,4 +1,4 @@
-// import { useEffect } from "react";
+import { useState } from "react";
 import { useMoralis, useWeb3Contract, useWeb3Transfer } from "react-moralis";
 // import Web3 from "web3";
 
@@ -67,6 +67,7 @@ const Shard = styled.div`
 export default function Home() {
 	const { isAuthenticated, user, isInitializing, Moralis } = useMoralis();
 	const router = useRouter();
+	const [videoLoaded, setVideoLoaded] = false;
 
 	// const { data, error, runContractFunction, isFetching, isLoading } =
 	// 	useWeb3Contract({
@@ -195,7 +196,12 @@ export default function Home() {
 		<Layout>
 			<div className="position-relative" style={{ minHeight: "100vh" }}>
 				{!isInitializing && (
-					<StyledContainer autoPlay loop muted>
+					<StyledContainer
+						onLoadedData={() => setVideoLoaded(true)}
+						autoPlay
+						loop
+						muted
+					>
 						<source
 							src="https://uploads-ssl.webflow.com/6186cb7acaa11f0e5fecf726/6186cc609578c419bfb5f681_Realm%20Hunter%20Town-transcode.mp4"
 							type="video/mp4"
@@ -204,7 +210,7 @@ export default function Home() {
 				)}
 
 				<ContentContainer>
-					{!isInitializing ? (
+					{!isInitializing && videoLoaded ? (
 						<>
 							<Image
 								src={"./images/rh_logo2.png"}
@@ -249,7 +255,7 @@ export default function Home() {
 									</BlurContainer>
 								</>
 							)}
-							{!isInitializing && (
+							{!isInitializing && videoLoaded && (
 								<div className="d-flex flex-column mt-auto ms-auto me-3 mb-0">
 									<MyButton
 										icon={<AiOutlineArrowRight className="text-white me-2" />}
