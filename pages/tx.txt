@@ -1,0 +1,122 @@
+// const { data, error, runContractFunction, isFetching, isLoading } =
+// 	useWeb3Contract({
+// 		abi: MintingGenesis,
+// 		contractAddress: GENESIS_CONTRACT_ADDRESS_ETH,
+// 		functionName: "whitelistedGenesisEggMint",
+// 		params: {
+// 			_owner: user && user.attributes.ethAddress,
+// 			_amountToMint: 1,
+// 			_hatchingDuration: 300,
+// 			_nbmonStats: [],
+// 			_types: [],
+// 			_potential: [],
+// 			_passives: [],
+// 			_isEgg: true,
+// 		},
+// 	});
+
+// const trf = useWeb3Transfer({
+// 	amount: Moralis.Units.ETH(0.08),
+// 	receiver: "0x5fa5c1998d4c11f59c17FDE8b3f07588C23837D5",
+// 	type: "native",
+// });
+
+// const fn = async () => {
+// 	await Moralis.enableWeb3();
+
+// 	const web3 = new Web3(Moralis.provider);
+
+// 	const contract = new web3.eth.Contract(
+// 		MintingGenesis,
+// 		GENESIS_CONTRACT_ADDRESS_ETH
+// 	);
+
+// 	const pvtKey =
+// 		"55c0ee6d4551520e4acf662f024579dae542b9d459dcdf8cc6b21ec98a970524";
+
+// 	const account = web3.eth.accounts.privateKeyToAccount(pvtKey).address;
+
+// 	const transaction = contract.methods.whitelistedGenesisEggMint(
+// 		"0xda6FCd7aF0E44E5d301dF3e7720a5281BBECCb2A", // dog's wallet address
+// 		1,
+// 		300,
+// 		[],
+// 		[],
+// 		[],
+// 		[],
+// 		true
+// 	);
+
+// 	const options = {
+// 		to: "0xda6FCd7aF0E44E5d301dF3e7720a5281BBECCb2A",
+// 		data: transaction.encodeABI(),
+// 		gas: 1000000,
+// 	};
+// 	const signed = await web3.eth.accounts.signTransaction(options, pvtKey);
+// 	console.log("signed,,", signed);
+// 	const receipt = await web3.eth.sendSignedTransaction(signed.rawTransaction);
+// 	console.log("RECEIPT", receipt);
+// };
+
+// const fn = async () => {
+// 	await Moralis.enableWeb3();
+
+// 	const web3 = new Web3(Moralis.provider);
+
+// 	const mintingGenesisContract = new web3.eth.Contract(
+// 		MintingGenesis,
+// 		GENESIS_CONTRACT_ADDRESS_ETH
+// 	);
+
+// 	const whiteListedEggMint =
+// 		mintingGenesisContract.methods.whitelistedGenesisEggMint(
+// 			"0x6ef0f724e780E5D3aD66f2A4FCbEF64A774eA796", // dog's wallet address
+// 			1,
+// 			300,
+// 			[],
+// 			[],
+// 			[],
+// 			[],
+// 			true
+// 		);
+
+// 	const encodedABI = whiteListedEggMint.encodeABI();
+
+// 	const tx = {
+// 		chainId: "4",
+// 		to: "0x6ef0f724e780E5D3aD66f2A4FCbEF64A774eA796",
+// 		data: encodedABI,
+// 		from: "0x5fa5c1998d4c11f59c17FDE8b3f07588C23837D5",
+// 		gas: 3000000,
+// 	};
+
+// 	const signedTx = await web3.eth.accounts.signTransaction(
+// 		tx,
+// 		"55c0ee6d4551520e4acf662f024579dae542b9d459dcdf8cc6b21ec98a970524",
+// 		(e) => {
+// 			console.log(e);
+// 		}
+// 	);
+
+// 	console.log(signedTx);
+// };
+
+// useEffect(() => {
+// 	if (trf.data) {
+// 		const x = trf.data.wait();
+// 		x.then((r) => {
+// 			console.log("RES", r);
+// 		});
+// 	}
+// }, [trf]);
+
+// console.log(trf.error && trf.error);
+// console.log(trf.data && trf.data);
+
+// useEffect(() => {
+// 	if (isAuthenticated) {
+// 		router.push("/nbmons");
+// 	} else {
+// 		router.push("/connect");
+// 	}
+// }, [isAuthenticated]);

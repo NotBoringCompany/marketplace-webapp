@@ -1,23 +1,33 @@
 import { useState } from "react";
 import { useMoralis, useWeb3Contract, useWeb3Transfer } from "react-moralis";
+import { useRouter } from "next/router";
 // import Web3 from "web3";
 
 import Image from "react-bootstrap/Image";
-import Layout from "components/Layout";
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import Countdown from "react-countdown";
+
 import styled from "styled-components";
-import { useRouter } from "next/router";
+
+import Layout from "components/Layout";
 import Loading from "components/Loading";
+
 import {
 	Heading18,
 	HeadingMD,
 	HeadingSuperXXS,
 } from "components/Typography/Headings";
+import { TextSecondary } from "components/Typography/Texts";
+
 import MetamaskButton from "components/Buttons/MetamaskButton";
 import { BlurContainer } from "components/BlurContainer";
-import { TextSecondary } from "components/Typography/Texts";
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import { AiOutlineArrowRight } from "react-icons/ai";
+
 import MyButton from "components/Buttons/Button";
+import CountDownContainer from "components/CountDownContainer";
+
+import { mediaBreakpoint } from "utils/breakpoints";
+
 // import MintingGenesis from "../abis/MintingGenesis.json";
 
 // const GENESIS_CONTRACT_ADDRESS_ETH =
@@ -48,6 +58,12 @@ const StyledHeadingMD = styled(HeadingMD)`
 		font-weight: lighter;
 	}
 	font-size: 38px;
+
+	@media ${mediaBreakpoint.down.xl} {
+		margin-top: -24px;
+		font-size: 24px;
+		line-height: 28px;
+	}
 `;
 
 const StyledHeadingSuperXXS = styled(HeadingSuperXXS)`
@@ -63,139 +79,85 @@ const Shard = styled.div`
 	right: 0;
 	border-bottom: 310px solid rgba(255, 255, 255, 0.16);
 	border-left: 400px solid transparent;
+
+	@media ${mediaBreakpoint.down.md} {
+		border-bottom: 170px solid rgba(255, 255, 255, 0.16);
+		border-left: 580px solid transparent;
+	}
+`;
+
+const RHImage = styled(Image)`
+	width: 360px;
+	height: 260px;
+	margin-top: 16px;
+
+	@media ${mediaBreakpoint.down.lg} {
+		margin-top: -48px;
+		width: 300px;
+		height: 230px;
+	}
+`;
+const TimersContainer = styled.div`
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 24px;
+
+	& .separator {
+		margin: 0 16px;
+	}
+
+	@media ${mediaBreakpoint.down.md} {
+	}
+
+	@media ${mediaBreakpoint.down.lg} {
+		flex-direction: column;
+		& .separator {
+			margin: 8px 0;
+		}
+	}
+`;
+
+const MintingSection = styled.div`
+	min-height: 100vh;
+
+	@media ${mediaBreakpoint.down.lg} and (orientation: landscape) {
+		min-height: calc(100vh + 380px);
+	}
+
+	@media (min-width: 820px) and (max-width: 1024px) and (orientation: portrait) {
+		min-height: calc(60vh + 100px);
+	}
+
+	@media (max-height: 667px) and (orientation: portrait) {
+		min-height: calc(100vh + 120px);
+	}
 `;
 
 export default function Home() {
 	const { isAuthenticated, user, isInitializing, Moralis } = useMoralis();
-	const router = useRouter();
+	// const router = useRouter();
 	const [videoLoaded, setVideoLoaded] = useState(false);
 
-	// const { data, error, runContractFunction, isFetching, isLoading } =
-	// 	useWeb3Contract({
-	// 		abi: MintingGenesis,
-	// 		contractAddress: GENESIS_CONTRACT_ADDRESS_ETH,
-	// 		functionName: "whitelistedGenesisEggMint",
-	// 		params: {
-	// 			_owner: user && user.attributes.ethAddress,
-	// 			_amountToMint: 1,
-	// 			_hatchingDuration: 300,
-	// 			_nbmonStats: [],
-	// 			_types: [],
-	// 			_potential: [],
-	// 			_passives: [],
-	// 			_isEgg: true,
-	// 		},
-	// 	});
-
-	// const trf = useWeb3Transfer({
-	// 	amount: Moralis.Units.ETH(0.08),
-	// 	receiver: "0x5fa5c1998d4c11f59c17FDE8b3f07588C23837D5",
-	// 	type: "native",
-	// });
-
-	// const fn = async () => {
-	// 	await Moralis.enableWeb3();
-
-	// 	const web3 = new Web3(Moralis.provider);
-
-	// 	const contract = new web3.eth.Contract(
-	// 		MintingGenesis,
-	// 		GENESIS_CONTRACT_ADDRESS_ETH
-	// 	);
-
-	// 	const pvtKey =
-	// 		"55c0ee6d4551520e4acf662f024579dae542b9d459dcdf8cc6b21ec98a970524";
-
-	// 	const account = web3.eth.accounts.privateKeyToAccount(pvtKey).address;
-
-	// 	const transaction = contract.methods.whitelistedGenesisEggMint(
-	// 		"0xda6FCd7aF0E44E5d301dF3e7720a5281BBECCb2A", // dog's wallet address
-	// 		1,
-	// 		300,
-	// 		[],
-	// 		[],
-	// 		[],
-	// 		[],
-	// 		true
-	// 	);
-
-	// 	const options = {
-	// 		to: "0xda6FCd7aF0E44E5d301dF3e7720a5281BBECCb2A",
-	// 		data: transaction.encodeABI(),
-	// 		gas: 1000000,
-	// 	};
-	// 	const signed = await web3.eth.accounts.signTransaction(options, pvtKey);
-	// 	console.log("signed,,", signed);
-	// 	const receipt = await web3.eth.sendSignedTransaction(signed.rawTransaction);
-	// 	console.log("RECEIPT", receipt);
-	// };
-
-	// const fn = async () => {
-	// 	await Moralis.enableWeb3();
-
-	// 	const web3 = new Web3(Moralis.provider);
-
-	// 	const mintingGenesisContract = new web3.eth.Contract(
-	// 		MintingGenesis,
-	// 		GENESIS_CONTRACT_ADDRESS_ETH
-	// 	);
-
-	// 	const whiteListedEggMint =
-	// 		mintingGenesisContract.methods.whitelistedGenesisEggMint(
-	// 			"0x6ef0f724e780E5D3aD66f2A4FCbEF64A774eA796", // dog's wallet address
-	// 			1,
-	// 			300,
-	// 			[],
-	// 			[],
-	// 			[],
-	// 			[],
-	// 			true
-	// 		);
-
-	// 	const encodedABI = whiteListedEggMint.encodeABI();
-
-	// 	const tx = {
-	// 		chainId: "4",
-	// 		to: "0x6ef0f724e780E5D3aD66f2A4FCbEF64A774eA796",
-	// 		data: encodedABI,
-	// 		from: "0x5fa5c1998d4c11f59c17FDE8b3f07588C23837D5",
-	// 		gas: 3000000,
-	// 	};
-
-	// 	const signedTx = await web3.eth.accounts.signTransaction(
-	// 		tx,
-	// 		"55c0ee6d4551520e4acf662f024579dae542b9d459dcdf8cc6b21ec98a970524",
-	// 		(e) => {
-	// 			console.log(e);
-	// 		}
-	// 	);
-
-	// 	console.log(signedTx);
-	// };
-
-	// useEffect(() => {
-	// 	if (trf.data) {
-	// 		const x = trf.data.wait();
-	// 		x.then((r) => {
-	// 			console.log("RES", r);
-	// 		});
-	// 	}
-	// }, [trf]);
-
-	// console.log(trf.error && trf.error);
-	// console.log(trf.data && trf.data);
-
-	// useEffect(() => {
-	// 	if (isAuthenticated) {
-	// 		router.push("/nbmons");
-	// 	} else {
-	// 		router.push("/connect");
-	// 	}
-	// }, [isAuthenticated]);
+	const renderer = ({ days, hours, minutes, seconds, completed }) => {
+		if (completed) {
+			// Render a complete state
+			return <p>asd</p>;
+		} else {
+			// Render a countdown
+			return (
+				<CountDownContainer
+					days={days}
+					hours={hours}
+					minutes={minutes}
+					seconds={seconds}
+				/>
+			);
+		}
+	};
 
 	return (
 		<Layout>
-			<div className="position-relative" style={{ minHeight: "100vh" }}>
+			<MintingSection className="position-relative">
 				{!isInitializing && (
 					<StyledContainer
 						onLoadedData={() => setVideoLoaded(true)}
@@ -210,18 +172,40 @@ export default function Home() {
 				<ContentContainer>
 					{!isInitializing && videoLoaded ? (
 						<>
-							<Image
-								src={"./images/rh_logo2.png"}
-								alt="logo"
-								width={360}
-								height={260}
-							/>
-							<StyledHeadingMD className="text-white mt-1 mb-4 text-center">
+							<RHImage src={"./images/rh_logo2.png"} alt="logo" />
+
+							<StyledHeadingMD className="text-white  mb-3 text-center">
 								<span className="skinny">
 									Genesis NBMon egg minting starts on
 								</span>{" "}
 								April 22, 4PM UTC
 							</StyledHeadingMD>
+
+							<TimersContainer>
+								<div className="d-flex flex-column justify-content-center align-items-center">
+									<HeadingSuperXXS
+										as="p"
+										className="mb-2 text-white text-uppercase text-center"
+									>
+										Whitelist Mint opens at 2 pm utc
+									</HeadingSuperXXS>
+									<Countdown
+										date={1650636000000}
+										renderer={renderer}
+										callback
+									/>
+								</div>
+								<div className="separator"></div>
+								<div className="d-flex flex-column justify-content-center align-items-center">
+									<HeadingSuperXXS
+										as="p"
+										className="mb-2 text-white text-uppercase text-center"
+									>
+										Public Mint opens at 4 pm utc
+									</HeadingSuperXXS>{" "}
+									<Countdown date={1650643200000} renderer={renderer} />
+								</div>
+							</TimersContainer>
 							{/* 
 						{user && (
 							<>
@@ -240,7 +224,7 @@ export default function Home() {
 							{!isAuthenticated && <MetamaskButton big />}
 							{isAuthenticated && (
 								<>
-									<BlurContainer className="text-white">
+									<BlurContainer className="mt-lg-5 mt-2 text-white">
 										<div className="d-flex align-items-center">
 											<IoIosCheckmarkCircleOutline className="me-2 checkmark-icon" />
 											<Heading18 as="p">You are logged in</Heading18>
@@ -275,7 +259,7 @@ export default function Home() {
 					)}
 				</ContentContainer>
 				<Shard />
-			</div>
+			</MintingSection>
 
 			{/*Other sections live from here on*/}
 		</Layout>
