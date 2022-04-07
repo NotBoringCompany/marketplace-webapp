@@ -158,7 +158,7 @@ export default function Home() {
 	return (
 		<Layout>
 			<MintingSection className="position-relative">
-				{!isInitializing && videoLoaded && (
+				{!isInitializing && (
 					<StyledContainer
 						onCanPlayThrough={() => setVideoLoaded(true)}
 						autoPlay
