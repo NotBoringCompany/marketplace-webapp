@@ -166,7 +166,7 @@ export default function Home() {
 						playsInline
 						muted
 					>
-						{videoLoaded && <source src="./images/bg.mp4" type="video/mp4" />}
+						<source src="./images/bg.mp4" type="video/mp4" />
 					</StyledContainer>
 				)}
 
