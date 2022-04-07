@@ -222,7 +222,9 @@ export default function Home() {
 								<button onClick={fn}>sign tx</button>
 							</>
 						)} */}
-							{!isAuthenticated && <MetamaskButton big />}
+							{!isAuthenticated && (
+								<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
+							)}
 							{isAuthenticated && (
 								<>
 									<BlurContainer className="mt-lg-5 mt-2 text-white">

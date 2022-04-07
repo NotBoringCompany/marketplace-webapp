@@ -4,7 +4,7 @@ import AppContext from "context/AppContext";
 
 import MyButton from "./Button";
 
-const MetamaskButton = ({ big = false }) => {
+const MetamaskButton = ({ big = false, className }) => {
 	const [triedAuth, setTriedAuth] = useState(false);
 	const [goAuth, setGoAuth] = useState(false);
 
@@ -59,7 +59,7 @@ const MetamaskButton = ({ big = false }) => {
 	return (
 		<MyButton
 			big={big}
-			className="w-10 mb-lg-0 mb-3"
+			className={`w-10 mb-lg-0 mb-3 ${className}`}
 			pill
 			onClick={authCrypto}
 			disabled={isAuthenticating}
