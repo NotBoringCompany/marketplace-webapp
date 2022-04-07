@@ -160,13 +160,13 @@ export default function Home() {
 			<MintingSection className="position-relative">
 				{!isInitializing && (
 					<StyledContainer
-						onCanPlayThrough={() => setVideoLoaded(true)}
+						onCanPlay={() => setVideoLoaded(true)}
 						autoPlay
 						loop
 						playsInline
 						muted
 					>
-						<source src="./images/bg.mp4" type="video/mp4" />
+						{videoLoaded && <source src="./images/bg.mp4" type="video/mp4" />}
 					</StyledContainer>
 				)}
 
