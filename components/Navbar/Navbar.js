@@ -139,6 +139,7 @@ const StyledDropdown = styled(Dropdown)`
 
 const RightContent = () => {
 	const { isAuthenticated, logout, user } = useMoralis();
+	const router = useRouter();
 
 	const handleLogOut = async () => {
 		await logout();

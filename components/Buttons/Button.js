@@ -7,7 +7,7 @@ import { MdArrowBackIos } from "react-icons/md";
 
 const StyledButton = styled(Button)`
 	padding: ${(props) =>
-		props.pill ? (props.big ? `10px 29px` : `6px 22px`) : `8px 24px;`};
+		props.pill ? (props.big ? `10px 24px` : `4px 22px`) : `8px 24px;`};
 	border-radius: ${(props) => (props.pill ? `60px` : `9px`)};
 	transition: 0.35s all;
 
@@ -18,7 +18,7 @@ const StyledButton = styled(Button)`
 const StyledP = styled.p`
 	font-family: "Mada";
 	font-weight: ${(props) => (props.thin ? `400` : `600`)};
-	font-size: ${(props) => (props.big ? `21px` : `18px`)};
+	font-size: ${(props) => (props.big ? `21px` : `16px`)};
 `;
 const MyButton = ({
 	text,
