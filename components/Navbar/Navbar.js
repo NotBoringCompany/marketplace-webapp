@@ -25,9 +25,39 @@ import MetamaskButton from "components/Buttons/MetamaskButton";
 
 const StyledNav = styled(Navbar)`
 	width: 100%;
-	padding: 16px;
+	padding: 0 32px;
 	display: flex;
 	z-index: 1;
+
+	& .navbar-brand {
+		width: 100%;
+		margin: 0;
+		display: flex;
+		align-items: center;
+		margin: 10px 0;
+	}
+
+	& .navbar-brand span {
+		display: flex;
+		align-items: center;
+		margin: 0;
+	}
+
+	& .navbar-collapse {
+		height: 78px;
+	}
+
+	@media ${mediaBreakpoint.down.lg} {
+		& .navbar-collapse {
+			height: revert;
+		}
+
+		& .collapsing {
+			height: 0;
+			overflow: hidden;
+			transition: height 0.35s ease;
+		}
+	}
 `;
 
 const StyledLink = styled(HeadingSuperXXS)`
@@ -38,12 +68,42 @@ const StyledLink = styled(HeadingSuperXXS)`
 
 const LeftMenuContainer = styled.div`
 	display: flex;
+	height: 100%;
 	& svg {
 		font-size: 24px;
 	}
 
 	& .calendar {
 		font-size: 20px;
+	}
+
+	& a {
+		transition: 0.2s all;
+		color: rgba(225, 227, 224, 0.5);
+		background: transparent;
+	}
+
+	& a.active {
+		color: #42ca9f;
+		background: #2f2f2f;
+	}
+
+	& a:hover {
+		background: #242424;
+		color: #42ca9f;
+	}
+
+	& a.disabled {
+		color: rgba(225, 227, 224, 0.2);
+		background: transparent;
+	}
+
+	& a.disabled:hover {
+		cursor: not-allowed !important;
+	}
+
+	@media ${mediaBreakpoint.down.lg} {
+		height: unset;
 	}
 `;
 const StyledDropdown = styled(Dropdown)`
@@ -79,7 +139,6 @@ const StyledDropdown = styled(Dropdown)`
 
 const RightContent = () => {
 	const { isAuthenticated, logout, user } = useMoralis();
-	const router = useRouter();
 
 	const handleLogOut = async () => {
 		await logout();
@@ -154,8 +213,8 @@ const RightContent = () => {
 };
 
 const MyNavbar = ({ showSubnav }) => {
-	// const router = useRouter();
 	// const { isAuthenticated } = useMoralis();
+	const router = useRouter();
 
 	return (
 		<div className="d-flex flex-column">
@@ -194,14 +253,18 @@ const MyNavbar = ({ showSubnav }) => {
 						</Nav>
 					)} */}
 					<LeftMenuContainer className="d-flex flex-lg-row flex-column">
-						<Link href="/">
-							<a className="ms-lg-3 mx-auto text-gray align-items-center justify-content-center d-flex mb-lg-0 mb-3">
+						<Link href="#">
+							<a className="disabled ms-lg-4 mx-auto px-3 align-items-center justify-content-center d-flex mb-lg-0 mb-3">
 								<MdStorefront className="me-2" />
 								<TextNormal className="mt-1">Marketplace</TextNormal>
 							</a>
 						</Link>
 						<Link href="/">
-							<a className="ms-lg-3 mx-auto text-gray align-items-center justify-content-center d-flex">
+							<a
+								className={`mx-auto px-3 align-items-center justify-content-center d-flex ${
+									router.pathname === "/" && `active`
+								}`}
+							>
 								<FaCalendarDay className="me-2 calendar" />
 								<TextNormal className="mt-1">Minting Event</TextNormal>
 							</a>
