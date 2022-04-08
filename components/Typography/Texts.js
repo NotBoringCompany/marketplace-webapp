@@ -18,8 +18,8 @@ export const TextSecondary = styled.p`
 
 export const TextNormal = styled.p`
 	font-family: "Mada";
-	font-size: 23px;
-	line-height: 30px;
+	font-size: 18px;
+	line-height: 18px;
 	font-weight: 400;
 	margin: 0;
 `;

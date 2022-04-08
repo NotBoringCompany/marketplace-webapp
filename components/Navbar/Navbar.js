@@ -15,8 +15,11 @@ import { mediaBreakpoint } from "utils/breakpoints";
 import { useRouter } from "next/router";
 
 import Logo from "public/images/logo.png";
+import { FaCalendarDay } from "react-icons/fa";
+import { MdStorefront } from "react-icons/md";
+
 import InventoryLogo from "public/images/inventory.svg";
-import { TextSecondary } from "components/Typography/Texts";
+import { TextNormal, TextSecondary } from "components/Typography/Texts";
 
 import MetamaskButton from "components/Buttons/MetamaskButton";
 
@@ -33,12 +36,16 @@ const StyledLink = styled(HeadingSuperXXS)`
 	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
 `;
 
-const StyledLinkBold = styled(HeadingSuperXXS)`
-	font-size: 18px;
-	font-weight: bold;
-	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
-`;
+const LeftMenuContainer = styled.div`
+	display: flex;
+	& svg {
+		font-size: 24px;
+	}
 
+	& .calendar {
+		font-size: 20px;
+	}
+`;
 const StyledDropdown = styled(Dropdown)`
 	& .my-dropdown {
 		padding-left: 0;
@@ -88,56 +95,10 @@ const RightContent = () => {
 			{!isAuthenticated ? (
 				// connectButton
 				<div className="d-flex align-items-center flex-lg-row flex-column">
-					<StyledLinkBold
-						active={false}
-						className={`text-white me-lg-4 mb-lg-0 mb-3`}
-					>
-						<a
-							className="text-white"
-							href="https://nbcompany.io/"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							NBC
-						</a>
-					</StyledLinkBold>
-					<StyledLink className={`text-white me-lg-4 mb-lg-0 mb-3`}>
-						<a
-							className="text-white"
-							href="https://litepaper.nbcompany.io"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							Litepaper
-						</a>
-					</StyledLink>
 					<MetamaskButton />
 				</div>
 			) : (
 				<div className="d-flex align-items-center flex-lg-row flex-column">
-					<StyledLinkBold
-						active={false}
-						className={`text-white me-lg-4 mb-lg-0 mb-3`}
-					>
-						<a
-							className="text-white"
-							href="https://nbcompany.io/"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							NBC
-						</a>
-					</StyledLinkBold>
-					<StyledLink className={`text-white me-lg-4 mb-lg-0 mb-3`}>
-						<a
-							className="text-white"
-							href="https://litepaper.nbcompany.io"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							Litepaper
-						</a>
-					</StyledLink>
 					<Link href={`/nbmons`}>
 						<a className="text-white d-flex align-items-center mb-lg-0 mb-3">
 							<Image
@@ -207,7 +168,7 @@ const MyNavbar = ({ showSubnav }) => {
 				<Link href="/">
 					<a>
 						<Navbar.Brand>
-							<Image src={Logo} alt="NBCompany" width={72} height={72} />
+							<Image src={Logo} alt="NBCompany" width={48} height={48} />
 						</Navbar.Brand>
 					</a>
 				</Link>
@@ -232,6 +193,20 @@ const MyNavbar = ({ showSubnav }) => {
 							))}
 						</Nav>
 					)} */}
+					<LeftMenuContainer className="d-flex flex-lg-row flex-column">
+						<Link href="/">
+							<a className="ms-lg-3 mx-auto text-gray align-items-center justify-content-center d-flex mb-lg-0 mb-3">
+								<MdStorefront className="me-2" />
+								<TextNormal className="mt-1">Marketplace</TextNormal>
+							</a>
+						</Link>
+						<Link href="/">
+							<a className="ms-lg-3 mx-auto text-gray align-items-center justify-content-center d-flex">
+								<FaCalendarDay className="me-2 calendar" />
+								<TextNormal className="mt-1">Minting Event</TextNormal>
+							</a>
+						</Link>
+					</LeftMenuContainer>
 
 					<RightContent />
 				</Navbar.Collapse>
