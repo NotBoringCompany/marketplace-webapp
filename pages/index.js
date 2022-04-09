@@ -162,6 +162,7 @@ export default function Home() {
 					<StyledContainer
 						onCanPlay={() => setVideoLoaded(true)}
 						loop
+						autoPlay
 						playsInline
 						muted
 					>
