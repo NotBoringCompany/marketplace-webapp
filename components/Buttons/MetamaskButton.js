@@ -64,7 +64,7 @@ const MetamaskButton = ({ big = false, className }) => {
 			onClick={authCrypto}
 			disabled={isAuthenticating}
 			img={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/metamask.svg`}
-			text={!isAuthenticating ? "Login with Metamask" : "Connecting..."}
+			text={!isAuthenticating ? "Log-in with Metamask" : "Connecting..."}
 		/>
 	);
 };
