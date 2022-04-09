@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useMoralis } from "react-moralis";
 
@@ -7,18 +7,22 @@ import Image from "next/image";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Dropdown from "react-bootstrap/Dropdown";
-import MyButton from "../Buttons/Button";
+import {
+	OverviewSVG,
+	InventorySVG,
+	LogoutSVG,
+	InventoryFilledSVG,
+	OverviewFilledSVG,
+	CalendarSVG,
+} from "components/Navbar/SVGs";
 import Subnavbar from "./Subnavbar";
-import { HeadingSuperXXS } from "../Typography/Headings";
 import { mediaBreakpoint } from "utils/breakpoints";
-// import { menu } from "./menu";
 import { useRouter } from "next/router";
 
 import Logo from "public/images/logo.png";
 import { FaCalendarDay } from "react-icons/fa";
 import { MdStorefront } from "react-icons/md";
 
-import InventoryLogo from "public/images/inventory.svg";
 import { TextNormal, TextSecondary } from "components/Typography/Texts";
 
 import MetamaskButton from "components/Buttons/MetamaskButton";
@@ -57,13 +61,9 @@ const StyledNav = styled(Navbar)`
 			overflow: hidden;
 			transition: height 0.35s ease;
 		}
-	}
-`;
 
-const StyledLink = styled(HeadingSuperXXS)`
-	font-size: 18px;
-	font-weight: lighter;
-	color: ${(props) => (props.active ? `#CACACA !important` : `inherit`)};
+		padding: 16px 24px;
+	}
 `;
 
 const LeftMenuContainer = styled.div`
@@ -81,58 +81,127 @@ const LeftMenuContainer = styled.div`
 		transition: 0.2s all;
 		color: rgba(225, 227, 224, 0.5);
 		background: transparent;
+
+		svg {
+			transition: 0.2s all;
+			fill: rgba(225, 227, 224, 0.5);
+		}
 	}
 
 	& a.active {
 		color: #42ca9f;
 		background: #2f2f2f;
+
+		svg {
+			fill: #42ca9f;
+		}
 	}
 
 	& a:hover {
 		background: #242424;
-		color: #42ca9f;
+		color: #e1e3e0;
+
+		svg {
+			fill: #e1e3e0;
+		}
 	}
 
 	& a.disabled {
 		color: rgba(225, 227, 224, 0.2);
 		background: transparent;
+		svg {
+			fill: rgba(225, 227, 224, 0.2);
+		}
 	}
 
 	& a.disabled:hover {
 		cursor: not-allowed !important;
+		svg {
+			fill: rgba(225, 227, 224, 0.2);
+		}
 	}
 
 	@media ${mediaBreakpoint.down.lg} {
 		height: unset;
+
+		& a.active {
+			background: transparent;
+		}
 	}
 `;
 const StyledDropdown = styled(Dropdown)`
 	& .my-dropdown {
-		padding-left: 0;
+		background: #2f2f2f;
+		border-radius: 32px;
+		padding: 6px 32px;
+		transition: 0.35s all;
+	}
+
+	& .my-dropdown:hover {
+		transform: translate(2px, -1px);
+	}
+
+	&.dropdown {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
 	}
 
 	& .dropdown-menu {
 		background: #2a2a2a !important;
 		color: #fff;
+		min-width: 159px;
+		border-radius: 16px;
+		margin-top 10px;
 	}
 
 	& .content {
 		padding: 0 16px;
-
+		transition: 0.25s all;
+		color: #e1e3e0;
+		align-items: center;
 		p {
 			font-size: 14px;
 		}
+
+		svg {
+			transition: 0.25s all;
+
+			fill: #bfc9c2;
+		}
+	}
+
+	& .content.active {
+		color: #42ca9f;
+		svg {
+			fill: #42ca9f;
+		}
+	}
+
+	& .content:hover {
+		color: #42ca9f;
+
+		svg {
+			fill: #42ca9f;
+		}
+	}
+
+	& .dropdown-toggle::after {
+		margin-left: 0.455em;
+		vertical-align: 2px;
+	}
+
+	& hr {
+		padding: 0 16px;
+		margin: 0;
+		width: 80%;
+		margin-left: auto;
+		margin-right: auto;
+		color: #E0E3E0;
 	}
 
 	@media ${mediaBreakpoint.down.lg} {
-		& .my-dropdown {
-			padding-left: 0;
-		}
-
 		& .content {
-			p {
-				font-size: 16px;
-			}
 		}
 	}
 `;
@@ -146,10 +215,6 @@ const RightContent = () => {
 		router.push("/connect");
 	};
 
-	const accountPageBtn = (
-		<MyButton text="Log Out" pill onClick={handleLogOut} className="w-100" />
-	);
-
 	return (
 		<Nav className="mt-3 mt-lg-0 ms-auto">
 			{!isAuthenticated ? (
@@ -159,54 +224,57 @@ const RightContent = () => {
 				</div>
 			) : (
 				<div className="d-flex align-items-center flex-lg-row flex-column">
-					<Link href={`/nbmons`}>
-						<a className="text-white d-flex align-items-center mb-lg-0 mb-3">
-							<Image
-								src={InventoryLogo}
-								alt="Inventory"
-								width={18}
-								height={18}
-								className=""
-							/>
-
-							<StyledLink className={`text-white ms-2 me-lg-4`}>
-								Inventory
-							</StyledLink>
-						</a>
-					</Link>
-
-					<div className="content">{accountPageBtn}</div>
-
-					{/* <StyledDropdown>
+					<StyledDropdown>
 						<Dropdown.Toggle
-							className="my-dropdown border-none text-white "
+							className="my-dropdown border-none text-white"
 							variant="transparent"
 							id="dropdown-basic"
 						>
-							Account Details
+							My Account
 						</Dropdown.Toggle>
-
 						<Dropdown.Menu>
-							<div className="content pt-2">
-								<TextSecondary>
-									Wallet Address:{" "}
-									{user.attributes &&
-										user.attributes.ethAddress.split("").splice(0, 6).join("")}
-									...
-									{user.attributes.ethAddress.split("").splice(-5).join("")}
-								</TextSecondary>
-							</div>
+							<Link href="/overview">
+								<a
+									className={`mt-2 content d-flex ${
+										router.pathname === "/overview" && `active`
+									}`}
+								>
+									{router.pathname === "/overview" ? (
+										<OverviewFilledSVG />
+									) : (
+										<OverviewSVG />
+									)}
+									<TextSecondary className="ms-3">Overview</TextSecondary>
+								</a>
+							</Link>
+
+							<Link href="/nbmons">
+								<a
+									className={`my-3 content  d-flex ${
+										router.pathname === "/nbmons" && `active`
+									}`}
+								>
+									{router.pathname === "/nbmons" ? (
+										<InventoryFilledSVG />
+									) : (
+										<InventorySVG />
+									)}
+									<TextSecondary className="ms-3">Inventory</TextSecondary>
+								</a>
+							</Link>
+
 							<hr />
-							<div className="content">
-								<TextSecondary>
-									Connected Email:{" "}
-									{user.attributes.email ? user.attributes.email : "-"}
-								</TextSecondary>
-							</div>
-							<hr />
-							<div className="content pb-2">{accountPageBtn}</div>
+
+							<Link href="#">
+								<a onClick={handleLogOut} className="mt-3 mb-2 content d-flex">
+									<LogoutSVG />
+									<TextSecondary className="ms-3">Log-out</TextSecondary>
+								</a>
+							</Link>
+
+							{/* <div className="content pb-2">{accountPageBtn}</div> */}
 						</Dropdown.Menu>
-					</StyledDropdown> */}
+					</StyledDropdown>
 				</div>
 			)}
 		</Nav>
@@ -218,7 +286,7 @@ const MyNavbar = ({ showSubnav }) => {
 	const router = useRouter();
 
 	return (
-		<div className="d-flex flex-column">
+		<div className="d-flex flex-column position-relative" style={{ zIndex: 3 }}>
 			<StyledNav
 				collapseOnSelect
 				expand="lg"
@@ -235,39 +303,19 @@ const MyNavbar = ({ showSubnav }) => {
 
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
-					{/* {isAuthenticated && (
-						<Nav className="me-auto mt-3 mt-lg-0">
-							{menu.map((m) => (
-								<Link key={m.path} href={`${m.path}`}>
-									<a className={`mx-0 my-2 mx-lg-3 my-lg-0`}>
-										<StyledLink
-											active={m.path === router.pathname}
-											className={`text-${
-												m.path === "/mint" ? `lighterGreen` : `white`
-											}`}
-										>
-											{m.text}
-										</StyledLink>
-									</a>
-								</Link>
-							))}
-						</Nav>
-					)} */}
 					<LeftMenuContainer className="d-flex flex-lg-row flex-column">
-						<Link href="#">
-							<a className="disabled ms-lg-4 mx-auto px-3 align-items-center justify-content-center d-flex mb-lg-0 mb-3">
-								<MdStorefront className="me-2" />
-								<TextNormal className="mt-1">Marketplace</TextNormal>
-							</a>
-						</Link>
+						<a className="disabled ms-lg-4 mx-auto px-3 align-items-center justify-content-center d-flex mb-lg-0 mb-3">
+							<MdStorefront className="me-2" />
+							<TextNormal className="mt-1">Marketplace</TextNormal>
+						</a>
 						<Link href="/">
 							<a
 								className={`mx-auto px-3 align-items-center justify-content-center d-flex ${
 									router.pathname === "/" && `active`
 								}`}
 							>
-								<FaCalendarDay className="me-2 calendar" />
-								<TextNormal className="mt-1">Minting Event</TextNormal>
+								<CalendarSVG />
+								<TextNormal className="ms-2 mt-1">Minting Event</TextNormal>
 							</a>
 						</Link>
 					</LeftMenuContainer>

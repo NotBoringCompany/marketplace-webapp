@@ -71,11 +71,7 @@ const SignInBox = ({
 				You must previously have connected your wallet, as well as your email
 				address to our marketplace to be able to sign in using email & password.
 			</TextSecondary>
-			<LinkCustom
-				href="/terms-and-conditions"
-				className="mt-3 text-gray"
-				text="Terms & Conditions"
-			/>
+			<LinkCustom href="/faq" className="mt-3 text-gray" text="FAQ" />
 		</Box>
 	);
 };

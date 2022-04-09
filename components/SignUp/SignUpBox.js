@@ -46,7 +46,6 @@ const SignUpBox = ({
 					variant="dark"
 					placeholder="Password"
 					type="password"
-					value={password}
 					onChange={onTextInputChange}
 					errorDesc={errors.password}
 				/>
@@ -66,11 +65,7 @@ const SignUpBox = ({
 			</Form>
 
 			<NoteText />
-			<LinkCustom
-				href="/terms-and-conditions"
-				className="mt-3 text-gray"
-				text="Terms & Conditions"
-			/>
+			<LinkCustom href="/faq" className="mt-3 text-gray" text="FAQ" />
 		</Box>
 	);
 };

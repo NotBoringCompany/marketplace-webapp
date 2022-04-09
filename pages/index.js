@@ -134,7 +134,7 @@ const MintingSection = styled.div`
 `;
 
 export default function Home() {
-	const { isAuthenticated, user, isInitializing, Moralis } = useMoralis();
+	const { isAuthenticated, user, isInitializing } = useMoralis();
 	// const router = useRouter();
 	const [videoLoaded, setVideoLoaded] = useState(false);
 
@@ -161,7 +161,6 @@ export default function Home() {
 				{!isInitializing && (
 					<StyledContainer
 						onCanPlay={() => setVideoLoaded(true)}
-						autoPlay
 						loop
 						playsInline
 						muted
