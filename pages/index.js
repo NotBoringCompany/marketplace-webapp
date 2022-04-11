@@ -25,6 +25,7 @@ import { BlurContainer } from "components/BlurContainer";
 
 import MyButton from "components/Buttons/Button";
 import CountDownContainer from "components/CountDownContainer";
+import MintingStats from "components/Mint/MintingStats";
 
 import { mediaBreakpoint } from "utils/breakpoints";
 
@@ -89,7 +90,7 @@ const Shard = styled.div`
 const RHImage = styled(Image)`
 	width: 360px;
 	height: 260px;
-	margin-top: 16px;
+	margin-top: -16px;
 
 	@media ${mediaBreakpoint.down.lg} {
 		margin-top: -48px;
@@ -160,7 +161,7 @@ export default function Home() {
 			<MintingSection className="position-relative">
 				{!isInitializing && (
 					<StyledContainer
-						autoPlay
+						autoPlay={false}
 						loop
 						muted
 						playsInline
@@ -224,6 +225,9 @@ export default function Home() {
 						)} */}
 							{!isAuthenticated && (
 								<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
+							)}
+							{isAuthenticated && (
+								<MintingStats haveBeenMinted={2500} totalSupply={3000} />
 							)}
 							{isAuthenticated && (
 								<>

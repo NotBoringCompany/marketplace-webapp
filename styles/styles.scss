@@ -1,10 +1,9 @@
 // Override default variables before the import
 // you can open the bootstrap.scss module and check any available variables.
 $primary: #181818;
-$primaryComplement: #1c1c1c;
+$primaryComplement: #242424;
 $primary2: #2a2a2a;
-$primary3: #202020;
-$secondary: #42ca9f;
+$secondary: #41b995;
 $success: #3e8d63;
 $info: #7854e4;
 $warning: #b8c924;
@@ -23,7 +22,6 @@ $accent: #da6d25;
 $theme-colors: (
 	primary: $primary,
 	primary2: $primary2,
-	primary3: $primary3,
 	secondary: $secondary,
 	primaryComplement: $primaryComplement,
 	success: $success,

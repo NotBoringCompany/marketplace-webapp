@@ -106,7 +106,7 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const clearFilter = useFilterStore((state) => state.clearFilter);
 	return (
 		<DesktopFilterContainer
-			className={`bg-primary3 ${filterOpen && `show`} ${
+			className={`bg-primaryComplement ${filterOpen && `show`} ${
 				opacityOne && `opacityOne`
 			}`}
 		>

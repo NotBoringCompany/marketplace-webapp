@@ -98,7 +98,7 @@ const LeftMenuContainer = styled.div`
 	}
 
 	& a:hover {
-		background: #242424;
+		background: #2f2f2f;
 		color: #e1e3e0;
 
 		svg {
