@@ -9,12 +9,12 @@ const StyledHeadingSuperXXS = styled(HeadingSuperXXS)`
 	line-height: 16px;
 `;
 
-const MintingStats = ({ haveBeenMinted = 0, totalSupply = 5000 }) => {
+const MintingStats = ({ haveBeenMinted = 0, supplyLimit = 5000 }) => {
 	return (
 		<BlurContainer>
-			<ProgressBar progress={parseInt((haveBeenMinted / totalSupply) * 100)} />
+			<ProgressBar progress={parseInt((haveBeenMinted / supplyLimit) * 100)} />
 			<HeadingSuperXXS as="p" className="text-secondary text-center mt-2">
-				{haveBeenMinted} / {totalSupply}
+				{haveBeenMinted} / {supplyLimit}
 			</HeadingSuperXXS>
 			<StyledHeadingSuperXXS as="p" className="text-white text-center mt-2">
 				Genesis NBMons Eggs Minted

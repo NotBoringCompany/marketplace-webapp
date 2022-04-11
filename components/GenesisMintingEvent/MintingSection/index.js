@@ -109,25 +109,28 @@ const TimersContainer = styled.div`
 
 const MintingSection = () => {
 	const { isAuthenticated, user, isInitializing } = useMoralis();
+	const [data, setData] = useState({ haveBeenMinted: 0, supplyLimit: 0 });
 	// const router = useRouter();
 	const [videoLoaded, setVideoLoaded] = useState(false);
 
-	const renderer = ({ days, hours, minutes, seconds, completed }) => {
-		if (completed) {
-			// Render a complete state
-			return <p>asd</p>;
-		} else {
-			// Render a countdown
-			return (
-				<CountDownContainer
-					days={days}
-					hours={hours}
-					minutes={minutes}
-					seconds={seconds}
-				/>
-			);
-		}
-	};
+	const { isFetching, error } = useQuery(
+		"mintingSectionConfig",
+		() =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/supply`
+			).then(async (res) => {
+				const supply = await res.json();
+				const { supplies } = supply;
+				setData({
+					haveBeenMinted: supplies.haveBeenMinted,
+					supplyLimit: supplies.supplyLimit,
+				});
+			}),
+		{ refetchOnWindowFocus: false }
+	);
+
+	if (isFetching) return <Loading />;
+
 	return (
 		<MainSection className="position-relative">
 			{!isInitializing && (
@@ -161,7 +164,10 @@ const MintingSection = () => {
 						</TimersContainer>
 
 						{isAuthenticated && (
-							<MintingStats haveBeenMinted={2500} totalSupply={3000} />
+							<MintingStats
+								haveBeenMinted={data.haveBeenMinted}
+								supplyLimit={data.supplyLimit}
+							/>
 						)}
 						{!isAuthenticated && (
 							<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
