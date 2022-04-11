@@ -154,8 +154,8 @@ const MintingSection = () => {
 	// const router = useRouter();
 	const [videoLoaded, setVideoLoaded] = useState(false);
 
-	const { isFetching, error } = useQuery(
-		"mintingSectionConfig",
+	const userConfigs = useQuery(
+		"userConfigs",
 		() =>
 			fetch(
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config/${user.attributes.ethAddress}`
@@ -168,10 +168,40 @@ const MintingSection = () => {
 					haveBeenMinted: supplies.haveBeenMinted,
 					supplyLimit: supplies.supplyLimit,
 				});
+
+				setTimeStamps({
+					publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
+					whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
+					now: parseInt(timeStamps.now * 1000),
+					isWhitelistOpen: true, // timeStamps.isWhitelistOpen
+					isPublicOpen: timeStamps.isPublicOpen,
+				});
 				setUserStatus({
-					canMint: true,
+					canMint: true, //status.canMint
 					isWhitelisted: status.isWhitelisted,
-					hasMintedBefore: false,
+					hasMintedBefore: status.hasMintedBefore,
+				});
+			}),
+		{
+			refetchOnWindowFocus: false,
+			retry: 0,
+			enabled: user && isAuthenticated && !isInitializing ? true : false,
+		}
+	);
+
+	const generalConfigs = useQuery(
+		"generalConfigs",
+		() =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config`
+			).then(async (res) => {
+				const supply = await res.json();
+				const { supplies, timeStamps } = supply;
+				console.log(supply);
+				setSupplyData({
+					...supplyData,
+					haveBeenMinted: supplies.haveBeenMinted,
+					supplyLimit: supplies.supplyLimit,
 				});
 
 				setTimeStamps({
@@ -185,13 +215,13 @@ const MintingSection = () => {
 		{
 			refetchOnWindowFocus: false,
 			retry: 0,
-			enabled: user && isAuthenticated && !isInitializing ? true : false,
+			enabled: !user && !isAuthenticated && !isInitializing ? true : false,
 		}
 	);
 
-	if (isFetching) return <Loading />;
+	if (userConfigs.isFetching || generalConfigs.isFetching) return <Loading />;
 
-	if (error)
+	if (userConfigs.error || generalConfigs.error)
 		return (
 			<TextPrimary className="mt-4 text-white text-center">
 				Oops, an unexpected error occured. Please refresh this page.
