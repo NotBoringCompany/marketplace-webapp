@@ -1,5 +1,4 @@
 import React from "react";
-import { BlurContainer } from "components/BlurContainer";
 import styled from "styled-components";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import ProgressBar from "./ProgressBar";
@@ -11,7 +10,7 @@ const StyledHeadingSuperXXS = styled(HeadingSuperXXS)`
 
 const MintingStats = ({ haveBeenMinted = 0, supplyLimit = 5000 }) => {
 	return (
-		<BlurContainer>
+		<>
 			<ProgressBar progress={parseInt((haveBeenMinted / supplyLimit) * 100)} />
 			<HeadingSuperXXS as="p" className="text-secondary text-center mt-2">
 				{haveBeenMinted} / {supplyLimit}
@@ -19,7 +18,7 @@ const MintingStats = ({ haveBeenMinted = 0, supplyLimit = 5000 }) => {
 			<StyledHeadingSuperXXS as="p" className="text-white text-center mt-2">
 				Genesis NBMons Eggs Minted
 			</StyledHeadingSuperXXS>
-		</BlurContainer>
+		</>
 	);
 };
 

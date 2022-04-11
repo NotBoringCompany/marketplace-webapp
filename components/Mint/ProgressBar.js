@@ -11,8 +11,10 @@ const ProgressBarContainer = styled.div`
 const Content = styled.div`
 	height: 11px;
 	border-radius: 11px;
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
+	border-top-right-radius: ${(props) =>
+		props.progress === 100 ? `11px` : `0`};
+	border-bottom-right-radius: ${(props) =>
+		props.progress === 100 ? `11px` : `0`};
 	width: ${(props) => props.progress}%;
 `;
 

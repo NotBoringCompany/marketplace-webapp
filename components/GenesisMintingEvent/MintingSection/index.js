@@ -12,7 +12,11 @@ import styled from "styled-components";
 
 import Loading from "components/Loading";
 
-import { Heading18, HeadingMD } from "components/Typography/Headings";
+import {
+	Heading18,
+	HeadingMD,
+	HeadingSuperXXS,
+} from "components/Typography/Headings";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 
 import MetamaskButton from "components/Buttons/MetamaskButton";
@@ -107,6 +111,24 @@ const TimersContainer = styled.div`
 	}
 `;
 
+const MintBtnContainer = styled.div`
+	display: flex;
+	max-width: 300px;
+	flex-direction: column;
+	justify-content: center;
+
+	& p {
+		max-width: 300%;
+		line-break: anywhere;
+		text-align: center;
+	}
+`;
+
+const StyledBlurContainer = styled(BlurContainer)`
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+`;
+
 const MintingSection = () => {
 	const { isAuthenticated, user, isInitializing } = useMoralis();
 	const [supplyData, setSupplyData] = useState({
@@ -116,16 +138,18 @@ const MintingSection = () => {
 	const [userStatus, setUserStatus] = useState({
 		canMint: false,
 		isWhitelisted: false,
+		hasMintedBefore: false,
 	});
 	const [timeStamps, setTimeStamps] = useState({
 		now: 0,
 		publicOpenAt: 0,
 		whitelistOpenAt: 0,
-		cock: 0,
+		isWhitelistOpen: false,
+		isPublicOpen: false,
 	});
 	const { haveBeenMinted, supplyLimit } = supplyData;
-	const { canMint, isWhitelisted } = userStatus;
-	const { now, publicOpenAt, whitelistOpenAt, cock } = timeStamps;
+	const { canMint, isWhitelisted, hasMintedBefore } = userStatus;
+	const { now, publicOpenAt, whitelistOpenAt, isWhitelistOpen } = timeStamps;
 
 	// const router = useRouter();
 	const [videoLoaded, setVideoLoaded] = useState(false);
@@ -147,12 +171,15 @@ const MintingSection = () => {
 				setUserStatus({
 					canMint: true,
 					isWhitelisted: status.isWhitelisted,
+					hasMintedBefore: false,
 				});
 
 				setTimeStamps({
 					publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
 					whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
 					now: parseInt(timeStamps.now * 1000),
+					isWhitelistOpen: true, // timeStamps.isWhitelistOpen
+					isPublicOpen: timeStamps.isPublicOpen,
 				});
 			}),
 		{
@@ -203,30 +230,97 @@ const MintingSection = () => {
 							<PublicTimer date={publicOpenAt} rn={now} />
 						</TimersContainer>
 
-						{isAuthenticated && canMint && (
-							<MintingStats
-								haveBeenMinted={haveBeenMinted}
-								supplyLimit={supplyLimit}
-							/>
-						)}
-						{!isAuthenticated && (
+						{!isAuthenticated ? (
 							<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
-						)}
-						{isAuthenticated && !canMint && (
+						) : (
 							<>
-								<BlurContainer className="mt-lg-5 mt-2 text-white">
-									<div className="d-flex align-items-center">
-										<IoIosCheckmarkCircleOutline className="me-2 checkmark-icon" />
-										<Heading18 as="p">You are logged in</Heading18>
-									</div>
-									<TextSecondary className="mt-1">
-										{user &&
-											user.attributes &&
-											user.attributes.ethAddress.toUpperCase()}
-									</TextSecondary>
-								</BlurContainer>
+								{haveBeenMinted < supplyLimit ? (
+									<MintBtnContainer>
+										{hasMintedBefore ? (
+											<>
+												<p>
+													Button that says You successfully minted your Genesis
+													NBMon
+												</p>
+												<BlurContainer>
+													<MintingStats
+														haveBeenMinted={haveBeenMinted}
+														supplyLimit={supplyLimit}
+													/>
+												</BlurContainer>
+											</>
+										) : (
+											<>
+												{isWhitelistOpen && !isWhitelisted && (
+													<BlurContainer>
+														<HeadingSuperXXS as="p" className="text-white mb-2">
+															Your address:
+														</HeadingSuperXXS>
+
+														<HeadingSuperXXS as="p" className="text-white mb-2">
+															{user && user.attributes.ethAddress.toUpperCase()}
+														</HeadingSuperXXS>
+
+														<HeadingSuperXXS as="p" className="text-white mb-3">
+															is not whitelisted
+														</HeadingSuperXXS>
+
+														<MintingStats
+															haveBeenMinted={haveBeenMinted}
+															supplyLimit={supplyLimit}
+														/>
+													</BlurContainer>
+												)}
+
+												{isWhitelistOpen && isWhitelisted && (
+													<>
+														<p>Green button here...</p>
+														<BlurContainer>
+															<MintingStats
+																haveBeenMinted={haveBeenMinted}
+																supplyLimit={supplyLimit}
+															/>
+														</BlurContainer>
+													</>
+												)}
+											</>
+										)}
+									</MintBtnContainer>
+								) : (
+									<MintBtnContainer>
+										<BlurContainer>
+											<p>
+												Button that says... No more minting possible. Max.
+												number reached.
+											</p>
+											<MintingStats
+												haveBeenMinted={haveBeenMinted}
+												supplyLimit={supplyLimit}
+											/>
+										</BlurContainer>
+									</MintBtnContainer>
+								)}
+
+								{haveBeenMinted < supplyLimit &&
+									!isWhitelistOpen &&
+									!isPublicOpen && (
+										<>
+											<BlurContainer className="mt-lg-5 mt-2 text-white">
+												<div className="d-flex align-items-center">
+													<IoIosCheckmarkCircleOutline className="me-2 checkmark-icon" />
+													<Heading18 as="p">You are logged in</Heading18>
+												</div>
+												<TextSecondary className="mt-1">
+													{user &&
+														user.attributes &&
+														user.attributes.ethAddress.toUpperCase()}
+												</TextSecondary>
+											</BlurContainer>
+										</>
+									)}
 							</>
 						)}
+
 						{!isInitializing && videoLoaded && <RealmHunterButton />}
 					</>
 				) : (
