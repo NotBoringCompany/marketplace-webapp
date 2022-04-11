@@ -13,7 +13,7 @@ import styled from "styled-components";
 import Loading from "components/Loading";
 
 import { Heading18, HeadingMD } from "components/Typography/Headings";
-import { TextSecondary } from "components/Typography/Texts";
+import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 
 import MetamaskButton from "components/Buttons/MetamaskButton";
 import { BlurContainer } from "components/BlurContainer";
@@ -109,7 +109,24 @@ const TimersContainer = styled.div`
 
 const MintingSection = () => {
 	const { isAuthenticated, user, isInitializing } = useMoralis();
-	const [data, setData] = useState({ haveBeenMinted: 0, supplyLimit: 0 });
+	const [supplyData, setSupplyData] = useState({
+		haveBeenMinted: 0,
+		supplyLimit: 0,
+	});
+	const [userStatus, setUserStatus] = useState({
+		canMint: false,
+		isWhitelisted: false,
+	});
+	const [timeStamps, setTimeStamps] = useState({
+		now: 0,
+		publicOpenAt: 0,
+		whitelistOpenAt: 0,
+		cock: 0,
+	});
+	const { haveBeenMinted, supplyLimit } = supplyData;
+	const { canMint, isWhitelisted } = userStatus;
+	const { now, publicOpenAt, whitelistOpenAt, cock } = timeStamps;
+
 	// const router = useRouter();
 	const [videoLoaded, setVideoLoaded] = useState(false);
 
@@ -117,19 +134,42 @@ const MintingSection = () => {
 		"mintingSectionConfig",
 		() =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/supply`
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config/${user.attributes.ethAddress}`
 			).then(async (res) => {
 				const supply = await res.json();
-				const { supplies } = supply;
-				setData({
+				const { supplies, status, timeStamps } = supply;
+				console.log(supply);
+				setSupplyData({
+					...supplyData,
 					haveBeenMinted: supplies.haveBeenMinted,
 					supplyLimit: supplies.supplyLimit,
 				});
+				setUserStatus({
+					canMint: true,
+					isWhitelisted: status.isWhitelisted,
+				});
+
+				setTimeStamps({
+					publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
+					whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
+					now: parseInt(timeStamps.now * 1000),
+				});
 			}),
-		{ refetchOnWindowFocus: false }
+		{
+			refetchOnWindowFocus: false,
+			retry: 0,
+			enabled: user && isAuthenticated && !isInitializing ? true : false,
+		}
 	);
 
 	if (isFetching) return <Loading />;
+
+	if (error)
+		return (
+			<TextPrimary className="mt-4 text-white text-center">
+				Oops, an unexpected error occured. Please refresh this page.
+			</TextPrimary>
+		);
 
 	return (
 		<MainSection className="position-relative">
@@ -158,21 +198,21 @@ const MintingSection = () => {
 						</StyledHeadingMD>
 
 						<TimersContainer>
-							<WhitelistTimer date={1650636000000} />
+							<WhitelistTimer date={whitelistOpenAt} rn={now} />
 							<div className="separator"></div>
-							<PublicTimer date={1650643200000} />
+							<PublicTimer date={publicOpenAt} rn={now} />
 						</TimersContainer>
 
-						{isAuthenticated && (
+						{isAuthenticated && canMint && (
 							<MintingStats
-								haveBeenMinted={data.haveBeenMinted}
-								supplyLimit={data.supplyLimit}
+								haveBeenMinted={haveBeenMinted}
+								supplyLimit={supplyLimit}
 							/>
 						)}
 						{!isAuthenticated && (
 							<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
 						)}
-						{isAuthenticated && (
+						{isAuthenticated && !canMint && (
 							<>
 								<BlurContainer className="mt-lg-5 mt-2 text-white">
 									<div className="d-flex align-items-center">

@@ -3,7 +3,7 @@ import Countdown from "react-countdown";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import CountDownContainer from "components/CountDownContainer";
 
-const PublicTimer = ({ date }) => {
+const PublicTimer = ({ date, rn }) => {
 	const renderer = ({ days, hours, minutes, seconds, completed }) => {
 		if (completed) {
 			// Render a complete state
@@ -28,7 +28,7 @@ const PublicTimer = ({ date }) => {
 			>
 				Public Mint opens at 4 pm utc
 			</HeadingSuperXXS>{" "}
-			<Countdown date={1650643200000} renderer={renderer} />
+			<Countdown date={rn + (date - rn)} renderer={renderer} />
 		</div>
 	);
 };

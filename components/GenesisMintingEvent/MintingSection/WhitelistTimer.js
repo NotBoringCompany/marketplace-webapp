@@ -3,7 +3,7 @@ import Countdown from "react-countdown";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import CountDownContainer from "components/CountDownContainer";
 
-const WhitelistTimer = ({ date }) => {
+const WhitelistTimer = ({ date, rn }) => {
 	const renderer = ({ days, hours, minutes, seconds, completed }) => {
 		if (completed) {
 			// Render a complete state
@@ -20,6 +20,7 @@ const WhitelistTimer = ({ date }) => {
 			);
 		}
 	};
+
 	return (
 		<div className="d-flex flex-column justify-content-center align-items-center">
 			<HeadingSuperXXS
@@ -28,7 +29,7 @@ const WhitelistTimer = ({ date }) => {
 			>
 				Whitelist Mint opens at 2 pm utc
 			</HeadingSuperXXS>
-			<Countdown date={date} renderer={renderer} />
+			<Countdown date={rn + (date - rn)} renderer={renderer} />
 		</div>
 	);
 };
