@@ -46,8 +46,8 @@ const MyButton = ({
 		<Link href={href} passHref={passHref}>
 			<a href={href} target={target} rel="noopener noreferrer">
 				<StyledButton
-					big={big}
-					pill={pill}
+					big={big ? 1 : 0}
+					pill={pill ? 1 : 0}
 					variant={variant}
 					className={`d-flex align-items-center justify-content-center ${className}`}
 					{...props}
@@ -64,8 +64,8 @@ const MyButton = ({
 	);
 	const RegularButton = (
 		<StyledButton
-			pill={pill}
-			big={big}
+			pill={pill ? 1 : 0}
+			big={big ? 1 : 0}
 			variant={variant}
 			onClick={onClick}
 			className={`d-flex align-items-center justify-content-center ${className}`}

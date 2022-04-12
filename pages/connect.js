@@ -5,7 +5,6 @@ import Layout from "components/Layout";
 import { HeadingSM } from "components/Typography/Headings";
 import { TextPrimary } from "components/Typography/Texts";
 import MetamaskButton from "components/Buttons/MetamaskButton";
-import NoMetaMask from "components/Modal/NoMetaMask";
 import SignInBox from "components/SignIn/SignInBox";
 
 import Container from "react-bootstrap/Container";
@@ -28,7 +27,6 @@ const Connect = () => {
 	const { isAuthenticated, isAuthenticating, hasAuthError, login, authError } =
 		useMoralis();
 
-	const [showModalNoMM, setShowModalNoMM] = useState(false);
 	const [authDetail, setAuthDetail] = useState({
 		email: "",
 		password: "",
@@ -36,8 +34,6 @@ const Connect = () => {
 	});
 
 	const { email, password, errors } = authDetail;
-
-	const statesModalNoMM = { getter: showModalNoMM, setter: setShowModalNoMM }; // getter + setter
 
 	useEffect(() => {
 		if (hasAuthError) {
@@ -97,7 +93,6 @@ const Connect = () => {
 	return (
 		<Layout showMonsters title="Connect | Realm Hunter">
 			<StyledContainer className="bg-primary d-flex flex-column justify-content-center position-relative">
-				<NoMetaMask stateUtils={statesModalNoMM} />
 				<Row>
 					{/* <Col
 						xl={6}

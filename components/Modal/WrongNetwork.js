@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useChain } from "react-moralis";
+import { useChain, useMoralis } from "react-moralis";
 import Image from "next/image";
 
 import CustomModal from "./CustomModal";
@@ -17,8 +17,10 @@ const CustomHeadingXXS = styled(HeadingXXS)`
 
 const WrongNetwork = ({ stateUtils }) => {
 	const { setter } = stateUtils;
+
 	const { switchNetwork, chainId } = useChain();
-	const handleSwitchNetworkBtn = () => {
+	const { isWeb3Enabled, enableWeb3, Moralis } = useMoralis();
+	const handleSwitchNetworkBtn = async () => {
 		if (chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) {
 			switchNetwork(process.env.NEXT_PUBLIC_CHAIN_ID);
 		} else {

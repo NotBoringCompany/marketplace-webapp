@@ -27,17 +27,11 @@ export const AppProvider = ({ children }) => {
 		getter: showWrongNetworkModal,
 		setter: setShowWrongNetworkModal,
 	};
+
 	useEffect(() => {
 		setTimeout(() => {
-			// if (!isWeb3Enabled && isAuthenticated && !isAuthenticating) {
-			// 	console.log("ASDAS");
-			// }
 			enableWeb3({ provider: "metamask" });
 		}, 100);
-
-		async function fetchMyAPI() {
-			await Moralis.enableWeb3({ provider: "metamask" });
-		}
 	}, [isWeb3Enabled, isAuthenticated]);
 
 	useEffect(() => {
