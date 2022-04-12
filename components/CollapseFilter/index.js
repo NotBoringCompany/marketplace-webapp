@@ -45,7 +45,7 @@ const CollapseFilter = ({
 	return (
 		<Container className="text-white">
 			<CollapseHeader
-				open={open ? 1 : 0}
+				open={open}
 				onClick={() => {
 					if (allowCollapse) setOpen(!open);
 				}}

@@ -22,7 +22,7 @@ import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import MetamaskButton from "components/Buttons/MetamaskButton";
 import { BlurContainer } from "components/BlurContainer";
 
-import CountDownContainer from "components/CountDownContainer";
+import MintButton from "./MintButton";
 import MintingStats from "components/Mint/MintingStats";
 
 import { mediaBreakpoint } from "utils/breakpoints";
@@ -65,6 +65,11 @@ const ContentContainer = styled.div`
 	width: 100%;
 	align-items: center;
 	padding: 20px;
+
+	& .no-radius-top {
+		border-top-right-radius: 0;
+		border-top-left-radius: 0;
+	}
 `;
 
 const StyledHeadingMD = styled(HeadingMD)`
@@ -124,11 +129,6 @@ const MintBtnContainer = styled.div`
 	}
 `;
 
-const StyledBlurContainer = styled(BlurContainer)`
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
-`;
-
 const MintingSection = () => {
 	const { isAuthenticated, user, isInitializing } = useMoralis();
 	const [supplyData, setSupplyData] = useState({
@@ -149,7 +149,8 @@ const MintingSection = () => {
 	});
 	const { haveBeenMinted, supplyLimit } = supplyData;
 	const { canMint, isWhitelisted, hasMintedBefore } = userStatus;
-	const { now, publicOpenAt, whitelistOpenAt, isWhitelistOpen } = timeStamps;
+	const { now, publicOpenAt, whitelistOpenAt, isWhitelistOpen, isPublicOpen } =
+		timeStamps;
 
 	// const router = useRouter();
 	const [videoLoaded, setVideoLoaded] = useState(false);
@@ -173,8 +174,8 @@ const MintingSection = () => {
 					publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
 					whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
 					now: parseInt(timeStamps.now * 1000),
-					isWhitelistOpen: true, // timeStamps.isWhitelistOpen
-					isPublicOpen: timeStamps.isPublicOpen,
+					isWhitelistOpen: timeStamps.isWhitelistOpen, // timeStamps.isWhitelistOpen
+					isPublicOpen: timeStamps.isPublicOpen, //timeStamps.isPublicOpen,
 				});
 				setUserStatus({
 					canMint: true, //status.canMint
@@ -200,7 +201,7 @@ const MintingSection = () => {
 				console.log(supply);
 				setSupplyData({
 					...supplyData,
-					haveBeenMinted: supplies.haveBeenMinted,
+					haveBeenMinted: 111, //supplies.haveBeenMinted,
 					supplyLimit: supplies.supplyLimit,
 				});
 
@@ -208,7 +209,7 @@ const MintingSection = () => {
 					publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
 					whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
 					now: parseInt(timeStamps.now * 1000),
-					isWhitelistOpen: true, // timeStamps.isWhitelistOpen
+					isWhitelistOpen: timeStamps.isWhitelistOpen,
 					isPublicOpen: timeStamps.isPublicOpen,
 				});
 			}),
@@ -242,6 +243,46 @@ const MintingSection = () => {
 				</StyledContainer>
 			)}
 
+			{user && (
+				<>
+					<button
+						style={{ position: "absolute", zIndex: 999 }}
+						onClick={() => {
+							setTimeStamps({
+								...timeStamps,
+								isWhitelistOpen: !isWhitelistOpen,
+							});
+						}}
+					>
+						trigger open whitelist
+					</button>
+					<button
+						style={{ position: "absolute", zIndex: 999, left: "160px" }}
+						onClick={() => {
+							setUserStatus({
+								...userStatus,
+								hasMintedBefore: !hasMintedBefore,
+							});
+						}}
+					>
+						trigger hasminted
+					</button>
+
+					<button
+						style={{ position: "absolute", zIndex: 999, left: "300px" }}
+						onClick={() => {
+							setSupplyData({
+								...supplyData,
+								haveBeenMinted:
+									haveBeenMinted === supplyLimit ? 111 : supplyLimit,
+							});
+						}}
+					>
+						trigger to max eggs minted
+					</button>
+				</>
+			)}
+
 			<ContentContainer>
 				{!isInitializing && videoLoaded ? (
 					<>
@@ -264,76 +305,9 @@ const MintingSection = () => {
 							<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
 						) : (
 							<>
-								{haveBeenMinted < supplyLimit ? (
-									<MintBtnContainer>
-										{hasMintedBefore ? (
-											<>
-												<p>
-													Button that says You successfully minted your Genesis
-													NBMon
-												</p>
-												<BlurContainer>
-													<MintingStats
-														haveBeenMinted={haveBeenMinted}
-														supplyLimit={supplyLimit}
-													/>
-												</BlurContainer>
-											</>
-										) : (
-											<>
-												{isWhitelistOpen && !isWhitelisted && (
-													<BlurContainer>
-														<HeadingSuperXXS as="p" className="text-white mb-2">
-															Your address:
-														</HeadingSuperXXS>
-
-														<HeadingSuperXXS as="p" className="text-white mb-2">
-															{user && user.attributes.ethAddress.toUpperCase()}
-														</HeadingSuperXXS>
-
-														<HeadingSuperXXS as="p" className="text-white mb-3">
-															is not whitelisted
-														</HeadingSuperXXS>
-
-														<MintingStats
-															haveBeenMinted={haveBeenMinted}
-															supplyLimit={supplyLimit}
-														/>
-													</BlurContainer>
-												)}
-
-												{isWhitelistOpen && isWhitelisted && (
-													<>
-														<p>Green button here...</p>
-														<BlurContainer>
-															<MintingStats
-																haveBeenMinted={haveBeenMinted}
-																supplyLimit={supplyLimit}
-															/>
-														</BlurContainer>
-													</>
-												)}
-											</>
-										)}
-									</MintBtnContainer>
-								) : (
-									<MintBtnContainer>
-										<BlurContainer>
-											<p>
-												Button that says... No more minting possible. Max.
-												number reached.
-											</p>
-											<MintingStats
-												haveBeenMinted={haveBeenMinted}
-												supplyLimit={supplyLimit}
-											/>
-										</BlurContainer>
-									</MintBtnContainer>
-								)}
-
-								{haveBeenMinted < supplyLimit &&
-									!isWhitelistOpen &&
-									!isPublicOpen && (
+								{!isWhitelistOpen &&
+									!isPublicOpen &&
+									haveBeenMinted < supplyLimit && (
 										<>
 											<BlurContainer className="mt-lg-5 mt-2 text-white">
 												<div className="d-flex align-items-center">
@@ -348,6 +322,63 @@ const MintingSection = () => {
 											</BlurContainer>
 										</>
 									)}
+								{!hasMintedBefore && haveBeenMinted === supplyLimit ? (
+									<MintBtnContainer>
+										<MintButton maxReached />
+										<BlurContainer className="no-radius-top">
+											<MintingStats
+												haveBeenMinted={haveBeenMinted}
+												supplyLimit={supplyLimit}
+											/>
+										</BlurContainer>
+									</MintBtnContainer>
+								) : (
+									<>
+										<MintBtnContainer>
+											{!isWhitelisted && !isPublicOpen && isWhitelistOpen ? (
+												<BlurContainer>
+													<HeadingSuperXXS as="p" className="text-white mb-2">
+														Your address:
+													</HeadingSuperXXS>
+
+													<HeadingSuperXXS as="p" className="text-white mb-2">
+														{user && user.attributes.ethAddress.toUpperCase()}
+													</HeadingSuperXXS>
+
+													<HeadingSuperXXS as="p" className="text-white mb-3">
+														is not whitelisted
+													</HeadingSuperXXS>
+
+													<MintingStats
+														haveBeenMinted={haveBeenMinted}
+														supplyLimit={supplyLimit}
+													/>
+												</BlurContainer>
+											) : (
+												<>
+													{hasMintedBefore ? (
+														<MintButton alreadyMint />
+													) : (
+														<>
+															{((isWhitelistOpen && isWhitelisted) ||
+																(isPublicOpen && !isWhitelisted)) && (
+																<MintButton />
+															)}
+														</>
+													)}
+													{(isWhitelistOpen || isPublicOpen) && (
+														<BlurContainer className="no-radius-top">
+															<MintingStats
+																haveBeenMinted={haveBeenMinted}
+																supplyLimit={supplyLimit}
+															/>
+														</BlurContainer>
+													)}
+												</>
+											)}
+										</MintBtnContainer>
+									</>
+								)}
 							</>
 						)}
 

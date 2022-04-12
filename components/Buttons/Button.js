@@ -46,8 +46,8 @@ const MyButton = ({
 		<Link href={href} passHref={passHref}>
 			<a href={href} target={target} rel="noopener noreferrer">
 				<StyledButton
-					big={big ? 1 : 0}
-					pill={pill ? 1 : 0}
+					big={big}
+					pill={pill}
 					variant={variant}
 					className={`d-flex align-items-center justify-content-center ${className}`}
 					{...props}
@@ -64,8 +64,8 @@ const MyButton = ({
 	);
 	const RegularButton = (
 		<StyledButton
-			pill={pill ? 1 : 0}
-			big={big ? 1 : 0}
+			pill={pill}
+			big={big}
 			variant={variant}
 			onClick={onClick}
 			className={`d-flex align-items-center justify-content-center ${className}`}
@@ -73,7 +73,7 @@ const MyButton = ({
 		>
 			{icon && icon}
 			{img && <Image src={img} width={32} height={32} className="me-2" />}
-			<StyledP big={big ? 1 : 0} className={textColor} thin={thinText}>
+			<StyledP big={big} className={textColor} thin={thinText}>
 				{text}
 			</StyledP>
 		</StyledButton>
