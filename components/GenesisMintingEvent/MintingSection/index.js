@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useState } from "react";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useWeb3Transfer } from "react-moralis";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 
 import Image from "react-bootstrap/Image";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
@@ -29,6 +29,7 @@ import { mediaBreakpoint } from "utils/breakpoints";
 import RealmHunterButton from "./RealmHunterButton";
 import WhitelistTimer from "./WhitelistTimer";
 import PublicTimer from "./PublicTimer";
+import CloseMintingTimer from "./CloseMintingTimer";
 import Shard from "./Shard";
 
 const MainSection = styled.div`
@@ -130,7 +131,7 @@ const MintBtnContainer = styled.div`
 `;
 
 const MintingSection = () => {
-	const { isAuthenticated, user, isInitializing } = useMoralis();
+	const { isAuthenticated, user, isInitializing, Moralis } = useMoralis();
 	const [supplyData, setSupplyData] = useState({
 		haveBeenMinted: 0,
 		supplyLimit: 0,
@@ -144,23 +145,36 @@ const MintingSection = () => {
 		now: 0,
 		publicOpenAt: 0,
 		whitelistOpenAt: 0,
+		mintingCloseAt: 0,
 		isWhitelistOpen: false,
 		isPublicOpen: false,
+		isMintingClose: false,
 	});
+	const [trxSuccessful, setTrxSuccessful] = useState(false);
+	const [videoLoaded, setVideoLoaded] = useState(false);
+
 	const { haveBeenMinted, supplyLimit } = supplyData;
 	const { canMint, isWhitelisted, hasMintedBefore } = userStatus;
-	const { now, publicOpenAt, whitelistOpenAt, isWhitelistOpen, isPublicOpen } =
-		timeStamps;
+	const {
+		now,
+		publicOpenAt,
+		mintingCloseAt,
+		whitelistOpenAt,
+		isWhitelistOpen,
+		isPublicOpen,
+		isMintingClose,
+	} = timeStamps;
 
 	// const router = useRouter();
-	const [videoLoaded, setVideoLoaded] = useState(false);
 
 	const userConfigs = useQuery(
 		"userConfigs",
 		() =>
 			fetch(
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config/${user.attributes.ethAddress}`
-			).then(async (res) => {
+			),
+		{
+			onSuccess: async (res) => {
 				const supply = await res.json();
 				const { supplies, status, timeStamps } = supply;
 				console.log(supply);
@@ -173,17 +187,18 @@ const MintingSection = () => {
 				setTimeStamps({
 					publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
 					whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
+					mintingCloseAt: parseInt(timeStamps.mintingCloseAt * 1000),
 					now: parseInt(timeStamps.now * 1000),
 					isWhitelistOpen: timeStamps.isWhitelistOpen, // timeStamps.isWhitelistOpen
 					isPublicOpen: timeStamps.isPublicOpen, //timeStamps.isPublicOpen,
+					isMintingClose: timeStamps.isMintingClose,
 				});
 				setUserStatus({
-					canMint: true, //status.canMint
+					canMint: status.canMint,
 					isWhitelisted: status.isWhitelisted,
 					hasMintedBefore: status.hasMintedBefore,
 				});
-			}),
-		{
+			},
 			refetchOnWindowFocus: false,
 			retry: 0,
 			enabled: user && isAuthenticated && !isInitializing ? true : false,
@@ -193,32 +208,103 @@ const MintingSection = () => {
 	const generalConfigs = useQuery(
 		"generalConfigs",
 		() =>
-			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config`
-			).then(async (res) => {
+			fetch(`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config`),
+		{
+			onSuccess: async (res) => {
 				const supply = await res.json();
 				const { supplies, timeStamps } = supply;
 				console.log(supply);
 				setSupplyData({
 					...supplyData,
-					haveBeenMinted: 111, //supplies.haveBeenMinted,
+					haveBeenMinted: supplies.haveBeenMinted, //supplies.haveBeenMinted,
 					supplyLimit: supplies.supplyLimit,
 				});
 
 				setTimeStamps({
 					publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
 					whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
+					mintingCloseAt: parseInt(timeStamps.mintingCloseAt * 1000),
 					now: parseInt(timeStamps.now * 1000),
 					isWhitelistOpen: timeStamps.isWhitelistOpen,
 					isPublicOpen: timeStamps.isPublicOpen,
 				});
-			}),
-		{
+			},
 			refetchOnWindowFocus: false,
 			retry: 0,
 			enabled: !user && !isAuthenticated && !isInitializing ? true : false,
 		}
 	);
+
+	const mintMutation = useMutation(
+		(mintData) =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonMinting/publicMint`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						// 'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: JSON.stringify(mintData),
+				}
+			),
+		{
+			onSuccess: (response) => {
+				//step3
+				console.log("MUTATION SUCCESS", response);
+				setSupplyData({ ...supplyData, haveBeenMinted: haveBeenMinted + 1 });
+				setUserStatus({ ...userStatus, canMint: false, hasMintedBefore: true });
+			},
+			onError: (e) => {
+				//error from rest - step error
+			},
+		}
+	);
+
+	const trfEth = useWeb3Transfer({
+		amount: Moralis.Units.ETH(0.01),
+		receiver: "0x2713489e72c84c97fa0B64Bc103a06c1C9b8b56A",
+		type: "native",
+	});
+
+	useEffect(() => {
+		if (trfEth.data && !trfEth.error) {
+			const data = trfEth.data;
+			//step ke 2
+			const finishedtrfEth = data.wait();
+			finishedtrfEth
+				.then((r) => {
+					const mintData = {
+						address: user.attributes.ethAddress,
+						txHash: r.transactionHash,
+					};
+					mintMutation.mutate(mintData);
+
+					console.log(r.transactionHash);
+				})
+				.catch((e) => {
+					console.log("e", e);
+					//error from transaction eth - step error
+				});
+		}
+
+		if (trfEth.error) {
+			console.log("ERR", trfEth.error);
+		}
+	}, [trfEth.data, trfEth.error]);
+
+	const handleMintButtonClicked = async () => {
+		console.log("WWW");
+		if (canMint) {
+			//step1
+			await trfEth.fetch();
+			// setUserStatus({
+			// 	...userStatus,
+			// 	canMint: false,
+			// 	hasMintedBefore: true,
+			// });
+		}
+	};
 
 	if (userConfigs.isFetching || generalConfigs.isFetching) return <Loading />;
 
@@ -228,12 +314,17 @@ const MintingSection = () => {
 				Oops, an unexpected error occured. Please refresh this page.
 			</TextPrimary>
 		);
+	if (trfEth.error) {
+		<TextPrimary className="mt-4 text-white text-center">
+			Oops, trx error..
+		</TextPrimary>;
+	}
 
 	return (
 		<MainSection className="position-relative">
 			{!isInitializing && (
 				<StyledContainer
-					autoPlay={false}
+					autoPlay
 					loop
 					muted
 					playsInline
@@ -243,7 +334,7 @@ const MintingSection = () => {
 				</StyledContainer>
 			)}
 
-			{user && (
+			{/* {user && (
 				<>
 					<button
 						style={{ position: "absolute", zIndex: 999 }}
@@ -281,26 +372,42 @@ const MintingSection = () => {
 						trigger to max eggs minted
 					</button>
 				</>
-			)}
+			)} */}
 
 			<ContentContainer>
 				{!isInitializing && videoLoaded ? (
 					<>
 						<RHImage src={"./images/rh_logo2.png"} alt="logo" />
-
-						<StyledHeadingMD className="text-white  mb-3 text-center">
-							<span className="skinny">
-								Genesis NBMon egg minting starts on
-							</span>{" "}
-							April 22, 4PM UTC
-						</StyledHeadingMD>
+						{!isWhitelistOpen && (
+							<StyledHeadingMD className="text-white  mb-3 text-center">
+								<span className="skinny">
+									Genesis NBMon egg minting starts on
+								</span>{" "}
+								April 22, 4PM UTC
+								{user && user.attributes.ethAddress}
+							</StyledHeadingMD>
+						)}
 
 						<TimersContainer>
-							<WhitelistTimer date={whitelistOpenAt} rn={now} />
+							{!isPublicOpen && (
+								<WhitelistTimer date={whitelistOpenAt} rn={now} />
+							)}
 							<div className="separator"></div>
-							<PublicTimer date={publicOpenAt} rn={now} />
-						</TimersContainer>
 
+							{!isPublicOpen ? (
+								<PublicTimer
+									date={Date.now() + 3000}
+									rn={now}
+									timeStampsStates={{ timeStamps, setTimeStamps }}
+								/>
+							) : (
+								<CloseMintingTimer
+									date={mintingCloseAt}
+									rn={now}
+									timeStampsStates={{ timeStamps, setTimeStamps }}
+								/>
+							)}
+						</TimersContainer>
 						{!isAuthenticated ? (
 							<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
 						) : (
@@ -317,7 +424,7 @@ const MintingSection = () => {
 												<TextSecondary className="mt-1">
 													{user &&
 														user.attributes &&
-														user.attributes.ethAddress.toUpperCase()}
+														user.attributes.ethAddress}
 												</TextSecondary>
 											</BlurContainer>
 										</>
@@ -342,7 +449,7 @@ const MintingSection = () => {
 													</HeadingSuperXXS>
 
 													<HeadingSuperXXS as="p" className="text-white mb-2">
-														{user && user.attributes.ethAddress.toUpperCase()}
+														{user && user.attributes.ethAddress}
 													</HeadingSuperXXS>
 
 													<HeadingSuperXXS as="p" className="text-white mb-3">
@@ -362,7 +469,11 @@ const MintingSection = () => {
 														<>
 															{((isWhitelistOpen && isWhitelisted) ||
 																(isPublicOpen && !isWhitelisted)) && (
-																<MintButton />
+																<MintButton
+																	onClick={() => {
+																		handleMintButtonClicked();
+																	}}
+																/>
 															)}
 														</>
 													)}
@@ -381,7 +492,6 @@ const MintingSection = () => {
 								)}
 							</>
 						)}
-
 						{!isInitializing && videoLoaded && <RealmHunterButton />}
 					</>
 				) : (

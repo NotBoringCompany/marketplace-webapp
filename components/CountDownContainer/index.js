@@ -21,15 +21,15 @@ const StyledBlurContainer = styled(BlurContainer)`
 	border-radius: 24px;
 	padding: 14px 56px;
 	backdrop-filter: blur(4.5px);
-
+	background: ${(props) => (props.completed ? `#41b995` : `auto`)};
 	@media ${mediaBreakpoint.down.xl} {
 		padding: 16px;
 	}
 `;
 
-const CountDownContainer = ({ days, hours, minutes, seconds }) => {
+const CountDownContainer = ({ days, hours, minutes, seconds, completed }) => {
 	return (
-		<StyledBlurContainer>
+		<StyledBlurContainer completed={completed ? 1 : 0}>
 			<div className="d-flex w-100">
 				<div className="d-flex flex-column align-items-center justify-content-center me-4">
 					<NumberText className="text-white">{days}</NumberText>

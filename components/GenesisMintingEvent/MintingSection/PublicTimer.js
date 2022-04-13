@@ -1,35 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import Countdown from "react-countdown";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import CountDownContainer from "components/CountDownContainer";
+import delay from "utils/delay";
 
-const PublicTimer = ({ date, rn }) => {
+const PublicTimer = ({ date, rn, timeStampsStates }) => {
+	const { setTimeStamps, timeStamps } = timeStampsStates;
+
 	const renderer = ({ days, hours, minutes, seconds, completed }) => {
 		if (completed) {
-			// Render a complete state
-			return <p>asd</p>;
+			return <></>;
 		} else {
 			// Render a countdown
 			return (
-				<CountDownContainer
-					days={days}
-					hours={hours}
-					minutes={minutes}
-					seconds={seconds}
-				/>
+				<div className="d-flex flex-column justify-content-center align-items-center">
+					<HeadingSuperXXS
+						as="p"
+						className="mb-2 text-white text-uppercase text-center"
+					>
+						Public Mint opens at X UTC
+					</HeadingSuperXXS>
+					<CountDownContainer
+						days={days}
+						hours={hours}
+						minutes={minutes}
+						seconds={seconds}
+					/>
+				</div>
 			);
 		}
 	};
+
 	return (
-		<div className="d-flex flex-column justify-content-center align-items-center">
-			<HeadingSuperXXS
-				as="p"
-				className="mb-2 text-white text-uppercase text-center"
-			>
-				Public Mint opens at 4 pm utc
-			</HeadingSuperXXS>{" "}
-			<Countdown date={rn + (date - rn)} renderer={renderer} />
-		</div>
+		<Countdown
+			date={rn + (date - rn)}
+			renderer={renderer}
+			onComplete={async () => {
+				setTimeStamps({ ...timeStamps, isPublicOpen: true });
+			}}
+		/>
 	);
 };
 

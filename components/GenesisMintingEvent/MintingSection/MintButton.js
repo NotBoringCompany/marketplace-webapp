@@ -26,10 +26,14 @@ const StyledTextNormal = styled(HeadingSuperXXS)`
 	font-weight: 500;
 `;
 
-const MintButton = ({ maxReached = false, alreadyMint = false }) => {
+const MintButton = ({
+	maxReached = false,
+	alreadyMint = false,
+	onClick = () => {},
+}) => {
 	const disabled = maxReached || alreadyMint;
 	return (
-		<StyledButton disabled={disabled} variant="secondary">
+		<StyledButton onClick={onClick} disabled={disabled} variant="secondary">
 			{alreadyMint ? (
 				<TextNormal className="text-secondary ms-auto">1/1</TextNormal>
 			) : (
