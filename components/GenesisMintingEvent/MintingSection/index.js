@@ -171,7 +171,7 @@ const MintingSection = () => {
 		"userConfigs",
 		() =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config/${user.attributes.ethAddress}`
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL_REMOTE}/genesisNBMon/config/${user.attributes.ethAddress}`
 			),
 		{
 			onSuccess: async (res) => {
@@ -208,7 +208,9 @@ const MintingSection = () => {
 	const generalConfigs = useQuery(
 		"generalConfigs",
 		() =>
-			fetch(`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config`),
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL_REMOTE}/genesisNBMon/config`
+			),
 		{
 			onSuccess: async (res) => {
 				const supply = await res.json();
@@ -238,7 +240,7 @@ const MintingSection = () => {
 	const mintMutation = useMutation(
 		(mintData) =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonMinting/publicMint`,
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL_REMOTE}/genesisNBMonMinting/publicMint`,
 				{
 					method: "POST",
 					headers: {
@@ -383,8 +385,7 @@ const MintingSection = () => {
 								<span className="skinny">
 									Genesis NBMon egg minting starts on
 								</span>{" "}
-								April 22, 4PM UTC
-								{user && user.attributes.ethAddress}
+								X UTC
 							</StyledHeadingMD>
 						)}
 
@@ -396,7 +397,7 @@ const MintingSection = () => {
 
 							{!isPublicOpen ? (
 								<PublicTimer
-									date={Date.now() + 3000}
+									date={publicOpenAt}
 									rn={now}
 									timeStampsStates={{ timeStamps, setTimeStamps }}
 								/>
@@ -414,6 +415,7 @@ const MintingSection = () => {
 							<>
 								{!isWhitelistOpen &&
 									!isPublicOpen &&
+									!hasMintedBefore &&
 									haveBeenMinted < supplyLimit && (
 										<>
 											<BlurContainer className="mt-lg-5 mt-2 text-white">
@@ -477,7 +479,9 @@ const MintingSection = () => {
 															)}
 														</>
 													)}
-													{(isWhitelistOpen || isPublicOpen) && (
+													{(isWhitelistOpen ||
+														isPublicOpen ||
+														hasMintedBefore) && (
 														<BlurContainer className="no-radius-top">
 															<MintingStats
 																haveBeenMinted={haveBeenMinted}
