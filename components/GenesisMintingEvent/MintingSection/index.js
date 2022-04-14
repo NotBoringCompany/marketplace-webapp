@@ -300,7 +300,7 @@ const MintingSection = () => {
 
 	const trfEth = useWeb3Transfer({
 		amount: Moralis.Units.ETH(0.01),
-		receiver: "0x2713489e72c84c97fa0B64Bc103a06c1C9b8b56A",
+		receiver: process.env.NEXT_PUBLIC_RECEIVER_ADDRESS,
 		type: "native",
 	});
 

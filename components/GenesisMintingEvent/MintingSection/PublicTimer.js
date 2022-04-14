@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Countdown from "react-countdown";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import CountDownContainer from "components/CountDownContainer";
-import delay from "utils/delay";
 
 const PublicTimer = ({ date, rn, timeStampsStates }) => {
 	const { setTimeStamps, timeStamps } = timeStampsStates;
