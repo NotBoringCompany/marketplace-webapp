@@ -313,6 +313,15 @@ const MintingSection = () => {
 		}
 	}, [trfEth.data, trfEth.error]);
 
+	useEffect(() => {
+		if (
+			!hasMintedBefore &&
+			((isWhitelistOpen && isWhitelisted) || (isPublicOpen && !isWhitelisted))
+		) {
+			setUserStatus({ ...userStatus, canMint: true });
+		}
+	}, [isPublicOpen, isWhitelistOpen]);
+
 	const handleMintButtonClicked = async () => {
 		if (canMint) {
 			setTrxAndMintingLoading(true);
@@ -494,12 +503,7 @@ const MintingSection = () => {
 															{((isWhitelistOpen && isWhitelisted) ||
 																(isPublicOpen && !isWhitelisted)) && (
 																<MintButton
-																	absoluteDisabled={
-																		// trfEth.isLoading ||
-																		// trfEth.isFetching ||
-																		// 				mintMutation.isLoading
-																		trxAndMintingLoading
-																	}
+																	absoluteDisabled={trxAndMintingLoading}
 																	onClick={() => {
 																		handleMintButtonClicked();
 																	}}
