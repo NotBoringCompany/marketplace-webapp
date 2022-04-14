@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 
 import { useState } from "react";
 import { useMoralis, useWeb3Transfer } from "react-moralis";
 import { useRouter } from "next/router";
 import { useQuery, useMutation } from "react-query";
+import AppContext from "context/AppContext";
 
 import Image from "react-bootstrap/Image";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
@@ -20,6 +21,7 @@ import {
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 
 import MetamaskButton from "components/Buttons/MetamaskButton";
+
 import { BlurContainer } from "components/BlurContainer";
 
 import MintButton from "./MintButton";
@@ -152,6 +154,9 @@ const MintingSection = () => {
 	});
 	const [trxSuccessful, setTrxSuccessful] = useState(false);
 	const [videoLoaded, setVideoLoaded] = useState(false);
+	const { statesSwitchModal } = useContext(AppContext);
+
+	const { getter } = statesSwitchModal;
 
 	const { haveBeenMinted, supplyLimit } = supplyData;
 	const { canMint, isWhitelisted, hasMintedBefore } = userStatus;
@@ -171,7 +176,7 @@ const MintingSection = () => {
 		"userConfigs",
 		() =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL_REMOTE}/genesisNBMon/config/${user.attributes.ethAddress}`
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config/${user.attributes.ethAddress}`
 			),
 		{
 			onSuccess: async (res) => {
@@ -208,9 +213,7 @@ const MintingSection = () => {
 	const generalConfigs = useQuery(
 		"generalConfigs",
 		() =>
-			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL_REMOTE}/genesisNBMon/config`
-			),
+			fetch(`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/config`),
 		{
 			onSuccess: async (res) => {
 				const supply = await res.json();
@@ -240,7 +243,7 @@ const MintingSection = () => {
 	const mintMutation = useMutation(
 		(mintData) =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL_REMOTE}/genesisNBMonMinting/publicMint`,
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonMinting/publicMint`,
 				{
 					method: "POST",
 					headers: {
@@ -291,15 +294,30 @@ const MintingSection = () => {
 		}
 
 		if (trfEth.error) {
-			console.log("ERR", trfEth.error);
+			statesSwitchModal.setter({
+				...getter,
+				show: false,
+			});
+			statesSwitchModal.setter({
+				show: true,
+				content: "txError",
+			});
 		}
-	}, [trfEth.data, trfEth.error]);
+
+		if (trfEth.isFetching) {
+			statesSwitchModal.setter({
+				show: true,
+				content: "metamaskConfirmation",
+			});
+		}
+	}, [trfEth.data, trfEth.error, trfEth.isFetching]);
 
 	const handleMintButtonClicked = async () => {
-		console.log("WWW");
 		if (canMint) {
 			//step1
+
 			await trfEth.fetch();
+
 			// setUserStatus({
 			// 	...userStatus,
 			// 	canMint: false,

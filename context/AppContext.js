@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import SetupModal from "components/Modal/SetupModal";
 import WrongNetwork from "components/Modal/WrongNetwork";
 import NoMetaMask from "components/Modal/NoMetaMask";
+import SwitchModal from "components/NewModal/SwitchModal";
 
 const AppContext = createContext();
 
@@ -13,6 +14,11 @@ export const AppProvider = ({ children }) => {
 	const [showSetupModal, setShowSetupModal] = useState(false);
 	const [showWrongNetworkModal, setShowWrongNetworkModal] = useState(false);
 	const [showModalNoMM, setShowModalNoMM] = useState(false);
+
+	const [switchModal, setSwitchModal] = useState({
+		show: false,
+		content: "",
+	});
 
 	const { isAuthenticated, isWeb3Enabled, enableWeb3, user } = useMoralis();
 	const { chainId, chain } = useChain();
@@ -27,6 +33,8 @@ export const AppProvider = ({ children }) => {
 		getter: showWrongNetworkModal,
 		setter: setShowWrongNetworkModal,
 	};
+
+	const statesSwitchModal = { getter: switchModal, setter: setSwitchModal };
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -52,11 +60,13 @@ export const AppProvider = ({ children }) => {
 				showWrongNetworkModal,
 				setShowWrongNetworkModal,
 				setShowModalNoMM,
+				statesSwitchModal,
 			}}
 		>
 			<SetupModal stateUtils={statesModalSetup} />
 			<WrongNetwork stateUtils={statesModalWrongNetwork} />
 			<NoMetaMask stateUtils={statesModalNoMM} />
+			<SwitchModal stateUtils={statesSwitchModal} />
 
 			{children}
 		</AppContext.Provider>
