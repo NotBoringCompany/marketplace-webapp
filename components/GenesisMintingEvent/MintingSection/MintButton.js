@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useChain } from "react-moralis";
 import Image from "next/image";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
@@ -32,7 +33,19 @@ const MintButton = ({
 	absoluteDisabled = false,
 	onClick = () => {},
 }) => {
+	const { chainId } = useChain();
+	const [hide, setHide] = useState(false);
+	useEffect(() => {
+		if (chainId && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) {
+			setHide(true);
+		} else {
+			setHide(false);
+		}
+	}, [chainId]);
 	const disabled = maxReached || alreadyMint;
+
+	if (hide) return <></>;
+
 	return (
 		<StyledButton
 			onClick={onClick}

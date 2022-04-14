@@ -242,7 +242,9 @@ const MintingSection = () => {
 	const mintMutation = useMutation(
 		(mintData) =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonMinting/publicMint`,
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonMinting/${
+					isWhitelisted ? `whitelistedMint` : `publicMint`
+				}`,
 				{
 					method: "POST",
 					headers: {
@@ -406,8 +408,16 @@ const MintingSection = () => {
 						)}
 
 						<TimersContainer>
-							{!isPublicOpen && (
-								<WhitelistTimer date={whitelistOpenAt} rn={now} />
+							{!isPublicOpen && !isWhitelistOpen && (
+								<WhitelistTimer
+									date={whitelistOpenAt}
+									rn={now}
+									timeStampsStates={{ timeStamps, setTimeStamps }}
+								/>
+							)}
+
+							{!isPublicOpen && isWhitelistOpen && (
+								<CloseMintingTimer dummyDisplay />
 							)}
 							<div className="separator"></div>
 
@@ -418,11 +428,7 @@ const MintingSection = () => {
 									timeStampsStates={{ timeStamps, setTimeStamps }}
 								/>
 							) : (
-								<CloseMintingTimer
-									date={mintingCloseAt}
-									rn={now}
-									timeStampsStates={{ timeStamps, setTimeStamps }}
-								/>
+								<CloseMintingTimer date={mintingCloseAt} rn={now} />
 							)}
 						</TimersContainer>
 						{!isAuthenticated ? (

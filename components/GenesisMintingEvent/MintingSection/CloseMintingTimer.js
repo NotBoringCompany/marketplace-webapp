@@ -4,8 +4,25 @@ import { HeadingSuperXXS } from "components/Typography/Headings";
 import CountDownContainer from "components/CountDownContainer";
 import delay from "utils/delay";
 
-const PublicTimer = ({ date, rn, timeStampsStates }) => {
-	const { setTimeStamps, timeStamps } = timeStampsStates;
+const CloseMintingTimer = ({ date, rn, dummyDisplay }) => {
+	if (dummyDisplay)
+		return (
+			<div className="d-flex flex-column justify-content-center align-items-center">
+				<HeadingSuperXXS
+					as="p"
+					className="mb-2 text-white text-uppercase text-center"
+				>
+					Whitelist Mint opened at X UTC
+				</HeadingSuperXXS>
+				<CountDownContainer
+					days={0}
+					hours={0}
+					minutes={0}
+					seconds={0}
+					completed
+				/>
+			</div>
+		);
 
 	const renderer = ({ days, hours, minutes, seconds, completed }) => {
 		if (completed) {
@@ -43,4 +60,4 @@ const PublicTimer = ({ date, rn, timeStampsStates }) => {
 	);
 };
 
-export default PublicTimer;
+export default CloseMintingTimer;

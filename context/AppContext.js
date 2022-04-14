@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import { useMoralis, useChain } from "react-moralis";
-import Moralis from "moralis";
 import { useRouter } from "next/router";
 import SetupModal from "components/Modal/SetupModal";
 import WrongNetwork from "components/Modal/WrongNetwork";
@@ -20,7 +19,8 @@ export const AppProvider = ({ children }) => {
 		content: "",
 	});
 
-	const { isAuthenticated, isWeb3Enabled, enableWeb3, user } = useMoralis();
+	const { isAuthenticated, isWeb3Enabled, enableWeb3, user, logout } =
+		useMoralis();
 	const { chainId, chain } = useChain();
 
 	const statesModalSetup = {
@@ -37,6 +37,20 @@ export const AppProvider = ({ children }) => {
 	const statesSwitchModal = { getter: switchModal, setter: setSwitchModal };
 
 	useEffect(() => {
+		window.ethereum.on("accountsChanged", function (accounts) {
+			if (isAuthenticated && user) {
+				console.log("Connected as:", user && user.attributes.ethAddress);
+				console.log("Metamask picked:", accounts[0]);
+
+				if (user.attributes.ethAddress !== accounts[0]) {
+					logout();
+				}
+			}
+			// Time to reload your interface with accounts[0]!
+		});
+	}, []);
+
+	useEffect(() => {
 		setTimeout(() => {
 			enableWeb3({ provider: "metamask" });
 		}, 100);
@@ -46,10 +60,17 @@ export const AppProvider = ({ children }) => {
 		setSwitchModal({ ...switchModal, show: false });
 		if (isAuthenticated && user && !user.attributes.email)
 			setShowSetupModal(true);
+
+		if (chainId && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) {
+			setShowWrongNetworkModal(true);
+		}
 	}, [isAuthenticated, router.pathname, chainId]);
 
 	useEffect(() => {
 		if (isWeb3Enabled) {
+			if (chainId && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) {
+				setShowWrongNetworkModal(true);
+			}
 			console.log("CID", chainId);
 			console.log("chain", chain);
 		}
