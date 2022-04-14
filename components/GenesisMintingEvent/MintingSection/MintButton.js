@@ -29,11 +29,16 @@ const StyledTextNormal = styled(HeadingSuperXXS)`
 const MintButton = ({
 	maxReached = false,
 	alreadyMint = false,
+	absoluteDisabled = false,
 	onClick = () => {},
 }) => {
 	const disabled = maxReached || alreadyMint;
 	return (
-		<StyledButton onClick={onClick} disabled={disabled} variant="secondary">
+		<StyledButton
+			onClick={onClick}
+			disabled={disabled || absoluteDisabled}
+			variant="secondary"
+		>
 			{alreadyMint ? (
 				<TextNormal className="text-secondary ms-auto">1/1</TextNormal>
 			) : (
@@ -50,7 +55,9 @@ const MintButton = ({
 						as="p"
 						className="text-white mt-3 text-content text-center"
 					>
-						Mint your Genesis NBMon Egg
+						{absoluteDisabled
+							? `Mint your Genesis NBMon Egg...`
+							: `Mint your Genesis NBMon Egg`}
 					</StyledTextNormal>
 				</>
 			) : (

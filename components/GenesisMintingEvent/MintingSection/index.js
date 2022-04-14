@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from "react";
 
 import { useState } from "react";
 import { useMoralis, useWeb3Transfer } from "react-moralis";
-import { useRouter } from "next/router";
 import { useQuery, useMutation } from "react-query";
 import AppContext from "context/AppContext";
 
@@ -152,7 +151,7 @@ const MintingSection = () => {
 		isPublicOpen: false,
 		isMintingClose: false,
 	});
-	const [trxSuccessful, setTrxSuccessful] = useState(false);
+	const [trxAndMintingLoading, setTrxAndMintingLoading] = useState(false);
 	const [videoLoaded, setVideoLoaded] = useState(false);
 	const { statesSwitchModal } = useContext(AppContext);
 
@@ -248,21 +247,52 @@ const MintingSection = () => {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
-						// 'Content-Type': 'application/x-www-form-urlencoded',
 					},
 					body: JSON.stringify(mintData),
 				}
 			),
 		{
-			onSuccess: (response) => {
+			onSuccess: async (response) => {
 				//step3
-				console.log("MUTATION SUCCESS", response);
-				setSupplyData({ ...supplyData, haveBeenMinted: haveBeenMinted + 1 });
-				setUserStatus({ ...userStatus, canMint: false, hasMintedBefore: true });
+
+				if (response.ok) {
+					const mutationResult = await response.json();
+					console.log("MUTATION SUCCESSFUL", mutationResult);
+					setSupplyData({
+						...supplyData,
+						haveBeenMinted: haveBeenMinted + 1,
+					});
+					setUserStatus({
+						...userStatus,
+						canMint: false,
+						hasMintedBefore: true,
+					});
+
+					statesSwitchModal.setter({
+						show: true,
+						content: "successMinting",
+					});
+					return;
+				} else {
+					const error = new Error(response.statusText);
+					error.response = response;
+					throw error;
+				}
 			},
-			onError: (e) => {
-				//error from rest - step error
+			onError: (_) => {
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Minting Error",
+						text: "We are sorry, an unexpected \n minting error occured. \n \n Please contact us to let us know \n the details.",
+					},
+				});
 			},
+			onSettled: () => {
+				setTrxAndMintingLoading(false);
+			},
+			retry: 0,
 		}
 	);
 
@@ -274,55 +304,63 @@ const MintingSection = () => {
 
 	useEffect(() => {
 		if (trfEth.data && !trfEth.error) {
-			const data = trfEth.data;
-			//step ke 2
-			const finishedtrfEth = data.wait();
-			finishedtrfEth
-				.then((r) => {
-					const mintData = {
-						address: user.attributes.ethAddress,
-						txHash: r.transactionHash,
-					};
-					mintMutation.mutate(mintData);
-
-					console.log(r.transactionHash);
-				})
-				.catch((e) => {
-					console.log("e", e);
-					//error from transaction eth - step error
-				});
-		}
-
-		if (trfEth.error) {
-			statesSwitchModal.setter({
-				...getter,
-				show: false,
-			});
 			statesSwitchModal.setter({
 				show: true,
-				content: "txError",
+				content: "waitTransaction",
 			});
 		}
+	}, [trfEth.data, trfEth.error]);
 
-		if (trfEth.isFetching) {
+	const handleMintButtonClicked = async () => {
+		if (canMint) {
+			setTrxAndMintingLoading(true);
 			statesSwitchModal.setter({
 				show: true,
 				content: "metamaskConfirmation",
 			});
-		}
-	}, [trfEth.data, trfEth.error, trfEth.isFetching]);
 
-	const handleMintButtonClicked = async () => {
-		if (canMint) {
-			//step1
+			await trfEth.fetch({
+				onSuccess: (tx) =>
+					tx.wait().then((r) => {
+						const mintData = {
+							purchaserAddress: user.attributes.ethAddress,
+							txHash: r.transactionHash,
+						};
+						mintMutation.mutate(mintData);
 
-			await trfEth.fetch();
-
-			// setUserStatus({
-			// 	...userStatus,
-			// 	canMint: false,
-			// 	hasMintedBefore: true,
-			// });
+						statesSwitchModal.setter({
+							show: true,
+							content: "beingMinted",
+						});
+					}),
+				onError: (e) => {
+					statesSwitchModal.setter({
+						content: "txError",
+						show: false,
+					});
+					if (e.code === "INSUFFICIENT_FUNDS") {
+						statesSwitchModal.setter({
+							show: true,
+							content: "txError",
+							detail: {
+								title: "Transaction Error",
+								text: `You have insufficient funds to \n make this transaction. \n\n Wallet address: ${user.attributes.ethAddress}`,
+							},
+						});
+						// code 4001 is user cancellation
+					} else if (e.code !== 4001) {
+						statesSwitchModal.setter({
+							show: true,
+							content: "txError",
+							detail: {
+								title: "Transaction Error",
+								text: "We are sorry, an unexpected \n error occured during transaction error occured. \n \n Please contact us to let us know \n the details.",
+							},
+						});
+					}
+					setTrxAndMintingLoading(false);
+				},
+			});
 		}
 	};
 
@@ -353,46 +391,6 @@ const MintingSection = () => {
 					<source src="./images/bg.mp4" type="video/mp4" />
 				</StyledContainer>
 			)}
-
-			{/* {user && (
-				<>
-					<button
-						style={{ position: "absolute", zIndex: 999 }}
-						onClick={() => {
-							setTimeStamps({
-								...timeStamps,
-								isWhitelistOpen: !isWhitelistOpen,
-							});
-						}}
-					>
-						trigger open whitelist
-					</button>
-					<button
-						style={{ position: "absolute", zIndex: 999, left: "160px" }}
-						onClick={() => {
-							setUserStatus({
-								...userStatus,
-								hasMintedBefore: !hasMintedBefore,
-							});
-						}}
-					>
-						trigger hasminted
-					</button>
-
-					<button
-						style={{ position: "absolute", zIndex: 999, left: "300px" }}
-						onClick={() => {
-							setSupplyData({
-								...supplyData,
-								haveBeenMinted:
-									haveBeenMinted === supplyLimit ? 111 : supplyLimit,
-							});
-						}}
-					>
-						trigger to max eggs minted
-					</button>
-				</>
-			)} */}
 
 			<ContentContainer>
 				{!isInitializing && videoLoaded ? (
@@ -490,6 +488,12 @@ const MintingSection = () => {
 															{((isWhitelistOpen && isWhitelisted) ||
 																(isPublicOpen && !isWhitelisted)) && (
 																<MintButton
+																	absoluteDisabled={
+																		// trfEth.isLoading ||
+																		// trfEth.isFetching ||
+																		// 				mintMutation.isLoading
+																		trxAndMintingLoading
+																	}
 																	onClick={() => {
 																		handleMintButtonClicked();
 																	}}

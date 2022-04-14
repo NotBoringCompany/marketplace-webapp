@@ -5,6 +5,7 @@ import MetamaskConfirmation from "components/GenesisMintingEvent/MintingSection/
 import BeingMinted from "components/GenesisMintingEvent/MintingSection/ModalContent/BeingMinted";
 import SuccessMinting from "components/GenesisMintingEvent/MintingSection/ModalContent/SuccessMinting";
 import Error from "components/GenesisMintingEvent/MintingSection/ModalContent/Error";
+import WaitTransaction from "components/GenesisMintingEvent/MintingSection/ModalContent/WaitTransaction";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -52,6 +53,7 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 			<StyledModalBody className={`bg-darkGray text-white ${className}`}>
 				<Switch test={content}>
 					<MetamaskConfirmation switchId="metamaskConfirmation" />
+					<WaitTransaction switchId="waitTransaction" />
 					<BeingMinted switchId="beingMinted" />
 					<SuccessMinting switchId="successMinting" stateUtils={stateUtils} />
 					<Error switchId="txError" stateUtils={stateUtils} />

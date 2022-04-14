@@ -43,6 +43,7 @@ export const AppProvider = ({ children }) => {
 	}, [isWeb3Enabled, isAuthenticated]);
 
 	useEffect(() => {
+		setSwitchModal({ ...switchModal, show: false });
 		if (isAuthenticated && user && !user.attributes.email)
 			setShowSetupModal(true);
 	}, [isAuthenticated, router.pathname, chainId]);

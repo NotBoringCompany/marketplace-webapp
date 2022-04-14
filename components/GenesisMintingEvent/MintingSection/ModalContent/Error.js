@@ -7,6 +7,8 @@ import styled from "styled-components";
 
 const Subtitle = styled(HeadingSuperXXS)`
 	font-size: 16px;
+	line-break: anywhere;
+	white-space: pre-line;
 `;
 
 const StyledButton = styled.button`
@@ -26,12 +28,15 @@ const Error = ({ stateUtils }) => {
 			</TextPrimary>
 			<Image src={ErrorImage} height={68} width={68} alt="Loading..." />
 			<Subtitle as="p" className="mt-5">
-				Something went wrong
+				{detail && detail.text
+					? detail.text
+					: `Oops, sorry, something went wrong.`}
 			</Subtitle>
 
 			<div className="d-flex mt-4 align-items-center justify-content-end pe-1">
 				<StyledButton
 					onClick={() => {
+						// window && window.location.reload();
 						setter({ ...getter, show: false });
 					}}
 					className="text-secondary me-2"
