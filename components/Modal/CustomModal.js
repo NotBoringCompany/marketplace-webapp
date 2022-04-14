@@ -12,7 +12,6 @@ const StyledModalBody = styled(Modal.Body)`
 	padding: 32px;
 	margin: 0;
 	border-radius: 10px;
-	box-shadow: 3px 5px 32px rgba(173, 173, 173, 0.25);
 	& .close {
 		font-size: 32px;
 		margin-left: auto;

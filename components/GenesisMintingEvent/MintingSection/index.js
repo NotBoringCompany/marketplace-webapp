@@ -366,7 +366,7 @@ const MintingSection = () => {
 							content: "txError",
 							detail: {
 								title: "Transaction Error",
-								text: "We are sorry, an unexpected \n error occured during transaction error occured. \n \n Please contact us to let us know \n the details.",
+								text: "We are sorry, an unexpected \n error occured during transaction. \n \n Please contact us to let us know \n the details.",
 							},
 						});
 					}
