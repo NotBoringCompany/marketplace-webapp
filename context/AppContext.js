@@ -46,7 +46,6 @@ export const AppProvider = ({ children }) => {
 					logout();
 				}
 			}
-			// Time to reload your interface with accounts[0]!
 		});
 	}, [isAuthenticated]);
 
