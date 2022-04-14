@@ -316,6 +316,7 @@ const MintingSection = () => {
 	useEffect(() => {
 		if (
 			!hasMintedBefore &&
+			haveBeenMinted < supplyLimit &&
 			((isWhitelistOpen && isWhitelisted) || (isPublicOpen && !isWhitelisted))
 		) {
 			setUserStatus({ ...userStatus, canMint: true });
@@ -462,7 +463,7 @@ const MintingSection = () => {
 											</BlurContainer>
 										</>
 									)}
-								{!hasMintedBefore && haveBeenMinted === supplyLimit ? (
+								{!hasMintedBefore && haveBeenMinted >= supplyLimit ? (
 									<MintBtnContainer>
 										<MintButton maxReached />
 										<BlurContainer className="no-radius-top">
