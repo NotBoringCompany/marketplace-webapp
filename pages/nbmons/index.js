@@ -22,6 +22,7 @@ import CheckBoxFilters from "components/Filters/CheckBoxFilters";
 import NBMonPreviewCard from "components/NBMonPreviewCard";
 import { TextPrimary } from "components/Typography/Texts";
 import Loading from "components/Loading";
+import EggCard from "components/NBMonPreviewCard/EggCard";
 
 import { useFilterStore } from "stores/filterStore";
 import Col from "react-bootstrap/Col";
@@ -158,21 +159,23 @@ const AccountPage = () => {
 		"allMyNBMons",
 		() =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_REST_API_PREFIX_URL}/getOwnerNBMons?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&address=${user.attributes.ethAddress}`
-			).then(async (res) => {
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/getOwnerGenesisNBmons/${user.attributes.ethAddress}`
+			),
+		{
+			refetchOnWindowFocus: false,
+			onSuccess: async (res) => {
 				let fetchedData = await res.json();
-				fetchedData = replaceDummy(fetchedData);
+				// console.log(fetchedData);
+				// fetchedData = replaceDummy(fetchedData);
 				setAllNBMons(
-					fetchedData.result.sort(
-						(a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)
-					)
+					fetchedData.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
 				);
 				setPage({
 					...page,
-					totalPage: totalPageCounter(fetchedData.result.length, show) - 1, // first page is page 0.,
+					totalPage: totalPageCounter(fetchedData.length, show) - 1, // first page is page 0.,
 				});
-			}),
-		{ refetchOnWindowFocus: false }
+			},
+		}
 	);
 
 	useEffect(() => {
@@ -285,7 +288,7 @@ const AccountPage = () => {
 						<>
 							{shownNBMons.map((nbMon) => (
 								<Col
-									key={nbMon.nbmonId}
+									key={`genesis-${nbMon.nbmonId}`}
 									className="mb-4"
 									xl={3}
 									lg={4}
@@ -294,9 +297,7 @@ const AccountPage = () => {
 								>
 									{" "}
 									<Link href={`/nbmons/${nbMon.nbmonId}`}>
-										<a>
-											<NBMonPreviewCard nbMon={nbMon} />
-										</a>
+										<a>{nbMon.isEgg ? <EggCard /> : <p>asd</p>}</a>
 									</Link>
 								</Col>
 							))}

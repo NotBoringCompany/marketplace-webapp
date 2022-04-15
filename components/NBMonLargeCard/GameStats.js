@@ -47,8 +47,8 @@ const GameStats = ({ nbMon }) => {
 			</StyledHeadingSuperXXS>
 
 			<div className="d-flex justify-content-center flex-wrap flex-md-nowrap">
-				<Pill content={nbMon.firstPassive} className="me-3 mt-3 mt-md-0" />
-				<Pill content={nbMon.secondPassive} className="me-3 mt-3 mt-md-0" />
+				<Pill content={nbMon.passives[0]} className="me-3 mt-3 mt-md-0" />
+				<Pill content={nbMon.passives[1]} className="me-3 mt-3 mt-md-0" />
 			</div>
 
 			<StyledHeadingSuperXXS as="p" className="text-white mt-3 mb-md-3 mb-0">

@@ -1,13 +1,20 @@
+const inSelectedFilter = (item, selectedFilter) => {
+	if (item === null) return false;
+	return item.toLowerCase() in selectedFilter;
+};
+
 export default function filterNBMons(selectedFilters, rangeFilters, nbmons) {
 	const preFiltered = nbmons.filter((nbmon) => {
-		return Object.keys(selectedFilters).every((key) => {
+		return Object.keys(selectedFilters).every((_) => {
 			return Object.keys(selectedFilters).every((key) => {
 				if (Array.isArray(nbmon[key])) {
-					return nbmon[key].some(
-						(item) => item.toLowerCase() in selectedFilters[key]
+					return nbmon[key].some((item) =>
+						inSelectedFilter(item, selectedFilters[key])
 					);
 				} else {
-					return nbmon[key].toLowerCase() in selectedFilters[key];
+					return nbmon[key] !== null
+						? nbmon[key].toLowerCase() in selectedFilters[key]
+						: false;
 				}
 			});
 		});
