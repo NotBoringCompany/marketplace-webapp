@@ -2,77 +2,33 @@ import React, { useEffect, useContext } from "react";
 import { useState } from "react";
 import { useMoralis, useWeb3Transfer } from "react-moralis";
 import { useQuery, useMutation } from "react-query";
-import AppContext from "context/AppContext";
-
-import Image from "react-bootstrap/Image";
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-
 import styled from "styled-components";
-
-import Loading from "components/Loading";
-
-import {
-	Heading18,
-	HeadingMD,
-	HeadingSuperXXS,
-} from "components/Typography/Headings";
-import { TextPrimary, TextSecondary } from "components/Typography/Texts";
-
-import MetamaskButton from "components/Buttons/MetamaskButton";
-
-import { BlurContainer } from "components/BlurContainer";
-
-import MintButton from "./MintButton";
-import MintingStats from "components/Mint/MintingStats";
+import Image from "react-bootstrap/Image";
 
 import { mediaBreakpoint } from "utils/breakpoints";
+import AppContext from "context/AppContext";
+
+import Loading from "components/Loading";
+import { BlurContainer } from "components/BlurContainer";
+import { HeadingMD } from "components/Typography/Headings";
+import { TextPrimary } from "components/Typography/Texts";
+import MetamaskButton from "components/Buttons/MetamaskButton";
+import MintingStats from "components/Mint/MintingStats";
+
+import {
+	MainSection,
+	StyledContainer,
+	ContentContainer,
+	MintBtnContainer,
+} from "./Containers";
+import MintButton from "./MintButton";
+import AccountInfoBox from "./AccountInfoBox";
 import RealmHunterButton from "./RealmHunterButton";
-import WhitelistTimer from "./WhitelistTimer";
-import PublicTimer from "./PublicTimer";
-import CloseMintingTimer from "./CloseMintingTimer";
 import Shard from "./Shard";
-
-const MainSection = styled.div`
-	min-height: 100vh;
-
-	@media ${mediaBreakpoint.down.lg} and (orientation: landscape) {
-		min-height: calc(100vh + 380px);
-	}
-
-	@media (min-width: 820px) and (max-width: 1024px) and (orientation: portrait) {
-		min-height: calc(60vh + 100px);
-	}
-
-	@media (max-height: 667px) and (orientation: portrait) {
-		min-height: calc(100vh + 120px);
-	}
-`;
-
-const StyledContainer = styled.video`
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	min-width: 100%;
-	min-height: 100%;
-`;
-
-const ContentContainer = styled.div`
-	position: absolute;
-	top: 0;
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	z-index: 2;
-	width: 100%;
-	align-items: center;
-	padding: 20px;
-
-	& .no-radius-top {
-		border-top-right-radius: 0;
-		border-top-left-radius: 0;
-	}
-`;
-
+import NotWhitelistedBox from "./NotWhitelistedBox";
+import Timers from "./Timers";
+import BlurredStats from "./BlurredStats";
+import Thankyou from "./Thankyou";
 const StyledHeadingMD = styled(HeadingMD)`
 	& span.skinny {
 		font-weight: lighter;
@@ -87,46 +43,14 @@ const StyledHeadingMD = styled(HeadingMD)`
 `;
 
 const RHImage = styled(Image)`
-	width: 360px;
-	height: 260px;
+	width: 300px;
+	height: 220px;
 	margin-top: -16px;
 
 	@media ${mediaBreakpoint.down.lg} {
 		margin-top: -48px;
 		width: 300px;
 		height: 230px;
-	}
-`;
-const TimersContainer = styled.div`
-	display: flex;
-	flex-direction: row;
-	margin-bottom: 24px;
-
-	& .separator {
-		margin: 0 16px;
-	}
-
-	@media ${mediaBreakpoint.down.md} {
-	}
-
-	@media ${mediaBreakpoint.down.lg} {
-		flex-direction: column;
-		& .separator {
-			margin: 8px 0;
-		}
-	}
-`;
-
-const MintBtnContainer = styled.div`
-	display: flex;
-	max-width: 300px;
-	flex-direction: column;
-	justify-content: center;
-
-	& p {
-		max-width: 300%;
-		line-break: anywhere;
-		text-align: center;
 	}
 `;
 
@@ -148,27 +72,14 @@ const MintingSection = () => {
 		mintingCloseAt: 0,
 		isWhitelistOpen: false,
 		isPublicOpen: false,
-		isMintingClose: false,
+		isMintingEnded: false,
 	});
 	const [trxAndMintingLoading, setTrxAndMintingLoading] = useState(false);
 	const [videoLoaded, setVideoLoaded] = useState(false);
 	const { statesSwitchModal } = useContext(AppContext);
-
-	const { getter } = statesSwitchModal;
-
 	const { haveBeenMinted, supplyLimit } = supplyData;
 	const { canMint, isWhitelisted, hasMintedBefore } = userStatus;
-	const {
-		now,
-		publicOpenAt,
-		mintingCloseAt,
-		whitelistOpenAt,
-		isWhitelistOpen,
-		isPublicOpen,
-		isMintingClose,
-	} = timeStamps;
-
-	// const router = useRouter();
+	const { isWhitelistOpen, isPublicOpen, isMintingEnded } = timeStamps;
 
 	const userConfigs = useQuery(
 		"userConfigs",
@@ -194,7 +105,7 @@ const MintingSection = () => {
 					now: parseInt(timeStamps.now * 1000),
 					isWhitelistOpen: timeStamps.isWhitelistOpen, // timeStamps.isWhitelistOpen
 					isPublicOpen: timeStamps.isPublicOpen, //timeStamps.isPublicOpen,
-					isMintingClose: timeStamps.isMintingClose,
+					isMintingEnded: true,
 				});
 				setUserStatus({
 					canMint: status.canMint,
@@ -385,11 +296,6 @@ const MintingSection = () => {
 				Oops, an unexpected error occured. Please refresh this page.
 			</TextPrimary>
 		);
-	if (trfEth.error) {
-		<TextPrimary className="mt-4 text-white text-center">
-			Oops, trx error..
-		</TextPrimary>;
-	}
 
 	return (
 		<MainSection className="position-relative">
@@ -409,127 +315,97 @@ const MintingSection = () => {
 				{!isInitializing && videoLoaded ? (
 					<>
 						<RHImage src={"./images/rh_logo2.png"} alt="logo" />
-						{!isWhitelistOpen && (
+
+						{!isMintingEnded ? (
+							<>
+								{!isWhitelistOpen && (
+									<StyledHeadingMD className="text-white  mb-3 text-center">
+										<span className="skinny">
+											Genesis NBMon egg minting starts on
+										</span>{" "}
+										22nd April, 2PM UTC
+									</StyledHeadingMD>
+								)}
+
+								{(isWhitelistOpen || isPublicOpen) && (
+									<StyledHeadingMD className="text-white  mb-3 text-center">
+										<span className="skinny">
+											GENESIS NBMON EGG MINTING OPEN
+										</span>
+									</StyledHeadingMD>
+								)}
+							</>
+						) : (
 							<StyledHeadingMD className="text-white  mb-3 text-center">
-								<span className="skinny">
-									Genesis NBMon egg minting starts on
-								</span>{" "}
-								22nd April, 2PM UTC
+								<span className="skinny">GENESIS NBMON EGG MINTING ENDED</span>
 							</StyledHeadingMD>
 						)}
 
-						<TimersContainer>
-							{!isPublicOpen && !isWhitelistOpen && (
-								<WhitelistTimer
-									date={whitelistOpenAt}
-									rn={now}
-									timeStampsStates={{ timeStamps, setTimeStamps }}
-								/>
-							)}
-
-							{!isPublicOpen && isWhitelistOpen && (
-								<CloseMintingTimer dummyDisplay />
-							)}
-							<div className="separator"></div>
-
-							{!isPublicOpen ? (
-								<PublicTimer
-									date={publicOpenAt}
-									rn={now}
-									timeStampsStates={{ timeStamps, setTimeStamps }}
-								/>
-							) : (
-								<CloseMintingTimer date={mintingCloseAt} rn={now} />
-							)}
-						</TimersContainer>
-						{!isAuthenticated ? (
-							<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
-						) : (
+						{!isMintingEnded ? (
 							<>
-								{!isWhitelistOpen &&
-									!isPublicOpen &&
-									!hasMintedBefore &&
-									haveBeenMinted < supplyLimit && (
-										<>
-											<BlurContainer className="mt-lg-5 mt-2 text-white">
-												<div className="d-flex align-items-center">
-													<IoIosCheckmarkCircleOutline className="me-2 checkmark-icon" />
-													<Heading18 as="p">You are logged in</Heading18>
-												</div>
-												<TextSecondary className="mt-1">
-													{user &&
-														user.attributes &&
-														user.attributes.ethAddress}
-												</TextSecondary>
-											</BlurContainer>
-										</>
-									)}
-								{!hasMintedBefore && haveBeenMinted >= supplyLimit ? (
-									<MintBtnContainer>
-										<MintButton maxReached />
-										<BlurContainer className="no-radius-top">
-											<MintingStats
-												haveBeenMinted={haveBeenMinted}
-												supplyLimit={supplyLimit}
-											/>
-										</BlurContainer>
-									</MintBtnContainer>
+								<Timers timeStampsStates={{ timeStamps, setTimeStamps }} />
+								{!isAuthenticated ? (
+									<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
 								) : (
 									<>
-										<MintBtnContainer>
-											{!isWhitelisted && !isPublicOpen && isWhitelistOpen ? (
-												<BlurContainer>
-													<HeadingSuperXXS as="p" className="text-white mb-2">
-														Your address:
-													</HeadingSuperXXS>
-
-													<HeadingSuperXXS as="p" className="text-white mb-2">
-														{user && user.attributes.ethAddress}
-													</HeadingSuperXXS>
-
-													<HeadingSuperXXS as="p" className="text-white mb-3">
-														is not whitelisted
-													</HeadingSuperXXS>
-
+										{!isWhitelistOpen &&
+											!isPublicOpen &&
+											!hasMintedBefore &&
+											haveBeenMinted < supplyLimit && <AccountInfoBox />}
+										{!hasMintedBefore && haveBeenMinted >= supplyLimit ? (
+											<MintBtnContainer>
+												<MintButton maxReached />
+												<BlurContainer className="no-radius-top">
 													<MintingStats
 														haveBeenMinted={haveBeenMinted}
 														supplyLimit={supplyLimit}
 													/>
 												</BlurContainer>
-											) : (
-												<>
-													{hasMintedBefore ? (
-														<MintButton alreadyMint />
+											</MintBtnContainer>
+										) : (
+											<>
+												<MintBtnContainer>
+													{!isWhitelisted &&
+													!isPublicOpen &&
+													isWhitelistOpen ? (
+														<NotWhitelistedBox
+															address={user && user.attributes.ethAddress}
+															supplyData={supplyData}
+														/>
 													) : (
 														<>
-															{((isWhitelistOpen && isWhitelisted) ||
-																(isPublicOpen && !isWhitelisted)) && (
-																<MintButton
-																	absoluteDisabled={trxAndMintingLoading}
-																	onClick={() => {
-																		handleMintButtonClicked();
-																	}}
-																/>
+															{hasMintedBefore ? (
+																<MintButton alreadyMint />
+															) : (
+																<>
+																	{((isWhitelistOpen && isWhitelisted) ||
+																		(isPublicOpen && !isWhitelisted)) && (
+																		<MintButton
+																			absoluteDisabled={trxAndMintingLoading}
+																			onClick={() => {
+																				handleMintButtonClicked();
+																			}}
+																		/>
+																	)}
+																</>
+															)}
+															{(isWhitelistOpen ||
+																isPublicOpen ||
+																hasMintedBefore) && (
+																<BlurredStats supplyData={supplyData} />
 															)}
 														</>
 													)}
-													{(isWhitelistOpen ||
-														isPublicOpen ||
-														hasMintedBefore) && (
-														<BlurContainer className="no-radius-top">
-															<MintingStats
-																haveBeenMinted={haveBeenMinted}
-																supplyLimit={supplyLimit}
-															/>
-														</BlurContainer>
-													)}
-												</>
-											)}
-										</MintBtnContainer>
+												</MintBtnContainer>
+											</>
+										)}
 									</>
 								)}
 							</>
+						) : (
+							<Thankyou />
 						)}
+
 						{!isInitializing && videoLoaded && <RealmHunterButton />}
 					</>
 				) : (
