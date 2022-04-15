@@ -301,7 +301,7 @@ const AccountPage = () => {
 										md={6}
 										style={{ maxWidth: "270px" }}
 										key={`genesis-${nbMon.nbmonId}`}
-										className="mb-4 me-4"
+										className="mb-4 "
 									>
 										{" "}
 										<Link href={`/genesis-nbmons/${nbMon.nbmonId}`}>
