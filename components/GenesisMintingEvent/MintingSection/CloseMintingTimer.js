@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Countdown from "react-countdown";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import CountDownContainer from "components/CountDownContainer";
-import delay from "utils/delay";
 
-const CloseMintingTimer = ({ date, rn, dummyDisplay }) => {
+const CloseMintingTimer = ({ date, rn, dummyDisplay, timeStampsStates }) => {
+	const { setTimeStamps, timeStamps } = timeStampsStates;
 	if (dummyDisplay)
 		return (
 			<div className="d-flex flex-column justify-content-center align-items-center">
@@ -53,8 +53,13 @@ const CloseMintingTimer = ({ date, rn, dummyDisplay }) => {
 		<Countdown
 			date={rn + (date - rn)}
 			renderer={renderer}
-			onComplete={async () => {
-				//closed...
+			onComplete={() => {
+				setTimeStamps({
+					...timeStamps,
+					isPublicOpen: false,
+					isWhitelistOpen: false,
+					isMintingEnded: true,
+				});
 			}}
 		/>
 	);

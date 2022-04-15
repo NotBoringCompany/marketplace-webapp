@@ -24,7 +24,12 @@ const Timers = ({ timeStampsStates }) => {
 				/>
 			)}
 
-			{!isPublicOpen && isWhitelistOpen && <CloseMintingTimer dummyDisplay />}
+			{!isPublicOpen && isWhitelistOpen && (
+				<CloseMintingTimer
+					dummyDisplay
+					timeStampsStates={{ timeStamps, setTimeStamps }}
+				/>
+			)}
 			<div className="separator"></div>
 
 			{!isPublicOpen ? (
@@ -34,7 +39,11 @@ const Timers = ({ timeStampsStates }) => {
 					timeStampsStates={{ timeStamps, setTimeStamps }}
 				/>
 			) : (
-				<CloseMintingTimer date={mintingCloseAt} rn={now} />
+				<CloseMintingTimer
+					date={mintingCloseAt}
+					rn={now}
+					timeStampsStates={{ timeStamps, setTimeStamps }}
+				/>
 			)}
 		</TimersContainer>
 	);

@@ -105,7 +105,7 @@ const MintingSection = () => {
 					now: parseInt(timeStamps.now * 1000),
 					isWhitelistOpen: timeStamps.isWhitelistOpen, // timeStamps.isWhitelistOpen
 					isPublicOpen: timeStamps.isPublicOpen, //timeStamps.isPublicOpen,
-					isMintingEnded: true,
+					isMintingEnded: timeStamps.isMintingEnded,
 				});
 				setUserStatus({
 					canMint: status.canMint,
