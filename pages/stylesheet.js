@@ -26,7 +26,7 @@ const StyledPillContainer = styled.div`
 
 const Stylesheet = () => {
 	return (
-		<div className="container my-4">
+		<div className="bg-white container my-4">
 			<h1>
 				<kbd>Dev</kbd> only page for stylesheet. Here you can find all of our{" "}
 				<u>reusable</u> custom components created specifically for this app.

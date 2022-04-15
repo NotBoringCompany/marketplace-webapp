@@ -14,7 +14,7 @@ export function replaceDummy(data) {
 				return (item[key] = keyValuePairDummy[key]);
 			} else if (key === "firstType" || key === "secondType") {
 				types.push(
-					value === "N/A" ? (key === "firstType" ? "nature" : "fire") : value
+					value === null ? (key === "firstType" ? "nature" : "fire") : value
 				);
 			}
 		});
@@ -31,7 +31,7 @@ export function replaceDummyForSingleNBMon(item) {
 			return (item[key] = keyValuePairDummy[key]);
 		} else if (key === "firstType" || key === "secondType") {
 			types.push(
-				value === "N/A" ? (key === "firstType" ? "nature" : "fire") : value
+				value === null ? (key === "firstType" ? "nature" : "fire") : value
 			);
 		}
 	});

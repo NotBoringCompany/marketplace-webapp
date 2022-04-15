@@ -154,7 +154,6 @@ const AccountPage = () => {
 		return parseInt(fetchedDataLength / show);
 	};
 
-	// `${process.env.NEXT_PUBLIC_REST_API_PREFIX_URL}/getOwnerNBMons?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&address=${user.attributes.ethAddress}
 	const { isFetching, error } = useQuery(
 		"allMyNBMons",
 		() =>

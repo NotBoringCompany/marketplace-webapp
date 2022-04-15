@@ -13,7 +13,7 @@ const WaitTransaction = () => {
 	return (
 		<div className="d-flex flex-column">
 			<TextPrimary className="text-center mb-5">
-				Transaction in Progress
+				Transaction In Progress
 			</TextPrimary>
 			<Image src={Egg} height={77} width={60} alt="Loading..." />
 			<Subtitle as="p" className="text-center mt-3">
