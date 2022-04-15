@@ -7,12 +7,16 @@ import Egg from "public/images/egg.svg";
 import EthLogo from "public/images/eth_logo.svg";
 import { TextSecondary } from "components/Typography/Texts";
 import GenesisTag from "./GenesisTag";
+import TopTag from "./TopTag";
 
 const Card = styled.div`
-	padding: 10px 16px;
+	padding: 8px;
+	padding-top: 0;
 	display: flex;
 	flex-direction: column;
 	border-radius: 16px;
+	width: 100%;
+	width: 240px;
 	border: 0.2px solid transparent;
 	transition: 0.35s all;
 	height: 300px;
@@ -23,40 +27,48 @@ const Card = styled.div`
 	background: linear-gradient(0deg, #2c2d2d, #2c2d2d),
 		linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)),
 		#000000;
-
+	border: ${(props) =>
+		props.hatchready ? `3px solid #7B61FF` : `3px solid transparent`};
 	& .genusName {
 		font-size: 18px;
 	}
 
 	@media ${mediaBreakpoint.down.xl} {
-		& .genusName {
-			font-size: 28px;
-		}
+		width: 240px;
 	}
 `;
 
 const IDContainer = styled.div`
 	background: red;
-	width: 28px;
-	height: 28px;
-	border-radius: 80%;
+	min-width: 28px;
+	min-height: 28px;
+	padding: 4px 16px;
+	border-radius: 50px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background: #242424;
+
+	p {
+		font-size: 12px;
+		font-weight: 500;
+	}
 `;
 
 const EggCard = ({ nbMon, ...props }) => {
 	const { className } = props;
+	const { isHatchable, nbmonId } = nbMon;
 	return (
 		<Card
+			hatchready={isHatchable ? 1 : 0}
 			className={`text-white align-items-center position-relative ${className}`}
 		>
-			<GenesisTag />
+			{isHatchable && <TopTag background={`#7B61FF`} text="Hatchable" />}
+			<GenesisTag background={isHatchable ? `#7B61FF` : null} />
 			<div className="d-flex w-100 justify-content-between">
-				<Image src={EthLogo} width={16} height={21} alt="ETH Logo" />
-				<IDContainer>
-					<TextSecondary className="text-gray">#1</TextSecondary>
+				<Image src={EthLogo} width={12} height={12} alt="ETH Logo" />
+				<IDContainer className="mt-2">
+					<TextSecondary className="text-gray">#{nbmonId}</TextSecondary>
 				</IDContainer>
 			</div>
 			<div className="d-flex flex-column mt-4">

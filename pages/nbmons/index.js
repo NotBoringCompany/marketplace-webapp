@@ -103,6 +103,13 @@ const ClearFilterButton = styled.button`
 	}
 `;
 
+const NBMonsContainer = styled.div`
+	& .nbmon-card {
+		margin-right: 16px;
+		margin-bottom: 16px;
+	}
+`;
+
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const clearFilter = useFilterStore((state) => state.clearFilter);
 	return (
@@ -287,19 +294,38 @@ const AccountPage = () => {
 					{!isFetching ? (
 						<>
 							{shownNBMons.map((nbMon) => (
-								<Col
-									key={`genesis-${nbMon.nbmonId}`}
-									className="mb-4"
-									xl={3}
-									lg={4}
-									md={6}
-									sm={12}
-								>
-									{" "}
-									<Link href={`/nbmons/${nbMon.nbmonId}`}>
-										<a>{nbMon.isEgg ? <EggCard /> : <p>asd</p>}</a>
-									</Link>
-								</Col>
+								<>
+									<Col
+										xl={3}
+										lg={6}
+										md={6}
+										style={{ maxWidth: "270px" }}
+										key={`genesis-${nbMon.nbmonId}`}
+										className="mb-4 me-4"
+									>
+										{" "}
+										<Link href={`/nbmons/${nbMon.nbmonId}`}>
+											<a>
+												{nbMon.isEgg ? <EggCard nbMon={nbMon} /> : <p>asd</p>}
+											</a>
+										</Link>
+									</Col>
+									<Col
+										xl={3}
+										lg={6}
+										md={6}
+										style={{ maxWidth: "270px" }}
+										key={`genesis-${nbMon.nbmonId}`}
+										className="mb-4 me-4"
+									>
+										{" "}
+										<Link href={`/nbmons/${nbMon.nbmonId}`}>
+											<a>
+												{nbMon.isEgg ? <EggCard nbMon={nbMon} /> : <p>asd</p>}
+											</a>
+										</Link>
+									</Col>
+								</>
 							))}
 						</>
 					) : (
