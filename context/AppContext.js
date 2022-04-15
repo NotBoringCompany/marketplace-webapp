@@ -41,13 +41,14 @@ export const AppProvider = ({ children }) => {
 			if (isAuthenticated && user) {
 				console.log("Connected as:", user && user.attributes.ethAddress);
 				console.log("Metamask picked:", accounts[0]);
-
-				if (user.attributes.ethAddress !== accounts[0]) {
+				if (
+					user.attributes.ethAddress.toLowerCase() !== accounts[0].toLowerCase()
+				) {
 					logout();
 				}
 			}
 		});
-	}, [isAuthenticated]);
+	}, [isAuthenticated, user]);
 
 	useEffect(() => {
 		setTimeout(() => {

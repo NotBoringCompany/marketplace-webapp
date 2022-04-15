@@ -10,8 +10,9 @@ import GenesisTag from "./GenesisTag";
 import TopTag from "./TopTag";
 
 const Card = styled.div`
-	padding: 8px;
+	padding: 8px 10px;
 	padding-top: 0;
+	padding-left: 12px;
 	display: flex;
 	flex-direction: column;
 	border-radius: 16px;
@@ -22,6 +23,11 @@ const Card = styled.div`
 	height: 300px;
 	p {
 		margin: 0;
+	}
+
+	&:hover {
+		cursor: pointer;
+		transform: translate(2px, -5px);
 	}
 
 	background: linear-gradient(0deg, #2c2d2d, #2c2d2d),
@@ -42,7 +48,7 @@ const IDContainer = styled.div`
 	background: red;
 	min-width: 28px;
 	min-height: 28px;
-	padding: 4px 16px;
+	padding: 2px 16px;
 	border-radius: 50px;
 	display: flex;
 	justify-content: center;
