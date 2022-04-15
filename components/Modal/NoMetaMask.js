@@ -21,7 +21,7 @@ const NoMetaMask = ({ stateUtils }) => {
 			className="d-flex flex-column align-items-center justify-content-center"
 		>
 			<div className="d-flex mb-3">
-				<Image src={Wallet} width={64} height={64} />
+				<Image src={Wallet} width={64} height={64} alt="Wallet" />
 			</div>
 
 			<CustomHeadingXXS className="text-center">

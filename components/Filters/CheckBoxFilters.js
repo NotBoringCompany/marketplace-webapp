@@ -39,6 +39,7 @@ const IndividualCheckBox = ({ item, kind }) => {
 			const isChecked = Object.keys(allSelectedKind).includes(item);
 			setChecked(isChecked);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleClicked = (e) => {

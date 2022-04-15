@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Form from "react-bootstrap/Form";
+import Image from "react-bootstrap/Image";
 import styled from "styled-components";
 import { TextSecondary } from "components/Typography/Texts";
 import { useFilterStore } from "stores/filterStore";
@@ -86,6 +87,7 @@ const CheckBoxImage = ({ kind, ...props }) => {
 			);
 			setChecked(isChecked);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleCheckboxClicked = (e) => {
@@ -105,7 +107,7 @@ const CheckBoxImage = ({ kind, ...props }) => {
 
 	return (
 		<Container onClick={handleClickContainer}>
-			<img
+			<Image
 				style={{ width: "100%", height: "100%" }}
 				src={
 					data[kind]

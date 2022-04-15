@@ -24,11 +24,13 @@ const FertilityFilter = () => {
 
 	useEffect(() => {
 		setRangeFilter({ prop: "fertility", min: values[0], max: values[1] });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [values]);
 
 	useEffect(() => {
 		setValues([fertilityRange.currentMin, fertilityRange.currentMax]);
 		setTextInputValues([fertilityRange.currentMin, fertilityRange.currentMax]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [clearingFilter]);
 
 	const onChange = ({ val, e }) => {

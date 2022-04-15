@@ -15,7 +15,7 @@ const NotFound = () => {
 		<Layout>
 			<Container>
 				<TextPrimary className="text-white">
-					Oops... We can't find this page. 😅
+					Oops... We cannot find this page. 😅
 				</TextPrimary>
 				<MyButton
 					isLink

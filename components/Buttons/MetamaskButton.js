@@ -24,17 +24,12 @@ const MetamaskButton = ({ big = false, className }) => {
 		console.log(authError);
 		if (hasAuthError) {
 			console.log("Error:", authError.message);
-
-			//TODO, refactor the below...
-
-			/*	alert(
-					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."
-				);*/
 		}
 
 		if (web3EnableError) {
 			console.log("Errorxxx:", web3EnableError);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasAuthError, web3EnableError]);
 
 	useEffect(() => {
@@ -46,6 +41,7 @@ const MetamaskButton = ({ big = false, className }) => {
 			auth();
 			setTriedAuth(false);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [chainId, triedAuth]);
 
 	const authCrypto = async () => {

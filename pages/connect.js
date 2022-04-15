@@ -38,9 +38,6 @@ const Connect = () => {
 	useEffect(() => {
 		if (hasAuthError) {
 			// console.log("Error:", authError.message);
-
-			//TODO, refactor the below...
-
 			if (authError.message === "Invalid username/password.") {
 				setAuthDetail({
 					...authDetail,
@@ -52,11 +49,8 @@ const Connect = () => {
 				});
 				return;
 			}
-
-			/*	alert(
-					"Sorry, an unexpected error occured. Please try again, preferably with a different browser."
-				);*/
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasAuthError]);
 
 	const handleInputChange = (e) => {

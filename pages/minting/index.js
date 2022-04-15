@@ -15,7 +15,7 @@ const randomIntFromInterval = (min, max) => {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-const index = () => {
+const Index = () => {
 	const { Moralis, user, isAuthenticated } = useMoralis();
 
 	console.log();
@@ -126,4 +126,4 @@ const index = () => {
 	);
 };
 
-export default index;
+export default Index;

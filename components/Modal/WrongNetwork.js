@@ -29,6 +29,7 @@ const WrongNetwork = ({ stateUtils }) => {
 	};
 	useEffect(() => {
 		if (chainId === process.env.NEXT_PUBLIC_CHAIN_ID) setter(false);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [chainId]);
 
 	return (

@@ -33,7 +33,7 @@ const Stylesheet = () => {
 			</h1>
 
 			<p>
-				What is a reusable component? In short, it's a component that we are
+				What is a reusable component? In short, it is a component that we are
 				using / potentially use multiple times in our design.
 			</p>
 			<hr className="my-5" />

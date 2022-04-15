@@ -187,10 +187,12 @@ const AccountPage = () => {
 				totalPage: totalPageCounter(filtered.length, show) - 1, // first page is page 0.,
 			});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedFilters, rangeFilters, isFetching, allNBMons]);
 
 	useEffect(() => {
 		setshownNBMons(allFilteredNBMons.slice(0, show)); // these r the nbmons that are shown in THAT page.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [allFilteredNBMons]);
 
 	useEffect(() => {
@@ -203,6 +205,7 @@ const AccountPage = () => {
 			);
 		}
 		// these r the nbmons that are shown in THAT page.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [current]);
 
 	const handleFilterButton = () => {

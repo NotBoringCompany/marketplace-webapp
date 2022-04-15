@@ -54,7 +54,15 @@ const MyButton = ({
 				>
 					{backIcon && <MdArrowBackIos />}
 					{icon && icon}
-					{img && <Image src={img} width={32} height={32} className="me-2" />}
+					{img && (
+						<Image
+							alt="img"
+							src={img}
+							width={32}
+							height={32}
+							className="me-2"
+						/>
+					)}
 					<StyledP big={big ? 1 : 0} className={textColor} thin={thinText}>
 						{text}
 					</StyledP>
@@ -72,7 +80,9 @@ const MyButton = ({
 			{...props}
 		>
 			{icon && icon}
-			{img && <Image src={img} width={32} height={32} className="me-2" />}
+			{img && (
+				<Image alt="img" src={img} width={32} height={32} className="me-2" />
+			)}
 			<StyledP big={big} className={textColor} thin={thinText}>
 				{text}
 			</StyledP>

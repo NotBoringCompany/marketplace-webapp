@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from "react";
-
 import { useState } from "react";
 import { useMoralis, useWeb3Transfer } from "react-moralis";
 import { useQuery, useMutation } from "react-query";
@@ -311,6 +310,7 @@ const MintingSection = () => {
 				content: "waitTransaction",
 			});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [trfEth.data, trfEth.error]);
 
 	useEffect(() => {
@@ -321,6 +321,7 @@ const MintingSection = () => {
 		) {
 			setUserStatus({ ...userStatus, canMint: true });
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isPublicOpen, isWhitelistOpen]);
 
 	const handleMintButtonClicked = async () => {

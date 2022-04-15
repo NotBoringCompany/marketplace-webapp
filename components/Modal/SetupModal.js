@@ -71,6 +71,7 @@ const SetupModal = ({ stateUtils }) => {
 				window && router.reload(window.location.pathname);
 			}
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isUserUpdating, userError, user]);
 
 	const link = async (e) => {

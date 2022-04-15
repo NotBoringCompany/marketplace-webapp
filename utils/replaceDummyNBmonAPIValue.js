@@ -10,12 +10,14 @@ export function replaceDummy(data) {
 		let types = [];
 		Object.keys(item).forEach((key) => {
 			const value = item[key];
-			if (value.length === 1 && mightBeDummy.has(key)) {
-				return (item[key] = keyValuePairDummy[key]);
-			} else if (key === "firstType" || key === "secondType") {
-				types.push(
-					value === null ? (key === "firstType" ? "nature" : "fire") : value
-				);
+			if (value) {
+				if (value.length === 1 && mightBeDummy.has(key)) {
+					return (item[key] = keyValuePairDummy[key]);
+				} else if (key === "firstType" || key === "secondType") {
+					types.push(
+						value === null ? (key === "firstType" ? "nature" : "fire") : value
+					);
+				}
 			}
 		});
 		return (item.types = types);
