@@ -244,7 +244,7 @@ const AccountPage = () => {
 	};
 
 	return (
-		<Layout title="Account Page | Realm Hunter" showSubnav>
+		<Layout title="Account Page | Realm Hunter">
 			<Filters
 				filterOpen={filterOpen}
 				opacityOne={opacityOne}

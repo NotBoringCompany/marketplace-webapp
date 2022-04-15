@@ -141,6 +141,7 @@ const MintingSection = () => {
 					now: parseInt(timeStamps.now * 1000),
 					isWhitelistOpen: timeStamps.isWhitelistOpen,
 					isPublicOpen: timeStamps.isPublicOpen,
+					isMintingEnded: timeStamps.isMintingEnded,
 				});
 			},
 			refetchOnWindowFocus: false,
