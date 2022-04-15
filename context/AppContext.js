@@ -37,17 +37,19 @@ export const AppProvider = ({ children }) => {
 	const statesSwitchModal = { getter: switchModal, setter: setSwitchModal };
 
 	useEffect(() => {
-		window.ethereum.on("accountsChanged", function (accounts) {
-			if (isAuthenticated && user) {
-				console.log("Connected as:", user && user.attributes.ethAddress);
-				console.log("Metamask picked:", accounts[0]);
-				if (
-					user.attributes.ethAddress.toLowerCase() !== accounts[0].toLowerCase()
-				) {
-					logout();
+		if (window.ethereum)
+			window.ethereum.on("accountsChanged", function (accounts) {
+				if (isAuthenticated && user) {
+					console.log("Connected as:", user && user.attributes.ethAddress);
+					console.log("Metamask picked:", accounts[0]);
+					if (
+						user.attributes.ethAddress.toLowerCase() !==
+						accounts[0].toLowerCase()
+					) {
+						logout();
+					}
 				}
-			}
-		});
+			});
 	}, [isAuthenticated, user]);
 
 	useEffect(() => {
