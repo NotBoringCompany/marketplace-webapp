@@ -14,7 +14,7 @@ import { mediaBreakpoint } from "utils/breakpoints";
 const BackBtnContainer = styled.div`
 	position: absolute;
 	right: calc(48% + 500px);
-	top: 120px;
+	top: 60px;
 	display: flex;
 	align-items: center;
 
