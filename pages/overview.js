@@ -1,13 +1,14 @@
-import Layout from 'components/Layout'
-import OverviewContainer from 'components/OverviewContainer'
-import React from 'react'
+import Layout from "components/Layout";
+import OverviewContainer from "components/OverviewContainer";
+import React from "react";
+import mustBeAuthed from "utils/mustBeAuthed";
 
 const OverviewPage = () => {
-    return (
-        <Layout> 
-            <OverviewContainer />
-        </Layout>
-    )
-}
+	return (
+		<Layout>
+			<OverviewContainer />
+		</Layout>
+	);
+};
 
-export default OverviewPage
+export default mustBeAuthed(OverviewPage);
