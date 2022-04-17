@@ -20,9 +20,12 @@ const BasicInfoContainer = styled.div`
 
 const StyledStatsText = styled(StatsText)`
 	color: rgba(225, 227, 224, 0.23);
+	& .me {
+		font-size: 12px;
+	}
 `;
 
-const BasicInfo = ({ nbMon }) => {
+const BasicInfo = ({ nbMon, mine = false }) => {
 	const birthDate = () => {
 		const properDate = parseInt(nbMon.hatchedAt) * 1000;
 		const day = new Date(properDate).getDate();
@@ -45,6 +48,7 @@ const BasicInfo = ({ nbMon }) => {
 						<div className="d-flex">
 							<StyledStatsText as="p">
 								{nbMon.owner.split("").splice(0, 16).join("")}...
+								<span className="me">{mine && "(me)"}</span>
 							</StyledStatsText>
 							<ButtonCopy
 								onClick={() => navigator.clipboard.writeText(nbMon.owner)}

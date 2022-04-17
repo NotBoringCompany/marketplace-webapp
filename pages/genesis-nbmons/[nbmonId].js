@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
+import { useMoralis } from "react-moralis";
 import styled from "styled-components";
 
 import Layout from "components/Layout";
@@ -45,6 +46,7 @@ const IndividualNBMon = () => {
 	const { query, isReady } = useRouter();
 	const router = useRouter();
 	const [nbMon, setNbmon] = useState(null);
+	const { isAuthenticated, user } = useMoralis();
 	const { nbmonId } = query;
 
 	const { isFetching, isError, error } = useQuery(
@@ -82,16 +84,21 @@ const IndividualNBMon = () => {
 	return (
 		<Layout title={`Genesis NBMon #${nbmonId} | Realm Hunter`}>
 			<div className="position-relative">
-				<BackBtnContainer onClick={handleBackBtnClick}>
-					<NewButton
-						icon={<FiArrowLeft className="me-2" />}
-						isLink
-						href="/nbmons"
-						text="Inventory"
-					/>
-				</BackBtnContainer>
+				{isAuthenticated && (
+					<BackBtnContainer onClick={handleBackBtnClick}>
+						<NewButton
+							icon={<FiArrowLeft className="me-2" />}
+							isLink
+							href="/nbmons"
+							text="Inventory"
+						/>
+					</BackBtnContainer>
+				)}
 
-				<NBMonLargeCard nbMon={nbMon} />
+				<NBMonLargeCard
+					nbMon={nbMon}
+					userAddress={user ? user.attributes.ethAddress : null}
+				/>
 			</div>
 		</Layout>
 	);

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { HeadingSuperXXS } from "components/Typography/Headings";
 import { mediaBreakpoint } from "utils/breakpoints";
 import { TextSecondary } from "components/Typography/Texts";
 export const StatsContainer = styled.div`
@@ -26,6 +25,7 @@ export const StatsContainer = styled.div`
 `;
 export const StatsText = styled(TextSecondary)`
 	font-size: 18px;
+
 	@media ${mediaBreakpoint.down.md} {
 		font-size: 14px;
 	}

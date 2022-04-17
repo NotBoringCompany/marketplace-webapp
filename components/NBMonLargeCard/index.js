@@ -2,21 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 import { data } from "configs";
-import { HeadingXXS } from "components/Typography/Headings";
 import { TextSecondary } from "components/Typography/Texts";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import BasicInfo from "./BasicInfo";
 import Stats from "./Stats";
 import { mediaBreakpoint } from "utils/breakpoints";
+import HatchButtonContainer from "./HatchButtoNContainer";
+
 const CardContainer = styled.div`
 	padding: 16px;
+	padding-bottom: 0px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	width: 400px;
 	max-width: 80%;
 	border-radius: 20px;
+	${(props) =>
+		props.hatchable ? `border: 3px solid #7b61ff` : `border: auto`};
 	margin-top: 160px;
 	& .afterImage {
 		position: relative;
@@ -67,7 +71,8 @@ const TabsContainer = styled.div`
 	align-items: center;
 	border-radius: 8px;
 	margin-top: -56px;
-
+	position: relative;
+	top: -20px;
 	& .tab-content {
 		margin-top: 24px;
 		width: 100%;
@@ -131,12 +136,18 @@ const StyledTabs = styled(Tabs)`
 	}
 `;
 
-const NBMonLargeCard = ({ nbMon }) => {
-	console.log("NBM", nbMon.isEgg);
-	const { isEgg } = nbMon;
+const NBMonLargeCard = ({ nbMon, userAddress }) => {
+	const { isEgg, isHatchable } = nbMon;
+	const mine = userAddress
+		? nbMon.owner.toLowerCase() === userAddress.toLowerCase()
+		: false;
+	const hatchesAt = isEgg
+		? parseInt(nbMon.bornAt + nbMon.hatchingDuration) * 1000
+		: 0;
+
 	return (
 		<div className="py-4 d-flex w-100 align-items-center justify-content-center">
-			<CardContainer>
+			<CardContainer hatchable={mine && isEgg && isHatchable ? 1 : 0}>
 				{isEgg ? (
 					<NBMonImage
 						src={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/egg.svg`}
@@ -148,11 +159,11 @@ const NBMonLargeCard = ({ nbMon }) => {
 					<NBMonImage src={data.genera[nbMon.genera].imageurl} alt="NBMon" />
 				)}
 				{isEgg ? (
-					<div className="afterImage text-center w-100">
-						<HeadingXXS as="h1" className="text-white text-capitalize">
-							Genesis NBMon Egg
-						</HeadingXXS>
-					</div>
+					<HatchButtonContainer
+						mine={mine}
+						hatchesAt={hatchesAt}
+						isHatchable={isHatchable}
+					/>
 				) : (
 					<div className="afterImage text-center w-100">
 						<HeadingMD as="h1" className="text-white text-capitalize">
@@ -164,29 +175,18 @@ const NBMonLargeCard = ({ nbMon }) => {
 					</div>
 				)}
 
-				{isEgg ? (
-					<TabsContainer>
-						<StyledTabs defaultActiveKey="info">
-							<Tab eventKey="info" title="Info">
-								<BasicInfo nbMon={nbMon} />
-							</Tab>
-						</StyledTabs>
-					</TabsContainer>
-				) : (
-					<TabsContainer>
-						<StyledTabs defaultActiveKey="basic_info">
-							<Tab eventKey="basic_info" title="Basic Info">
-								<BasicInfo nbMon={nbMon} />
-							</Tab>
+				<TabsContainer>
+					<StyledTabs defaultActiveKey="info">
+						<Tab eventKey="info" title="Info">
+							<BasicInfo nbMon={nbMon} mine={mine} />
+						</Tab>
+						{!isEgg && (
 							<Tab eventKey="stats" title="Stats">
 								<Stats nbMon={nbMon} />
 							</Tab>
-							{/* <Tab eventKey="game_stats" title="Game Stats">
-							<GameStats nbMon={nbMon} />
-						</Tab> */}
-						</StyledTabs>
-					</TabsContainer>
-				)}
+						)}
+					</StyledTabs>
+				</TabsContainer>
 			</CardContainer>
 		</div>
 	);
