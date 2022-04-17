@@ -1,24 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 import TitleWithLink from 'components/Typography/TitleWithLink'
-import { mediaBreakpoint } from 'utils/breakpoints'
 import Link from 'next/link'
 
 const OverviewActivies = () => {
   return (
-    <div
-        style={{
-            padding: '0 15px',
-            marginTop: '8px'
-        }}
-    >
+    <div className='py-0 px-3 mt-2'>
         <TitleWithLink
             title='Activities'
             textLink='View in Block Explorer'
             href='/activities'
-            style={{
-                marginBottom: '16px'
-            }}
+            classesWrap='mb-3'
         />
 
         <BlockActivites>

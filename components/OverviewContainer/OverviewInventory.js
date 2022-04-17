@@ -2,18 +2,17 @@ import React from 'react'
 import TitleWithLink from 'components/Typography/TitleWithLink'
 import styled from 'styled-components'
 import { mediaBreakpoint } from 'utils/breakpoints'
+import Image from 'next/image'
 
 const OverviewInventory = () => {
   return (
-    <div style={{ marginTop: '24px' }}>
-        <div style={{ padding: '0 15px' }}>
+    <div className='mt-4'>
+        <div className='py-0 px-3'>
             <TitleWithLink
                 title='Inventory'
                 textLink='Open inventory'
                 href='/inventory'
-                style={{
-                    marginBottom: '8px'
-                }}
+                classesWrap='mb-2'
             />
         </div>
 
@@ -54,11 +53,11 @@ const OverviewInventory = () => {
 const CardInventoryActive = ({ iconSrc, text }) => {
     return(
         <CardActiveWrap>
-            <img
+            <Image
                 src={iconSrc}
-                style={{
-                    marginTop: '4px'
-                }}
+                className='mt-1'
+                width={40}
+                height={40}
             />
 
             <TextActive>{text}</TextActive>
@@ -69,17 +68,17 @@ const CardInventoryActive = ({ iconSrc, text }) => {
 const CardInventorySoon = () => {
     return(
         <CardSoonWrap>
-            <img
-                style={{
-                    marginTop: '3px'
-                }}
+            <Image
                 src='/images/question_mark.svg'
+                className='mt-1'
+                height={40}
+                width={40}
             />
 
             <TextSoon>Artifacts</TextSoon>
 
             <BlockComingSoon>
-                <span style={{ textAlign: 'center', display: 'block', width: '100%' }}>coming soon</span>
+                <span className='text-center d-block w-100'>coming soon</span>
             </BlockComingSoon>
         </CardSoonWrap>
     )

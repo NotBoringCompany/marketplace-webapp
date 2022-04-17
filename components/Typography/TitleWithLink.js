@@ -7,12 +7,12 @@ import styled from 'styled-components'
  * @param string title
  * @param string textLink - optional (will hide when prop empty)
  * @param string href - url of text link
- * @param object style - optional (style for wrapper)
+ * @param string classesWrap - class name for wrapper
  * @returns JSX.Element
  */
-const TitleWithLink = ({ title, textLink, href = '#', style }) => {
+const TitleWithLink = ({ title, textLink, href = '#', classesWrap }) => {
   return (
-    <div style={style}>
+    <div className={classesWrap}>
         <Inner>
             <Title>{title}</Title>
 

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import TitleWithLink from 'components/Typography/TitleWithLink'
 import { mediaBreakpoint } from 'utils/breakpoints'
+import Image from 'next/image'
 
 /**
  * Props:
@@ -24,23 +25,19 @@ const OverviewWallet = ({
     totalEthUsd2
 }) => {
   return (
-    <div
-        style={{
-            padding: '0 15px'
-        }}
-    >
+    <div className='py-0 px-3'>
         <TitleWithLink
             title='Wallet'
-            style={{
-                marginBottom: '8px'
-            }}
+            classesWrap='mb-2'
         />
 
         <CardOverview>
             <AddressWrap>
                 <ImageWrap>
-                    <img
+                    <Image
                         src='/images/overview-eth-address.svg'
+                        width={28.04}
+                        height={44}
                     />
                 </ImageWrap>
 
@@ -50,18 +47,15 @@ const OverviewWallet = ({
                     <CopyAddress>
                         <AddressText>{addressEth}</AddressText>
 
-                        <button
-                            style={{
-                                backgroundColor: 'transparent',
-                                padding: 0,
-                                border: 'none'
-                            }}
+                        <ButtonCopy
                             onClick={() => navigator.clipboard.writeText(addressEth)}
                         >
-                            <img
+                            <Image
                                 src='/images/copy_all.svg'
+                                height={24}
+                                width={24}
                             />
-                        </button>
+                        </ButtonCopy>
                     </CopyAddress>
                 </AddressContent>
             </AddressWrap>
@@ -70,8 +64,10 @@ const OverviewWallet = ({
                 {/* item */}
                 <CryptoItem>
                     <CryptoIcon>
-                        <img
+                        <Image
                             src='/images/Bitcoin.svg'
+                            width={28}
+                            height={28}
                         />
                     </CryptoIcon>
 
@@ -84,8 +80,10 @@ const OverviewWallet = ({
                 {/* item */}
                 <CryptoItem>
                     <CryptoIcon>
-                        <img
+                        <Image
                             src='/images/Ethereum.svg'
+                            width={30}
+                            height={30}
                         />
                     </CryptoIcon>
 
@@ -98,13 +96,15 @@ const OverviewWallet = ({
                 {/* item */}
                 <CryptoItem>
                     <CryptoIcon>
-                        <img
+                        <Image
                             src='/images/Ethereum.svg'
+                            width={30}
+                            height={30}
                         />
                     </CryptoIcon>
 
                     <CryptoDetail>
-                    <TextTotalCrypto>{totalEth2}</TextTotalCrypto>
+                        <TextTotalCrypto>{totalEth2}</TextTotalCrypto>
                         <TextUsd>{totalEthUsd2}</TextUsd>
                     </CryptoDetail>
                 </CryptoItem>
@@ -177,6 +177,7 @@ const AddressText = styled.span`
     width: 100%;
     overflow-x: hidden;
     margin-right: 11.5px;
+    display: block;
 `
 
 const ListCrypto = styled.ul`
@@ -193,6 +194,7 @@ const CryptoItem = styled.div`
     flex-flow: row nowrap;
     align-items: center;
     margin-right: 5px;
+    align-items: center;
 `
 
 const CryptoIcon = styled.div`
@@ -228,6 +230,15 @@ const TextUsd = styled.span`
     text-align: right;
     color: #AFAFAF;
     display: block;
+`
+
+const ButtonCopy = styled.button`
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    width: 24px;
+    height: 24px;
+    border: none;
 `
 
 export default OverviewWallet
