@@ -1,62 +1,59 @@
-import Link from 'next/link'
-import React from 'react'
-import styled from 'styled-components'
+import Link from "next/link";
+import React from "react";
+import styled from "styled-components";
+import { HeadingSuperXXS } from "./Headings";
+import { TextSecondary } from "./Texts";
 
 /**
  * Props:
  * @param string title
  * @param string textLink - optional (will hide when prop empty)
  * @param string href - url of text link
- * @param string classesWrap - class name for wrapper
  * @returns JSX.Element
  */
-const TitleWithLink = ({ title, textLink, href = '#', classesWrap }) => {
-  return (
-    <div className={classesWrap}>
-        <Inner>
-            <Title>{title}</Title>
+const TitleWithLink = ({ title, textLink, href = "#" }) => {
+	return (
+		<Inner>
+			<Title as="h2">{title}</Title>
 
-            {textLink && (<LinkWrap>
-                <Link href={href}>
-                    <TextLink>{textLink}</TextLink>
-                </Link>
-            </LinkWrap>)}
-        </Inner>
-    </div>
-  )
-}
+			{textLink && (
+				<LinkWrap className="ms-2">
+					<Link href={href}>
+						<TextLink>{textLink}</TextLink>
+					</Link>
+				</LinkWrap>
+			)}
+		</Inner>
+	);
+};
 
 const Inner = styled.div`
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: flex-end;
-`
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: flex-end;
+`;
 
- const Title = styled.h2`
-    flex: 0 1 auto;
-    font-family: 'Mada';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 28px;
-    color: #E1E3E0;
-    margin: 0;
- `
+const Title = styled(HeadingSuperXXS)`
+	flex: 0 1 auto;
+	font-family: "Mada";
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 24px;
+	color: #e1e3e0;
+`;
 
- const LinkWrap = styled.div`
-    flex: 0 1 auto;
-    padding-left: 4px;
- `
+const LinkWrap = styled.div`
+	flex: 0 1 auto;
+`;
 
- const TextLink = styled.a`
-    font-family: 'Mada';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 16px;
-    letter-spacing: 0.5px;
-    color: #67DBB1 !important;
-    cursor: pointer;
- `
+const TextLink = styled(TextSecondary)`
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	letter-spacing: 0.5px;
+	color: #67dbb1;
+	cursor: pointer;
+`;
 
-export default TitleWithLink
+export default TitleWithLink;

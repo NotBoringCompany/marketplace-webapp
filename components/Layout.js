@@ -1,4 +1,5 @@
 import React from "react";
+import { useMoralis } from "react-moralis";
 import Head from "next/head";
 import Footer from "./Footer";
 import Navbar from "./Navbar/Navbar";
@@ -6,6 +7,7 @@ import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 
 import { mediaBreakpoint } from "utils/breakpoints";
+import Loading from "./Loading";
 
 const NBMonsImage = styled(Image)`
 	position: absolute;
@@ -27,6 +29,7 @@ const Layout = ({
 	showSubnav = false,
 	children,
 }) => {
+	const { isInitializing } = useMoralis();
 	return (
 		<>
 			<Head>
@@ -45,7 +48,7 @@ const Layout = ({
 					/>
 				)}
 				<div className="bg-primary" style={{ minHeight: "100vh" }}>
-					{children}
+					{isInitializing ? <Loading /> : children}
 				</div>
 			</div>
 

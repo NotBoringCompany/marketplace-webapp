@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useChain } from "react-moralis";
+import { useChain, useMoralis } from "react-moralis";
 import Image from "next/image";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
@@ -34,9 +34,16 @@ const MintButton = ({
 	onClick = () => {},
 }) => {
 	const { chainId } = useChain();
+	const { isWeb3Enabled } = useMoralis();
 	const [hide, setHide] = useState(false);
 	useEffect(() => {
-		if (chainId && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) {
+		if (
+			(chainId && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) ||
+			!chainId ||
+			chainId === null ||
+			chainId === undefined ||
+			!isWeb3Enabled
+		) {
 			setHide(true);
 		} else {
 			setHide(false);
