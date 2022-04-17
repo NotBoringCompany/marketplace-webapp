@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 import { data } from "configs";
-import { HeadingMD } from "components/Typography/Headings";
+import { HeadingXXS } from "components/Typography/Headings";
 import { TextSecondary } from "components/Typography/Texts";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -14,16 +14,30 @@ const CardContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 560px;
+	width: 400px;
 	max-width: 80%;
-	border: 2px solid rgba(176, 176, 176, 0.35);
-	border-radius: 8px;
-	margin-top: 90px;
+	border-radius: 20px;
+	margin-top: 160px;
 	& .afterImage {
 		position: relative;
-		top: -89px;
+		top: -102px;
 	}
 	margin-bottom: 24px;
+	background: linear-gradient(
+			0deg,
+			rgba(255, 255, 255, 0.14),
+			rgba(255, 255, 255, 0.14)
+		),
+		linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)),
+		#000000;
+
+	@media ${mediaBreakpoint.down.lg} {
+		padding: 32px;
+	}
+
+	@media ${mediaBreakpoint.down.md} {
+		padding: 16px;
+	}
 `;
 
 const NBMonImage = styled(Image)`
@@ -31,7 +45,6 @@ const NBMonImage = styled(Image)`
 	height: 240px;
 	position: relative;
 	top: -121px;
-	margin-right: 8px;
 
 	@media ${mediaBreakpoint.down.xl} {
 		width: 190px;
@@ -48,20 +61,22 @@ const Description = styled(TextSecondary)`
 const TabsContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	background: #585858;
+	background: transparent;
 	width: 100%;
-	padding: 16px 34px;
+	padding: 16px 0;
 	align-items: center;
 	border-radius: 8px;
 	margin-top: -56px;
 
 	& .tab-content {
-		margin-top: 16px;
+		margin-top: 24px;
 		width: 100%;
 	}
 
 	@media ${mediaBreakpoint.down.md} {
 		padding: 16px;
+		position: relative;
+		top: -16px;
 	}
 `;
 
@@ -87,15 +102,15 @@ const StyledTabs = styled(Tabs)`
 
 	& .nav-link {
 		background: #363636;
-		min-width: 120px;
-		border-radius: 10px;
+		padding: 8px 40px;
+		border-radius: 100px;
 		border: none;
 		color: #fff;
 	}
 
 	& .nav-link.active {
 		border: none;
-		color: #fff;
+		color: #003827;
 		background: #42ca9f;
 	}
 
@@ -117,32 +132,61 @@ const StyledTabs = styled(Tabs)`
 `;
 
 const NBMonLargeCard = ({ nbMon }) => {
-	console.log("NBM", nbMon);
+	console.log("NBM", nbMon.isEgg);
+	const { isEgg } = nbMon;
 	return (
 		<div className="py-4 d-flex w-100 align-items-center justify-content-center">
-			<CardContainer className="bg-primaryComplement">
-				<NBMonImage src={data.genera[nbMon.genera].imageurl} alt="NBMon" />
-				<div className="afterImage text-center w-100">
-					<HeadingMD as="h1" className="text-white text-capitalize">
-						{nbMon.genera}
-					</HeadingMD>
-					<Description className="mt-2 text-white mx-auto">
-						{data.genera[nbMon.genera].description}
-					</Description>
-				</div>
-				<TabsContainer>
-					<StyledTabs defaultActiveKey="basic_info">
-						<Tab eventKey="basic_info" title="Basic Info">
-							<BasicInfo nbMon={nbMon} />
-						</Tab>
-						<Tab eventKey="stats" title="Stats">
-							<Stats nbMon={nbMon} />
-						</Tab>
-						{/* <Tab eventKey="game_stats" title="Game Stats">
+			<CardContainer>
+				{isEgg ? (
+					<NBMonImage
+						src={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/egg.svg`}
+						alt="NBMon"
+						width={224}
+						height={200}
+					/>
+				) : (
+					<NBMonImage src={data.genera[nbMon.genera].imageurl} alt="NBMon" />
+				)}
+				{isEgg ? (
+					<div className="afterImage text-center w-100">
+						<HeadingXXS as="h1" className="text-white text-capitalize">
+							Genesis NBMon Egg
+						</HeadingXXS>
+					</div>
+				) : (
+					<div className="afterImage text-center w-100">
+						<HeadingMD as="h1" className="text-white text-capitalize">
+							{nbMon.genera}
+						</HeadingMD>
+						<Description className="mt-2 text-white mx-auto">
+							{data.genera[nbMon.genera].description}
+						</Description>
+					</div>
+				)}
+
+				{isEgg ? (
+					<TabsContainer>
+						<StyledTabs defaultActiveKey="info">
+							<Tab eventKey="info" title="Info">
+								<BasicInfo nbMon={nbMon} />
+							</Tab>
+						</StyledTabs>
+					</TabsContainer>
+				) : (
+					<TabsContainer>
+						<StyledTabs defaultActiveKey="basic_info">
+							<Tab eventKey="basic_info" title="Basic Info">
+								<BasicInfo nbMon={nbMon} />
+							</Tab>
+							<Tab eventKey="stats" title="Stats">
+								<Stats nbMon={nbMon} />
+							</Tab>
+							{/* <Tab eventKey="game_stats" title="Game Stats">
 							<GameStats nbMon={nbMon} />
 						</Tab> */}
-					</StyledTabs>
-				</TabsContainer>
+						</StyledTabs>
+					</TabsContainer>
+				)}
 			</CardContainer>
 		</div>
 	);

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import TitleWithLink from 'components/Typography/TitleWithLink'
 import { mediaBreakpoint } from 'utils/breakpoints'
 import Image from 'next/image'
-
+import { ButtonCopy } from 'components/Buttons/ButtonCopy'
 /**
  * Props:
  * @param string addressEth
@@ -232,13 +232,6 @@ const TextUsd = styled.span`
     display: block;
 `
 
-const ButtonCopy = styled.button`
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    width: 24px;
-    height: 24px;
-    border: none;
-`
+
 
 export default OverviewWallet

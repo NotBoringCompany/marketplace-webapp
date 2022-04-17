@@ -8,6 +8,7 @@ import Loading from "components/Loading";
 import NotFound from "pages/404";
 import NewButton from "components/Buttons/NewButton";
 import { FiArrowLeft } from "react-icons/fi";
+import NBMonLargeCard from "components/NBMonLargeCard";
 
 import { mediaBreakpoint } from "utils/breakpoints";
 
@@ -55,6 +56,7 @@ const IndividualNBMon = () => {
 				}/genesisNBMon/getGenesisNBMon/${parseInt(nbmonId)}`
 			).then(async (res) => {
 				let fetchedData = await res.json();
+				setNbmon(fetchedData);
 
 				// fetchedData = replaceDummyForSingleNBMon(fetchedData.result);
 				// setNbmon(fetchedData);
@@ -88,6 +90,8 @@ const IndividualNBMon = () => {
 						text="Inventory"
 					/>
 				</BackBtnContainer>
+
+				<NBMonLargeCard nbMon={nbMon} />
 			</div>
 		</Layout>
 	);
