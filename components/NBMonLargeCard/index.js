@@ -8,7 +8,7 @@ import Tabs from "react-bootstrap/Tabs";
 import BasicInfo from "./BasicInfo";
 import Stats from "./Stats";
 import { mediaBreakpoint } from "utils/breakpoints";
-import HatchButtonContainer from "./HatchButtoNContainer";
+import HatchButtonContainer from "./HatchButtonContainer";
 
 const CardContainer = styled.div`
 	padding: 16px;
