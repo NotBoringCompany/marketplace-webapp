@@ -11,7 +11,7 @@ const OverviewInventory = () => {
             <TitleWithLink
                 title='Inventory'
                 textLink='Open inventory'
-                href='/inventory'
+                href='/nbmons'
                 classesWrap='mb-2'
             />
         </div>
