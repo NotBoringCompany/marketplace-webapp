@@ -28,7 +28,7 @@ const Layout = ({
 	children,
 }) => {
 	return (
-		<div>
+		<>
 			<Head>
 				<title>{title}</title>
 				<meta name="description" content={description} />
@@ -50,7 +50,7 @@ const Layout = ({
 			</div>
 
 			<Footer />
-		</div>
+		</>
 	);
 };
 
