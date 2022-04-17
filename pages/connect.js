@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
 import Layout from "components/Layout";
-import { HeadingSM } from "components/Typography/Headings";
-import { TextPrimary } from "components/Typography/Texts";
 import MetamaskButton from "components/Buttons/MetamaskButton";
 import SignInBox from "components/SignIn/SignInBox";
 
@@ -16,6 +14,7 @@ import styled from "styled-components";
 import mustBeUnauthed from "utils/mustBeUnauthed";
 import { validEmail } from "utils/validEmail";
 import { whitespace } from "utils/whitespace";
+import Image from "next/image";
 
 const StyledContainer = styled(Container)`
 	padding-top: 32px;
@@ -85,7 +84,7 @@ const Connect = () => {
 	if (isAuthenticated) return <p>Authenticated</p>;
 
 	return (
-		<Layout showMonsters title="Connect | Realm Hunter">
+		<Layout title="Connect | Realm Hunter">
 			<StyledContainer className="bg-primary d-flex flex-column justify-content-center position-relative">
 				<Row>
 					{/* <Col
@@ -107,16 +106,24 @@ const Connect = () => {
 						className="mt-5 mt-lg-0 d-flex flex-column align-items-center"
 						xl={12}
 					>
-						<HeadingSM as="h1" className="text-center text-lg-start text-white">
+						<Image
+							src='/images/logo.png'
+							width={77.12}
+							height={69.29}
+						/>
+
+						<TitleConnect className="text-center text-lg-start text-white">
 							Connect
-						</HeadingSM>
-						<TextPrimary className="text-center text-lg-start mt-3 mb-4 text-white">
-							Join our Marketplace by connecting your wallet.
-						</TextPrimary>
+						</TitleConnect>
+
+						<DescriptionConnect>Join our Marketplace by connecting your wallet.</DescriptionConnect>
+
 						<MetamaskButton big />
-						<TextPrimary className="my-4 text-center text-lg-start text-white">
+
+						<TextOr>
 							or
-						</TextPrimary>
+						</TextOr>
+
 						<SignInBox
 							isAuthenticating={isAuthenticating}
 							auth={authNonCrypto}
@@ -129,5 +136,41 @@ const Connect = () => {
 		</Layout>
 	);
 };
+
+const TitleConnect = styled.h1`
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 32px;
+	line-height: 40px;
+	color: #E1E3E0;
+	margin-top: 34px;
+	margin-bottom: 0;
+`
+
+const DescriptionConnect = styled.p`
+	margin: 0;
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 24px;
+	letter-spacing: 0.5px;
+	color: #E1E3E0;
+	margin-bottom: 35px;
+	text-align: center;
+`
+
+const TextOr = styled.span`
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 22px;
+	line-height: 28px;
+	display: block;
+	text-align: center;
+	color: #FFFFFF;
+	margin: 32px 0;
+`
 
 export default mustBeUnauthed(Connect);

@@ -1,15 +1,13 @@
 import styled from "styled-components";
 import LinkCustom from "components/Link/Link";
 import TextInput from "components/FormInputs/TextInput";
-import MyButton from "components/Buttons/Button";
 import Form from "react-bootstrap/Form";
 import { TextSecondary } from "components/Typography/Texts";
+import Link from "next/link";
 
 const Box = styled.div`
-	border: 2px solid rgba(176, 176, 176, 0.35);
-	box-shadow: 0px 4px 4px rgba(66, 202, 159, 0.2);
-	max-width: 560px;
-	border-radius: 8px;
+	max-width: 361px;
+	width: 100%;
 `;
 
 const SignInBox = ({
@@ -24,7 +22,7 @@ const SignInBox = ({
 
 	return (
 		<Box
-			className={`p-3 p-md-4 p-lg-4 bg-primaryComplement ${className}`}
+			className={className}
 			{...props}
 		>
 			<Form onSubmit={auth}>
@@ -38,7 +36,9 @@ const SignInBox = ({
 					onChange={onTextInputChange}
 					errorDesc={errors.email}
 				/>
+
 				<div className="mb-3" />
+
 				<TextInput
 					name="password"
 					value={password}
@@ -48,18 +48,20 @@ const SignInBox = ({
 					onChange={onTextInputChange}
 					errorDesc={errors.password}
 				/>
+
 				<LinkCustom
 					href="/"
-					className="mt-3 mb-1 text-secondary"
-					text="Forgotten your password?"
+					className="mt-2 mb-1 text-secondary mb-4 text-12px"
+					text="forgot your password?"
 				/>
-				<MyButton
+
+				<LoginButton
 					type="submit"
-					// onClick={auth}
-					text={!isAuthenticating ? "Sign In" : "Signing In..."}
 					disabled={isAuthenticating}
-					className="w-100 mt-3 mb-3 text-secondary"
-				/>
+				>
+					{!isAuthenticating ? "Log-in" : "Signing In..."}
+				</LoginButton>
+
 				{errors.authFailedMessage && (
 					<TextSecondary className="mt-2 text-danger">
 						{errors.authFailedMessage}
@@ -67,13 +69,22 @@ const SignInBox = ({
 				)}
 			</Form>
 
-			<TextSecondary className="mt-4 text-white">
-				You must previously have connected your wallet, as well as your email
-				address to our marketplace to be able to sign in using email & password.
-			</TextSecondary>
-			<LinkCustom href="/faq" className="mt-3 text-gray" text="FAQ" />
+			<Link href="#">
+				<a className="link-terms-condition mt-1">Terms and Conditions</a>
+			</Link>
 		</Box>
 	);
 };
+
+const LoginButton = styled.button`
+	background: rgba(227, 227, 227, 0.12);
+	border-radius: 100px;
+	padding: 10px 24px;
+	border: none;
+	display: block;
+	letter-spacing: 0.1px;
+	color: rgba(230, 225, 229, 0.38);
+	width: 100%;
+`
 
 export default SignInBox;

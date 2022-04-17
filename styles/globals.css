@@ -152,3 +152,17 @@ input[type="number"] {
 ::-webkit-scrollbar-thumb:hover {
 	background: #5eae95;
 }
+
+.text-12px {
+	font-size: 12px !important;
+}
+
+.link-terms-condition {
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 16px;
+	letter-spacing: 0.4px;
+	color: #A9ACA8 !important;
+}

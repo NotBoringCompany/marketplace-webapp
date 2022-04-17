@@ -2,16 +2,21 @@ import React from "react";
 import FormControl from "react-bootstrap/FormControl";
 import styled from "styled-components";
 import { TextSecondary } from "components/Typography/Texts";
+
 const StyledFormControl = styled(FormControl)`
-	border-radius: 8px;
-	padding: 10px 16px;
+	border: 1px solid #938F99;
+	border-radius: 4px;
 	background: ${(props) => (props.variant === "light" ? `#fff` : `#181818`)};
-	border: 2px solid rgba(176, 176, 176, 0.35);
 	color: ${(props) => (props.variant === "light" ? `#181818` : `#fff`)};
+	padding: 15px 16px;
 
 	&:focus {
 		background: ${(props) => (props.variant === "light" ? `#fff` : `black`)};
 		color: ${(props) => (props.variant === "light" ? `#212121` : `#fff`)};
+	}
+
+	&::placeholder {
+		color: #CAC4D0;
 	}
 `;
 

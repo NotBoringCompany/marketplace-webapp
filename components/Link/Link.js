@@ -3,10 +3,10 @@ import Link from "next/link";
 import { TextSecondary } from "components/Typography/Texts";
 const LinkCustom = ({ href = "#", text, className, ...props }) => {
 	return (
-		<Link href={href}>
+		<Link href={href} className="text-decoration-none">
 			<a>
 				<TextSecondary className={`d-inline-block ${className}`} {...props}>
-					<u>{text}</u>
+					{text}
 				</TextSecondary>
 			</a>
 		</Link>

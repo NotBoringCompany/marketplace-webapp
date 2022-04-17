@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import { useMoralis, useChain } from "react-moralis";
 import AppContext from "context/AppContext";
 
-import MyButton from "./Button";
+import styled from "styled-components";
 
 const MetamaskButton = ({ big = false, className }) => {
 	const [triedAuth, setTriedAuth] = useState(false);
@@ -64,16 +64,33 @@ const MetamaskButton = ({ big = false, className }) => {
 		await authenticate({ provider: "metamask" });
 	};
 	return (
-		<MyButton
-			big={big}
-			className={`w-10 mb-lg-0 mb-3 ${className}`}
-			pill
+		<ConnectButton
 			onClick={authCrypto}
 			disabled={isAuthenticating}
-			img={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/metamask.svg`}
-			text={!isAuthenticating ? "Log-in with Metamask" : "Connecting..."}
-		/>
+		>
+			<TextButton>{!isAuthenticating ? "Log-in to Metamask" : "Connecting..."}</TextButton>
+		</ConnectButton>
 	);
 };
+
+const ConnectButton = styled.button`
+	background: #42BA96;
+	border-radius: 100px;
+	padding: 15px 24px;
+	text-align: center;
+	border: none;
+	max-width: 361px;
+	width: 100%;
+`
+
+const TextButton = styled.span`
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 20px;
+	letter-spacing: 0.1px;
+	color: #FFFFFF;
+`
 
 export default MetamaskButton;
