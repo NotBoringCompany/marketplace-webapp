@@ -4,6 +4,7 @@ import TextInput from "components/FormInputs/TextInput";
 import Form from "react-bootstrap/Form";
 import { TextSecondary } from "components/Typography/Texts";
 import Link from "next/link";
+import MyButton from "components/Buttons/Button";
 
 const Box = styled.div`
 	max-width: 361px;
@@ -55,12 +56,20 @@ const SignInBox = ({
 					text="forgot your password?"
 				/>
 
-				<LoginButton
+				{/*<LoginButton
 					type="submit"
 					disabled={isAuthenticating}
 				>
 					{!isAuthenticating ? "Log-in" : "Signing In..."}
-				</LoginButton>
+				</LoginButton>*/}
+
+				<MyButton
+					type="submit"
+					// onClick={auth}
+					text={!isAuthenticating ? "Sign In" : "Signing In..."}
+					disabled={isAuthenticating}
+					className="w-100 mb-1 text-secondary"
+				/>
 
 				{errors.authFailedMessage && (
 					<TextSecondary className="mt-2 text-danger">
