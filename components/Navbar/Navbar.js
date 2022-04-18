@@ -14,6 +14,7 @@ import {
 	InventoryFilledSVG,
 	OverviewFilledSVG,
 	CalendarSVG,
+	FAQIconSVG,
 } from "components/Navbar/SVGs";
 import Subnavbar from "./Subnavbar";
 import { mediaBreakpoint } from "utils/breakpoints";
@@ -66,7 +67,7 @@ const StyledNav = styled(Navbar)`
 	}
 `;
 
-const LeftMenuContainer = styled.div`
+const LinkMenuItemContainer = styled.div`
 	display: flex;
 	height: 100%;
 	& svg {
@@ -216,14 +217,24 @@ const RightContent = () => {
 	};
 
 	return (
-		<Nav className="mt-3 mt-lg-0 ms-auto">
-			{!isAuthenticated ? (
-				// connectButton
-				<div className="d-flex align-items-center flex-lg-row flex-column">
+		<Nav className="mt-3 mt-lg-0 h-100 ms-auto">
+			<div className="d-flex align-items-center flex-lg-row flex-column">
+				<LinkMenuItemContainer className="mb-3 mb-lg-0 d-flex flex-lg-row flex-column me-2">
+					<Link href="/faq">
+						<a
+							className={`mx-auto px-3 align-items-center justify-content-center d-flex ${
+								router.pathname === "/faq" && `active`
+							}`}
+						>
+							<FAQIconSVG />
+							<TextNormal className="ms-2 mt-1">FAQ</TextNormal>
+						</a>
+					</Link>
+				</LinkMenuItemContainer>
+				{!isAuthenticated ? (
+					// connectButton
 					<MetamaskButton />
-				</div>
-			) : (
-				<div className="d-flex align-items-center flex-lg-row flex-column">
+				) : (
 					<StyledDropdown>
 						<Dropdown.Toggle
 							className="my-dropdown border-none text-white"
@@ -275,8 +286,8 @@ const RightContent = () => {
 							{/* <div className="content pb-2">{accountPageBtn}</div> */}
 						</Dropdown.Menu>
 					</StyledDropdown>
-				</div>
-			)}
+				)}
+			</div>
 		</Nav>
 	);
 };
@@ -303,7 +314,7 @@ const MyNavbar = ({ showSubnav }) => {
 
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
-					<LeftMenuContainer className="d-flex flex-lg-row flex-column">
+					<LinkMenuItemContainer className="d-flex flex-lg-row flex-column">
 						<a className="disabled ms-lg-4 mx-auto px-3 align-items-center justify-content-center d-flex mb-lg-0 mb-3">
 							<MdStorefront className="me-2" />
 							<TextNormal className="mt-1">Marketplace</TextNormal>
@@ -318,7 +329,7 @@ const MyNavbar = ({ showSubnav }) => {
 								<TextNormal className="ms-2 mt-1">Minting Event</TextNormal>
 							</a>
 						</Link>
-					</LeftMenuContainer>
+					</LinkMenuItemContainer>
 
 					<RightContent />
 				</Navbar.Collapse>
