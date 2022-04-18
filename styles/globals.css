@@ -152,3 +152,59 @@ input[type="number"] {
 ::-webkit-scrollbar-thumb:hover {
 	background: #5eae95;
 }
+
+/* custom accordion */
+.accordion-item {
+	background-color: #242424 !important;
+	border-top-left-radius: 28px !important;
+	border-top-right-radius: 28px !important;
+	border-bottom-left-radius: 30px !important;
+	border-bottom-right-radius: 30px !important;
+}
+
+.accordion-header {
+	background-color: #1D1D1D !important;
+	border-radius: 40px !important;
+}
+
+.accordion-button {
+	background: #41B995 !important;
+	border-radius: 100px !important;
+	font-family: 'Mada' !important;
+	font-style: normal !important;
+	font-weight: 700 !important;
+	font-size: 14px !important;
+	line-height: 20px !important;
+	letter-spacing: 0.1px !important;
+	color: #1D192B !important;
+}
+
+.accordion-button::after {
+	background-image: url('/images/accordion_arrow.svg') !important;
+	background-size: 12px !important;
+	width: 12px !important;
+	height: 12px !important;
+}
+
+.accordion-body {
+	font-family: 'Mada' !important;
+	font-style: normal !important;
+	font-weight: 400 !important;
+	font-size: 14px !important;
+	line-height: 20px !important;
+	letter-spacing: 0.25px !important;
+	color: #E1E3E0 !important;
+	padding: 24px !important;
+}
+
+.text-scroll-to {
+	font-family: 'Mada' !important;
+	font-style: normal !important;
+	font-weight: 500 !important;
+	font-size: 16px !important;
+	line-height: 24px !important;
+	letter-spacing: 0.1px !important;
+	text-decoration-line: underline !important;
+	color: #67DBB1 !important;
+	cursor: pointer !important;
+}
