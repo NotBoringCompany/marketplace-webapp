@@ -90,3 +90,15 @@ export const CalendarSVG = (props) => (
 		/>
 	</svg>
 );
+
+export const FAQIconSVG = (props) => (
+	<svg
+		width={20}
+		height={21}
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		{...props}
+	>
+		<path d="M9 16.49h2v-2H9v2Zm1-16c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10Zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8Zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4Z" />
+	</svg>
+);
