@@ -135,7 +135,7 @@ input[type="number"] {
 
 /* width */
 ::-webkit-scrollbar {
-	width: 9px;
+	width: 6px;
 }
 
 /* Track */
@@ -163,48 +163,70 @@ input[type="number"] {
 }
 
 .accordion-header {
-	background-color: #1D1D1D !important;
+	background-color: #1d1d1d !important;
 	border-radius: 40px !important;
 }
 
 .accordion-button {
-	background: #41B995 !important;
+	background: #41b995 !important;
 	border-radius: 100px !important;
-	font-family: 'Mada' !important;
+	font-family: "Mada" !important;
 	font-style: normal !important;
 	font-weight: 700 !important;
 	font-size: 14px !important;
 	line-height: 20px !important;
 	letter-spacing: 0.1px !important;
-	color: #1D192B !important;
+	color: #1d192b !important;
 }
 
 .accordion-button::after {
-	background-image: url('/images/accordion_arrow.svg') !important;
+	background-image: url("/images/accordion_arrow.svg") !important;
 	background-size: 12px !important;
 	width: 12px !important;
 	height: 12px !important;
 }
 
-.accordion-body {
-	font-family: 'Mada' !important;
+.accordion-body pre {
+	font-family: "Mada" !important;
 	font-style: normal !important;
 	font-weight: 400 !important;
 	font-size: 14px !important;
 	line-height: 20px !important;
 	letter-spacing: 0.25px !important;
-	color: #E1E3E0 !important;
+	color: #e1e3e0 !important;
 	padding: 24px !important;
+	white-space: pre-line;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.accordion-body a {
+	color: inherit;
+	text-decoration: underline !important;
+}
+
+.accordion-body a:hover {
+	color: inherit;
 }
 
 .text-scroll-to {
-	font-family: 'Mada' !important;
+	font-family: "Mada" !important;
 	font-style: normal !important;
 	font-weight: 500 !important;
 	font-size: 16px !important;
 	line-height: 24px !important;
 	letter-spacing: 0.1px !important;
 	text-decoration-line: underline !important;
-	color: #67DBB1 !important;
+	color: #67dbb1 !important;
 	cursor: pointer !important;
+}
+
+@media (max-width: 575px) {
+	.accordion-body {
+		padding: 16px 4px;
+	}
+
+	.accordion-body pre a {
+		line-break: anywhere;
+	}
 }
