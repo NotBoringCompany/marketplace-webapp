@@ -390,7 +390,7 @@ const AccountPage = () => {
 								currentPage={current}
 								totalPage={totalPage + 1}
 								onChangeCurrent={handleChangeCurrentInput}
-								onMouseLeaveCurrent={() => {
+								onBlurCurrent={() => {
 									if(current === 0) setPage({ ...page, current: 1 })
 								}}
 							/>)}
