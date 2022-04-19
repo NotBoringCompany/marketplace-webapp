@@ -390,6 +390,9 @@ const AccountPage = () => {
 								currentPage={current}
 								totalPage={totalPage + 1}
 								onChangeCurrent={handleChangeCurrentInput}
+								onMouseLeaveCurrent={() => {
+									if(current === 0) setPage({ ...page, current: 1 })
+								}}
 							/>)}
 						</PaginationWrap>
 

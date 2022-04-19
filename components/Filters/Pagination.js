@@ -21,7 +21,8 @@ const Pagination = ({
     nextDisabled,
     currentPage,
     totalPage,
-    onChangeCurrent
+    onChangeCurrent,
+    onMouseLeaveCurrent
 }) => {
   return (
     <PaginationWrap>
@@ -35,6 +36,7 @@ const Pagination = ({
             value={currentPage > 0 ? Number(currentPage) : ''}
             onChange={onChangeCurrent}
             type="text"
+            onMouseLeave={onMouseLeaveCurrent}
         />
 
         <TextOf>
