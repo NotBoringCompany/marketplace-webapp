@@ -13,7 +13,7 @@ const StyledButton = styled(MyButton)`
 		#000000;
 	& p {
 		color: #bfc9c2 !important;
-		font-size: 16px !important;
+		font-size: 14px !important;
 		font-weight: 400;
 		margin-top: 1px;
 		line-height: 16px;

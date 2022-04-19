@@ -37,7 +37,7 @@ const Container = styled.div`
 	width: 84px;
 	height: 84px;
 	display: flex;
-	background: #42ca9f;
+	background: #00c286;
 	position: relative;
 	border-radius: 10px;
 	transition: 0.35s all;
@@ -108,7 +108,7 @@ const CheckBoxImage = ({ kind, ...props }) => {
 	return (
 		<Container onClick={handleClickContainer}>
 			<Image
-				style={{ width: "100%", height: "100%" }}
+				style={{ width: "80%", height: "80%", margin: "auto" }}
 				src={
 					data[kind]
 						? data[kind][props.label.toLowerCase()].imageurl

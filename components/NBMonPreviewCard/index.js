@@ -100,7 +100,6 @@ const Card = styled.div`
 `;
 
 const NBMonPreviewCard = ({ nbMon, ...props }) => {
-	console.log(nbMon);
 	const { className } = props;
 	return (
 		<Card className={`bg-gray text-white align-items-center ${className}`}>
