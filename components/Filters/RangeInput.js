@@ -1,6 +1,6 @@
 import React from "react";
-import TextInput from "components/FormInputs/TextInput";
 import { TextPrimary } from "components/Typography/Texts";
+import styled from "styled-components";
 
 const RangeInput = ({
 	min = 0,
@@ -17,7 +17,7 @@ const RangeInput = ({
 
 	return (
 		<div className="mb-3 d-flex align-items-center justify-content-between">
-			<TextInput
+			<CustomInput
 				onChange={(e) => handleChange(e)}
 				type="number"
 				name="min"
@@ -25,8 +25,10 @@ const RangeInput = ({
 				onBlur={onBlur}
 				variant="dark"
 			/>
+
 			<TextPrimary className="mx-3">-</TextPrimary>
-			<TextInput
+
+			<CustomInput
 				onChange={(e) => handleChange(e)}
 				type="number"
 				name="max"
@@ -37,5 +39,31 @@ const RangeInput = ({
 		</div>
 	);
 };
+
+const CustomInput = styled.input`
+	background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)), #000000;
+	border-radius: 3px;
+	border: none;
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 18px;
+	text-align: center;
+	color: #E1E3E0;
+	padding: 10px 12px;
+	max-width: 120px;
+	width: 100%;
+
+	&:hover {
+		border: none;
+		outline: none;
+	}
+
+	&:focus {
+		border: none;
+		outline: none;
+	}
+`
 
 export default RangeInput;

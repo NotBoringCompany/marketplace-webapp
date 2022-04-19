@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Collapse from "react-bootstrap/Collapse";
-import Caret from "public/images/caret_down.svg";
-import { HeadingSuperXXS } from "components/Typography/Headings";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -28,11 +26,21 @@ const CollapseHeader = styled.div`
 		${(props) => props.open && `transform: rotate(180deg);`}
 	}
 `;
+
 const Separator = styled.div`
 	width: 100%;
 	height: 2px;
 	background: #42ca9f;
 `;
+
+const TitleFilter = styled.h5`
+	font-style: normal;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 24px;
+	letter-spacing: 0.1px;
+	color: #E1E3E0;
+`
 
 const CollapseFilter = ({
 	id,
@@ -50,15 +58,16 @@ const CollapseFilter = ({
 					if (allowCollapse) setOpen(!open);
 				}}
 			>
-				<HeadingSuperXXS className="text-white text-capitalize">
+				<TitleFilter className="text-capitalize">
 					{title === "genera" ? "Genus" : title}
-				</HeadingSuperXXS>
+				</TitleFilter>
+
 				{allowCollapse && (
 					<Image
 						className="caret"
-						src={Caret}
-						width={16}
-						height={16}
+						src='/images/caret_small_icon.svg'
+						width={12}
+						height={12}
 						alt="Caret"
 					/>
 				)}
@@ -67,7 +76,6 @@ const CollapseFilter = ({
 			<Collapse in={open}>
 				<div id={`collapse-filter-${id}`}>{children}</div>
 			</Collapse>
-			<Separator />
 		</Container>
 	);
 };
