@@ -37,15 +37,13 @@ const CheckBoxIcon = ({
 			</CheckboxInput>
 
 			<BoxText>
-				<BoxIcon>
-					<Image
-						src={`/images/${label.toLowerCase().replace(" ", "_")}.svg`}
-						width={12}
-						height={12}
-					/>
-				</BoxIcon>
+				<Image
+					src={`/images/${label.toLowerCase().replace(" ", "_")}.svg`}
+					width={18}
+					height={18}
+				/>
 
-				<Text>{label}</Text>
+				<Text className="ms-1 mt-1">{label}</Text>
 			</BoxText>
 		</CheckboxWrap>
 	);
@@ -100,6 +98,7 @@ const BoxText = styled.div`
 		#000000;
 	border-radius: 23px;
 	padding: 6px 12px;
+	padding-bottom: 7px;
 	width: 100%;
 	display: flex;
 	flex-flow: row nowrap;

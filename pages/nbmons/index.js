@@ -312,27 +312,25 @@ const AccountPage = () => {
 					{!isFetching ? (
 						<>
 							{shownNBMons.map((nbMon) => (
-								<>
-									<Col
-										xl={3}
-										lg={6}
-										md={6}
-										style={{ maxWidth: "270px" }}
-										key={`genesis-${nbMon.nbmonId}`}
-										className="mb-4 "
-									>
-										{" "}
-										<Link href={`/genesis-nbmons/${nbMon.nbmonId}`}>
-											<a>
-												{nbMon.isEgg ? (
-													<EggCard nbMon={nbMon} />
-												) : (
-													<NBMonPreviewCard nbMon={nbMon} />
-												)}
-											</a>
-										</Link>
-									</Col>
-								</>
+								<Col
+									xl={3}
+									lg={6}
+									md={6}
+									style={{ maxWidth: "270px" }}
+									key={`genesis-${nbMon.nbmonId}`}
+									className="mb-4 "
+								>
+									{" "}
+									<Link href={`/genesis-nbmons/${nbMon.nbmonId}`}>
+										<a>
+											{nbMon.isEgg ? (
+												<EggCard nbMon={nbMon} />
+											) : (
+												<NBMonPreviewCard nbMon={nbMon} />
+											)}
+										</a>
+									</Link>
+								</Col>
 							))}
 						</>
 					) : (

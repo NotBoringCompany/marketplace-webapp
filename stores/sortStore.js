@@ -15,7 +15,6 @@ export const useSortStore = create((set, get) => ({
 		}));
 	},
 	setPageSettings: (pageData) => {
-		console.log("asd");
 		set((state) => ({
 			pageSettings: { ...state.pageSettings, ...pageData },
 		}));
