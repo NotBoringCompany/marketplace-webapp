@@ -27,7 +27,7 @@ import { useFilterStore } from "stores/filterStore";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import { FaChevronRight, FaChevronLeft, FaArrowDown } from "react-icons/fa";
+import { FaArrowDown } from "react-icons/fa";
 
 import Image from "next/image";
 import { BackBtnContainer } from "pages/genesis-nbmons/[nbmonId]";
@@ -37,6 +37,7 @@ import Pagination from "components/Filters/Pagination";
 import { useRouter } from "next/router";
 import SelectSort from "components/Filters/SelectSort";
 import NBMonPreviewCard from "components/NBMonPreviewCard";
+import { getRarityNumber } from "utils/other";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -197,7 +198,7 @@ const AccountPage = () => {
 	const { selectedFilters, rangeFilters } = useFilterStore();
 	const { show, current, totalPage } = page;
 
-	const [btnSort, setBtnSort] = useState('up');
+	const [btnSort, setBtnSort] = useState('down'); // down = high to low, up = low to high
 	const [typeSort, setTypeSort] = useState('ID') // default is ID
 
 	const totalPageCounter = (fetchedDataLength, show) => {
@@ -230,13 +231,16 @@ const AccountPage = () => {
 		}
 	);
 
-	console.log(typeSort)
-
 	useEffect(() => {
 		if (!isFetching) {
 			const filtered = filterNBMons(selectedFilters, rangeFilters, allNBMons);
 			setAllFilteredNBMons(
-				filtered.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
+				filtered.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)).map(data => {
+					return {
+						...data,
+						rarityNum: data.rarity == null ? 0 : getRarityNumber(data.rarity.toLowerCase())
+					}
+				})
 			);
 			setPage({
 				...page,
@@ -248,9 +252,16 @@ const AccountPage = () => {
 	}, [selectedFilters, rangeFilters, isFetching, allNBMons]);
 
 	useEffect(() => {
-		setshownNBMons(allFilteredNBMons.slice(0, show)); // these r the nbmons that are shown in THAT page.
+		const reSort = allFilteredNBMons.sort((a, b) => {
+			if(typeSort == 'ID' && btnSort == 'down') return b.nbmonId - a.nbmonId
+			if(typeSort == 'ID' && btnSort == 'up') return a.nbmonId - b.nbmonId
+			if(typeSort == 'Rarity' && btnSort == 'down') return b.rarityNum - a.rarityNum
+			if(typeSort == 'Rarity' && btnSort == 'up') return a.rarityNum - b.rarityNum
+		})
+
+		setshownNBMons(reSort.slice(0, show)); // these r the nbmons that are shown in THAT page.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [allFilteredNBMons]);
+	}, [allFilteredNBMons, btnSort]);
 
 	useEffect(() => {
 		if (current === 1) {
