@@ -57,56 +57,64 @@ export const useFilterStore = create((set, get) => ({
 		],
 		types: [
 			{
-				name: "Null",
-				id: "null",
-			},
-			{
-				name: "Neutral",
-				id: "neutral",
-			},
-			{
-				name: "Wind",
-				id: "wind",
-			},
-			{
-				name: "Earth",
-				id: "earth",
-			},
-			{
-				name: "Water",
-				id: "water",
-			},
-			{
-				name: "Fire",
-				id: "fire",
-			},
-			{
-				name: "Nature",
-				id: "nature",
-			},
-			{
-				name: "Electric",
-				id: "electric",
-			},
-			{
-				name: "Mental",
-				id: "mental",
-			},
-			{
-				name: "Digital",
-				id: "digital",
-			},
-			{
-				name: "Melee",
-				id: "melee",
+				name: "Brawler",
+				id: "brawler",
 			},
 			{
 				name: "Crystal",
 				id: "crystal",
 			},
 			{
+				name: "Earth",
+				id: "earth",
+			},
+			{
+				name: "Electric",
+				id: "electric",
+			},
+			{
+				name: "Fire",
+				id: "fire",
+			},
+			{
+				name: "Frost",
+				id: "frost",
+			},
+			{
+				name: "Magic",
+				id: "magic",
+			},
+			{
+				name: "Nature",
+				id: "nature",
+			},
+			{
+				name: "Ordinary",
+				id: "ordinary",
+			},
+			{
+				name: "Psychic",
+				id: "psychic",
+			},
+			{
+				name: "Reptile",
+				id: "reptile",
+			},
+			{
+				name: "Spirit",
+				id: "spirit",
+			},
+			{
 				name: "Toxic",
 				id: "toxic",
+			},
+			{
+				name: "Water",
+				id: "water",
+			},
+			{
+				name: "Wind",
+				id: "wind",
 			},
 		],
 	},

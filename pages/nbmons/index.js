@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
 import Link from "next/link";
@@ -37,6 +36,7 @@ import { HeadingSuperXXS } from "components/Typography/Headings";
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const clearFilter = useFilterStore((state) => state.clearFilter);
+
 	return (
 		<DesktopFilterContainer
 			className={`${filterOpen && `show`} ${opacityOne && `opacityOne`}`}
@@ -95,7 +95,7 @@ const AccountPage = () => {
 
 	const { isFetching, error } = useQuery(
 		"allMyNBMons",
-		() => fetch(`https://run.mocky.io/v3/d561df65-168a-4e91-b66d-c5c0ad012018`),
+		() => fetch(`https://run.mocky.io/v3/e6ede34b-06aa-4fb3-b5f6-c5eccd63a147`),
 		{
 			refetchOnWindowFocus: false,
 			onSuccess: async (res) => {
@@ -446,7 +446,6 @@ const TextClear = styled(HeadingSuperXXS)`
 	font-weight: 700;
 	font-size: 14px;
 	line-height: 18px;
-	color: #5b5b5b;
 `;
 
 //

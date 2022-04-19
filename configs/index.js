@@ -1,4 +1,5 @@
 const ASSET_URL = "https://raw.githubusercontent.com/shonsirsha/dumps/main";
+const ASSET_URL_TYPES = `${ASSET_URL}/types`;
 export const data = {
 	genera: {
 		lamox: {
@@ -58,8 +59,58 @@ export const data = {
 				"Similar to a dinosaur, body covered with sand. Todillos are very heavy and lazy. They like lying around and sunbathing.",
 		},
 	},
+	types: {
+		brawler: {
+			imageurl: `${ASSET_URL_TYPES}/Brawler.png`,
+		},
+		crystal: {
+			imageurl: `${ASSET_URL_TYPES}/Crystal.png`,
+		},
+		earth: {
+			imageurl: `${ASSET_URL_TYPES}/earth.png`,
+		},
+		earth: {
+			imageurl: `${ASSET_URL_TYPES}/Earth.png`,
+		},
+		electric: {
+			imageurl: `${ASSET_URL_TYPES}/Electric.png`,
+		},
+		fire: {
+			imageurl: `${ASSET_URL_TYPES}/Fire.png`,
+		},
+		frost: {
+			imageurl: `${ASSET_URL_TYPES}/Frost.png`,
+		},
+		magic: {
+			imageurl: `${ASSET_URL_TYPES}/Magic.png`,
+		},
+		nature: {
+			imageurl: `${ASSET_URL_TYPES}/Nature.png`,
+		},
+		ordinary: {
+			imageurl: `${ASSET_URL_TYPES}/Ordinary.png`,
+		},
+		psychic: {
+			imageurl: `${ASSET_URL_TYPES}/Psychic.png`,
+		},
+		reptile: {
+			imageurl: `${ASSET_URL_TYPES}/Reptile.png`,
+		},
+		spirit: {
+			imageurl: `${ASSET_URL_TYPES}/Spirit.png`,
+		},
+		toxic: {
+			imageurl: `${ASSET_URL_TYPES}/Toxic.png`,
+		},
+		water: {
+			imageurl: `${ASSET_URL_TYPES}/Water.png`,
+		},
+		wind: {
+			imageurl: `${ASSET_URL_TYPES}/Wind.png`,
+		},
+	},
+
 	default: {
-		imageurl:
-			"https://www.seekpng.com/png/detail/966-9665317_placeholder-image-person-jpg.png",
+		imageurl: `${ASSET_URL}/types/Brawler.png`,
 	},
 };

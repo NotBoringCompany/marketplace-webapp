@@ -12,16 +12,16 @@ const PreviewImage = styled.img`
 `;
 
 const TextNoneSelected = styled.span`
-	font-family: 'Mada';
+	font-family: "Mada";
 	font-style: normal;
 	font-weight: 400;
 	font-size: 12px;
 	line-height: 16px;
 	letter-spacing: 0.4px;
-	color: #BFC9C2;
+	color: #bfc9c2;
 	display: block;
 	text-align: center;
-`
+`;
 
 const ButtonSelect = styled.button`
 	padding: 10px 16px;
@@ -30,18 +30,24 @@ const ButtonSelect = styled.button`
 	right: 0%;
 	top: 0%;
 	bottom: 0%;
-	background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)), #000000;
+	background: linear-gradient(
+			0deg,
+			rgba(255, 255, 255, 0.2),
+			rgba(255, 255, 255, 0.2)
+		),
+		linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)),
+		#000000;
 	border-radius: 100px;
 	border: none;
 	width: 100%;
-	font-family: 'Mada';
+	font-family: "Mada";
 	font-style: normal;
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 20px;
 	letter-spacing: 0.1px;
-	color: #BFC9C2;
-`
+	color: #bfc9c2;
+`;
 
 const FiltersWithModal = () => {
 	const availableFiltersWithImage = useFilterStore(
@@ -99,17 +105,14 @@ const CheckBoxFiltersWithImage = ({ data, kind }) => {
 			</div>
 
 			<div className="mb-3" id={`collapse-filter-${kind}`}>
-				<ButtonSelect
-					onClick={() => setShowModal(true)}
-				>
-					Select {
-						kind === "genera"
+				<ButtonSelect onClick={() => setShowModal(true)} className="mt-2">
+					Select{" "}
+					{kind === "genera"
 						? "Genus"
 						: `${kind.split("")[0].toUpperCase()}${kind
-							.split("")
-							.splice(1)
-							.join("")}`
-					}
+								.split("")
+								.splice(1)
+								.join("")}`}
 				</ButtonSelect>
 			</div>
 		</CollapseFilter>
