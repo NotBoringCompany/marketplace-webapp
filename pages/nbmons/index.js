@@ -190,7 +190,7 @@ const AccountPage = () => {
 	const [allNBMons, setAllNBMons] = useState([]);
 	const [page, setPage] = useState({
 		show: 12,
-		current: 0,
+		current: 1,
 		totalPage: null,
 	});
 	const [allFilteredNBMons, setAllFilteredNBMons] = useState([]);
@@ -225,7 +225,7 @@ const AccountPage = () => {
 				);
 				setPage({
 					...page,
-					totalPage: totalPageCounter(fetchedData.length, show) - 1, // first page is page 0.,
+					totalPage: totalPageCounter(fetchedData.length, show) - 1, // first page is page 0
 				});
 			},
 		}
@@ -238,13 +238,13 @@ const AccountPage = () => {
 				filtered.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId)).map(data => {
 					return {
 						...data,
-						rarityNum: data.rarity == null ? 0 : getRarityNumber(data.rarity.toLowerCase())
+						rarityNum: data.rarity == null ? -1 : getRarityNumber(data.rarity.toLowerCase())
 					}
 				})
 			);
 			setPage({
 				...page,
-				current: 0,
+				current: 1,
 				totalPage: totalPageCounter(filtered.length, show) - 1, // first page is page 0.,
 			});
 		}
@@ -261,15 +261,15 @@ const AccountPage = () => {
 
 		setshownNBMons(reSort.slice(0, show)); // these r the nbmons that are shown in THAT page.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [allFilteredNBMons, btnSort]);
+	}, [allFilteredNBMons, btnSort, typeSort]);
 
 	useEffect(() => {
-		if (current === 1) {
-			setshownNBMons(allFilteredNBMons.slice(show, show + show));
+		if (current === 1 || current == 0) {
+			setshownNBMons(allFilteredNBMons.slice(0, show));
 		} else {
 			//2 and above
 			setshownNBMons(
-				allFilteredNBMons.slice(show * current, show * (current + 1))
+				allFilteredNBMons.slice(show * (current - 1), (show * current) + 1)
 			);
 		}
 		// these r the nbmons that are shown in THAT page.
@@ -292,23 +292,29 @@ const AccountPage = () => {
 			}, 300);
 		}
 	};
+
 	const handleNextBtn = () => {
 		if (totalPage === 0 || !totalPage || totalPage < 0) {
 			return;
 		}
 
-		if (current !== totalPage) {
+		if (current-1 !== totalPage) {
 			setPage({ ...page, current: current + 1 });
 		}
 	};
+
 	const handleBackbtn = () => {
 		if (totalPage === 0 || !totalPage || totalPage < 0) {
 			return;
 		}
 
-		if (current <= totalPage && current > 0) {
+		if (current > 1) {
 			setPage({ ...page, current: current - 1 });
 		}
+	};
+	const handleChangeCurrentInput = (e) => {
+		if(Number(e.target.value) <= totalPage + 1) return setPage({ ...page, current: Number(e.target.value) });
+		if(Number(e.target.value) > totalPage + 1) return setPage({ ...page, current: totalPage + 1 });
 	};
 
 	const handleBackToOverview = () => {
@@ -379,10 +385,11 @@ const AccountPage = () => {
 							{totalPage + 1 >= 1 && (<Pagination
 								prevOnClick={handleBackbtn}
 								nextOnClick={handleNextBtn}
-								prevDisabled={current + 1 == 1}
-								nextDisabled={current + 1 == totalPage + 1}
-								currentPage={current + 1}
+								prevDisabled={current  == 1}
+								nextDisabled={current == totalPage + 1}
+								currentPage={current}
 								totalPage={totalPage + 1}
+								onChangeCurrent={handleChangeCurrentInput}
 							/>)}
 						</PaginationWrap>
 

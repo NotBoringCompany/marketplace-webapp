@@ -11,6 +11,7 @@ import { mediaBreakpoint } from 'utils/breakpoints'
  * @param boolean nextDisabled
  * @param number currentPage
  * @param number totalPage
+ * @param ChangeEventHandler onChangeCurrent
  * @returns JSX.Element
  */
 const Pagination = ({
@@ -19,7 +20,8 @@ const Pagination = ({
     prevDisabled,
     nextDisabled,
     currentPage,
-    totalPage
+    totalPage,
+    onChangeCurrent
 }) => {
   return (
     <PaginationWrap>
@@ -29,9 +31,11 @@ const Pagination = ({
             </i>
         </BtnArrow>
 
-        <CurrentPage>
-            {currentPage}
-        </CurrentPage>
+        <CurrentPage
+            value={currentPage > 0 ? Number(currentPage) : ''}
+            onChange={onChangeCurrent}
+            type="text"
+        />
 
         <TextOf>
             of
@@ -75,14 +79,17 @@ const BtnArrow = styled.button`
     }
 `
 
-const CurrentPage = styled.div`
-    padding: 2px 24px;
+const CurrentPage = styled.input`
+    padding: 2px 15px;
     background: linear-gradient(0deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.17)), linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)), #000000;
     border-radius: 38px;
     color: #FFFFFF;
     font-size: 14px;
     flex: 0 1 auto;
     margin: 0 8px 0 16px;
+    border: none;
+    text-align: center;
+    width: 60px;
 `
 
 const TextOf = styled.span`
