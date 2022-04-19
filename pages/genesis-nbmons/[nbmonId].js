@@ -13,7 +13,7 @@ import NBMonLargeCard from "components/NBMonLargeCard";
 
 import { mediaBreakpoint } from "utils/breakpoints";
 
-const BackBtnContainer = styled.div`
+export const BackBtnContainer = styled.div`
 	position: absolute;
 	right: calc(48% + 500px);
 	top: 60px;

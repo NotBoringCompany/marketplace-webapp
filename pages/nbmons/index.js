@@ -19,7 +19,6 @@ import { HeadingSuperXXS, HeadingXXS } from "components/Typography/Headings";
 
 import { mediaBreakpoint } from "utils/breakpoints";
 import CheckBoxFilters from "components/Filters/CheckBoxFilters";
-import NBMonPreviewCard from "components/NBMonPreviewCard";
 import { TextPrimary } from "components/Typography/Texts";
 import Loading from "components/Loading";
 import EggCard from "components/NBMonPreviewCard/EggCard";
@@ -28,9 +27,16 @@ import { useFilterStore } from "stores/filterStore";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
+import { FaChevronRight, FaChevronLeft, FaArrowDown } from "react-icons/fa";
 
-import { replaceDummy } from "utils/replaceDummyNBmonAPIValue";
+import Image from "next/image";
+import { BackBtnContainer } from "pages/genesis-nbmons/[nbmonId]";
+import NewButton from "components/Buttons/NewButton";
+import { FiArrowLeft } from "react-icons/fi";
+import Pagination from "components/Filters/Pagination";
+import { useRouter } from "next/router";
+import SelectSort from "components/Filters/SelectSort";
+import NBMonPreviewCard from "components/NBMonPreviewCard";
 
 const StyledContainer = styled.div`
 	padding: 32px;
@@ -61,10 +67,11 @@ const DesktopFilterContainer = styled.div`
 	flex-direction: column;
 	height: 100%;
 	overflow-y: scroll;
+	background-color: #242424;
 	width: 24%;
 	z-index: 1;
 	position: absolute;
-	padding: 24px;
+	padding: 24px 12px 24px 16px;
 	& > * {
 		margin-top: 16px;
 	}
@@ -103,32 +110,66 @@ const ClearFilterButton = styled.button`
 	}
 `;
 
-const NBMonsContainer = styled.div`
-	& .nbmon-card {
-		margin-right: 16px;
-		margin-bottom: 16px;
-	}
-`;
+const FilterHeader = styled.div`
+	display: flex;
+	flex-flow: row nowrap;
+	margin-bottom: 15px;
+`
+
+const FilterHeaderTitle = styled.h5`
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 22px;
+	line-height: 28px;
+	color: #E1E3E0;
+	flex: 0 1 auto;
+	padding-left: 12px;
+`
+
+const FilterHeaderIcon = styled.div`
+	flex: 0 1 auto;
+`
+
+const TextClear = styled.span`
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 18px;
+	color: #5B5B5B;
+`
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const clearFilter = useFilterStore((state) => state.clearFilter);
 	return (
 		<DesktopFilterContainer
-			className={`bg-primaryComplement ${filterOpen && `show`} ${
+			className={`${filterOpen && `show`} ${
 				opacityOne && `opacityOne`
 			}`}
 		>
-			<div className="d-flex mb-4 justify-content-center">
-				<HeadingXXS as="p" className="ms-auto text-white text-center">
-					Filters
-				</HeadingXXS>
+			<FilterHeader>
+				<FilterHeaderIcon>
+					<Image
+						src='/images/filter_icon.svg'
+						width={24}
+						height={24}
+					/>
+				</FilterHeaderIcon>
+
+				<FilterHeaderTitle>Filter</FilterHeaderTitle>
+
 				<ClearFilterButton className="mt-1 ms-auto" onClick={clearFilter}>
-					<HeadingSuperXXS as="p">Clear</HeadingSuperXXS>
+					<TextClear>clear</TextClear>
 				</ClearFilterButton>
-			</div>
+			</FilterHeader>
+
 			<FiltersWithModal />
+
 			<CheckBoxFilters />
+
 			<FertilityFilter />
+
 			<MyButton
 				className="d-xl-none d-block mb-3"
 				variant="outline-secondary"
@@ -141,6 +182,7 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 
 const AccountPage = () => {
 	const { user } = useMoralis();
+	const router = useRouter();
 
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
@@ -155,6 +197,9 @@ const AccountPage = () => {
 	const { selectedFilters, rangeFilters } = useFilterStore();
 	const { show, current, totalPage } = page;
 
+	const [btnSort, setBtnSort] = useState('up');
+	const [typeSort, setTypeSort] = useState('ID') // default is ID
+
 	const totalPageCounter = (fetchedDataLength, show) => {
 		if (fetchedDataLength % show > 0) {
 			return parseInt(fetchedDataLength / show) + 1;
@@ -166,7 +211,7 @@ const AccountPage = () => {
 		"allMyNBMons",
 		() =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/getOwnerGenesisNBmons/${user.attributes.ethAddress}`
+				`https://run.mocky.io/v3/d561df65-168a-4e91-b66d-c5c0ad012018`
 			),
 		{
 			refetchOnWindowFocus: false,
@@ -184,6 +229,8 @@ const AccountPage = () => {
 			},
 		}
 	);
+
+	console.log(typeSort)
 
 	useEffect(() => {
 		if (!isFetching) {
@@ -253,6 +300,10 @@ const AccountPage = () => {
 		}
 	};
 
+	const handleBackToOverview = () => {
+		router.push("/overview");
+	};
+
 	return (
 		<Layout title="Account Page | Realm Hunter">
 			<Filters
@@ -271,23 +322,74 @@ const AccountPage = () => {
 				</div>
 
 				{!isFetching && (
-					<div className="d-flex align-items-center mb-5">
-						<HeadingXXS as="h1" className="text-white ">
-							{allFilteredNBMons.length} NBMons
-						</HeadingXXS>
-						{totalPage >= 0 && (
-							<div className="pagingContainer d-flex mx-auto align-items-center">
-								<FaChevronLeft className="text-white" onClick={handleBackbtn} />
-								<HeadingSuperXXS className="text-white mx-3">
-									{current + 1} of {totalPage + 1}
-								</HeadingSuperXXS>
-								<FaChevronRight
-									className="text-white"
-									onClick={handleNextBtn}
-								/>
-							</div>
-						)}
+				<div>
+					<div>
+						<RecustomBackBtn onClick={handleBackToOverview}>
+							<NewButton
+								icon={<FiArrowLeft className="me-2" />}
+								isLink
+								href="/overview"
+								text="Back to Overview"
+							/>
+						</RecustomBackBtn>
 					</div>
+
+					<div className="d-flex align-items-center mb-3">
+						<TextTotalNBMons>
+							{allFilteredNBMons.length} NBMons
+						</TextTotalNBMons>
+					</div>
+
+					<FilterWrap>
+						<FilterSort>
+							<TextSort>Sort:</TextSort>
+
+							<SelectSort
+								list={[
+									{
+										name: 'ID'
+									},
+									{
+										name: 'Rarity'
+									}
+								]}
+								defaultValue={typeSort}
+								getSelectedValue={setTypeSort}
+							/>
+
+							<ButtonSort
+								onClick={() => setBtnSort(btnSort == 'down' ? 'up' : 'down')}
+							>
+								<FaArrowDown className={btnSort == 'up' && 'up'}/>
+							</ButtonSort>
+						</FilterSort>
+
+						<PaginationWrap>
+							{totalPage + 1 >= 1 && (<Pagination
+								prevOnClick={handleBackbtn}
+								nextOnClick={handleNextBtn}
+								prevDisabled={current + 1 == 1}
+								nextDisabled={current + 1 == totalPage + 1}
+								currentPage={current + 1}
+								totalPage={totalPage + 1}
+							/>)}
+						</PaginationWrap>
+
+						<FilterInfo>
+							<BoxGetMore>
+								<TextMore>Get more on</TextMore>
+								<TextMoreLink href="#">
+									<span className="pe-1">Opensea</span>
+									<Image
+										src="/images/opensea_link_icon.svg"
+										width={17.5}
+										height={8.75}
+									/>
+								</TextMoreLink>
+							</BoxGetMore>
+						</FilterInfo>
+					</FilterWrap>
+				</div>
 				)}
 
 				<Row className="justify-content-lg-start justify-content-center">
@@ -306,7 +408,7 @@ const AccountPage = () => {
 										{" "}
 										<Link href={`/genesis-nbmons/${nbMon.nbmonId}`}>
 											<a>
-												{nbMon.isEgg ? <EggCard nbMon={nbMon} /> : <p>asd</p>}
+												{nbMon.isEgg ? <EggCard nbMon={nbMon} /> : <NBMonPreviewCard nbMon={nbMon} />}
 											</a>
 										</Link>
 									</Col>
@@ -342,5 +444,109 @@ const AccountPage = () => {
 		</Layout>
 	);
 };
+
+const RecustomBackBtn = styled(BackBtnContainer)`
+	position: relative;
+	top: unset;
+	bottom: unset;
+	right: unset;
+	left: unset;
+`
+
+const TextTotalNBMons = styled.h2`
+	font-style: normal;
+	font-weight: 400 !important;
+	font-size: 22px !important;
+	line-height: 28px;
+	color: #E1E3E0;
+	margin-top: 40px;
+`
+
+const FilterWrap = styled.div`
+	display: flex;
+	flex-flow: row wrap;
+	align-items: center;
+`
+
+const FilterSort = styled.div`
+	flex: 0 1 auto;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	padding: 8px 0;
+`
+
+const PaginationWrap = styled.div`
+	flex: 1 1 auto;
+	padding: 8px 0;
+`
+
+const FilterInfo = styled.div`
+	flex: 0 1 auto;
+	padding: 8px 0;
+`
+
+const BoxGetMore = styled.div`
+	background: linear-gradient(0deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.07)), #171717;
+	border-radius: 8px;
+	padding: 4px 12px;
+`
+
+const TextMore = styled.span`
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 20px;
+	color: #E1E3E0;
+	display: inline-block;
+	padding-right: 4px;
+`
+
+const TextMoreLink = styled.a`
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 20px;
+	letter-spacing: 0.25px;
+	color: #5484FF !important;
+`
+
+const TextSort = styled.span`
+	font-family: 'Mada';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 20px;
+	letter-spacing: 0.1px;
+	color: #BFC9C2;
+	flex: 0 1 auto;
+	padding-right: 12px;
+`
+
+const ButtonSort = styled.button`
+	height: 29px;
+	width: 29px;
+	background: linear-gradient(0deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.17)), linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)), #000000;
+	border-radius: 38px;
+	color: #E1E3E0;
+	font-size: 14px;
+	flex: 0 1 auto;
+	border: none;
+	border-radius: 8px;
+	position: relative;
+	padding: 2px 8px;
+
+	& svg {
+		transform: rotate(0deg);
+		transition: .6s;
+	}
+
+	& svg.up {
+		transform: rotate(180deg);
+	}
+`
+
 
 export default mustBeAuthed(AccountPage);

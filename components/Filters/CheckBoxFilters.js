@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
 import CollapseFilter from "components/CollapseFilter";
-import CheckBox from "./CheckBox";
 import { useFilterStore } from "stores/filterStore";
+import CheckBoxIcon from "./CheckBoxIcon";
+import styled from "styled-components";
+
 const CheckBoxFilters = () => {
 	const availableFilters = useFilterStore((state) => state.availableFilters);
 	return (
 		<>
 			{Object.keys(availableFilters).map((kind) => (
 				<CollapseFilter key={kind} id={kind} title={kind}>
-					<div className="d-grid" id={`collapse-filter-${kind}`}>
+					<ListCheckbox id={`collapse-filter-${kind}`}>
 						{availableFilters[kind].map((item) => (
-							<IndividualCheckBox item={item} kind={kind} key={item} />
+						<ListItem key={item}>
+							<IndividualCheckBox item={item} kind={kind} />
+						</ListItem>
 						))}
-					</div>
+					</ListCheckbox>
 				</CollapseFilter>
 			))}
 		</>
@@ -51,7 +55,8 @@ const IndividualCheckBox = ({ item, kind }) => {
 		}
 	};
 	return (
-		<CheckBox
+	<>
+		<CheckBoxIcon
 			key={item}
 			onChange={(e) => handleClicked(e)}
 			type={"checkbox"}
@@ -61,7 +66,30 @@ const IndividualCheckBox = ({ item, kind }) => {
 			value={item}
 			label={item.toString().toUpperCase()}
 		/>
+	</>
 	);
 };
+
+const ListCheckbox = styled.ul`
+	list-style: none;
+	margin: 0 !important;
+	padding: 0 !important;
+	display: flex;
+	flex-flow: row wrap;
+`
+
+const ListItem = styled.li`
+	flex: 0 1 auto;
+	width: 50%;
+	padding-bottom: 8px;
+
+	&:nth-child(odd) {
+		padding-right: 4px;
+	}
+
+	&:nth-child(even) {
+		padding-left: 4px;
+	}
+`
 
 export default CheckBoxFilters;
