@@ -1,11 +1,12 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
 import styled from "styled-components";
-import MetamaskConfirmation from "components/GenesisMintingEvent/MintingSection/ModalContent/MetamaskConfirmation";
-import BeingMinted from "components/GenesisMintingEvent/MintingSection/ModalContent/BeingMinted";
-import SuccessMinting from "components/GenesisMintingEvent/MintingSection/ModalContent/SuccessMinting";
-import Error from "components/GenesisMintingEvent/MintingSection/ModalContent/Error";
-import WaitTransaction from "components/GenesisMintingEvent/MintingSection/ModalContent/WaitTransaction";
+import MetamaskConfirmation from "components/NewModalContents/GenesisMinting/MetamaskConfirmation";
+import BeingMinted from "components/NewModalContents/GenesisMinting/BeingMinted";
+import SuccessMinting from "components/NewModalContents//GenesisMinting/SuccessMinting";
+import Error from "components/NewModalContents/GenesisMinting/Error";
+import WaitTransaction from "components/NewModalContents/GenesisMinting/WaitTransaction";
+import UserConfirm from "components/NewModalContents/Hatching/UserConfirm";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -14,7 +15,7 @@ const StyledModal = styled(Modal)`
 		justify-content: center;
 	}
 	& .modal-content {
-		border-radius: 28px;
+		border-radius: 30px;
 		width: 312px;
 		min-height: 320px;
 	}
@@ -22,7 +23,7 @@ const StyledModal = styled(Modal)`
 const StyledModalBody = styled(Modal.Body)`
 	padding: 32px;
 	margin: 0;
-	border-radius: 10px;
+	border-radius: 28px;
 `;
 
 const Switch = ({ test, children }) => {
@@ -45,17 +46,19 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 		setter({ ...getter, show: false });
 	};
 
-	// const renderContent = "metamaskConfirmation"
-
 	return (
 		<StyledModal onHide={close} centered show={show}>
 			<StyledModalBody className={`bg-darkGray text-white ${className}`}>
 				<Switch test={content}>
+					{/*Genesis minting modals*/}
 					<MetamaskConfirmation switchId="metamaskConfirmation" />
 					<WaitTransaction switchId="waitTransaction" />
 					<BeingMinted switchId="beingMinted" />
 					<SuccessMinting switchId="successMinting" stateUtils={stateUtils} />
 					<Error switchId="txError" stateUtils={stateUtils} />
+
+					{/*Hatching modal*/}
+					<UserConfirm switchId="userConfirmation" stateUtils={stateUtils} />
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>

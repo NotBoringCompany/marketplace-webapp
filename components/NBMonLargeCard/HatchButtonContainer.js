@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Countdown from "react-countdown";
 import HatchButton from "components/Buttons/HatchButton";
 import { HeadingXXS } from "components/Typography/Headings";
+import AppContext from "context/AppContext";
 const HatchButtonContainer = ({ mine, isHatchable, hatchesAt }) => {
+	const { statesSwitchModal } = useContext(AppContext);
+
 	const renderer = ({ days, hours, minutes, seconds, completed }) => {
 		if (completed) {
 			if (!isHatchable) window.location.reload();
@@ -23,6 +26,15 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt }) => {
 		}
 	};
 
+	const handleHatchButtonClick = () => {
+		if (mine && isHatchable) {
+			statesSwitchModal.setter({
+				show: true,
+				content: "userConfirmation",
+			});
+		}
+	};
+
 	return (
 		<div className="afterImage text-center w-100 d-flex flex-column align-items-center">
 			<HeadingXXS as="h1" className="text-white text-capitalize mb-3">
@@ -31,7 +43,7 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt }) => {
 			{mine && !isHatchable && (
 				<Countdown date={hatchesAt} renderer={renderer} />
 			)}
-			{mine && isHatchable && <HatchButton />}
+			{mine && isHatchable && <HatchButton onClick={handleHatchButtonClick} />}
 		</div>
 	);
 };
