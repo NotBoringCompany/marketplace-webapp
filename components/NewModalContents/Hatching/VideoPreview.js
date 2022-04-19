@@ -30,7 +30,7 @@ const VideoPreview = ({ stateUtils }) => {
 	return (
 		<div className="d-flex flex-column">
 			<VideoContainer
-				onEnded={() => {}}
+				onEnded={handleClose}
 				autoPlay
 				muted
 				playsInline
