@@ -20,13 +20,13 @@ const StyledButton = styled(MyButton)`
 	}
 `;
 
-const HatchButton = ({ disabled = false, ...props }) => {
+const HatchButton = ({ text = "Hatch", disabled = false, ...props }) => {
 	return (
 		<>
 			{disabled ? (
 				<StyledButton {...props} disabled variant={"primary3"} />
 			) : (
-				<StyledButton {...props} variant={"info"} text="Hatch" />
+				<StyledButton {...props} variant={"info"} text={text} />
 			)}
 		</>
 	);

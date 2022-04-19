@@ -6,6 +6,7 @@ import { HeadingSuperXXS } from "components/Typography/Headings";
 import Egg from "components/../public/images/egg.svg";
 import styled from "styled-components";
 import HatchButton from "components/Buttons/HatchButton";
+import delay from "utils/delay";
 
 const Subtitle = styled(HeadingSuperXXS)`
 	font-size: 16px;
@@ -27,8 +28,12 @@ const UserConfirm = ({ stateUtils }) => {
 		setter({ ...getter, show: false });
 	};
 
-	const handleHatch = () => {
+	const handleHatch = async () => {
 		setLoading(true);
+		await delay(2000);
+		setter({ ...getter, show: false });
+		await delay(500);
+		setter({ content: "videoPreview", show: true });
 	};
 
 	return (

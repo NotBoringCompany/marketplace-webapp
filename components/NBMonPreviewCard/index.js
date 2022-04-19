@@ -15,7 +15,7 @@ const Card = styled.div`
 	border-radius: 16px;
 	border: 0.2px solid transparent;
 	transition: 0.35s all;
-
+	border: 1px solid;
 	p {
 		margin: 0;
 	}

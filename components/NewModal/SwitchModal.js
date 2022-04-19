@@ -7,6 +7,8 @@ import SuccessMinting from "components/NewModalContents//GenesisMinting/SuccessM
 import Error from "components/NewModalContents/GenesisMinting/Error";
 import WaitTransaction from "components/NewModalContents/GenesisMinting/WaitTransaction";
 import UserConfirm from "components/NewModalContents/Hatching/UserConfirm";
+import VideoPreview from "components/NewModalContents/Hatching/VideoPreview";
+import CardPreview from "components/NewModalContents/Hatching/CardPreview";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -21,9 +23,18 @@ const StyledModal = styled(Modal)`
 	}
 `;
 const StyledModalBody = styled(Modal.Body)`
-	padding: 32px;
+	padding: ${(props) => (props.nopadding ? `0` : `32px`)};
 	margin: 0;
 	border-radius: 28px;
+	background: ${(props) =>
+		props.cardpreview
+			? `linear-gradient(
+			180deg,
+			rgba(0, 0, 0, 0) 0%,
+			rgba(123, 97, 255, 0.2) 87.53%
+		),
+		#202020;`
+			: `unset`};
 `;
 
 const Switch = ({ test, children }) => {
@@ -43,12 +54,25 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 	const { show, content } = getter;
 
 	const close = () => {
+		if (cantClickOutside(content)) return;
 		setter({ ...getter, show: false });
+	};
+
+	const cantClickOutside = () => {
+		return ["cardPreview", "videoPreview", "userConfirmation"].includes(
+			content
+		);
 	};
 
 	return (
 		<StyledModal onHide={close} centered show={show}>
-			<StyledModalBody className={`bg-darkGray text-white ${className}`}>
+			<StyledModalBody
+				className={`bg-darkGray text-white ${className && className}`}
+				nopadding={
+					content === "videoPreview" || content === "cardPreview" ? 1 : 0
+				}
+				cardpreview={content === "cardPreview" ? 1 : 0}
+			>
 				<Switch test={content}>
 					{/*Genesis minting modals*/}
 					<MetamaskConfirmation switchId="metamaskConfirmation" />
@@ -59,6 +83,8 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 
 					{/*Hatching modal*/}
 					<UserConfirm switchId="userConfirmation" stateUtils={stateUtils} />
+					<VideoPreview switchId="videoPreview" stateUtils={stateUtils} />
+					<CardPreview switchId="cardPreview" />
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>
