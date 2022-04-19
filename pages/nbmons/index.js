@@ -20,6 +20,8 @@ import Loading from "components/Loading";
 import EggCard from "components/NBMonPreviewCard/EggCard";
 
 import { useFilterStore } from "stores/filterStore";
+import { useSortStore } from "stores/sortStore";
+
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
@@ -83,8 +85,11 @@ const AccountPage = () => {
 	const { selectedFilters, rangeFilters } = useFilterStore();
 	const { show, current, totalPage } = page;
 
-	const [btnSort, setBtnSort] = useState("down"); // down = high to low, up = low to high
-	const [typeSort, setTypeSort] = useState("ID"); // default is ID
+	const btnSort = useSortStore((states) => states.sortingDetails.btnSort);
+	const typeSort = useSortStore((states) => states.sortingDetails.typeSort);
+	const changeSortDirection = useSortStore(
+		(states) => states.changeSortDirection
+	);
 
 	const totalPageCounter = (fetchedDataLength, show) => {
 		if (fetchedDataLength % show > 0) {
@@ -255,12 +260,11 @@ const AccountPage = () => {
 											},
 										]}
 										defaultValue={typeSort}
-										getSelectedValue={setTypeSort}
 									/>
 
 									<ButtonSort
 										onClick={() =>
-											setBtnSort(btnSort == "down" ? "up" : "down")
+											changeSortDirection(btnSort === "down" ? "up" : "down")
 										}
 									>
 										<FaArrowDown className={btnSort == "up" && "up"} />
