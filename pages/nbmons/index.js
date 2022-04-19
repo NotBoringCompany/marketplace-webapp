@@ -75,21 +75,20 @@ const AccountPage = () => {
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
 	const [allNBMons, setAllNBMons] = useState([]);
-	const [page, setPage] = useState({
-		show: 12,
-		current: 1,
-		totalPage: null,
-	});
+
 	const [allFilteredNBMons, setAllFilteredNBMons] = useState([]);
 	const [shownNBMons, setshownNBMons] = useState([]);
 	const { selectedFilters, rangeFilters } = useFilterStore();
-	const { show, current, totalPage } = page;
 
 	const btnSort = useSortStore((states) => states.sortingDetails.btnSort);
 	const typeSort = useSortStore((states) => states.sortingDetails.typeSort);
 	const changeSortDirection = useSortStore(
 		(states) => states.changeSortDirection
 	);
+
+	const pageSettings = useSortStore((states) => states.pageSettings);
+	const setPageSettings = useSortStore((states) => states.setPageSettings);
+	const { show, current, totalPage } = pageSettings;
 
 	const totalPageCounter = (fetchedDataLength, show) => {
 		if (fetchedDataLength % show > 0) {
@@ -105,14 +104,14 @@ const AccountPage = () => {
 			refetchOnWindowFocus: false,
 			onSuccess: async (res) => {
 				let fetchedData = await res.json();
-				// console.log(fetchedData);
-				// fetchedData = replaceDummy(fetchedData);
+
 				setAllNBMons(
 					fetchedData.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
 				);
-				setPage({
-					...page,
-					totalPage: totalPageCounter(fetchedData.length, show) - 1, // first page is page 0
+
+				setPageSettings({
+					...pageSettings,
+					totalPage: totalPageCounter(fetchedData.length, show) - 1,
 				});
 			},
 		}
@@ -128,28 +127,29 @@ const AccountPage = () => {
 						return {
 							...data,
 							rarityNum:
-								data.rarity == null
+								data.rarity === null
 									? -1
 									: getRarityNumber(data.rarity.toLowerCase()),
 						};
 					})
 			);
-			setPage({
-				...page,
+
+			setPageSettings({
+				...pageSettings,
 				current: 1,
-				totalPage: totalPageCounter(filtered.length, show) - 1, // first page is page 0.,
-			});
+				totalPage: totalPageCounter(filtered.length, show) - 1,
+			}); // first page is page 0
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedFilters, rangeFilters, isFetching, allNBMons]);
 
 	useEffect(() => {
 		const reSort = allFilteredNBMons.sort((a, b) => {
-			if (typeSort == "ID" && btnSort == "down") return b.nbmonId - a.nbmonId;
-			if (typeSort == "ID" && btnSort == "up") return a.nbmonId - b.nbmonId;
-			if (typeSort == "Rarity" && btnSort == "down")
+			if (typeSort === "ID" && btnSort === "down") return b.nbmonId - a.nbmonId;
+			if (typeSort === "ID" && btnSort === "up") return a.nbmonId - b.nbmonId;
+			if (typeSort === "Rarity" && btnSort === "down")
 				return b.rarityNum - a.rarityNum;
-			if (typeSort == "Rarity" && btnSort == "up")
+			if (typeSort === "Rarity" && btnSort === "up")
 				return a.rarityNum - b.rarityNum;
 		});
 
@@ -158,7 +158,7 @@ const AccountPage = () => {
 	}, [allFilteredNBMons, btnSort, typeSort]);
 
 	useEffect(() => {
-		if (current === 1 || current == 0) {
+		if (current === 1 || current === 0) {
 			setshownNBMons(allFilteredNBMons.slice(0, show));
 		} else {
 			//2 and above
@@ -193,7 +193,7 @@ const AccountPage = () => {
 		}
 
 		if (current - 1 !== totalPage) {
-			setPage({ ...page, current: current + 1 });
+			setPageSettings({ ...pageSettings, current: current + 1 });
 		}
 	};
 
@@ -202,15 +202,16 @@ const AccountPage = () => {
 			return;
 		}
 
-		if (current > 1) {
-			setPage({ ...page, current: current - 1 });
-		}
+		if (current > 1) setPageSettings({ ...pageSettings, current: current - 1 });
 	};
 	const handleChangeCurrentInput = (e) => {
 		if (Number(e.target.value) <= totalPage + 1)
-			return setPage({ ...page, current: Number(e.target.value) });
+			return setPageSettings({
+				...pageSettings,
+				current: Number(e.target.value),
+			});
 		if (Number(e.target.value) > totalPage + 1)
-			return setPage({ ...page, current: totalPage + 1 });
+			return setPageSettings({ ...pageSettings, current: totalPage + 1 });
 	};
 
 	return (
@@ -267,7 +268,7 @@ const AccountPage = () => {
 											changeSortDirection(btnSort === "down" ? "up" : "down")
 										}
 									>
-										<FaArrowDown className={btnSort == "up" && "up"} />
+										<FaArrowDown className={btnSort === "up" && "up"} />
 									</ButtonSort>
 								</div>
 
@@ -275,13 +276,14 @@ const AccountPage = () => {
 									<Pagination
 										prevOnClick={handleBackbtn}
 										nextOnClick={handleNextBtn}
-										prevDisabled={current == 1}
-										nextDisabled={current == totalPage + 1}
+										prevDisabled={current === 1}
+										nextDisabled={current === totalPage + 1}
 										currentPage={current}
 										totalPage={totalPage + 1}
 										onChangeCurrent={handleChangeCurrentInput}
 										onBlurCurrent={() => {
-											if (current === 0) setPage({ ...page, current: 1 });
+											if (current === 0)
+												setPageSettings({ ...pageSettings, current: 1 });
 										}}
 									/>
 								)}

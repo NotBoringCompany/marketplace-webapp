@@ -17,7 +17,7 @@ const SelectSort = ({ list = [], defaultValue }) => {
 						list.map((data, i) => (
 							<Item
 								key={i}
-								className={selected == data.name && "active"}
+								className={selected === data.name && "active"}
 								onClick={(e) => {
 									setSelected(e.target.textContent);
 									changeSortType(e.target.textContent);
