@@ -15,12 +15,19 @@ import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import TextInput from "components/FormInputs/TextInput";
 import styled from "styled-components";
 
+import NewPill from "components/NewPill";
+
 const StyledPillContainer = styled.div`
 	margin-top: 16px;
 	background: linear-gradient(180deg, #1f1f1f 0%, #272626 100%);
 	padding: 32px;
 	& > div {
 		margin-bottom: 32px;
+	}
+
+	& > div > div {
+		margin-right: 6px;
+		margin-bottom: 12px;
 	}
 `;
 
@@ -67,6 +74,65 @@ const Stylesheet = () => {
 				<div className="d-flex w-100">
 					<Pill content={"mutated"} />
 					<Pill content={"not mutated"} />
+				</div>
+			</StyledPillContainer>
+
+			<StyledPillContainer className="text-white d-flex flex-column flex-wrap">
+				<h2 className="text-white">Fertility</h2>
+				<div className="d-flex w-100 mt-3">
+					<NewPill pillType="fertility" content="3000" />
+				</div>
+
+				<h2 className="text-white">Species</h2>
+				<div className="d-flex w-100 mt-3">
+					<NewPill pillType="origin" />
+					<NewPill pillType="wild" />
+					<NewPill pillType="hybrid" />
+				</div>
+
+				<h2 className="text-white">Types</h2>
+				<div className="d-flex w-100 mt-3 flex-wrap">
+					<NewPill pillType="type" content="brawler" />
+					<NewPill pillType="type" content="crystal" />
+					<NewPill pillType="type" content="earth" />
+					<NewPill pillType="type" content="electric" />
+					<NewPill pillType="type" content="fire" />
+					<NewPill pillType="type" content="frost" />
+					<NewPill pillType="type" content="magic" />
+					<NewPill pillType="type" content="Nature" />
+					<NewPill pillType="type" content="Ordinary" />
+
+					<NewPill pillType="type" content="psychic" />
+					<NewPill pillType="type" content="Toxic" />
+					<NewPill pillType="type" content="Water" />
+					<NewPill pillType="type" content="Wind" />
+				</div>
+
+				<h2 className="text-white">Mutations</h2>
+				<div className="d-flex w-100 mt-3 flex-wrap">
+					<NewPill pillType="mutation" content="brawler" />
+					<NewPill pillType="mutation" content="crystal" />
+					<NewPill pillType="mutation" content="earth" />
+					<NewPill pillType="mutation" content="electric" />
+					<NewPill pillType="mutation" content="fire" />
+					<NewPill pillType="mutation" content="frost" />
+					<NewPill pillType="mutation" content="magic" />
+					<NewPill pillType="mutation" content="nature" />
+					<NewPill pillType="mutation" content="Ordinary" />
+					<NewPill pillType="mutation" content="psychic" />
+					<NewPill pillType="mutation" content="Toxic" />
+					<NewPill pillType="mutation" content="Water" />
+					<NewPill pillType="mutation" content="Wind" />
+				</div>
+
+				<h2 className="text-white">Mutations</h2>
+				<div className="d-flex w-100 mt-3 flex-wrap">
+					<NewPill pillType="rarity" content="common" />
+					<NewPill pillType="rarity" content="uncommon" />
+					<NewPill pillType="rarity" content="Rare" />
+					<NewPill pillType="rarity" content="epic" />
+					<NewPill pillType="rarity" content="legendary" />
+					<NewPill pillType="rarity" content="mythical" />
 				</div>
 			</StyledPillContainer>
 			<hr className="my-5" />

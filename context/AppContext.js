@@ -39,7 +39,7 @@ export const AppProvider = ({ children }) => {
 	useEffect(() => {
 		if (window.ethereum)
 			window.ethereum.on("accountsChanged", function (accounts) {
-				if (isAuthenticated && user) {
+				if (isAuthenticated && user && accounts && accounts[0]) {
 					console.log("Connected as:", user && user.attributes.ethAddress);
 					console.log("Metamask picked:", accounts[0]);
 					if (
@@ -48,8 +48,12 @@ export const AppProvider = ({ children }) => {
 							accounts[0].toLowerCase()
 					) {
 						logout();
+					} else {
+						window && window.location.reload();
 					}
 				}
+
+				if (accounts.length === 0) window && window.location.reload();
 			});
 	}, [isAuthenticated, user]);
 

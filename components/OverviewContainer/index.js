@@ -23,12 +23,16 @@ const OverviewContainer = () => {
 		{
 			onSuccess: async (res) => {
 				const result = await res.json();
-				setUsdPrice(
-					(
-						result.data.rates.USD *
-						(balance.balance / Math.pow(10, 18))
-					).toFixed(3)
-				);
+				if (balance.balance === undefined) {
+					setUsdPrice("Please connect your metamask");
+				} else {
+					setUsdPrice(
+						`$${(
+							result.data.rates.USD *
+							(balance.balance / Math.pow(10, 18))
+						).toFixed(3)}`
+					);
+				}
 			},
 			enabled: !isLoading,
 			retry: 0,
@@ -71,7 +75,7 @@ const OverviewContainer = () => {
 					exchangeRates.isLoading
 						? ""
 						: !exchangeRates.error
-						? `$${usdPrice}`
+						? `${usdPrice}`
 						: "Error in getting USD price"
 				}
 			/>
