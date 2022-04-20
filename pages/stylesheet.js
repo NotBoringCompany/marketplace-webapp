@@ -9,8 +9,6 @@ import {
 } from "components/Typography/Headings";
 import Link from "next/link";
 
-import Pill from "components/Pill";
-
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import TextInput from "components/FormInputs/TextInput";
 import styled from "styled-components";
@@ -41,7 +39,7 @@ const Stylesheet = () => {
 
 			<p>
 				What is a reusable component? In short, it is a component that we are
-				using / potentially use multiple times in our design.
+				using / potentially use multiple times throughout our app.
 			</p>
 			<hr className="my-5" />
 			<HeadingXL>HeadingXL</HeadingXL>
@@ -54,28 +52,6 @@ const Stylesheet = () => {
 			<TextSecondary>TextSecondary</TextSecondary>
 
 			<hr className="my-5" />
-
-			<StyledPillContainer className="text-white d-flex flex-column flex-wrap">
-				<h2 className="text-white">Species</h2>
-				<div className="d-flex w-100 mt-3">
-					<Pill content={"origin"} /> <Pill content={"hybrid"} />{" "}
-					<Pill content={"wild"} />
-				</div>
-				<h2 className="text-white">Rarity</h2>
-				<div className="d-flex w-100">
-					<Pill content={"common"} />
-					<Pill content={"uncommon"} />
-					<Pill content={"rare"} />
-					<Pill content={"epic"} />
-					<Pill content={"legendary"} />
-					<Pill content={"mythical"} />
-				</div>
-				<h2 className="text-white">Mutation Status</h2>
-				<div className="d-flex w-100">
-					<Pill content={"mutated"} />
-					<Pill content={"not mutated"} />
-				</div>
-			</StyledPillContainer>
 
 			<StyledPillContainer className="text-white d-flex flex-column flex-wrap">
 				<h2 className="text-white">Fertility</h2>
