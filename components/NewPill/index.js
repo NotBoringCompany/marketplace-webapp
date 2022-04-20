@@ -35,47 +35,11 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 	const exists =
 		modifiedPillType in pillsConfig.colors &&
 		content in pillsConfig.colors[modifiedPillType];
+
 	const imageDecider = () => {
 		const set = new Set(["rarity", "mutation", "type"]);
 		return set.has(pillType);
 	};
-
-	// if (pillType !== "type" && pillTypeDecider()) {
-	// 	return (
-	// 		<>
-	// 			{pillType == "mutation" ? (
-	// 				<PillContainer
-	// 					bg={pillsConfig.colors["type"][content.toLowerCase()].background}
-	// 					color={pillsConfig.colors["type"][content.toLowerCase()].text}
-	// 					{...props}
-	// 				>
-	// 					<Image
-	// 						src={`${IMAGE_PATH}/type/${content.toLowerCase()}.svg`}
-	// 						alt={`mutated to ${content.toLowerCase()}`}
-	// 						width={16}
-	// 						height={16}
-	// 					/>
-	// 					<div className="ms-1">Mutation: {content}</div>
-	// 				</PillContainer>
-	// 			) : (
-	// 				//rarity
-	// 				<BigPillContainer
-	// 					bg={pillsConfig.colors["rarity"][content.toLowerCase()].background}
-	// 					color={pillsConfig.colors["rarity"][content.toLowerCase()].text}
-	// 					{...props}
-	// 				>
-	// 					<Image
-	// 						src={`${IMAGE_PATH}/type/${content.toLowerCase()}.svg`}
-	// 						alt={content.toLowerCase()}
-	// 						width={16}
-	// 						height={16}
-	// 					/>
-	// 					<div className="ms-1">{content}</div>
-	// 				</BigPillContainer>
-	// 			)}
-	// 		</>
-	// 	);
-	// }
 
 	if (modifiedPillType === "rarity" && exists) {
 		return (

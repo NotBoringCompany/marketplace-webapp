@@ -56,28 +56,6 @@ const Stylesheet = () => {
 			<hr className="my-5" />
 
 			<StyledPillContainer className="text-white d-flex flex-column flex-wrap">
-				<h2 className="text-white">Species</h2>
-				<div className="d-flex w-100 mt-3">
-					<Pill content={"origin"} /> <Pill content={"hybrid"} />{" "}
-					<Pill content={"wild"} />
-				</div>
-				<h2 className="text-white">Rarity</h2>
-				<div className="d-flex w-100">
-					<Pill content={"common"} />
-					<Pill content={"uncommon"} />
-					<Pill content={"rare"} />
-					<Pill content={"epic"} />
-					<Pill content={"legendary"} />
-					<Pill content={"mythical"} />
-				</div>
-				<h2 className="text-white">Mutation Status</h2>
-				<div className="d-flex w-100">
-					<Pill content={"mutated"} />
-					<Pill content={"not mutated"} />
-				</div>
-			</StyledPillContainer>
-
-			<StyledPillContainer className="text-white d-flex flex-column flex-wrap">
 				<h2 className="text-white">Fertility</h2>
 				<div className="d-flex w-100 mt-3">
 					<NewPill pillType="fertility" content="3000" />
