@@ -20,11 +20,15 @@ const PillContainer = styled.div`
 `;
 
 const BigPillContainer = styled(PillContainer)`
-	padding: 10px 24px;
+	padding: 8px 24px;
+	padding-bottom: 10px;
 	border-radius: 23px;
 	font-size: 16px;
 	line-height: 16px;
 	box-shadow: ${(props) => (props.shadow ? props.shadow : `unset`)};
+	& .myContainer {
+		margin-top: 2px;
+	}
 `;
 
 const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
@@ -54,7 +58,7 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 					width={16}
 					height={16}
 				/>
-				<div className="ms-1">{content}</div>
+				<div className="ms-1 myContainer">{content}</div>
 			</BigPillContainer>
 		);
 	}
@@ -84,7 +88,7 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 				height={16}
 			/>
 
-			<div className="ms-2">
+			<div className="ms-2 ">
 				{pillType === "mutation" && "Mutated: "}
 				{content}
 			</div>
