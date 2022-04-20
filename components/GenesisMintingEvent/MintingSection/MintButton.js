@@ -34,9 +34,10 @@ const MintButton = ({
 	onClick = () => {},
 }) => {
 	const { chainId } = useChain();
-	const { isWeb3Enabled } = useMoralis();
+	const { isWeb3Enabled, user, enableWeb3 } = useMoralis();
 	const [hide, setHide] = useState(false);
 	useEffect(() => {
+		if (!isWeb3Enabled) enableWeb3({ provider: "metamask" });
 		if (
 			(chainId && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) ||
 			!chainId ||
@@ -48,7 +49,10 @@ const MintButton = ({
 		} else {
 			setHide(false);
 		}
-	}, [chainId]);
+		console.log("chainId", chainId);
+		console.log(isWeb3Enabled);
+		console.log("ASDASD");
+	}, [chainId, user, isWeb3Enabled]);
 	const disabled = maxReached || alreadyMint;
 
 	if (hide) return <></>;
