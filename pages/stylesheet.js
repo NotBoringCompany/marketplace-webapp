@@ -61,9 +61,9 @@ const Stylesheet = () => {
 
 				<h2 className="text-white">Species</h2>
 				<div className="d-flex w-100 mt-3">
-					<NewPill pillType="origin" />
-					<NewPill pillType="wild" />
-					<NewPill pillType="hybrid" />
+					<NewPill pillType="species" content="hybrid" />
+					<NewPill pillType="species" content="wild" />
+					<NewPill pillType="species" content="Origin" />
 				</div>
 
 				<h2 className="text-white">Types</h2>

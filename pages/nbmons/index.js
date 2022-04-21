@@ -17,6 +17,7 @@ import { mediaBreakpoint } from "utils/breakpoints";
 import CheckBoxFilters from "components/Filters/CheckBoxFilters";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import Loading from "components/Loading";
+import NBMonCard from "components/NBMonPreviewCard/NBMonCard";
 import EggCard from "components/NBMonPreviewCard/EggCard";
 
 import { useFilterStore } from "stores/filterStore";
@@ -32,7 +33,6 @@ import NewButton from "components/Buttons/NewButton";
 import { FiArrowLeft } from "react-icons/fi";
 import Pagination from "components/Filters/Pagination";
 import SelectSort from "components/Filters/SelectSort";
-import NBMonPreviewCard from "components/NBMonPreviewCard";
 import { getRarityNumber } from "utils/other";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 
@@ -326,7 +326,7 @@ const AccountPage = () => {
 											{nbMon.isEgg ? (
 												<EggCard nbMon={nbMon} />
 											) : (
-												<NBMonPreviewCard nbMon={nbMon} />
+												<NBMonCard nbMon={nbMon} />
 											)}
 										</a>
 									</Link>

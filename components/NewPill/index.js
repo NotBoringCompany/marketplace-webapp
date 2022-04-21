@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { pillsConfig, IMAGE_PATH } from "configs/pillsConfig";
+import { nbmonColorSchemes, IMAGE_PATH } from "configs/nbmonColorSchemes";
 import styled from "styled-components";
 
 const PillContainer = styled.div`
@@ -37,8 +37,8 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 	let modifiedPillType = pillType === "mutation" ? "type" : pillType;
 
 	const exists =
-		modifiedPillType in pillsConfig.colors &&
-		content in pillsConfig.colors[modifiedPillType];
+		modifiedPillType in nbmonColorSchemes.colors &&
+		content in nbmonColorSchemes.colors[modifiedPillType];
 	const imageDecider = () => {
 		const set = new Set(["rarity", "mutation", "type"]);
 		return set.has(pillType);
@@ -47,9 +47,9 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 	if (modifiedPillType === "rarity" && exists) {
 		return (
 			<BigPillContainer
-				bg={pillsConfig.colors["rarity"][content].background}
-				color={pillsConfig.colors["rarity"][content].text}
-				shadow={pillsConfig.colors["rarity"][content].shadow}
+				bg={nbmonColorSchemes.colors["rarity"][content].background}
+				color={nbmonColorSchemes.colors["rarity"][content].text}
+				shadow={nbmonColorSchemes.colors["rarity"][content].shadow}
 				{...props}
 			>
 				<Image
@@ -67,26 +67,35 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 		<PillContainer
 			bg={
 				exists
-					? pillsConfig.colors[modifiedPillType][content].background
-					: pillsConfig.colors["default"].background
+					? nbmonColorSchemes.colors[modifiedPillType][content].background
+					: nbmonColorSchemes.colors["default"].background
 			}
 			color={
 				exists
-					? pillsConfig.colors[modifiedPillType][content].text
-					: pillsConfig.colors["default"].text
+					? nbmonColorSchemes.colors[modifiedPillType][content].text
+					: nbmonColorSchemes.colors["default"].text
 			}
 			{...props}
 		>
-			<Image
-				src={
-					imageDecider()
-						? `${IMAGE_PATH}/${modifiedPillType}/${content}.svg`
-						: `${IMAGE_PATH}/${pillType}.svg`
-				}
-				alt={pillType}
-				width={16}
-				height={16}
-			/>
+			{modifiedPillType === "species" ? (
+				<Image
+					src={`${IMAGE_PATH}/${content}.svg`}
+					alt={pillType}
+					width={16}
+					height={16}
+				/>
+			) : (
+				<Image
+					src={
+						imageDecider()
+							? `${IMAGE_PATH}/${modifiedPillType}/${content}.svg`
+							: `${IMAGE_PATH}/${pillType}.svg`
+					}
+					alt={pillType}
+					width={16}
+					height={16}
+				/>
+			)}
 
 			<div className="ms-2 ">
 				{pillType === "mutation" && "Mutated: "}

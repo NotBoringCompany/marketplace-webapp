@@ -78,7 +78,7 @@ const EggCard = ({ nbMon, ...props }) => {
 				</IDContainer>
 			</div>
 			<div className="d-flex flex-column mt-4">
-				<Image src={Egg} alt="nbmon" width={107} height={120} />
+				<Image src={Egg} alt="nbmon" width={110} height={110} />
 				<div className="mt-4 justify-content-center d-flex align-items-center">
 					<HeadingSuperXXS
 						as="p"

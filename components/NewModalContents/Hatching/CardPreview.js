@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import HatchButton from "components/Buttons/HatchButton";
-import NBMonPreviewCard from "components/NBMonPreviewCard";
+import NBMonCard from "components/NBMonPreviewCard/NBMonCard";
 
 const StyledHatchButton = styled(HatchButton)`
 	border-radius: 30px;
@@ -56,7 +56,7 @@ const CardPreview = ({}) => {
 
 	return (
 		<div className="d-flex flex-column w-100">
-			<NBMonPreviewCard className="m-4" nbMon={dummyNBMon} />
+			<NBMonCard className="m-4" nbMon={dummyNBMon} />
 			<StyledHatchButton
 				onClick={handleCollectBtn}
 				className="mt-auto"

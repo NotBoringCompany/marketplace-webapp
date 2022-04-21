@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { TextSecondary } from "components/Typography/Texts";
 
 const Container = styled.div`
-	border-bottom-left-radius: 8px;
-	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 14px;
+	border-bottom-right-radius: 14px;
 	background: ${(props) => (props.background ? props.background : `#464646`)};
 	position: absolute;
 	left: 50%;

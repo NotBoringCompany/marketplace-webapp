@@ -1,5 +1,5 @@
 export const IMAGE_PATH = "/images/pills";
-export const pillsConfig = {
+export const nbmonColorSchemes = {
 	colors: {
 		rarity: {
 			common: {
@@ -9,12 +9,6 @@ export const pillsConfig = {
 			},
 			uncommon: {
 				background: "#4CBC42",
-				text: "#fff",
-				shadow: null,
-			},
-
-			rare: {
-				background: "#4E8DD6",
 				text: "#fff",
 				shadow: null,
 			},

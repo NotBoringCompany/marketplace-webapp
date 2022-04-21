@@ -8,6 +8,7 @@ const Container = styled.div`
 	border-bottom-right-radius: 4px;
 	background: ${(props) => (props.background ? props.background : `#464646`)};
 	position: absolute;
+
 	top: 30%;
 	left: calc(0% - 24px);
 	padding: 4px 8px;
@@ -15,7 +16,7 @@ const Container = styled.div`
 const GenesisTag = ({ background }) => {
 	return (
 		<Container background={background}>
-			<TextSecondary className="text-white">GENESIS</TextSecondary>
+			<TextSecondary className="text-white text-bold">GENESIS</TextSecondary>
 		</Container>
 	);
 };
