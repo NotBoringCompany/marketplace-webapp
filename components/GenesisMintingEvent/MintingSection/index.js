@@ -326,7 +326,7 @@ const MintingSection = () => {
 										<span className="skinny">
 											Genesis NBMon egg minting starts on
 										</span>{" "}
-										22nd April, 2PM UTC
+										4th May, 2PM UTC
 									</StyledHeadingMD>
 								)}
 
