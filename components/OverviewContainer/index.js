@@ -15,7 +15,9 @@ const OverviewContainer = () => {
 		data: balance,
 		error,
 		isLoading,
-	} = useNativeBalance({ chain: "0x4" });
+	} = useNativeBalance({ chain: process.env.NEXT_PUBLIC_CHAIN_ID });
+
+	const [activities, setActivities] = useState([]);
 
 	const exchangeRates = useQuery(
 		"exchangeRates",
@@ -52,7 +54,25 @@ const OverviewContainer = () => {
 				console.log(supply.length);
 				setTotalNBMons(supply.length);
 			},
-			enabled: !isInitializing && !moralisLoading,
+			enabled: user && !isInitializing && !moralisLoading,
+			retry: 0,
+			refetchOnWindowFocus: false,
+		}
+	);
+
+	const userActivities = useQuery(
+		"activities",
+		() =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/activities/${user.attributes.ethAddress}`
+			),
+		{
+			onSuccess: async (res) => {
+				const result = await res.json();
+				console.log(result);
+				setActivities(result);
+			},
+			enabled: user && !isInitializing && !moralisLoading,
 			retry: 0,
 			refetchOnWindowFocus: false,
 		}
@@ -82,7 +102,11 @@ const OverviewContainer = () => {
 
 			<OverviewInventory loading={nbmons.isLoading} totalNBMons={totalNBMons} />
 
-			{/* <OverviewActivies /> */}
+			{userActivities.loading ? (
+				"..."
+			) : (
+				<OverviewActivies activities={activities} />
+			)}
 		</Wrapper>
 	);
 };

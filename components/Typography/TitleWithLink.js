@@ -19,7 +19,9 @@ const TitleWithLink = ({ title, textLink, href = "#" }) => {
 			{textLink && (
 				<LinkWrap className="ms-2">
 					<Link href={href}>
-						<TextLink>{textLink}</TextLink>
+						<a>
+							<TextLink>{textLink}</TextLink>
+						</a>
 					</Link>
 				</LinkWrap>
 			)}

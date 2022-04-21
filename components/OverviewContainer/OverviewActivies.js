@@ -1,36 +1,46 @@
 import React from "react";
 import styled from "styled-components";
-import TitleWithLink from "components/Typography/TitleWithLink";
-import Link from "next/link";
 
-const OverviewActivies = () => {
+import TitleWithLink from "components/Typography/TitleWithLink";
+import { TextNormal } from "components/Typography/Texts";
+
+const StyledText = styled(TextNormal)`
+	font-size: 14px;
+	font-weight: 300;
+`;
+
+const OverviewActivies = ({ activities }) => {
+	const activityText = (transactionType, price) => {
+		switch (transactionType) {
+			case "genesisMinting":
+				return `You bought and minted an egg for ${price} ETH`;
+			default:
+				return `You bought an NBMon for ${price} ETH`;
+		}
+	};
+
 	return (
 		<div className="py-0 px-3 mt-2 mb-3">
-			<TitleWithLink
-				title="Activities"
-				textLink="View in Block Explorer"
-				href="/activities"
-			/>
+			<TitleWithLink title="Activities" />
+			<StyledText className="text-white mt-1">
+				All dates and times are in UTC
+			</StyledText>
+			{activities.map((activity) => (
+				<>
+					<TitleDate className="mt-3">{activity.dateGroup}</TitleDate>
 
-			<BlockActivites>
-				<TitleDate>April 22, 2021</TitleDate>
-
-				<ListActivites>
-					<CardItemActivities
-						time="22:00"
-						title="You bought and minted an egg for X eth"
-						description="Transaction status (Block Explorer)"
-						href="#"
-					/>
-
-					<CardItemActivities
-						time="22:00"
-						title="You bought and minted an egg for X eth"
-						description="Transaction status (Block Explorer)"
-						href="#"
-					/>
-				</ListActivites>
-			</BlockActivites>
+					<ListActivites>
+						{activity.data.map((d) => (
+							<CardItemActivities
+								time={d.utcTime}
+								title={activityText(d.transaction_type, d.value)}
+								description="Transaction status (Block Explorer)"
+								href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}/${d.transaction_hash}`}
+							/>
+						))}
+					</ListActivites>
+				</>
+			))}
 		</div>
 	);
 };
@@ -53,23 +63,21 @@ const CardItemActivities = ({ time, title, description, href = "#" }) => {
 			<DetailWrap>
 				<TitleDetail>{title}</TitleDetail>
 				<DetailLinkWrap>
-					<TextLink>{description}</TextLink>
-					<Link href={href}>
+					<a href={href} target="_blank" rel="noopener noreferrer">
+						<TextLink>{description}</TextLink>
 						<ImgIcon src="/images/goto_icon.svg" />
-					</Link>
+					</a>
 				</DetailLinkWrap>
 			</DetailWrap>
 		</ItemActivies>
 	);
 };
 
-const BlockActivites = styled.div``;
-
 const TitleDate = styled.h5`
 	font-family: "Mada";
 	font-style: normal;
 	font-weight: 500;
-	font-size: 16px;
+	font-size: 18px;
 	line-height: 24px;
 	letter-spacing: 0.1px;
 	color: #e1e3e0;
@@ -97,7 +105,7 @@ const TextTime = styled.span`
 	font-family: "Mada";
 	font-style: normal;
 	font-weight: 500;
-	font-size: 14px;
+	font-size: 16px;
 	line-height: 20px;
 	letter-spacing: 0.1px;
 	color: rgba(225, 227, 224, 0.38);
@@ -109,7 +117,7 @@ const TitleDetail = styled.h6`
 	font-family: "Mada";
 	font-style: normal;
 	font-weight: 500;
-	font-size: 16px;
+	font-size: 18px;
 	line-height: 24px;
 	letter-spacing: 0.1px;
 	color: #e1e3e0;
@@ -122,7 +130,7 @@ const TextLink = styled.span`
 	font-family: "Mada";
 	font-style: normal;
 	font-weight: 500;
-	font-size: 11px;
+	font-size: 14px;
 	line-height: 16px;
 	letter-spacing: 0.5px;
 	color: rgba(225, 227, 224, 0.38);
