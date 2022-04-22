@@ -9,7 +9,6 @@ const Container = styled.div`
 	position: absolute;
 	left: 50%;
 	top: 0;
-
 	transform: translateX(-50%);
 	padding: 4px 8px;
 `;

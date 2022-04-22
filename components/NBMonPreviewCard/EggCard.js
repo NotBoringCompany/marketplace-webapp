@@ -16,11 +16,12 @@ const Card = styled.div`
 	display: flex;
 	flex-direction: column;
 	border-radius: 16px;
-	width: 100%;
+
 	width: 240px;
 	border: 0.2px solid transparent;
 	transition: 0.35s all;
-	height: 300px;
+	min-height: 300px;
+	height: 100%;
 	p {
 		margin: 0;
 	}
@@ -34,7 +35,7 @@ const Card = styled.div`
 		linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)),
 		#000000;
 	border: ${(props) =>
-		props.hatchready ? `3px solid #7B61FF` : `3px solid transparent`};
+		props.hatchready ? `2px solid #7B61FF` : `2px solid transparent`};
 	& .genusName {
 		font-size: 18px;
 	}

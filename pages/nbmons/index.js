@@ -99,12 +99,11 @@ const AccountPage = () => {
 
 	const { isFetching, error } = useQuery(
 		"allMyNBMons",
-		() => fetch(`https://run.mocky.io/v3/e6ede34b-06aa-4fb3-b5f6-c5eccd63a147`),
+		() => fetch(`https://run.mocky.io/v3/d728b29c-ddfc-4827-be5a-b87974a95455`),
 		{
 			refetchOnWindowFocus: false,
 			onSuccess: async (res) => {
 				let fetchedData = await res.json();
-
 				setAllNBMons(
 					fetchedData.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
 				);

@@ -27,12 +27,14 @@ export const nbmonColorSchemes = {
 					"linear-gradient(62.39deg, #D3C227 0%, #F5EA82 76.06%, #E4D127 100%);",
 				text: "#fff",
 				shadow: "0px 2px 6px rgba(245, 233, 128, 0.44);",
+				baseColor: "#F4E97E",
 			},
 			mythical: {
 				background: "linear-gradient(180deg, #FF533C 0%, #FF1F00 100%);",
 				text: "#fff",
 				shadow:
 					"-2px 2px 3px rgba(255, 31, 0, 0.4), 2px 2px 3px rgba(255, 31, 0, 0.4);",
+				baseColor: "#FF381D",
 			},
 		},
 		type: {

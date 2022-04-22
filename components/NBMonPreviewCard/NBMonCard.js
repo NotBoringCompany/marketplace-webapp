@@ -11,13 +11,18 @@ import { nbmonColorSchemes } from "configs/nbmonColorSchemes";
 
 const OuterCard = styled.div`
 	position: relative;
-	padding: 3px;
-	background: ${(props) => props.border};
-	width: 240px;
-	height: 300px;
-	border-radius: 16px;
+	padding: 2px;
+	${(props) =>
+		props.mutation
+			? `background-image: linear-gradient(${
+					props.basecolor ? props.basecolor : props.border
+			  } 55%, ${props.mutationcolor});`
+			: `background: ${props.border};`}
 
+	width: 240px;
+	border-radius: 16px;
 	transition: 0.35s all;
+	height: 100%;
 
 	&:hover {
 		cursor: pointer;
@@ -26,31 +31,32 @@ const OuterCard = styled.div`
 `;
 
 const Card = styled.div`
-	position: absolute;
-	padding: 8px 10px;
-	padding-top: 0;
 	padding-left: 12px;
+	padding-right: 10px;
+	padding-bottom: ${(props) => (props.mutationcolor ? `40px` : `24px`)};
+	padding-top: 0;
 	display: flex;
 	flex-direction: column;
 	border-radius: 16px;
 
 	width: 100%;
 	height: 100%;
+	min-height: 300px;
 
 	p {
 		margin: 0;
 	}
 
-	background: linear-gradient(0deg, #2c2d2d, #2c2d2d),
-		linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)),
-		#000000;
-
-	& .genusName {
+	background: ${(props) =>
+			props.mutationcolor
+				? `linear-gradient(to bottom right, #0000 50%, ${props.mutationcolor} 50.1%) bottom
+			right/50px 50px no-repeat,
+		linear-gradient(0deg, #2c2d2d, #2c2d2d),
+		linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01));`
+				: `linear-gradient(0deg, #2c2d2d, #2c2d2d),
+		linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01));`}
+		& .genusName {
 		font-size: 18px;
-	}
-
-	@media ${mediaBreakpoint.down.xl} {
-		width: 240px;
 	}
 `;
 
@@ -78,16 +84,80 @@ const ImageContainer = styled.div`
 	align-self: center;
 `;
 
+const MutatedLogoContainer = styled.div`
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	right: -16px;
+`;
+
+const RarityContainer = styled.div`
+	position: absolute;
+	left: 50%;
+	top: 0;
+
+	transform: translateX(-50%);
+`;
+
+const StyledRarity = styled(NewPill)`
+	padding: 4px 16px;
+	padding-top: 2px;
+	border-radius: 12px;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+	font-size: 13px;
+`;
+
+// const Triangle = styled.div`
+// 	width: 0;
+// 	height: 0;
+// 	border-style: solid;
+// 	border-width: 30px 30px 0px 30px;
+// 	border-color: transparent #608a32 transparent transparent;
+// 	right: 0;
+// 	bottom: 0;
+// 	position: absolute;
+// 	border-radius: 2px;
+// `;
+
 const NBMonCard = ({ nbMon, ...props }) => {
 	const { className } = props;
-	const { nbmonId, genera, fertility, species, gender } = nbMon;
+	const {
+		nbmonId,
+		genera,
+		fertility,
+		species,
+		gender,
+		rarity,
+		mutation,
+		mutation_value,
+	} = nbMon;
 	return (
 		<OuterCard
-			border={nbmonColorSchemes.colors.rarity[nbMon.rarity].background}
+			mutation={mutation === "mutated" ? 1 : 0}
+			mutationcolor={
+				mutation_value
+					? nbmonColorSchemes.colors.type[mutation_value].background
+					: 0
+			}
+			basecolor={
+				rarity === "legendary" || rarity === "mythical"
+					? nbmonColorSchemes.colors.rarity[rarity].baseColor
+					: 0
+			}
+			border={nbmonColorSchemes.colors.rarity[rarity].background}
 		>
 			<Card
 				className={`text-white align-items-center position-relative ${className}`}
+				mutationcolor={
+					mutation_value
+						? nbmonColorSchemes.colors.type[mutation_value].background
+						: 0
+				}
 			>
+				<RarityContainer>
+					<StyledRarity pillType="rarity" content={rarity} />
+				</RarityContainer>
 				<GenesisTag
 					background={nbmonColorSchemes.colors.rarity[nbMon.rarity].background}
 				/>
@@ -102,7 +172,7 @@ const NBMonCard = ({ nbMon, ...props }) => {
 						<TextSecondary className="text-gray">#{nbmonId}</TextSecondary>
 					</IDContainer>
 				</div>
-				<div className="d-flex flex-column mt-0">
+				<div className="d-flex flex-column mt-3">
 					<ImageContainer>
 						<Image
 							layout="fill"
@@ -110,6 +180,16 @@ const NBMonCard = ({ nbMon, ...props }) => {
 							src={data.genera[nbMon.genera].imageurl}
 							alt="nbmon"
 						/>
+
+						{mutation_value && (
+							<MutatedLogoContainer>
+								<Image
+									layout="fill"
+									alt="mutation"
+									src={data.types[mutation_value.toLowerCase()].imageurl}
+								/>
+							</MutatedLogoContainer>
+						)}
 					</ImageContainer>
 
 					<div className="mt-3 justify-content-center d-flex align-items-center">
@@ -138,13 +218,22 @@ const NBMonCard = ({ nbMon, ...props }) => {
 						)}
 					</div>
 
-					<div className="d-flex align-items-center mt-3">
-						<NewPill pillType="species" content={species} className="me-1" />
-						<NewPill
-							pillType="fertility"
-							content={fertility}
-							className="ms-1"
-						/>
+					<div className="d-flex flex-column">
+						<div className="d-flex align-items-center mt-3">
+							<NewPill pillType="species" content={species} className="me-1" />
+							<NewPill
+								pillType="fertility"
+								content={fertility}
+								className="ms-1"
+							/>
+						</div>
+						{mutation === "mutated" && (
+							<NewPill
+								className="w-100 mt-2"
+								pillType="mutation"
+								content={mutation_value}
+							/>
+						)}
 					</div>
 				</div>
 			</Card>

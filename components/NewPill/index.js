@@ -17,6 +17,10 @@ const PillContainer = styled.div`
 	font-size: 14px;
 	line-height: 14px;
 	padding: 6px 14px;
+	justify-content: center;
+	& > span {
+		flex-shrink: 0;
+	}
 `;
 
 const BigPillContainer = styled(PillContainer)`
@@ -28,6 +32,10 @@ const BigPillContainer = styled(PillContainer)`
 	box-shadow: ${(props) => (props.shadow ? props.shadow : `unset`)};
 	& .myContainer {
 		margin-top: 2px;
+	}
+
+	& > span {
+		flex-shrink: 0;
 	}
 `;
 
@@ -55,8 +63,8 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 				<Image
 					src={`${IMAGE_PATH}/rarity/${content}.svg`}
 					alt={content.toLowerCase()}
-					width={16}
-					height={16}
+					width={14}
+					height={14}
 				/>
 				<div className="ms-1 myContainer">{content}</div>
 			</BigPillContainer>
@@ -81,8 +89,8 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 				<Image
 					src={`${IMAGE_PATH}/${content}.svg`}
 					alt={pillType}
-					width={16}
-					height={16}
+					width={15}
+					height={15}
 				/>
 			) : (
 				<Image
@@ -92,8 +100,8 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 							: `${IMAGE_PATH}/${pillType}.svg`
 					}
 					alt={pillType}
-					width={16}
-					height={16}
+					width={15}
+					height={15}
 				/>
 			)}
 
