@@ -20,7 +20,7 @@ const Card = styled.div`
 	width: 240px;
 	border: 0.2px solid transparent;
 	transition: 0.35s all;
-	min-height: 300px;
+	min-height: 340px;
 	height: 100%;
 	p {
 		margin: 0;
