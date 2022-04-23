@@ -5,7 +5,7 @@ export default function handler(req, res) {
 		const { id } = req.query;
 		const result = mockData.filter((mD) => mD.nbmonId === id);
 		if (result.length) {
-			res.status(200).json(result);
+			res.status(200).json(result[0]);
 		} else {
 			res.status(404).json({ messsage: "not found" });
 		}

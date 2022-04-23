@@ -6,6 +6,8 @@ import styled from "styled-components";
 const PillContainer = styled.div`
 	background: ${(props) => props.bg};
 	color: ${(props) => props.color};
+	border: ${(props) =>
+		props.notmutated ? `2px solid ${props.color}` : `unset`};
 	border-radius: 24px;
 	flex-shrink: 0;
 	text-transform: capitalize;
@@ -24,11 +26,10 @@ const PillContainer = styled.div`
 `;
 
 const BigPillContainer = styled(PillContainer)`
-	padding: 8px 24px;
-	padding-bottom: 10px;
+	padding: 6px 14px;
+	padding-bottom: 7px;
 	border-radius: 23px;
-	font-size: 16px;
-	line-height: 16px;
+
 	box-shadow: ${(props) => (props.shadow ? props.shadow : `unset`)};
 	& .myContainer {
 		margin-top: 2px;
@@ -73,6 +74,7 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 
 	return (
 		<PillContainer
+			notmutated={content === "not mutated" ? 1 : 0}
 			bg={
 				exists
 					? nbmonColorSchemes.colors[modifiedPillType][content].background

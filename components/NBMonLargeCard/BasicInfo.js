@@ -3,6 +3,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import { StatsContainer, StatsText } from "./TabItemComponents";
 import Pill from "components/Pill";
+import NewPill from "components/NewPill";
 import { IoMdMale, IoMdFemale } from "react-icons/io";
 import { mediaBreakpoint } from "utils/breakpoints";
 import { ButtonCopy } from "components/Buttons/ButtonCopy";
@@ -11,7 +12,7 @@ const BasicInfoContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	padding: 0 32px;
+	padding: 0 24px;
 
 	@media ${mediaBreakpoint.down.lg} {
 		padding: 0;
@@ -28,25 +29,31 @@ const StyledStatsText = styled(StatsText)`
 const BasicInfo = ({ nbMon, mine = false }) => {
 	const birthDate = () => {
 		const properDate = parseInt(nbMon.hatchedAt) * 1000;
-		const day = new Date(properDate).getDate();
-		const month = new Date(properDate).getMonth() + 1;
+		const day =
+			new Date(properDate).getDate() > 9
+				? new Date(properDate).getDate()
+				: `0${new Date(properDate).getDate()}`;
+		const month =
+			new Date(properDate).getMonth() + 1 > 9
+				? new Date(properDate).getMonth() + 1
+				: `0${new Date(properDate).getMonth() + 1}`;
 		const year = new Date(properDate).getFullYear();
 		return `${day}/${month}/${year}`;
 	};
 	const { isEgg } = nbMon;
 	return (
-		<BasicInfoContainer className="">
+		<BasicInfoContainer className="mt-3">
 			{isEgg ? (
 				<>
 					<div className="d-flex text-white w-100 justify-content-between">
-						<StatsText as="p">NBMonID</StatsText>
-						<StatsText as="p">#{nbMon.nbmonId}</StatsText>
+						<StatsText>NBMonID</StatsText>
+						<StatsText>#{nbMon.nbmonId}</StatsText>
 					</div>
 					<div className="d-flex text-white w-100 justify-content-between mt-3">
-						<StatsText as="p">Owned by</StatsText>
+						<StatsText>Owned by</StatsText>
 
 						<div className="d-flex">
-							<StyledStatsText as="p">
+							<StyledStatsText>
 								{nbMon.owner.split("").splice(0, 16).join("")}...
 								<span className="me">{mine && "(me)"}</span>
 							</StyledStatsText>
@@ -58,87 +65,74 @@ const BasicInfo = ({ nbMon, mine = false }) => {
 						</div>
 					</div>
 					<div className="d-flex text-white w-100 justify-content-between mt-3">
-						<StatsText as="p">Owner Count</StatsText>
+						<StatsText>Owner Count</StatsText>
 
-						<StatsText as="p">TODO</StatsText>
+						<StatsText>TODO</StatsText>
 					</div>
 				</>
 			) : (
 				<>
-					{" "}
 					<StatsContainer>
-						<StatsText as="p" className="text-white">
-							Genus
-						</StatsText>
-						<StatsText as="p" className="text-capitalize text-white">
+						<StatsText className="text-white">Genus</StatsText>
+						<StatsText className="text-capitalize text-white">
 							{nbMon.genera}
 						</StatsText>
 					</StatsContainer>
-					<StatsContainer>
-						<StatsText as="p" className="text-white">
-							Species
-						</StatsText>
-						<Pill content={nbMon.species} />
+					<StatsContainer className="mt-4">
+						<StatsText className="text-white">Rarity</StatsText>
+						<NewPill pillType="rarity" content={nbMon.rarity} />
 					</StatsContainer>
-					<StatsContainer>
-						<StatsText as="p" className="text-white">
-							Rarity
-						</StatsText>
-						<Pill content={nbMon.rarity} />
+					<StatsContainer className="mt-4">
+						<StatsText className="text-white">Species</StatsText>
+						<NewPill pillType="species" content={nbMon.species} />
 					</StatsContainer>
-					<StatsContainer>
-						<StatsText as="p" className="text-white">
-							Mutation
-						</StatsText>
-						<Pill content={nbMon.mutation} />
+					<StatsContainer className="mt-4">
+						<StatsText className="text-white">Mutation</StatsText>
+						<NewPill pillType="type" content={nbMon.mutation} />
 					</StatsContainer>
-					<StatsContainer>
-						<StatsText as="p" className="text-white">
-							NBMonID
-						</StatsText>
-						<StatsText as="p" className="text-white">
-							{nbMon.nbmonId}
-						</StatsText>
+					<StatsContainer className="mt-4">
+						<StatsText className="text-white">Fertility</StatsText>
+						<NewPill pillType="fertility" content={nbMon.fertility} />
 					</StatsContainer>
-					<StatsContainer>
-						<StatsText as="p" className="text-white">
-							Gender
-						</StatsText>
-						<div className="d-flex align-items-center">
-							<StatsText as="p" className="text-white text-capitalize">
-								{nbMon.gender}
-							</StatsText>
-							{nbMon.gender === "male" ? (
-								<IoMdMale className="male ms-2" />
-							) : (
-								<IoMdFemale className="female ms-2" />
+					<StatsContainer className="mt-4">
+						<StatsText className="text-white">Types</StatsText>
+						<div className="d-flex">
+							<NewPill pillType="type" content={nbMon.types[0]} />
+							{nbMon.types[1] && (
+								<NewPill
+									pillType="type"
+									content={nbMon.types[1]}
+									className="ms-2"
+								/>
 							)}
 						</div>
 					</StatsContainer>
-					<StatsContainer>
-						<StatsText as="p" className="text-white">
-							Birthdate
-						</StatsText>
-						<StatsText as="p" className="text-white">
-							{birthDate()}
-						</StatsText>
+					<StatsContainer className="mt-4">
+						<StatsText className="text-white">NBMonID</StatsText>
+						<StatsText className="text-white">#{nbMon.nbmonId}</StatsText>
 					</StatsContainer>
-					<StatsContainer>
-						<StatsText as="p" className="text-white">
-							Current owner
-						</StatsText>
-						<StatsText as="p" className="text-white">
-							{nbMon.owner.split("").splice(0, 5).join("")}...
-							{nbMon.owner.split("").splice(-4).join("")}
-						</StatsText>
+
+					<StatsContainer className="mt-4">
+						<StatsText className="text-white">Birthdate</StatsText>
+						<StatsText className="text-white">{birthDate()}</StatsText>
 					</StatsContainer>
-					<StatsContainer>
-						<StatsText as="p" className="text-white">
-							Owner count
-						</StatsText>
-						<StatsText as="p" className="text-white">
-							- TODO -
-						</StatsText>
+					<StatsContainer className="mt-4">
+						<StatsText className="text-white">Owned by</StatsText>
+						<div className="d-flex">
+							<StyledStatsText>
+								{nbMon.owner.split("").splice(0, 16).join("")}...
+								<span className="me">{mine && "(me)"}</span>
+							</StyledStatsText>
+							<ButtonCopy
+								onClick={() => navigator.clipboard.writeText(nbMon.owner)}
+							>
+								<Image src="/images/copy_all.svg" height={24} width={24} />
+							</ButtonCopy>
+						</div>
+					</StatsContainer>
+					<StatsContainer className="mt-4">
+						<StatsText className="text-white">Owner count</StatsText>
+						<StatsText className="text-white">1</StatsText>
 					</StatsContainer>
 				</>
 			)}

@@ -30,7 +30,7 @@ const dummyNBMon = {
 	species: "wild",
 	genera: "birvo",
 	fertility: "2500",
-	types: ["melee", "water"],
+	types: ["reptile", "water"],
 	healthPotential: null,
 	energyPotential: null,
 	attackPotential: null,

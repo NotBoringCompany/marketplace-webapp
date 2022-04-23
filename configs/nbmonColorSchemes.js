@@ -112,6 +112,16 @@ export const nbmonColorSchemes = {
 				background: "#88E2DD",
 				text: "#4E4E4E",
 			},
+
+			mutated: {
+				background: "#45DAB6",
+				text: "#272D2B",
+			},
+
+			"not mutated": {
+				background: "transparent",
+				text: "#798E87",
+			},
 		},
 		default: {
 			background: "#E1E3E0",

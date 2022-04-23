@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 import { data } from "configs";
 import { TextSecondary } from "components/Typography/Texts";
+import { HeadingSM } from "components/Typography/Headings";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import BasicInfo from "./BasicInfo";
@@ -16,7 +17,7 @@ const CardContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 400px;
+	width: 456px;
 	max-width: 80%;
 	border-radius: 20px;
 	${(props) =>
@@ -59,7 +60,9 @@ const NBMonImage = styled(Image)`
 
 const Description = styled(TextSecondary)`
 	max-width: 260px;
-	font-weight: 600;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 20px;
 `;
 
 const TabsContainer = styled.div`
@@ -136,6 +139,22 @@ const StyledTabs = styled(Tabs)`
 	}
 `;
 
+const MutationImage = styled(Image)`
+	width: 45px;
+	height: 45px;
+	position: relative;
+	top: calc(-121px + -250px);
+	right: -116px;
+
+	@media (max-width: 1024px) {
+		width: 45px;
+		height: 45px;
+		position: relative;
+		top: calc(-121px + -200px);
+		right: -96px;
+	}
+`;
+
 const NBMonLargeCard = ({ nbMon, userAddress }) => {
 	const { isEgg, isHatchable } = nbMon;
 	const mine = userAddress
@@ -158,6 +177,12 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 				) : (
 					<NBMonImage src={data.genera[nbMon.genera].imageurl} alt="NBMon" />
 				)}
+				{nbMon.mutation === "mutated" && (
+					<MutationImage
+						src={data.types[nbMon.mutation_value].imageurl}
+						alt="mutation"
+					/>
+				)}
 				{isEgg ? (
 					<HatchButtonContainer
 						mine={mine}
@@ -165,10 +190,18 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 						isHatchable={isHatchable}
 					/>
 				) : (
-					<div className="afterImage text-center w-100">
-						<HeadingMD as="h1" className="text-white text-capitalize">
-							{nbMon.genera}
-						</HeadingMD>
+					<div className="afterImage   text-center w-100">
+						<div className="d-flex w-100 justify-content-center align-items-center">
+							<HeadingSM as="h1" className="text-white text-capitalize me-2">
+								{nbMon.genera}
+							</HeadingSM>
+							{nbMon.gender === "male" ? (
+								<Image src="/images/male_1.svg" width={32} height={32} />
+							) : (
+								<Image src="/images/female_1.svg" width={32} height={32} />
+							)}
+						</div>
+
 						<Description className="mt-2 text-white mx-auto">
 							{data.genera[nbMon.genera].description}
 						</Description>
