@@ -99,7 +99,7 @@ const AccountPage = () => {
 
 	const { isFetching, error } = useQuery(
 		"allMyNBMons",
-		() => fetch(`https://run.mocky.io/v3/d728b29c-ddfc-4827-be5a-b87974a95455`),
+		() => fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons`),
 		{
 			refetchOnWindowFocus: false,
 			onSuccess: async (res) => {
