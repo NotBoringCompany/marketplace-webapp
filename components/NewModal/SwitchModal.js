@@ -1,14 +1,21 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
 import styled from "styled-components";
+
 import MetamaskConfirmation from "components/NewModalContents/GenesisMinting/MetamaskConfirmation";
 import BeingMinted from "components/NewModalContents/GenesisMinting/BeingMinted";
 import SuccessMinting from "components/NewModalContents//GenesisMinting/SuccessMinting";
 import Error from "components/NewModalContents/GenesisMinting/Error";
 import WaitTransaction from "components/NewModalContents/GenesisMinting/WaitTransaction";
+
 import UserConfirm from "components/NewModalContents/Hatching/UserConfirm";
 import VideoPreview from "components/NewModalContents/Hatching/VideoPreview";
 import CardPreview from "components/NewModalContents/Hatching/CardPreview";
+
+import ForgotPassword from "components/NewModalContents/ForgotPassword/ForgotPassword";
+import EmailSent from "components/NewModalContents/ForgotPassword/EmailSent";
+import NewPasswordSet from "components/NewModalContents/ForgotPassword/NewPasswordSet";
+import ResetPassword from "components/NewModalContents/ForgotPassword/ResetPassword";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -18,14 +25,14 @@ const StyledModal = styled(Modal)`
 	}
 	& .modal-content {
 		border-radius: 30px;
-		width: 312px;
-		min-height: 320px;
+		width: ${(props) => (props.bigger ? `365px` : `312px`)};
+		min-height: ${(props) => (props.nominheight ? `unset` : `320px;`)};
 	}
 `;
 const StyledModalBody = styled(Modal.Body)`
 	padding: ${(props) => (props.nopadding ? `0` : `32px`)};
 	margin: 0;
-	border-radius: 28px;
+	border-radius: 24px;
 	background: ${(props) =>
 		props.cardpreview
 			? `linear-gradient(
@@ -64,8 +71,21 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 		);
 	};
 
+	const newPasswordModals = [
+		"forgotPassword",
+		"emailSent",
+		"newPasswordSet",
+		"resetPassword",
+	];
+
 	return (
-		<StyledModal onHide={close} centered show={show}>
+		<StyledModal
+			onHide={close}
+			centered
+			show={show}
+			bigger={newPasswordModals.includes(content) ? 1 : 0}
+			nominheight={newPasswordModals.includes(content) ? 1 : 0}
+		>
 			<StyledModalBody
 				className={`bg-darkGray text-white ${className && className}`}
 				nopadding={
@@ -85,6 +105,12 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					<UserConfirm switchId="userConfirmation" stateUtils={stateUtils} />
 					<VideoPreview switchId="videoPreview" stateUtils={stateUtils} />
 					<CardPreview switchId="cardPreview" />
+
+					{/*New Password modal*/}
+					<ForgotPassword switchId="forgotPassword" stateUtils={stateUtils} />
+					<EmailSent switchId="emailSent" stateUtils={stateUtils} />
+					<ResetPassword switchId="resetPassword" stateUtils={stateUtils} />
+					<NewPasswordSet switchId="newPasswordSet" stateUtils={stateUtils} />
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>

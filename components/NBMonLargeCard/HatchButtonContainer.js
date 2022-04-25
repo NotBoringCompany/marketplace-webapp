@@ -3,7 +3,7 @@ import Countdown from "react-countdown";
 import HatchButton from "components/Buttons/HatchButton";
 import { HeadingXXS } from "components/Typography/Headings";
 import AppContext from "context/AppContext";
-const HatchButtonContainer = ({ mine, isHatchable, hatchesAt }) => {
+const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 	const { statesSwitchModal } = useContext(AppContext);
 
 	const renderer = ({ days, hours, minutes, seconds, completed }) => {
@@ -31,6 +31,7 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt }) => {
 			statesSwitchModal.setter({
 				show: true,
 				content: "userConfirmation",
+				nbmonId,
 			});
 		}
 	};
@@ -39,7 +40,7 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt }) => {
 		<div className="afterImage text-center w-100 d-flex flex-column align-items-center">
 			<HeadingXXS as="h1" className="text-white text-capitalize mb-3">
 				Genesis NBMon Egg
-			</HeadingXXS>
+			</HeadingXXS>{" "}
 			{mine && !isHatchable && (
 				<Countdown date={hatchesAt} renderer={renderer} />
 			)}

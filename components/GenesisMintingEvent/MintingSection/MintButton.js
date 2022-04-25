@@ -51,7 +51,6 @@ const MintButton = ({
 		}
 		console.log("chainId", chainId);
 		console.log(isWeb3Enabled);
-		console.log("ASDASD");
 	}, [chainId, user, isWeb3Enabled]);
 	const disabled = maxReached || alreadyMint;
 

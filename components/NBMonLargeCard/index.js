@@ -175,7 +175,10 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 						height={200}
 					/>
 				) : (
-					<NBMonImage src={data.genera[nbMon.genera].imageurl} alt="NBMon" />
+					<NBMonImage
+						src={data.genus[nbMon.genus.toLowerCase()].imageurl}
+						alt="NBMon"
+					/>
 				)}
 				{nbMon.mutation === "mutated" && (
 					<MutationImage
@@ -186,6 +189,7 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 				{isEgg ? (
 					<HatchButtonContainer
 						mine={mine}
+						nbmonId={nbMon.nbmonId}
 						hatchesAt={hatchesAt}
 						isHatchable={isHatchable}
 					/>
@@ -193,7 +197,7 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 					<div className="afterImage   text-center w-100">
 						<div className="d-flex w-100 justify-content-center align-items-center">
 							<HeadingSM as="h1" className="text-white text-capitalize me-2">
-								{nbMon.genera}
+								{nbMon.genus}
 							</HeadingSM>
 							{nbMon.gender === "male" ? (
 								<Image src="/images/male_1.svg" width={32} height={32} />
@@ -203,7 +207,7 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 						</div>
 
 						<Description className="mt-2 text-white mx-auto">
-							{data.genera[nbMon.genera].description}
+							{data.genus[nbMon.genus].description}
 						</Description>
 					</div>
 				)}

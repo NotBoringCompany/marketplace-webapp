@@ -176,8 +176,8 @@ const NBMonCard = ({ nbMon, ...props }) => {
 					<ImageContainer>
 						<Image
 							layout="fill"
-							className={`nbmonImg ${nbMon.genera}`}
-							src={data.genera[nbMon.genera].imageurl}
+							className={`nbmonImg ${nbMon.genus}`}
+							src={data.genus[nbMon.genus.toLowerCase()].imageurl}
 							alt="nbmon"
 						/>
 

@@ -6,7 +6,7 @@ import {
 	useWeb3Contract,
 } from "react-moralis";
 import Web3 from "web3";
-import NBMonMinting from "../../abis/NBMonMinting.json";
+import NBMonMinting from "../../abis/MintingGenesis.json";
 
 //TODO: NEEDS TO BE REVISITED
 //THIS IS JUST FOR TESTING PURPOSES...
@@ -16,7 +16,7 @@ const randomIntFromInterval = (min, max) => {
 };
 
 const Index = () => {
-	const { Moralis, user, isAuthenticated } = useMoralis();
+	const { Moralis, user, isAuthenticated, enableWeb3 } = useMoralis();
 
 	console.log();
 
@@ -40,27 +40,51 @@ const Index = () => {
 	// 	console.log(data);
 	// };
 
-	const { fetch, data, error, isLoading, isFetching } = useWeb3ExecuteFunction({
-		contractAddress: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
-		functionName: "mintOrigin",
-		abi: mintingAbi,
-		params: {
-			_randomNumber: randomIntFromInterval(0, 9007199254740900),
-			_owner: user && user.attributes.ethAddress,
-			_from: user && user.attributes.ethAddress,
-		},
-	});
+	// const { fetch, data, error, isLoading, isFetching } = useWeb3ExecuteFunction({
+	// 	contractAddress: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
+	// 	functionName: "mintOrigin",
+	// 	abi: mintingAbi,
+	// 	params: {
+	// 		_randomNumber: randomIntFromInterval(0, 9007199254740900),
+	// 		_owner: user && user.attributes.ethAddress,
+	// 		_from: user && user.attributes.ethAddress,
+	// 	},
+	// });
+
+	const { runContractFunction, data, error, isLoading, isFetching } =
+		useWeb3Contract({
+			contractAddress: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
+			functionName: "hatchFromEgg",
+			abi: mintingAbi,
+			params: {
+				_key: "4dd7d6f3-087e-4253-ae56-141f7e5e9c49",
+				_nbmonId: "12",
+			},
+		});
+
+	const executeF = async () => {
+		enableWeb3({ provider: "metamask" }).then(() => {
+			runContractFunction();
+		});
+	};
 
 	useEffect(() => {
 		if (data) {
 			console.log(data);
+			console.log("waiting...");
 			const x = data.wait();
 			x.then((r) => {
 				// const NBMonId =
-				console.log("NBMID", parseInt(r.events[1].args._nbmonId._hex, 16) - 1);
+				console.log("Hatched", r);
 			});
 		}
 	}, [data]);
+
+	useEffect(() => {
+		if (error) {
+			console.log("ERROR", error);
+		}
+	}, [error]);
 
 	// console.log(data && data);
 
@@ -111,17 +135,19 @@ const Index = () => {
 	};
 	return (
 		<div className="text-white">
-			{isAuthenticated.toString()}
-			<br />
+			Authenticated: {isAuthenticated.toString()}, as:{" "}
 			{user && user.attributes.ethAddress}
 			<br />
+			{isLoading && "loading"}
+			<br />
 			{/* {error && error} */}
-			<button onClick={mintNBMon}>mint using web3</button>{" "}
+			{/* <button onClick={mintNBMon}>mint using web3</button>{" "}
 			<button onClick={() => fetch()} disabled={isFetching || isLoading}>
 				mint using moralis hook
-			</button>{" "}
-			<button onClick={update}>update</button>{" "}
+			</button>{" "} */}
+			{/* <button onClick={update}>update</button>{" "} */}
 			{/* {data && <pre>{JSON.stringify(data)}</pre>} */}
+			<button onClick={() => executeF()}>HATCH THE EGG</button>{" "}
 		</div>
 	);
 };

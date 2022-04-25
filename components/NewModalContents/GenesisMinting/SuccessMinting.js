@@ -22,6 +22,7 @@ const StyledButton = styled.button`
 
 const SuccessMinting = ({ stateUtils }) => {
 	const { setter, getter } = stateUtils;
+	const { nbmonId } = getter;
 	const router = useRouter();
 	return (
 		<div className="d-flex flex-column text-center">
@@ -47,7 +48,7 @@ const SuccessMinting = ({ stateUtils }) => {
 				<StyledButton
 					onClick={() => {
 						setter({ ...getter, show: false });
-						router.push("/nbmons");
+						router.push(`/genesis-nbmons/${nbmonId}`);
 					}}
 					className="text-secondary"
 				>

@@ -75,7 +75,7 @@ const BasicInfo = ({ nbMon, mine = false }) => {
 					<StatsContainer>
 						<StatsText className="text-white">Genus</StatsText>
 						<StatsText className="text-capitalize text-white">
-							{nbMon.genera}
+							{nbMon.genus}
 						</StatsText>
 					</StatsContainer>
 					<StatsContainer className="mt-4">

@@ -1,7 +1,7 @@
 const ASSET_URL = "https://raw.githubusercontent.com/shonsirsha/dumps/main";
 const ASSET_URL_TYPES = `${ASSET_URL}/types`;
 export const data = {
-	genera: {
+	genus: {
 		lamox: {
 			imageurl: `${ASSET_URL}/lamox.png`,
 			description:

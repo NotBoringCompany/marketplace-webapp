@@ -1,9 +1,11 @@
+import { useContext } from "react";
 import styled from "styled-components";
 import LinkCustom from "components/Link/Link";
 import TextInput from "components/FormInputs/TextInput";
 import MyButton from "components/Buttons/Button";
 import Form from "react-bootstrap/Form";
 import { TextSecondary } from "components/Typography/Texts";
+import AppContext from "context/AppContext";
 
 const Box = styled.div`
 	border: 2px solid rgba(176, 176, 176, 0.35);
@@ -21,13 +23,21 @@ const SignInBox = ({
 	...props
 }) => {
 	const { email, password, errors } = authDetail;
+	const { statesSwitchModal } = useContext(AppContext);
+
+	const handleClickForgotPassword = () => {
+		statesSwitchModal.setter({
+			show: true,
+			content: "forgotPassword",
+		});
+	};
 
 	return (
 		<Box
 			className={`p-3 p-md-4 p-lg-4 bg-primaryComplement ${className}`}
 			{...props}
 		>
-			<Form onSubmit={auth}>
+			<Form autoComplete={"off"} onSubmit={auth}>
 				<TextInput
 					name="email"
 					value={email}
@@ -49,7 +59,8 @@ const SignInBox = ({
 					errorDesc={errors.password}
 				/>
 				<LinkCustom
-					href="/"
+					href="#"
+					onClick={() => handleClickForgotPassword()}
 					className="mt-3 mb-1 text-secondary"
 					text="Forgotten your password?"
 				/>

@@ -9,7 +9,7 @@ export const useFilterStore = create((set, get) => ({
 		mutation: ["mutated", "not mutated"],
 	},
 	availableFiltersWithImage: {
-		genera: [
+		genus: [
 			{
 				name: "Lamox",
 				id: "lamox",
@@ -125,7 +125,7 @@ export const useFilterStore = create((set, get) => ({
 		gender: {
 			male: true	
 		},
-		genera: {
+		genus: {
 			Lamox: true,
 			Licorine: true
 		}

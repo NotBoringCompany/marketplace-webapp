@@ -52,13 +52,7 @@ const IndividualNBMon = () => {
 	const { isFetching, isError } = useQuery(
 		"individualNBMon",
 		() =>
-			fetch(
-				`${
-					process.env.NEXT_PUBLIC_REST_API_PREFIX_URL
-				}/getNBMon?_ApplicationId=VWnxCyrXVilvNWnBjdnaJJdQGu7QzN4lJeu1teyg&id=${parseInt(
-					nbmonId
-				)}`
-			).then(async (res) => {
+			fetch(`s`).then(async (res) => {
 				let fetchedData = await res.json();
 
 				fetchedData = replaceDummyForSingleNBMon(fetchedData.result);

@@ -3,7 +3,7 @@ const keyValuePairDummy = {
 	rarity: "uncommon",
 	mutation: "mutated",
 	species: "wild",
-	genera: "birvo",
+	genus: "birvo",
 };
 export function replaceDummy(data) {
 	data.result.map((item) => {

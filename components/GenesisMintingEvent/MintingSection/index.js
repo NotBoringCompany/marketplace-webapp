@@ -169,8 +169,8 @@ const MintingSection = () => {
 				//step3
 
 				if (response.ok) {
-					const mutationResult = await response.json();
-					console.log("MUTATION SUCCESSFUL", mutationResult);
+					const res = await response.json();
+					console.log("MUTATION SUCCESSFUL", res);
 					setSupplyData({
 						...supplyData,
 						haveBeenMinted: haveBeenMinted + 1,
@@ -184,6 +184,7 @@ const MintingSection = () => {
 					statesSwitchModal.setter({
 						show: true,
 						content: "successMinting",
+						nbmonId: res.nbmonId,
 					});
 					return;
 				} else {

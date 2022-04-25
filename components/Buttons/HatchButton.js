@@ -24,7 +24,7 @@ const HatchButton = ({ text = "Hatch", disabled = false, ...props }) => {
 	return (
 		<>
 			{disabled ? (
-				<StyledButton {...props} disabled variant={"primary3"} />
+				<StyledButton {...props} disabled variant={"primary3"} text={text} />
 			) : (
 				<StyledButton {...props} variant={"info"} text={text} />
 			)}

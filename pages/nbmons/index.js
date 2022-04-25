@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useMoralis } from "react-moralis";
 import { useQuery } from "react-query";
 
 import Link from "next/link";
@@ -76,6 +77,8 @@ const AccountPage = () => {
 	const [opacityOne, setOpacityOne] = useState(false);
 	const [allNBMons, setAllNBMons] = useState([]);
 
+	const { user } = useMoralis();
+
 	const [allFilteredNBMons, setAllFilteredNBMons] = useState([]);
 	const [shownNBMons, setshownNBMons] = useState([]);
 	const { selectedFilters, rangeFilters } = useFilterStore();
@@ -99,7 +102,10 @@ const AccountPage = () => {
 
 	const { isFetching, error } = useQuery(
 		"allMyNBMons",
-		() => fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons`),
+		() =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/getOwnerGenesisNBmons/${user.attributes.ethAddress}`
+			),
 		{
 			refetchOnWindowFocus: false,
 			onSuccess: async (res) => {
@@ -212,6 +218,8 @@ const AccountPage = () => {
 		if (Number(e.target.value) > totalPage + 1)
 			return setPageSettings({ ...pageSettings, current: totalPage + 1 });
 	};
+
+	console.log(error);
 
 	return (
 		<Layout title="Account Page | Realm Hunter">

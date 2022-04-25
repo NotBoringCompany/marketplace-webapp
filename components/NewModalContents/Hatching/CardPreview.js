@@ -28,7 +28,7 @@ const dummyNBMon = {
 	mutation: "not mutated",
 	mutation_value: null,
 	species: "wild",
-	genera: "birvo",
+	genus: "birvo",
 	fertility: "2500",
 	types: ["reptile", "water"],
 	healthPotential: null,
@@ -48,15 +48,15 @@ const dummyNBMon = {
 };
 
 const CardPreview = ({}) => {
-	const handleClose = () => {};
-
 	const handleCollectBtn = () => {
 		window && window.location.reload();
 	};
 
 	return (
 		<div className="d-flex flex-column w-100">
-			<NBMonCard className="m-4" nbMon={dummyNBMon} />
+			<div className="my-3 mx-auto">
+				<NBMonCard nbMon={dummyNBMon} />
+			</div>
 			<StyledHatchButton
 				onClick={handleCollectBtn}
 				className="mt-auto"
