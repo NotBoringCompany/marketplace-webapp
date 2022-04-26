@@ -110,7 +110,7 @@ const MintingSection = () => {
 						isMintingEnded: timeStamps.isMintingEnded,
 					});
 					setUserStatus(status);
-				}, 50);
+				}, 150);
 			},
 			refetchOnWindowFocus: false,
 			retry: 0,
