@@ -13,6 +13,7 @@ export const AppProvider = ({ children }) => {
 	const [showSetupModal, setShowSetupModal] = useState(false);
 	const [showWrongNetworkModal, setShowWrongNetworkModal] = useState(false);
 	const [showModalNoMM, setShowModalNoMM] = useState(false);
+	const [justHatchedNBMon, setJustHatchedNBMon] = useState(null);
 
 	const [switchModal, setSwitchModal] = useState({
 		show: false,
@@ -35,6 +36,11 @@ export const AppProvider = ({ children }) => {
 	};
 
 	const statesSwitchModal = { getter: switchModal, setter: setSwitchModal };
+
+	const statesJustHatched = {
+		getter: justHatchedNBMon,
+		setter: setJustHatchedNBMon,
+	};
 
 	useEffect(() => {
 		if (window.ethereum)
@@ -90,6 +96,7 @@ export const AppProvider = ({ children }) => {
 				setShowWrongNetworkModal,
 				setShowModalNoMM,
 				statesSwitchModal,
+				statesJustHatched,
 			}}
 		>
 			<SetupModal stateUtils={statesModalSetup} />

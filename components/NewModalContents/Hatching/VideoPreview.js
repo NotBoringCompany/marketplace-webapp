@@ -21,10 +21,15 @@ const VideoContainer = styled.video`
 
 const VideoPreview = ({ stateUtils }) => {
 	const { setter, getter } = stateUtils;
+
+	const { nbMon } = getter;
+
+	console.log("HATCHED NBMON", nbMon);
+
 	const handleClose = async () => {
 		setter({ ...getter, show: false });
-		await delay(500);
-		setter({ content: "cardPreview", show: true });
+		await delay(250);
+		setter({ content: "cardPreview", show: true, nbMon });
 	};
 
 	return (
@@ -46,7 +51,7 @@ const VideoPreview = ({ stateUtils }) => {
 				onClick={handleClose}
 				className="mt-5 ms-auto me-2 text-white"
 			>
-				Skip
+				Skip {getter.foo}
 			</CancelButton>
 		</div>
 	);

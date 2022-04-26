@@ -104,6 +104,7 @@ const AccountPage = () => {
 		"allMyNBMons",
 		() =>
 			fetch(
+				// `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons`
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMon/getOwnerGenesisNBmons/${user.attributes.ethAddress}`
 			),
 		{

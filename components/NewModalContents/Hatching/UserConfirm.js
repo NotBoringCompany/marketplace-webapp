@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useMutation } from "react-query";
-import { useWeb3ExecuteFunction, useWeb3Contract } from "react-moralis";
+import { useMutation, useQuery } from "react-query";
+import { useWeb3Contract } from "react-moralis";
 import Image from "next/image";
 import { Image as BsImage } from "react-bootstrap";
 import { TextPrimary } from "components/Typography/Texts";
@@ -8,7 +8,6 @@ import { HeadingSuperXXS } from "components/Typography/Headings";
 import Egg from "components/../public/images/egg.svg";
 import styled from "styled-components";
 import HatchButton from "components/Buttons/HatchButton";
-import delay from "utils/delay";
 import MintingGenesis from "components/../abis/MintingGenesis.json";
 
 const Subtitle = styled(HeadingSuperXXS)`
@@ -26,18 +25,23 @@ const CancelButton = styled.button`
 
 const UserConfirm = ({ stateUtils }) => {
 	const { setter, getter } = stateUtils;
-	const { nbmonId } = getter;
+	const { nbmonId, setDisableHatchBtn } = getter;
 
 	const [loading, setLoading] = useState(false);
 	const [key, setKey] = useState(null);
-	const handleClose = () => {
-		setter({ ...getter, show: false });
-	};
 
 	const abi = MintingGenesis;
 
+	const [getNBmon, setGetNBmon] = useState(0);
+
+	const handleClose = () => {
+		setDisableHatchBtn(false);
+		setter({ ...getter, show: false });
+	};
+
 	useEffect(() => {
 		if (key) {
+			console.log("useEf", key);
 			handleHatch(key);
 		}
 	}, [key]);
@@ -52,7 +56,7 @@ const UserConfirm = ({ stateUtils }) => {
 		},
 	});
 
-	const hatchMutation = useMutation(
+	const statsRandomizer = useMutation(
 		() =>
 			fetch(
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonHatching/randomizeHatchingStats`,
@@ -66,8 +70,6 @@ const UserConfirm = ({ stateUtils }) => {
 					const res = await response.json();
 					setKey(res.key);
 					console.log(res.key);
-
-					// await handleHatch(res.key);
 				} else {
 					const error = new Error(response.statusText);
 					error.response = response;
@@ -89,23 +91,59 @@ const UserConfirm = ({ stateUtils }) => {
 		}
 	);
 
+	useQuery(
+		"getHatchedNBmon",
+		() =>
+			fetch(
+				`${
+					process.env.NEXT_PUBLIC_NEW_REST_API_URL
+				}/genesisNBMon/getGenesisNBMon/${parseInt(nbmonId)}`
+			),
+		{
+			onSuccess: async (response) => {
+				if (response.ok) {
+					const nbMon = await response.json();
+					console.log("hatchedNBmon", nbMon);
+					setter({ content: "videoPreview", show: true, nbMon });
+				} else {
+					const error = new Error(response.statusText);
+					error.response = response;
+					throw error;
+				}
+			},
+			onError: (_) => {
+				setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Hatching Error",
+						text: "We are sorry, there was a problem in displaying your hatched NBMon. \n \n Please refresh this page.",
+					},
+				});
+			},
+
+			enabled: getNBmon > 0,
+			refetchOnWindowFocus: false,
+			retry: 1,
+		}
+	);
+
 	const handleGetHatchKey = () => {
 		setLoading(true);
-		hatchMutation.mutate();
+		statsRandomizer.mutate(); // gets key, and sends paired key:stats to blockchain.
 	};
 
 	const handleHatch = async (key) => {
-		console.log("asd");
-		console.log("KEY", key);
-		// await delay(200);
-		// setter({ ...getter, show: false });
-		// await delay(500);
-		// setter({ content: "videoPreview", show: true });
 		if (key) {
-			console.log("SADASD");
+			console.log("KEY", key);
 			hatchFromEgg.runContractFunction({
-				onSuccess: () => {
-					setter({ content: "videoPreview", show: true });
+				onSuccess: async (tx) => {
+					console.log("tx", tx);
+					const r = await tx.wait().catch((e) => {
+						throw e;
+					});
+					console.log("R, done!!!", r);
+					setGetNBmon(nbmonId);
 				},
 				onError: (e) => {
 					setter({

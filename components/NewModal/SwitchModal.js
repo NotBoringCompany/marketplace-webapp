@@ -104,7 +104,7 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					{/*Hatching modal*/}
 					<UserConfirm switchId="userConfirmation" stateUtils={stateUtils} />
 					<VideoPreview switchId="videoPreview" stateUtils={stateUtils} />
-					<CardPreview switchId="cardPreview" />
+					<CardPreview switchId="cardPreview" stateUtils={stateUtils} />
 
 					{/*New Password modal*/}
 					<ForgotPassword switchId="forgotPassword" stateUtils={stateUtils} />

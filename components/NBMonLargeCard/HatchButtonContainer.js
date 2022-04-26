@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Countdown from "react-countdown";
 import HatchButton from "components/Buttons/HatchButton";
 import { HeadingXXS } from "components/Typography/Headings";
 import AppContext from "context/AppContext";
 const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 	const { statesSwitchModal } = useContext(AppContext);
+
+	const [disableHatchBtn, setDisableHatchBtn] = useState(false);
 
 	const renderer = ({ days, hours, minutes, seconds, completed }) => {
 		if (completed) {
@@ -27,12 +29,14 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 	};
 
 	const handleHatchButtonClick = () => {
-		if (mine && isHatchable) {
+		if (mine && isHatchable && !disableHatchBtn) {
 			statesSwitchModal.setter({
 				show: true,
 				content: "userConfirmation",
 				nbmonId,
+				setDisableHatchBtn,
 			});
+			setDisableHatchBtn(true);
 		}
 	};
 
@@ -44,7 +48,12 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 			{mine && !isHatchable && (
 				<Countdown date={hatchesAt} renderer={renderer} />
 			)}
-			{mine && isHatchable && <HatchButton onClick={handleHatchButtonClick} />}
+			{mine && isHatchable && (
+				<HatchButton
+					disabled={disableHatchBtn}
+					onClick={handleHatchButtonClick}
+				/>
+			)}
 		</div>
 	);
 };

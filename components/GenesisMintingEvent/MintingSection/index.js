@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from "react";
+import { flushSync } from "react-dom";
 import { useState } from "react";
 import { useMoralis, useWeb3Transfer } from "react-moralis";
 import { useQuery, useMutation } from "react-query";
@@ -92,32 +93,32 @@ const MintingSection = () => {
 				const supply = await res.json();
 				const { supplies, status, timeStamps } = supply;
 				console.log(supply);
-				setSupplyData({
-					...supplyData,
-					haveBeenMinted: supplies.haveBeenMinted,
-					supplyLimit: supplies.supplyLimit,
-				});
 
-				setTimeStamps({
-					publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
-					whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
-					mintingCloseAt: parseInt(timeStamps.mintingCloseAt * 1000),
-					now: parseInt(timeStamps.now * 1000),
-					isWhitelistOpen: timeStamps.isWhitelistOpen, // timeStamps.isWhitelistOpen
-					isPublicOpen: timeStamps.isPublicOpen, //timeStamps.isPublicOpen,
-					isMintingEnded: timeStamps.isMintingEnded,
-				});
-				setUserStatus({
-					canMint: status.canMint,
-					isWhitelisted: status.isWhitelisted,
-					hasMintedBefore: status.hasMintedBefore,
-				});
+				//prevents weird race condition
+				setTimeout(() => {
+					setSupplyData({
+						haveBeenMinted: supplies.haveBeenMinted,
+						supplyLimit: supplies.supplyLimit,
+					});
+					setTimeStamps({
+						publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
+						whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
+						mintingCloseAt: parseInt(timeStamps.mintingCloseAt * 1000),
+						now: parseInt(timeStamps.now * 1000),
+						isWhitelistOpen: timeStamps.isWhitelistOpen, // timeStamps.isWhitelistOpen
+						isPublicOpen: timeStamps.isPublicOpen, //timeStamps.isPublicOpen,
+						isMintingEnded: timeStamps.isMintingEnded,
+					});
+					setUserStatus(status);
+				}, 50);
 			},
 			refetchOnWindowFocus: false,
 			retry: 0,
 			enabled: user && isAuthenticated && !isInitializing ? true : false,
 		}
 	);
+
+	const { isLoading, isFetching } = userConfigs;
 
 	const generalConfigs = useQuery(
 		"generalConfigs",
@@ -229,15 +230,17 @@ const MintingSection = () => {
 	}, [trfEth.data, trfEth.error]);
 
 	useEffect(() => {
-		if (
-			!hasMintedBefore &&
-			haveBeenMinted < supplyLimit &&
-			((isWhitelistOpen && isWhitelisted) || (isPublicOpen && !isWhitelisted))
-		) {
-			setUserStatus({ ...userStatus, canMint: true });
+		if (!isLoading && !isFetching) {
+			if (
+				!hasMintedBefore &&
+				haveBeenMinted < supplyLimit &&
+				((isWhitelistOpen && isWhitelisted) || (isPublicOpen && !isWhitelisted))
+			) {
+				setUserStatus({ ...userStatus, canMint: true });
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isPublicOpen, isWhitelistOpen]);
+	}, [hasMintedBefore, isPublicOpen, isWhitelistOpen, isLoading, isFetching]);
 
 	const handleMintButtonClicked = async () => {
 		if (canMint) {
@@ -248,19 +251,22 @@ const MintingSection = () => {
 			});
 
 			await trfEth.fetch({
-				onSuccess: (tx) =>
-					tx.wait().then((r) => {
-						const mintData = {
-							purchaserAddress: user.attributes.ethAddress,
-							txHash: r.transactionHash,
-						};
-						mintMutation.mutate(mintData);
+				onSuccess: async (tx) => {
+					const r = await tx.wait().catch((e) => {
+						throw e;
+					});
 
-						statesSwitchModal.setter({
-							show: true,
-							content: "beingMinted",
-						});
-					}),
+					const mintData = {
+						purchaserAddress: user.attributes.ethAddress,
+						txHash: r.transactionHash,
+					};
+					mintMutation.mutate(mintData);
+
+					statesSwitchModal.setter({
+						show: true,
+						content: "beingMinted",
+					});
+				},
 				onError: (e) => {
 					statesSwitchModal.setter({
 						content: "txError",
@@ -276,7 +282,7 @@ const MintingSection = () => {
 							},
 						});
 						// code 4001 is user cancellation
-					} else if (e.code !== 4001) {
+					} else if (!e.code || (e.code && e.code !== 4001)) {
 						statesSwitchModal.setter({
 							show: true,
 							content: "txError",
@@ -334,7 +340,7 @@ const MintingSection = () => {
 								{(isWhitelistOpen || isPublicOpen) && (
 									<StyledHeadingMD className="text-white  mb-3 text-center">
 										<span className="skinny">
-											GENESIS NBMON EGG MINTING OPEN
+											GENESIS NBMON EGG MINTING OPEN{" "}
 										</span>
 									</StyledHeadingMD>
 								)}
@@ -355,7 +361,9 @@ const MintingSection = () => {
 										{!isWhitelistOpen &&
 											!isPublicOpen &&
 											!hasMintedBefore &&
-											haveBeenMinted < supplyLimit && <AccountInfoBox />}
+											haveBeenMinted < supplyLimit && (
+												<AccountInfoBox user={user} />
+											)}
 										{!hasMintedBefore && haveBeenMinted >= supplyLimit ? (
 											<MintBtnContainer>
 												<MintButton maxReached />

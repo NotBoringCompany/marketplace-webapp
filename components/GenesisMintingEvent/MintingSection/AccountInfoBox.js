@@ -5,6 +5,7 @@ import { TextSecondary } from "components/Typography/Texts";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 
 const AccountInfo = ({ user }) => {
+	console.log("USER", user);
 	return (
 		<BlurContainer className="mt-lg-5 mt-2 text-white">
 			<div className="d-flex align-items-center">

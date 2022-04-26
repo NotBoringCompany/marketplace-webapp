@@ -131,19 +131,10 @@ const Stats = ({ nbMon }) => {
 
 			<StatsContainer className="mt-3">
 				<StatsText as="p" className="text-white">
-					Rarity Deduction
+					Fertility Deduction
 				</StatsText>
 				<StatsText as="p" className="text-capitalize text-white">
-					TODO
-				</StatsText>
-			</StatsContainer>
-
-			<StatsContainer className="mt-3">
-				<StatsText as="p" className="text-white">
-					Breed count
-				</StatsText>
-				<StatsText as="p" className="text-capitalize text-white">
-					TODO
+					{nbMon.fertilityDeduction}
 				</StatsText>
 			</StatsContainer>
 		</div>

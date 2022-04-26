@@ -3,7 +3,7 @@ import { mockData } from "../../../utils/mockdata";
 export default function handler(req, res) {
 	if (req.method === "GET") {
 		const { id } = req.query;
-		const result = mockData.filter((mD) => mD.nbmonId === id);
+		const result = mockData.filter((mD) => mD.nbmonId === parseInt(id));
 		if (result.length) {
 			res.status(200).json(result[0]);
 		} else {

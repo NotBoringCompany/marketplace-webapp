@@ -108,36 +108,22 @@ const StyledRarity = styled(NewPill)`
 	font-size: 13px;
 `;
 
-// const Triangle = styled.div`
-// 	width: 0;
-// 	height: 0;
-// 	border-style: solid;
-// 	border-width: 30px 30px 0px 30px;
-// 	border-color: transparent #608a32 transparent transparent;
-// 	right: 0;
-// 	bottom: 0;
-// 	position: absolute;
-// 	border-radius: 2px;
-// `;
-
 const NBMonCard = ({ nbMon, ...props }) => {
 	const { className } = props;
-	const {
-		nbmonId,
-		genera,
-		fertility,
-		species,
-		gender,
-		rarity,
-		mutation,
-		mutation_value,
-	} = nbMon;
+	const { nbmonId, fertility, species, gender, mutation } = nbMon;
+
+	const rarity = nbMon.rarity.toLowerCase();
+	const genus = nbMon.genus.toLowerCase();
+	let mutationType = null;
+	if (nbMon.mutationType) {
+		mutationType = nbMon.mutationType.toLowerCase();
+	}
 	return (
 		<OuterCard
 			mutation={mutation === "mutated" ? 1 : 0}
 			mutationcolor={
-				mutation_value
-					? nbmonColorSchemes.colors.type[mutation_value].background
+				mutationType
+					? nbmonColorSchemes.colors.type[mutationType].background
 					: 0
 			}
 			basecolor={
@@ -150,8 +136,8 @@ const NBMonCard = ({ nbMon, ...props }) => {
 			<Card
 				className={`text-white align-items-center position-relative ${className}`}
 				mutationcolor={
-					mutation_value
-						? nbmonColorSchemes.colors.type[mutation_value].background
+					mutationType
+						? nbmonColorSchemes.colors.type[mutationType].background
 						: 0
 				}
 			>
@@ -159,7 +145,7 @@ const NBMonCard = ({ nbMon, ...props }) => {
 					<StyledRarity pillType="rarity" content={rarity} />
 				</RarityContainer>
 				<GenesisTag
-					background={nbmonColorSchemes.colors.rarity[nbMon.rarity].background}
+					background={nbmonColorSchemes.colors.rarity[rarity].background}
 				/>
 				<div className="d-flex w-100 justify-content-between">
 					<Image
@@ -176,17 +162,17 @@ const NBMonCard = ({ nbMon, ...props }) => {
 					<ImageContainer>
 						<Image
 							layout="fill"
-							className={`nbmonImg ${nbMon.genus}`}
-							src={data.genus[nbMon.genus.toLowerCase()].imageurl}
+							className={`nbmonImg ${genus}`}
+							src={data.genus[genus].imageurl}
 							alt="nbmon"
 						/>
 
-						{mutation_value && (
+						{mutationType && mutationType !== "not mutated" && (
 							<MutatedLogoContainer>
 								<Image
 									layout="fill"
 									alt="mutation"
-									src={data.types[mutation_value.toLowerCase()].imageurl}
+									src={data.types[mutationType].imageurl}
 								/>
 							</MutatedLogoContainer>
 						)}
@@ -199,7 +185,7 @@ const NBMonCard = ({ nbMon, ...props }) => {
 								gender === "male" ? "me-2" : "me-1"
 							}`}
 						>
-							{genera}
+							{genus}
 						</HeadingSuperXXS>
 						{gender === "male" ? (
 							<Image
@@ -231,7 +217,7 @@ const NBMonCard = ({ nbMon, ...props }) => {
 							<NewPill
 								className="w-100 mt-2"
 								pillType="mutation"
-								content={mutation_value}
+								content={mutationType}
 							/>
 						)}
 					</div>

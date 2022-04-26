@@ -19,28 +19,52 @@ export const useFilterStore = create((set, get) => ({
 				id: "licorine",
 			},
 			{
-				name: "Birvo",
-				id: "birvo",
+				name: "Unicorn",
+				id: "unicorn",
 			},
 			{
 				name: "Dranexx",
 				id: "dranexx",
 			},
 			{
-				name: "Heree",
-				id: "heree",
-			},
-			{
 				name: "Milnas",
 				id: "milnas",
 			},
 			{
-				name: "Schoggi",
-				id: "schoggi",
+				name: "Todillo",
+				id: "todillo",
+			},
+			{
+				name: "Birvo",
+				id: "birvo",
 			},
 			{
 				name: "Pongu",
 				id: "pongu",
+			},
+			{
+				name: "Darrakan",
+				id: "darrakan",
+			},
+			{
+				name: "Kirin",
+				id: "kirin",
+			},
+			{
+				name: "Heree",
+				id: "heree",
+			},
+			{
+				name: "Fennec",
+				id: "fennec",
+			},
+			{
+				name: "Sworffle",
+				id: "sworffle",
+			},
+			{
+				name: "Pfufu",
+				id: "Pfufu",
 			},
 			{
 				name: "Prawdek",
@@ -51,8 +75,12 @@ export const useFilterStore = create((set, get) => ({
 				id: "roggo",
 			},
 			{
-				name: "Todillo",
-				id: "todillo",
+				name: "Schoggi",
+				id: "schoggi",
+			},
+			{
+				name: "Fairwoole",
+				id: "fairwoole",
 			},
 		],
 		types: [

@@ -163,6 +163,10 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 	const hatchesAt = isEgg
 		? parseInt(nbMon.bornAt + nbMon.hatchingDuration) * 1000
 		: 0;
+	let genus;
+	if (!isEgg) {
+		genus = nbMon.genus.toLowerCase();
+	}
 
 	return (
 		<div className="py-4 d-flex w-100 align-items-center justify-content-center">
@@ -175,14 +179,11 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 						height={200}
 					/>
 				) : (
-					<NBMonImage
-						src={data.genus[nbMon.genus.toLowerCase()].imageurl}
-						alt="NBMon"
-					/>
+					<NBMonImage src={data.genus[genus].imageurl} alt="NBMon" />
 				)}
 				{nbMon.mutation === "mutated" && (
 					<MutationImage
-						src={data.types[nbMon.mutation_value].imageurl}
+						src={data.types[nbMon.mutationType.toLowerCase()].imageurl}
 						alt="mutation"
 					/>
 				)}
@@ -197,7 +198,7 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 					<div className="afterImage   text-center w-100">
 						<div className="d-flex w-100 justify-content-center align-items-center">
 							<HeadingSM as="h1" className="text-white text-capitalize me-2">
-								{nbMon.genus}
+								{genus}
 							</HeadingSM>
 							{nbMon.gender === "male" ? (
 								<Image src="/images/male_1.svg" width={32} height={32} />
@@ -207,7 +208,7 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 						</div>
 
 						<Description className="mt-2 text-white mx-auto">
-							{data.genus[nbMon.genus].description}
+							{data.genus[genus].description}
 						</Description>
 					</div>
 				)}
