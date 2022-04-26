@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from "react";
-import { flushSync } from "react-dom";
 import { useState } from "react";
 import { useMoralis, useWeb3Transfer } from "react-moralis";
 import { useQuery, useMutation } from "react-query";
@@ -147,6 +146,8 @@ const MintingSection = () => {
 					isPublicOpen: timeStamps.isPublicOpen,
 					isMintingEnded: timeStamps.isMintingEnded,
 				});
+
+				setAntiRace(false);
 			},
 			refetchOnWindowFocus: false,
 			retry: 0,
