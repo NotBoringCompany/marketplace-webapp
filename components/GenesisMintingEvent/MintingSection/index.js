@@ -82,6 +82,8 @@ const MintingSection = () => {
 	const { canMint, isWhitelisted, hasMintedBefore } = userStatus;
 	const { isWhitelistOpen, isPublicOpen, isMintingEnded } = timeStamps;
 
+	const [antiRace, setAntiRace] = useState(true);
+
 	const userConfigs = useQuery(
 		"userConfigs",
 		() =>
@@ -93,23 +95,24 @@ const MintingSection = () => {
 				const supply = await res.json();
 				const { supplies, status, timeStamps } = supply;
 				console.log(supply);
+				setSupplyData({
+					haveBeenMinted: supplies.haveBeenMinted,
+					supplyLimit: supplies.supplyLimit,
+				});
+				setTimeStamps({
+					publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
+					whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
+					mintingCloseAt: parseInt(timeStamps.mintingCloseAt * 1000),
+					now: parseInt(timeStamps.now * 1000),
+					isWhitelistOpen: timeStamps.isWhitelistOpen, // timeStamps.isWhitelistOpen
+					isPublicOpen: timeStamps.isPublicOpen, //timeStamps.isPublicOpen,
+					isMintingEnded: timeStamps.isMintingEnded,
+				});
 
 				//prevents weird race condition
 				setTimeout(() => {
-					setSupplyData({
-						haveBeenMinted: supplies.haveBeenMinted,
-						supplyLimit: supplies.supplyLimit,
-					});
-					setTimeStamps({
-						publicOpenAt: parseInt(timeStamps.publicOpenAt * 1000),
-						whitelistOpenAt: parseInt(timeStamps.whitelistOpenAt * 1000),
-						mintingCloseAt: parseInt(timeStamps.mintingCloseAt * 1000),
-						now: parseInt(timeStamps.now * 1000),
-						isWhitelistOpen: timeStamps.isWhitelistOpen, // timeStamps.isWhitelistOpen
-						isPublicOpen: timeStamps.isPublicOpen, //timeStamps.isPublicOpen,
-						isMintingEnded: timeStamps.isMintingEnded,
-					});
 					setUserStatus(status);
+					setAntiRace(false);
 				}, 150);
 			},
 			refetchOnWindowFocus: false,
@@ -298,7 +301,8 @@ const MintingSection = () => {
 		}
 	};
 
-	if (userConfigs.isFetching || generalConfigs.isFetching) return <Loading />;
+	if (userConfigs.isFetching || generalConfigs.isFetching || antiRace)
+		return <Loading />;
 
 	if (userConfigs.error || generalConfigs.error)
 		return (
