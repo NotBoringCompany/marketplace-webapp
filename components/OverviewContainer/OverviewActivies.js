@@ -14,8 +14,10 @@ const OverviewActivies = ({ activities }) => {
 		switch (transactionType) {
 			case "genesisMinting":
 				return `You bought and minted an egg for ${price} ETH`;
+			case "genesisHatching":
+				return `You hatched your egg!`;
 			default:
-				return `You bought an NBMon for ${price} ETH`;
+				return `You made an activity`;
 		}
 	};
 
@@ -30,7 +32,7 @@ const OverviewActivies = ({ activities }) => {
 					<TitleDate className="mt-3">{activity.dateGroup}</TitleDate>
 
 					<ListActivites>
-						{activity.data.map((d) => (
+						{[...activity.data].reverse().map((d) => (
 							<CardItemActivities
 								time={d.utcTime}
 								title={activityText(d.transaction_type, d.value)}

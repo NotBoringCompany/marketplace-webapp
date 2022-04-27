@@ -86,7 +86,6 @@ const UserConfirm = ({ stateUtils }) => {
 					},
 				});
 			},
-			onSettled: () => {},
 			retry: 0,
 		}
 	);
