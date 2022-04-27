@@ -27,22 +27,28 @@ const OverviewActivies = ({ activities }) => {
 			<StyledText className="text-white mt-1">
 				All dates and times are in UTC
 			</StyledText>
-			{activities.map((activity) => (
-				<>
-					<TitleDate className="mt-3">{activity.dateGroup}</TitleDate>
+			{[...activities]
+				.sort((a, b) => new Date(b.dateGroup) - new Date(a.dateGroup))
+				.map((activity) => (
+					<>
+						<TitleDate className="mt-3">{activity.dateGroup}</TitleDate>
 
-					<ListActivites>
-						{[...activity.data].reverse().map((d) => (
-							<CardItemActivities
-								time={d.utcTime}
-								title={activityText(d.transaction_type, d.value)}
-								description="Transaction status (Block Explorer)"
-								href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}/${d.transaction_hash}`}
-							/>
-						))}
-					</ListActivites>
-				</>
-			))}
+						<ListActivites>
+							{[...activity.data]
+								.sort(
+									(a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp)
+								)
+								.map((d) => (
+									<CardItemActivities
+										time={d.utcTime}
+										title={activityText(d.transaction_type, d.value)}
+										description="Transaction status (Block Explorer)"
+										href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}/${d.transaction_hash}`}
+									/>
+								))}
+						</ListActivites>
+					</>
+				))}
 		</div>
 	);
 };

@@ -185,7 +185,7 @@ const MintingSection = () => {
 						canMint: false,
 						hasMintedBefore: true,
 					});
-
+					console.log("nbmonId", res.nbmonId);
 					statesSwitchModal.setter({
 						show: true,
 						content: "successMinting",

@@ -127,6 +127,29 @@ const UserConfirm = ({ stateUtils }) => {
 		}
 	);
 
+	const addToActivity = useMutation(
+		(hash) =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/activities/addHatchingActivity`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ hash }),
+				}
+			),
+		{
+			onSuccess: () => {
+				console.log("added to activity!");
+			},
+			onError: (_) => {
+				console.log("error adding to activity");
+			},
+			retry: 0,
+		}
+	);
+
 	const handleGetHatchKey = () => {
 		setLoading(true);
 		statsRandomizer.mutate(); // gets key, and sends paired key:stats to blockchain.
@@ -138,11 +161,15 @@ const UserConfirm = ({ stateUtils }) => {
 			hatchFromEgg.runContractFunction({
 				onSuccess: async (tx) => {
 					console.log("tx", tx);
-					const r = await tx.wait().catch((e) => {
+
+					const awaited = await tx.wait().catch((e) => {
 						throw e;
 					});
-					console.log("R, done!!!", r);
+					console.log("awaited done!!!", awaited);
 					setGetNBmon(nbmonId);
+
+					console.log("now adding to activities...");
+					addToActivity.mutate(awaited.transactionHash);
 				},
 				onError: (e) => {
 					setter({

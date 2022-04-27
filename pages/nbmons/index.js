@@ -220,8 +220,6 @@ const AccountPage = () => {
 			return setPageSettings({ ...pageSettings, current: totalPage + 1 });
 	};
 
-	console.log(error);
-
 	return (
 		<Layout title="Account Page | Realm Hunter">
 			<Filters
