@@ -40,6 +40,7 @@ const OverviewActivies = ({ activities }) => {
 								)
 								.map((d) => (
 									<CardItemActivities
+										key={d.transaction_hash}
 										time={d.utcTime}
 										title={activityText(d.transaction_type, d.value)}
 										description="Transaction status (Block Explorer)"

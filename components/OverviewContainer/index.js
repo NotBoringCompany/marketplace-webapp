@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useMoralis, useNativeBalance } from "react-moralis";
 import styled from "styled-components";
 import OverviewInventory from "./OverviewInventory";
 import OverviewWallet from "./OverviewWallet";
 import OverviewActivies from "./OverviewActivies";
-import { TextPrimary } from "components/Typography/Texts";
 
 const OverviewContainer = () => {
 	const { user, isInitializing, isLoading: moralisLoading } = useMoralis();
@@ -102,7 +101,7 @@ const OverviewContainer = () => {
 
 			<OverviewInventory loading={nbmons.isLoading} totalNBMons={totalNBMons} />
 
-			{userActivities.loading ? (
+			{userActivities.isLoading ? (
 				"..."
 			) : (
 				<OverviewActivies activities={activities} />

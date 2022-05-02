@@ -16,6 +16,7 @@ import ForgotPassword from "components/NewModalContents/ForgotPassword/ForgotPas
 import EmailSent from "components/NewModalContents/ForgotPassword/EmailSent";
 import NewPasswordSet from "components/NewModalContents/ForgotPassword/NewPasswordSet";
 import ResetPassword from "components/NewModalContents/ForgotPassword/ResetPassword";
+import WaitHatching from "components/NewModalContents/Hatching/WaitHatching";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -66,9 +67,12 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 	};
 
 	const cantClickOutside = () => {
-		return ["cardPreview", "videoPreview", "userConfirmation"].includes(
-			content
-		);
+		return [
+			"cardPreview",
+			"videoPreview",
+			"userConfirmation",
+			"waitHatching",
+		].includes(content);
 	};
 
 	const newPasswordModals = [
@@ -94,8 +98,9 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 				cardpreview={content === "cardPreview" ? 1 : 0}
 			>
 				<Switch test={content}>
-					{/*Genesis minting modals*/}
 					<MetamaskConfirmation switchId="metamaskConfirmation" />
+
+					{/*Genesis minting modals*/}
 					<WaitTransaction switchId="waitTransaction" />
 					<BeingMinted switchId="beingMinted" />
 					<SuccessMinting switchId="successMinting" stateUtils={stateUtils} />
@@ -105,6 +110,7 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					<UserConfirm switchId="userConfirmation" stateUtils={stateUtils} />
 					<VideoPreview switchId="videoPreview" stateUtils={stateUtils} />
 					<CardPreview switchId="cardPreview" stateUtils={stateUtils} />
+					<WaitHatching switchId="waitHatching" />
 
 					{/*New Password modal*/}
 					<ForgotPassword switchId="forgotPassword" stateUtils={stateUtils} />
