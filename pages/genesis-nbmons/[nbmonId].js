@@ -53,18 +53,17 @@ const IndividualNBMon = () => {
 		"individualNBMon",
 		() =>
 			fetch(
-				// `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons/${parseInt(
-				// 	nbmonId
-				// )}`
 				`${
 					process.env.NEXT_PUBLIC_NEW_REST_API_URL
 				}/genesisNBMon/getGenesisNBMon/${parseInt(nbmonId)}`
 			).then(async (res) => {
 				let fetchedData = await res.json();
-				setNbmon(fetchedData);
 
-				// fetchedData = replaceDummyForSingleNBMon(fetchedData.result);
-				// setNbmon(fetchedData);
+				setNbmon(!fetchedData.errorName ? fetchedData : null);
+				// for some reason error not found from the API
+				//is still fetchedData and not actual error (due to status code 200)
+				fetchedData = replaceDummyForSingleNBMon(fetchedData.result);
+				setNbmon(fetchedData);
 			}),
 		{ refetchOnWindowFocus: false, enabled: isReady, retry: 1 }
 	);
@@ -79,7 +78,7 @@ const IndividualNBMon = () => {
 				<Loading />
 			</Layout>
 		);
-	if (isError) {
+	if (isError || !nbMon) {
 		console.log(error);
 		return <NotFound />;
 	}

@@ -1,7 +1,12 @@
 module.exports = {
 	reactStrictMode: true,
 	async rewrites() {
-		return [];
+		return [
+			{
+				source: "/genesis-nbmons",
+				destination: "/nbmons",
+			},
+		];
 	},
 	images: {
 		domains: ["raw.githubusercontent.com"],

@@ -35,7 +35,7 @@ const CloseMintingTimer = ({ date, rn, dummyDisplay, timeStampsStates }) => {
 						as="p"
 						className="mb-2 text-white text-uppercase text-center"
 					>
-						Public Mint closes X UTC (undecided)
+						Public Mint closes {new Date(date)}
 					</HeadingSuperXXS>
 					<CountDownContainer
 						days={days}
