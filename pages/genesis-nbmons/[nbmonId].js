@@ -58,12 +58,10 @@ const IndividualNBMon = () => {
 				}/genesisNBMon/getGenesisNBMon/${parseInt(nbmonId)}`
 			).then(async (res) => {
 				let fetchedData = await res.json();
-
+				console.log(fetchedData);
 				setNbmon(!fetchedData.errorName ? fetchedData : null);
 				// for some reason error not found from the API
 				//is still fetchedData and not actual error (due to status code 200)
-				fetchedData = replaceDummyForSingleNBMon(fetchedData.result);
-				setNbmon(fetchedData);
 			}),
 		{ refetchOnWindowFocus: false, enabled: isReady, retry: 1 }
 	);
