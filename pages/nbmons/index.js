@@ -46,7 +46,12 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 		>
 			<FilterHeader>
 				<FilterHeaderIcon>
-					<Image src="/images/filter_icon.svg" width={24} height={24} />
+					<Image
+						alt="Filter"
+						src="/images/filter_icon.svg"
+						width={24}
+						height={24}
+					/>
 				</FilterHeaderIcon>
 
 				<FilterHeaderTitle>Filter</FilterHeaderTitle>
@@ -303,6 +308,7 @@ const AccountPage = () => {
 									>
 										<span className="pe-1">Opensea</span>
 										<Image
+											alt="Opensea"
 											src="/images/opensea_link_icon.svg"
 											width={17.5}
 											height={8.75}

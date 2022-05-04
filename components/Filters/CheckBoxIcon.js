@@ -40,6 +40,7 @@ const CheckBoxIcon = ({
 				<Image
 					src={`/images/${label.toLowerCase().replace(" ", "_")}.svg`}
 					width={18}
+					alt={label.toLowerCase()}
 					height={18}
 				/>
 

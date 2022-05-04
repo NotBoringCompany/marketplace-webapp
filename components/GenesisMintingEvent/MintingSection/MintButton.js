@@ -51,6 +51,7 @@ const MintButton = ({
 		}
 		console.log("chainId", chainId);
 		console.log(isWeb3Enabled);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [chainId, user, isWeb3Enabled]);
 	const disabled = maxReached || alreadyMint;
 

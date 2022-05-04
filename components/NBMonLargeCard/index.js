@@ -201,9 +201,19 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 								{genus}
 							</HeadingSM>
 							{nbMon.gender === "male" ? (
-								<Image src="/images/male_1.svg" width={32} height={32} />
+								<Image
+									src="/images/male_1.svg"
+									width={32}
+									height={32}
+									alt="Male"
+								/>
 							) : (
-								<Image src="/images/female_1.svg" width={32} height={32} />
+								<Image
+									src="/images/female_1.svg"
+									width={32}
+									height={32}
+									alt="Female"
+								/>
 							)}
 						</div>
 

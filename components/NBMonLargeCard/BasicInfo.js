@@ -60,7 +60,12 @@ const BasicInfo = ({ nbMon, mine = false }) => {
 							<ButtonCopy
 								onClick={() => navigator.clipboard.writeText(nbMon.owner)}
 							>
-								<Image src="/images/copy_all.svg" height={24} width={24} />
+								<Image
+									src="/images/copy_all.svg"
+									height={24}
+									width={24}
+									alt="Copy"
+								/>
 							</ButtonCopy>
 						</div>
 					</div>
@@ -126,7 +131,12 @@ const BasicInfo = ({ nbMon, mine = false }) => {
 							<ButtonCopy
 								onClick={() => navigator.clipboard.writeText(nbMon.owner)}
 							>
-								<Image src="/images/copy_all.svg" height={24} width={24} />
+								<Image
+									src="/images/copy_all.svg"
+									height={24}
+									width={24}
+									alt="Copy"
+								/>
 							</ButtonCopy>
 						</div>
 					</StatsContainer>

@@ -13,7 +13,7 @@ const FaqContainer = () => {
 	return (
 		<Wrapper className="px-3 mx-auto">
 			<div className="text-center">
-				<Image src="/images/logo.png" width={69.29} height={77.12} />
+				<Image src="/images/logo.png" width={69.29} height={77.12} alt="Logo" />
 
 				<div className="text-start my-4">
 					<TitleHeader as="h1" className="text-secondary mb-2">

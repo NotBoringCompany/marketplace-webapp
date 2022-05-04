@@ -68,6 +68,7 @@ const CardInventorySoon = ({ itemTitle = "" }) => {
 				className="mt-1"
 				height={40}
 				width={40}
+				alt="QuestionMark"
 			/>
 
 			<TextItem>{itemTitle}</TextItem>

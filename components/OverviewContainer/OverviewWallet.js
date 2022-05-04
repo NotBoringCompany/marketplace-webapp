@@ -20,6 +20,7 @@ const OverviewWallet = ({ addressEth, totalEth1, totalEthUsd1 }) => {
 				<AddressWrap>
 					<ImageWrap>
 						<Image
+							alt="Eth Logo"
 							src="/images/overview-eth-address.svg"
 							width={28.04}
 							height={44}
@@ -35,7 +36,12 @@ const OverviewWallet = ({ addressEth, totalEth1, totalEthUsd1 }) => {
 							<ButtonCopy
 								onClick={() => navigator.clipboard.writeText(addressEth)}
 							>
-								<Image src="/images/copy_all.svg" height={24} width={24} />
+								<Image
+									alt="Copy"
+									src="/images/copy_all.svg"
+									height={24}
+									width={24}
+								/>
 							</ButtonCopy>
 						</CopyAddress>
 					</AddressContent>
@@ -44,7 +50,12 @@ const OverviewWallet = ({ addressEth, totalEth1, totalEthUsd1 }) => {
 				<ListCrypto>
 					<CryptoItem>
 						<CryptoIcon>
-							<Image src="/images/Ethereum.svg" width={30} height={30} />
+							<Image
+								alt="Eth Logo"
+								src="/images/Ethereum.svg"
+								width={30}
+								height={30}
+							/>
 						</CryptoIcon>
 
 						<CryptoDetail>
