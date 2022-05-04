@@ -55,8 +55,8 @@ export const useFilterStore = create((set, get) => ({
 				id: "heree",
 			},
 			{
-				name: "Fennec",
-				id: "fennec",
+				name: "Spherno",
+				id: "spherno",
 			},
 			{
 				name: "Sworffle",

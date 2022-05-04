@@ -57,8 +57,8 @@ export const data = {
 			description:
 				"Heree has a strong connection with the forest, body made of leaves and sticks. Gets sick if he spends too much time in the city.",
 		},
-		fennec: {
-			imageurl: `${ASSET_URL}/fennec.png`,
+		spherno: {
+			imageurl: `${ASSET_URL}/spherno.png`,
 			description:
 				"A grumpy Fennec fox from Egypt. Has long pointy ears to generate powerful blows to its opponents and can also use them to cover itself from fierce sandstorms.",
 		},
