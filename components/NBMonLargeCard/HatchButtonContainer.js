@@ -47,8 +47,13 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 			onSuccess: async (response) => {
 				if (response.ok) {
 					const res = await response.json();
-					setKey(res.key);
-					console.log("Hatching key: ", res.key);
+					if (res.key) {
+						setKey(res.key);
+						console.log("Hatching key: ", res.key);
+					} else {
+						console.log("Retrying due to error:", res.reason && res.reason);
+						statsRandomizer.mutate();
+					}
 				} else {
 					const error = new Error(response.statusText);
 					error.response = response;
