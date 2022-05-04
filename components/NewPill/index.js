@@ -20,6 +20,7 @@ const PillContainer = styled.div`
 	line-height: 14px;
 	padding: 6px 14px;
 	justify-content: center;
+
 	& > span {
 		flex-shrink: 0;
 	}
