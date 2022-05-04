@@ -12,6 +12,10 @@ const StyledHeadingSuperXXS = styled(HeadingSuperXXS)`
 	line-height: 24px;
 `;
 
+const TypesContainer = styled.div`
+	max-width: 150px;
+`;
+
 const Stats = ({ nbMon }) => {
 	return (
 		<div className="d-flex flex-column align-items-center p-0 p-lg-3 pt-0">
@@ -40,6 +44,7 @@ const Stats = ({ nbMon }) => {
 					<div className="d-flex flex-wrap justify-content-center">
 						{nbMon.strongAgainst.map((type) => (
 							<NewPill
+								noText
 								className="me-1 mb-2"
 								key={type}
 								pillType="type"
@@ -62,6 +67,7 @@ const Stats = ({ nbMon }) => {
 					<div className="d-flex flex-wrap justify-content-center">
 						{nbMon.weakAgainst.map((type) => (
 							<NewPill
+								noText
 								className="me-1 mb-2"
 								key={type}
 								pillType="type"
@@ -86,6 +92,7 @@ const Stats = ({ nbMon }) => {
 					<div className="d-flex flex-wrap justify-content-center">
 						{nbMon.resistantTo.map((type) => (
 							<NewPill
+								noText
 								className="me-1 mb-2"
 								key={type}
 								pillType="type"
@@ -107,6 +114,7 @@ const Stats = ({ nbMon }) => {
 					<div className="d-flex flex-wrap justify-content-center">
 						{nbMon.vulnerableTo.map((type) => (
 							<NewPill
+								noText
 								className="me-1 mb-2"
 								key={type}
 								pillType="type"

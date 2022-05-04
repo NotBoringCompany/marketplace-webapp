@@ -40,7 +40,12 @@ const BigPillContainer = styled(PillContainer)`
 	}
 `;
 
-const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
+const NewPill = ({
+	pillType = "fertility",
+	content = null,
+	noText = false,
+	...props
+}) => {
 	content = content ? content.toLowerCase() : pillType;
 
 	let modifiedPillType = pillType === "mutation" ? "type" : pillType;
@@ -67,7 +72,7 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 					width={14}
 					height={14}
 				/>
-				<div className="ms-1 myContainer">{content}</div>
+				{!noText && <div className="ms-1 myContainer">{content}</div>}
 			</BigPillContainer>
 		);
 	}
@@ -106,11 +111,12 @@ const NewPill = ({ pillType = "fertility", content = null, ...props }) => {
 					height={15}
 				/>
 			)}
-
-			<div className="ms-2 ">
-				{pillType === "mutation" && "Mutated: "}
-				{content}
-			</div>
+			{!noText && (
+				<div className="ms-2 ">
+					{pillType === "mutation" && "Mutated: "}
+					{content}
+				</div>
+			)}
 		</PillContainer>
 	);
 };
