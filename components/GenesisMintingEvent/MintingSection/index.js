@@ -64,6 +64,8 @@ const MintingSection = () => {
 		canMint: false,
 		isWhitelisted: false,
 		hasMintedBefore: false,
+		amountMinted: 0,
+		hasMintedFive: false,
 	});
 	const [timeStamps, setTimeStamps] = useState({
 		now: 0,
@@ -78,7 +80,13 @@ const MintingSection = () => {
 	const [videoLoaded, setVideoLoaded] = useState(false);
 	const { statesSwitchModal } = useContext(AppContext);
 	const { haveBeenMinted, supplyLimit } = supplyData;
-	const { canMint, isWhitelisted, hasMintedBefore } = userStatus;
+	const {
+		canMint,
+		isWhitelisted,
+		hasMintedBefore,
+		amountMinted,
+		hasMintedFive,
+	} = userStatus;
 	const { isWhitelistOpen, isPublicOpen, isMintingEnded } = timeStamps;
 
 	const [antiRace, setAntiRace] = useState(true);
@@ -112,7 +120,7 @@ const MintingSection = () => {
 				setTimeout(() => {
 					setUserStatus(status);
 					setAntiRace(false);
-				}, 150);
+				}, 50);
 			},
 			refetchOnWindowFocus: false,
 			retry: 0,
@@ -147,7 +155,9 @@ const MintingSection = () => {
 					isMintingEnded: timeStamps.isMintingEnded,
 				});
 
-				setAntiRace(false);
+				setTimeout(() => {
+					setAntiRace(false);
+				}, 150);
 			},
 			refetchOnWindowFocus: false,
 			retry: 0,
@@ -159,7 +169,7 @@ const MintingSection = () => {
 		(mintData) =>
 			fetch(
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonMinting/${
-					isWhitelisted ? `whitelistedMint` : `publicMint`
+					isWhitelisted && amountMinted === 0 ? `whitelistedMint` : `publicMint`
 				}`,
 				{
 					method: "POST",
@@ -235,7 +245,9 @@ const MintingSection = () => {
 
 	useEffect(() => {
 		if (!isLoading && !isFetching) {
+			console.log(hasMintedFive);
 			if (
+				!hasMintedFive &&
 				!hasMintedBefore &&
 				haveBeenMinted < supplyLimit &&
 				((isWhitelistOpen && isWhitelisted) || (isPublicOpen && !isWhitelisted))
@@ -244,9 +256,17 @@ const MintingSection = () => {
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasMintedBefore, isPublicOpen, isWhitelistOpen, isLoading, isFetching]);
+	}, [
+		hasMintedFive,
+		hasMintedBefore,
+		isPublicOpen,
+		isWhitelistOpen,
+		isLoading,
+		isFetching,
+	]);
 
 	const handleMintButtonClicked = async () => {
+		console.log("canMint", canMint);
 		if (canMint) {
 			setTrxAndMintingLoading(true);
 			statesSwitchModal.setter({
