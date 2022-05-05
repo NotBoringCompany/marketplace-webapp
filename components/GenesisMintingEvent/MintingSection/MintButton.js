@@ -31,6 +31,8 @@ const MintButton = ({
 	maxReached = false,
 	alreadyMint = false,
 	absoluteDisabled = false,
+	waitPublicOpenForWhitelistedUsers = false,
+	amountMinted = 0,
 	onClick = () => {},
 }) => {
 	const { chainId } = useChain();
@@ -49,8 +51,8 @@ const MintButton = ({
 		} else {
 			setHide(false);
 		}
-		console.log("chainId", chainId);
-		console.log(isWeb3Enabled);
+		// console.log("chainId", chainId);
+		// console.log(isWeb3Enabled);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [chainId, user, isWeb3Enabled]);
 	const disabled = maxReached || alreadyMint;
@@ -64,11 +66,13 @@ const MintButton = ({
 			variant="secondary"
 		>
 			{alreadyMint ? (
-				<TextNormal className="text-secondary ms-auto">1/1</TextNormal>
+				<TextNormal className="text-secondary ms-auto">5/5</TextNormal>
 			) : (
 				<>
 					{!maxReached && (
-						<TextNormal className="text-white ms-auto">0/1</TextNormal>
+						<TextNormal className="text-white ms-auto">
+							{amountMinted}/5
+						</TextNormal>
 					)}
 				</>
 			)}
@@ -80,7 +84,9 @@ const MintButton = ({
 						className="text-white mt-3 text-content text-center"
 					>
 						{absoluteDisabled
-							? `Mint your Genesis NBMon Egg...`
+							? waitPublicOpenForWhitelistedUsers
+								? `You have minted your whitelisted share. Please wait for the public minting to be open to mint more.`
+								: `Mint your Genesis NBMon Egg...`
 							: `Mint your Genesis NBMon Egg`}
 					</StyledTextNormal>
 				</>
@@ -92,8 +98,8 @@ const MintButton = ({
 							as="p"
 							className="text-secondary mt-3 text-content text-center"
 						>
-							You successfully minted your <br />
-							Genesis NBMon
+							You have successfully minted <br />
+							all of your Genesis NBMon shares.
 						</StyledTextNormal>
 					) : (
 						<StyledTextNormal

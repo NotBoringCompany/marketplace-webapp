@@ -11,7 +11,11 @@ const NotWhitelistedBox = ({ supplyData, address }) => {
 				Your address:
 			</HeadingSuperXXS>
 
-			<HeadingSuperXXS as="p" className="text-white mb-2">
+			<HeadingSuperXXS
+				style={{ lineBreak: "anywhere" }}
+				as="p"
+				className="text-white mb-2"
+			>
 				{address}
 			</HeadingSuperXXS>
 

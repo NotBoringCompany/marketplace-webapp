@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Countdown from "react-countdown";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import CountDownContainer from "components/CountDownContainer";
-
+import { formatInTimeZone } from "date-fns-tz";
 const CloseMintingTimer = ({ date, rn, dummyDisplay, timeStampsStates }) => {
 	const { setTimeStamps, timeStamps } = timeStampsStates;
+	const formattedDate = new Date(date);
 	if (dummyDisplay)
 		return (
 			<div className="d-flex flex-column justify-content-center align-items-center">
@@ -12,7 +13,8 @@ const CloseMintingTimer = ({ date, rn, dummyDisplay, timeStampsStates }) => {
 					as="p"
 					className="mb-2 text-white text-uppercase text-center"
 				>
-					Whitelist Mint opened at X UTC
+					Whitelist Mint opened on{" "}
+					{formatInTimeZone(formattedDate, "utc", "MMMM do h a")} UTC
 				</HeadingSuperXXS>
 				<CountDownContainer
 					days={0}
@@ -35,7 +37,8 @@ const CloseMintingTimer = ({ date, rn, dummyDisplay, timeStampsStates }) => {
 						as="p"
 						className="mb-2 text-white text-uppercase text-center"
 					>
-						Public Mint closes at X UTC
+						Public Mint closes on{" "}
+						{formatInTimeZone(formattedDate, "utc", "MMMM do h a")} UTC
 					</HeadingSuperXXS>
 					<CountDownContainer
 						days={days}

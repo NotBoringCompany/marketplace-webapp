@@ -70,7 +70,6 @@ export const MintBtnContainer = styled.div`
 
 	& p {
 		max-width: 300%;
-		line-break: anywhere;
 		text-align: center;
 	}
 `;

@@ -26,6 +26,7 @@ const Timers = ({ timeStampsStates }) => {
 
 			{!isPublicOpen && isWhitelistOpen && (
 				<CloseMintingTimer
+					date={whitelistOpenAt}
 					dummyDisplay
 					timeStampsStates={{ timeStamps, setTimeStamps }}
 				/>

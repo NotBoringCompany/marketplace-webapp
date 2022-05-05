@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 
 import { mediaBreakpoint } from "utils/breakpoints";
+import { formatInTimeZone } from "date-fns-tz";
 import AppContext from "context/AppContext";
 
 import Loading from "components/Loading";
@@ -29,6 +30,7 @@ import NotWhitelistedBox from "./NotWhitelistedBox";
 import Timers from "./Timers";
 import BlurredStats from "./BlurredStats";
 import Thankyou from "./Thankyou";
+
 const StyledHeadingMD = styled(HeadingMD)`
 	& span.skinny {
 		font-weight: lighter;
@@ -63,7 +65,6 @@ const MintingSection = () => {
 	const [userStatus, setUserStatus] = useState({
 		canMint: false,
 		isWhitelisted: false,
-		hasMintedBefore: false,
 		amountMinted: 0,
 		hasMintedFive: false,
 	});
@@ -80,14 +81,10 @@ const MintingSection = () => {
 	const [videoLoaded, setVideoLoaded] = useState(false);
 	const { statesSwitchModal } = useContext(AppContext);
 	const { haveBeenMinted, supplyLimit } = supplyData;
-	const {
-		canMint,
-		isWhitelisted,
-		hasMintedBefore,
-		amountMinted,
-		hasMintedFive,
-	} = userStatus;
+	const { canMint, isWhitelisted, amountMinted, hasMintedFive } = userStatus;
 	const { isWhitelistOpen, isPublicOpen, isMintingEnded } = timeStamps;
+
+	const { whitelistOpenAt } = timeStamps;
 
 	const [antiRace, setAntiRace] = useState(true);
 
@@ -190,11 +187,9 @@ const MintingSection = () => {
 						...supplyData,
 						haveBeenMinted: haveBeenMinted + 1,
 					});
-					setUserStatus({
-						...userStatus,
-						canMint: false,
-						hasMintedBefore: true,
-					});
+
+					setUserStatus({ ...userStatus, amountMinted: amountMinted + 1 });
+
 					console.log("nbmonId", res.nbmonId);
 					statesSwitchModal.setter({
 						show: true,
@@ -248,7 +243,6 @@ const MintingSection = () => {
 			console.log(hasMintedFive);
 			if (
 				!hasMintedFive &&
-				!hasMintedBefore &&
 				haveBeenMinted < supplyLimit &&
 				((isWhitelistOpen && isWhitelisted) || (isPublicOpen && !isWhitelisted))
 			) {
@@ -256,14 +250,35 @@ const MintingSection = () => {
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		hasMintedFive,
-		hasMintedBefore,
-		isPublicOpen,
-		isWhitelistOpen,
-		isLoading,
-		isFetching,
-	]);
+	}, [hasMintedFive, isPublicOpen, isWhitelistOpen, isLoading, isFetching]);
+
+	useEffect(() => {
+		if (amountMinted === 5 || hasMintedFive) {
+			// same thing
+			setUserStatus({
+				...userStatus,
+				canMint: false,
+				hasMintedFive: true,
+			});
+		} else {
+			if (isWhitelisted && amountMinted >= 1 && !isPublicOpen) {
+				// Actually amountMinted is only gonna be === 1 (since whitelist is only allowed to mint 1 before public is open)
+				//. However, just in case.
+				setUserStatus({
+					...userStatus,
+					canMint: false,
+					hasMintedFive,
+				});
+			} else {
+				setUserStatus({
+					...userStatus,
+					canMint: true,
+					hasMintedFive,
+				});
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [hasMintedFive, amountMinted]);
 
 	const handleMintButtonClicked = async () => {
 		console.log("canMint", canMint);
@@ -358,7 +373,12 @@ const MintingSection = () => {
 										<span className="skinny">
 											Genesis NBMon egg minting starts on
 										</span>{" "}
-										4th May, 2PM UTC
+										{formatInTimeZone(
+											new Date(whitelistOpenAt),
+											"utc",
+											"MMMM do h a"
+										)}{" "}
+										UTC
 									</StyledHeadingMD>
 								)}
 
@@ -385,11 +405,11 @@ const MintingSection = () => {
 									<>
 										{!isWhitelistOpen &&
 											!isPublicOpen &&
-											!hasMintedBefore &&
+											!hasMintedFive &&
 											haveBeenMinted < supplyLimit && (
 												<AccountInfoBox user={user} />
 											)}
-										{!hasMintedBefore && haveBeenMinted >= supplyLimit ? (
+										{!hasMintedFive && haveBeenMinted >= supplyLimit ? (
 											<MintBtnContainer>
 												<MintButton maxReached />
 												<BlurContainer className="no-radius-top">
@@ -411,24 +431,45 @@ const MintingSection = () => {
 														/>
 													) : (
 														<>
-															{hasMintedBefore ? (
+															{hasMintedFive ? (
 																<MintButton alreadyMint />
 															) : (
 																<>
-																	{((isWhitelistOpen && isWhitelisted) ||
-																		(isPublicOpen && !isWhitelisted)) && (
+																	{isWhitelisted &&
+																	amountMinted >= 1 &&
+																	// Actually amountMinted is only gonna be === 1
+																	//(since whitelist is only allowed to mint 1 before public is open).
+																	// However, just in case.
+																	!isPublicOpen ? (
 																		<MintButton
-																			absoluteDisabled={trxAndMintingLoading}
+																			amountMinted={amountMinted}
+																			waitPublicOpenForWhitelistedUsers
+																			absoluteDisabled
 																			onClick={() => {
 																				handleMintButtonClicked();
 																			}}
 																		/>
+																	) : (
+																		<>
+																			{((isWhitelistOpen && isWhitelisted) ||
+																				(isPublicOpen && !isWhitelisted)) && (
+																				<MintButton
+																					amountMinted={amountMinted}
+																					absoluteDisabled={
+																						trxAndMintingLoading
+																					}
+																					onClick={() => {
+																						handleMintButtonClicked();
+																					}}
+																				/>
+																			)}
+																		</>
 																	)}
 																</>
 															)}
 															{(isWhitelistOpen ||
 																isPublicOpen ||
-																hasMintedBefore) && (
+																hasMintedFive) && (
 																<BlurredStats supplyData={supplyData} />
 															)}
 														</>
