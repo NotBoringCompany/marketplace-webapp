@@ -54,18 +54,16 @@ const Index = () => {
 	const { runContractFunction, data, error, isLoading, isFetching } =
 		useWeb3Contract({
 			contractAddress: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
-			functionName: "hatchFromEgg",
+			functionName: "setApprovalForAll",
 			abi: mintingAbi,
 			params: {
-				_key: "4dd7d6f3-087e-4253-ae56-141f7e5e9c49",
-				_nbmonId: "12",
+				operator: "0x460107fAB29D57a6926DddC603B7331F4D3bCA05",
+				approved: true,
 			},
 		});
 
 	const executeF = async () => {
-		enableWeb3({ provider: "metamask" }).then(() => {
-			runContractFunction();
-		});
+		runContractFunction();
 	};
 
 	useEffect(() => {
@@ -147,7 +145,8 @@ const Index = () => {
 			</button>{" "} */}
 			{/* <button onClick={update}>update</button>{" "} */}
 			{/* {data && <pre>{JSON.stringify(data)}</pre>} */}
-			<button onClick={() => executeF()}>HATCH THE EGG</button>{" "}
+			{/* <button onClick={() => executeF()}>HATCH THE EGG</button>{" "} */}
+			<button onClick={() => executeF()}>setApprovalForAll</button>{" "}
 		</div>
 	);
 };
