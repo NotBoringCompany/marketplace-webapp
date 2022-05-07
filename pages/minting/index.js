@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	useMoralis,
 	useWeb3ExecuteFunction,
@@ -15,41 +15,184 @@ const randomIntFromInterval = (min, max) => {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+const TEST_ABI = [
+	{
+		inputs: [
+			{
+				internalType: "bytes32",
+				name: "_messageHash",
+				type: "bytes32",
+			},
+		],
+		name: "getEthSignedMessageHash",
+		outputs: [
+			{
+				internalType: "bytes32",
+				name: "",
+				type: "bytes32",
+			},
+		],
+		stateMutability: "pure",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "_nftAddress",
+				type: "address",
+			},
+			{
+				internalType: "uint256",
+				name: "_tokenId",
+				type: "uint256",
+			},
+			{
+				internalType: "address",
+				name: "_paymentTokenAddress",
+				type: "address",
+			},
+			{
+				internalType: "uint256",
+				name: "_price",
+				type: "uint256",
+			},
+			{
+				internalType: "uint256",
+				name: "_nonce",
+				type: "uint256",
+			},
+		],
+		name: "getMessageHash",
+		outputs: [
+			{
+				internalType: "bytes32",
+				name: "",
+				type: "bytes32",
+			},
+		],
+		stateMutability: "pure",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "bytes32",
+				name: "_ethSignedMessageHash",
+				type: "bytes32",
+			},
+			{
+				internalType: "bytes",
+				name: "_signature",
+				type: "bytes",
+			},
+		],
+		name: "recoverSigner",
+		outputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address",
+			},
+		],
+		stateMutability: "pure",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "bytes",
+				name: "sig",
+				type: "bytes",
+			},
+		],
+		name: "splitSignature",
+		outputs: [
+			{
+				internalType: "bytes32",
+				name: "r",
+				type: "bytes32",
+			},
+			{
+				internalType: "bytes32",
+				name: "s",
+				type: "bytes32",
+			},
+			{
+				internalType: "uint8",
+				name: "v",
+				type: "uint8",
+			},
+		],
+		stateMutability: "pure",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "_signer",
+				type: "address",
+			},
+			{
+				internalType: "address",
+				name: "_nftAddress",
+				type: "address",
+			},
+			{
+				internalType: "uint256",
+				name: "_tokenId",
+				type: "uint256",
+			},
+			{
+				internalType: "address",
+				name: "_paymentTokenAddress",
+				type: "address",
+			},
+			{
+				internalType: "uint256",
+				name: "_price",
+				type: "uint256",
+			},
+			{
+				internalType: "uint256",
+				name: "_nonce",
+				type: "uint256",
+			},
+			{
+				internalType: "bytes",
+				name: "signature",
+				type: "bytes",
+			},
+		],
+		name: "verify",
+		outputs: [
+			{
+				internalType: "bool",
+				name: "",
+				type: "bool",
+			},
+		],
+		stateMutability: "pure",
+		type: "function",
+	},
+];
+const NFT_ADDRESS = "0xc23f1BC9Ad2682A8659EA67c3b54BbB259FB5C38";
+const PAYMENT_TOKEN_ADDRESS = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 const Index = () => {
 	const { Moralis, user, isAuthenticated, enableWeb3 } = useMoralis();
+	const web3 = new Web3(Moralis.provider);
+	const [signature, setSignature] = useState(null);
 
-	console.log();
-
+	useEffect(() => {
+		if (signature) {
+			verify.runContractFunction().then((verified) => {
+				console.log("verified", verified);
+			});
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [signature]);
 	const mintingAbi = NBMonMinting;
-
-	// const { data, error, fetch, isFetching, isLoading } = useWeb3ExecuteFunction({
-	// 	abi: mintingAbi,
-	// 	contractAddress: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
-	// 	functionName: "mintOrigin",
-	// 	params: {
-	// 		_randomNumber: randomIntFromInterval(0, 9007199254740900),
-	// 		_owner: user && user.attributes.ethAddress,
-	// 		_from: user && user.attributes.ethAddress,
-	// 	},
-	// });
-
-	// const wx = () => {
-
-	// 	runContractFunction();
-
-	// 	console.log(data);
-	// };
-
-	// const { fetch, data, error, isLoading, isFetching } = useWeb3ExecuteFunction({
-	// 	contractAddress: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
-	// 	functionName: "mintOrigin",
-	// 	abi: mintingAbi,
-	// 	params: {
-	// 		_randomNumber: randomIntFromInterval(0, 9007199254740900),
-	// 		_owner: user && user.attributes.ethAddress,
-	// 		_from: user && user.attributes.ethAddress,
-	// 	},
-	// });
 
 	const { runContractFunction, data, error, isLoading, isFetching } =
 		useWeb3Contract({
@@ -65,6 +208,35 @@ const Index = () => {
 	const executeF = async () => {
 		runContractFunction();
 	};
+
+	const signatureContract = useWeb3Contract({
+		contractAddress: "0x0D42f72fF98DF201156D33A67a61274B73041A30",
+		functionName: "getMessageHash",
+		abi: TEST_ABI,
+		params: {
+			_nftAddress: NFT_ADDRESS,
+			_tokenId: 1,
+			_paymentTokenAddress: PAYMENT_TOKEN_ADDRESS,
+			_price: Web3.utils.toWei("2.5", "ether"),
+			_nonce: 1,
+		},
+	});
+
+	const verify = useWeb3Contract({
+		contractAddress: "0x0D42f72fF98DF201156D33A67a61274B73041A30",
+		functionName: "verify",
+		abi: TEST_ABI,
+		params: {
+			_signer: user && user.attributes.ethAddress,
+			_nftAddress: NFT_ADDRESS,
+			_tokenId: 1,
+			_paymentTokenAddress: PAYMENT_TOKEN_ADDRESS,
+			_price: Web3.utils.toWei("2.5", "ether"),
+			_nonce: 1,
+			signature:
+				"0x5bd04aa46832f6eb9a57dca0d33e91b24dfafc82da753fe8e4c36b9721341b704f6e930297a80f2b4ced548ed85a1c196d2f9be5b1a323370f5c19b0dbc588f41b",
+		},
+	});
 
 	useEffect(() => {
 		if (data) {
@@ -131,6 +303,8 @@ const Index = () => {
 			.then((r) => console.log(r))
 			.catch((e) => console.log("err", e));
 	};
+
+	//hash: 0x2de8b69d7f168e10359c88e4a14ce6d2bcf19fc84c1c78d69afebebf53d0e02b
 	return (
 		<div className="text-white">
 			Authenticated: {isAuthenticated.toString()}, as:{" "}
@@ -147,6 +321,24 @@ const Index = () => {
 			{/* {data && <pre>{JSON.stringify(data)}</pre>} */}
 			{/* <button onClick={() => executeF()}>HATCH THE EGG</button>{" "} */}
 			<button onClick={() => executeF()}>setApprovalForAll</button>{" "}
+			<button
+				onClick={async () => {
+					// const hash = await signatureContract.runContractFunction();
+					// console.log("hash", hash);
+
+					// const sig = await web3.eth.personal.sign(
+					// 	hash,
+					// 	user && user.attributes.ethAddress
+					// );
+					// console.log("sig", sig);
+					// setSignature(sig);
+					const verified = await verify.runContractFunction();
+
+					console.log("verified", verified);
+				}}
+			>
+				test
+			</button>
 		</div>
 	);
 };
