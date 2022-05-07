@@ -31,9 +31,13 @@ const EmailSent = ({ stateUtils }) => {
 			<TextPrimary className="text-center mt-3">
 				Email has been sent
 			</TextPrimary>
-			<StyledText className="my-3">
+			<StyledText className="mt-3 mb-2">
 				If your account exists, you will receive an email shortly containing a
-				link to reset your password.
+				link to reset your password.{" "}
+			</StyledText>
+
+			<StyledText className="mb-3">
+				Important: Please check your inbox as well as your spam folder! 😊
 			</StyledText>
 
 			<div className="ms-auto mt-4">

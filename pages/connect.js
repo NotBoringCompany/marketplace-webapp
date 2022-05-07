@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
 import { useMoralis } from "react-moralis";
 
+import AppContext from "context/AppContext";
 import Layout from "components/Layout";
 import { HeadingSM } from "components/Typography/Headings";
 import { TextPrimary } from "components/Typography/Texts";
@@ -26,6 +29,9 @@ const StyledContainer = styled(Container)`
 const Connect = () => {
 	const { isAuthenticated, isAuthenticating, hasAuthError, login, authError } =
 		useMoralis();
+	const { statesSwitchModal } = useContext(AppContext);
+
+	const router = useRouter();
 
 	const [authDetail, setAuthDetail] = useState({
 		email: "",
@@ -33,9 +39,69 @@ const Connect = () => {
 		errors: { email: "", password: "", authFailedMessage: "" },
 	});
 
+	const [resetPasswordToken, setResetPasswordToken] = useState("");
+
 	const { email, password, errors } = authDetail;
 
+	const { query } = router;
+
+	useQuery(
+		"tokenCheck",
+		() =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/account/password-token-check/${resetPasswordToken}`
+			),
+		{
+			onSuccess: async (response) => {
+				const res = await response.json();
+				if (response.ok) {
+					statesSwitchModal.setter({
+						show: true,
+						content: "resetPassword",
+						tokenId: resetPasswordToken,
+					});
+					return;
+				} else {
+					if (res.valid === false) {
+						statesSwitchModal.setter({
+							show: true,
+							content: "txError",
+							detail: {
+								title: "Error",
+								text: "This password reset link doesn't \n exist or has expired. \n\n Please feel free to request a \n new one if you need to.",
+							},
+						});
+					} else {
+						console.log("TOKEN CHECK ERROR", res);
+						statesSwitchModal.setter({
+							show: true,
+							content: "txError",
+							detail: {
+								title: "Error",
+								text: "An unexpected error occured when trying to process your reset \n password URL. \n\n Please refrresh this page and \n try again. (400)",
+							},
+						});
+					}
+				}
+			},
+			onError: (_) => {
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Error",
+						text: "An unexpected error occured when trying to process your reset \n password URL. \n\n Please refrresh this page and \n try again.",
+					},
+				});
+			},
+			retry: 1,
+			enabled: resetPasswordToken.length > 0,
+			refetchOnWindowFocus: false,
+		}
+	);
+
 	useEffect(() => {
+		console.log("ROUTER", router);
 		if (hasAuthError) {
 			// console.log("Error:", authError.message);
 			if (authError.message === "Invalid username/password.") {
@@ -52,6 +118,13 @@ const Connect = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasAuthError]);
+
+	useEffect(() => {
+		//We know for sure rtk will be of length 300 chars
+		if (query.rtk && query.rtk.length === 300) {
+			setResetPasswordToken(query.rtk);
+		}
+	}, [query]);
 
 	const handleInputChange = (e) => {
 		setAuthDetail({ ...authDetail, [e.target.name]: e.target.value });

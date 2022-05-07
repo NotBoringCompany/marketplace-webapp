@@ -45,8 +45,9 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 			),
 		{
 			onSuccess: async (response) => {
+				const res = await response.json();
+
 				if (response.ok) {
-					const res = await response.json();
 					if (res.key) {
 						setKey(res.key);
 						console.log("Hatching key: ", res.key);
@@ -55,9 +56,15 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 						statsRandomizer.mutate();
 					}
 				} else {
-					const error = new Error(response.statusText);
-					error.response = response;
-					throw error;
+					console.log("ERROR HATCHING", res);
+					setter({
+						show: true,
+						content: "txError",
+						detail: {
+							title: "Hatching Error",
+							text: `We are sorry, there was a problem in getting your hatching key. \n\n Please refresh this page \n and try again.. (400)`,
+						},
+					});
 				}
 			},
 			onError: (_) => {
@@ -84,14 +91,21 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 			),
 		{
 			onSuccess: async (response) => {
+				const nbMon = await response.json();
+
 				if (response.ok) {
-					const nbMon = await response.json();
 					console.log("hatchedNBmon", nbMon);
 					setter({ content: "videoPreview", show: true, nbMon });
 				} else {
-					const error = new Error(response.statusText);
-					error.response = response;
-					throw error;
+					console.log("GET HATCHED NBMON ERROR", nbMon);
+					setter({
+						show: true,
+						content: "txError",
+						detail: {
+							title: "Hatching Error",
+							text: "We are sorry, there was a problem in displaying your hatched NBMon. \n \n Please refresh this page. (400)",
+						},
+					});
 				}
 			},
 			onError: (_) => {

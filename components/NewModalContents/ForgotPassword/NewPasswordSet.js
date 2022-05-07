@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import styled from "styled-components";
 
@@ -16,6 +17,7 @@ const StyledText = styled(TextSecondary)`
 `;
 
 const NewPasswordSet = ({ stateUtils }) => {
+	const router = useRouter();
 	const { setter, getter } = stateUtils;
 
 	return (
@@ -36,6 +38,7 @@ const NewPasswordSet = ({ stateUtils }) => {
 				<StyledButton
 					onClick={() => {
 						setter({ ...getter, show: false });
+						router.push("/connect");
 					}}
 					className="text-secondary"
 				>

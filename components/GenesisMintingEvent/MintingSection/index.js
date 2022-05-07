@@ -179,9 +179,8 @@ const MintingSection = () => {
 		{
 			onSuccess: async (response) => {
 				//step3
-
+				const res = await response.json();
 				if (response.ok) {
-					const res = await response.json();
 					console.log("MUTATION SUCCESSFUL", res);
 					setSupplyData({
 						...supplyData,
@@ -198,9 +197,15 @@ const MintingSection = () => {
 					});
 					return;
 				} else {
-					const error = new Error(response.statusText);
-					error.response = response;
-					throw error;
+					console.log("ERROR MINTING", res);
+					statesSwitchModal.setter({
+						show: true,
+						content: "txError",
+						detail: {
+							title: "Minting Error",
+							text: "We are sorry, an unexpected \n minting error occured. \n \n Please contact us to let us know \n the details..",
+						},
+					});
 				}
 			},
 			onError: (_) => {
