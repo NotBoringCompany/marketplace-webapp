@@ -181,7 +181,7 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 				) : (
 					<NBMonImage src={data.genus[genus].imageurl} alt="NBMon" />
 				)}
-				{nbMon.mutation === "mutated" && (
+				{nbMon.mutation === "Mutated" && (
 					<MutationImage
 						src={data.types[nbMon.mutationType.toLowerCase()].imageurl}
 						alt="mutation"
@@ -200,7 +200,7 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 							<HeadingSM as="h1" className="text-white text-capitalize me-2">
 								{genus}
 							</HeadingSM>
-							{nbMon.gender === "male" ? (
+							{nbMon.gender === "Male" ? (
 								<Image
 									src="/images/male_1.svg"
 									width={32}

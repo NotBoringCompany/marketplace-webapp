@@ -120,7 +120,7 @@ const NBMonCard = ({ nbMon, ...props }) => {
 	}
 	return (
 		<OuterCard
-			mutation={mutation === "mutated" ? 1 : 0}
+			mutation={mutation === "Mutated" ? 1 : 0}
 			mutationcolor={
 				mutationType
 					? nbmonColorSchemes.colors.type[mutationType].background
@@ -182,12 +182,12 @@ const NBMonCard = ({ nbMon, ...props }) => {
 						<HeadingSuperXXS
 							as="p"
 							className={`text-capitalize genusName text-center ${
-								gender === "male" ? "me-2" : "me-1"
+								gender === "Male" ? "me-2" : "me-1"
 							}`}
 						>
 							{genus}
 						</HeadingSuperXXS>
-						{gender === "male" ? (
+						{gender === "Male" ? (
 							<Image
 								src="/images/male_1.svg"
 								alt="Male"
@@ -213,7 +213,7 @@ const NBMonCard = ({ nbMon, ...props }) => {
 								className="ms-1"
 							/>
 						</div>
-						{mutation === "mutated" && (
+						{mutation === "Mutated" && (
 							<NewPill
 								className="w-100 mt-2"
 								pillType="mutation"
