@@ -8,6 +8,7 @@ import HatchButton from "components/Buttons/HatchButton";
 
 const Subtitle = styled(HeadingSuperXXS)`
 	font-size: 16px;
+	font-weight: normal;
 `;
 
 const CancelButton = styled.button`
@@ -39,9 +40,9 @@ const UserConfirm = ({ stateUtils }) => {
 			</TextPrimary>
 			{loading ? (
 				<Image
-					src={"/images/key_on.svg"}
-					height={48}
-					width={48}
+					src={"/images/key_purple.svg"}
+					height={29}
+					width={29}
 					alt="Hatching Key"
 				/>
 			) : (
@@ -50,11 +51,11 @@ const UserConfirm = ({ stateUtils }) => {
 				</>
 			)}
 			{loading ? (
-				<Subtitle className="text-center mt-3">
+				<Subtitle className="text-center mt-4">
 					Please wait while we generate your hatching key.
 					<br />
 					<br />
-					We appreciate your patience.
+					Thank you for your patience.
 				</Subtitle>
 			) : (
 				<>
