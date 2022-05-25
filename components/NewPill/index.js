@@ -13,7 +13,7 @@ const PillContainer = styled.div`
 	text-transform: capitalize;
 	display: flex;
 	align-items: center;
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 500;
 	font-size: 14px;

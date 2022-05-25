@@ -1,70 +1,48 @@
 @font-face {
-	font-family: "Mada";
-	src: url("./fonts/Mada-Light.ttf") format("truetype");
+	font-family: "Lexend";
+	src: url("./fonts/Lexend/Lexend-Light.ttf") format("truetype");
 	font-weight: 300;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: "Mada";
-	src: url("./fonts/Mada-Regular.ttf") format("truetype");
+	font-family: "Lexend";
+	src: url("./fonts/Lexend/Lexend-Regular.ttf") format("truetype");
 	font-weight: normal;
-	font-style: normal;
 }
 
 @font-face {
-	font-family: "Mada";
-	src: url("./fonts/Mada-Regular.ttf") format("truetype");
-	font-weight: normal;
-	font-style: italic;
-}
-
-@font-face {
-	font-family: "Mada";
-	src: url("./fonts/Mada-Bold.ttf") format("truetype");
-	font-weight: 600;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: "Mada";
-	src: url("./fonts/Mada-Bold.ttf") format("truetype");
-	font-weight: bold;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: "Mada";
-	src: url("./fonts/Mada-Bold.ttf") format("truetype");
-	font-weight: bold;
-	font-style: italic;
-}
-
-@font-face {
-	font-family: "Mada";
-	src: url("./fonts/Mada-SemiBold.ttf") format("truetype");
-	font-weight: 600;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: "Mada";
-	src: url("./fonts/Mada-Medium.ttf") format("truetype");
+	font-family: "Lexend";
+	src: url("./fonts/Lexend/Lexend-Medium.ttf") format("truetype");
 	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Lexend";
+	src: url("./fonts/Lexend/Lexend-SemiBold.ttf") format("truetype");
+	font-weight: 600;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Lexend";
+	src: url("./fonts/Lexend/Lexend-Bold.ttf") format("truetype");
+	font-weight: 700;
 	font-style: normal;
 }
 
 html {
 	height: 100%;
 	overflow: auto;
-	font-family: "Mada";
+	font-family: "Lexend";
 	width: 100%;
 	height: 100%;
 	background: #181818;
 }
 body {
 	height: 100%;
-	font-family: "Mada";
+	font-family: "Lexend";
 	width: 100%;
 	height: 100%;
 	background: #181818 !important;
@@ -170,7 +148,7 @@ input[type="number"] {
 .accordion-button {
 	background: #41b995 !important;
 	border-radius: 100px !important;
-	font-family: "Mada" !important;
+	font-family: "Lexend" !important;
 	font-style: normal !important;
 	font-weight: 700 !important;
 	font-size: 14px !important;
@@ -187,7 +165,7 @@ input[type="number"] {
 }
 
 .accordion-body pre {
-	font-family: "Mada" !important;
+	font-family: "Lexend" !important;
 	font-style: normal !important;
 	font-weight: 400 !important;
 	font-size: 14px !important;
@@ -210,7 +188,7 @@ input[type="number"] {
 }
 
 .text-scroll-to {
-	font-family: "Mada" !important;
+	font-family: "Lexend" !important;
 	font-style: normal !important;
 	font-weight: 500 !important;
 	font-size: 16px !important;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const TextPrimary = styled.p`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-size: 24px;
 	line-height: 30px;
 	font-weight: 300;
@@ -9,7 +9,7 @@ export const TextPrimary = styled.p`
 `;
 
 export const TextSecondary = styled.p`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-size: 16px;
 	line-height: 22px;
 	font-weight: 300;
@@ -17,7 +17,7 @@ export const TextSecondary = styled.p`
 `;
 
 export const TextNormal = styled.p`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-size: 16px;
 	line-height: 16px;
 	font-weight: 400;

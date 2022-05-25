@@ -10,7 +10,7 @@ const Container = styled.div`
 	position: absolute;
 
 	top: 30%;
-	left: calc(0% - 24px);
+	left: calc(0% - 29px);
 	padding: 4px 8px;
 `;
 const GenesisTag = ({ background }) => {

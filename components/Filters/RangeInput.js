@@ -41,16 +41,22 @@ const RangeInput = ({
 };
 
 const CustomInput = styled.input`
-	background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)), #000000;
+	background: linear-gradient(
+			0deg,
+			rgba(255, 255, 255, 0.2),
+			rgba(255, 255, 255, 0.2)
+		),
+		linear-gradient(0deg, rgba(103, 219, 177, 0.01), rgba(103, 219, 177, 0.01)),
+		#000000;
 	border-radius: 3px;
 	border: none;
-	font-family: 'Mada';
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 700;
 	font-size: 14px;
 	line-height: 18px;
 	text-align: center;
-	color: #E1E3E0;
+	color: #e1e3e0;
 	padding: 10px 12px;
 	max-width: 120px;
 	width: 100%;
@@ -64,6 +70,6 @@ const CustomInput = styled.input`
 		border: none;
 		outline: none;
 	}
-`
+`;
 
 export default RangeInput;

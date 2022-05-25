@@ -37,7 +37,7 @@ const Inner = styled.div`
 
 const Title = styled(HeadingSuperXXS)`
 	flex: 0 1 auto;
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-size: 24px;
 	font-style: normal;
 	font-weight: 400;

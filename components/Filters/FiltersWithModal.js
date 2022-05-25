@@ -12,7 +12,7 @@ const PreviewImage = styled.img`
 `;
 
 const TextNoneSelected = styled.span`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 400;
 	font-size: 12px;
@@ -40,7 +40,7 @@ const ButtonSelect = styled.button`
 	border-radius: 100px;
 	border: none;
 	width: 100%;
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 500;
 	font-size: 14px;

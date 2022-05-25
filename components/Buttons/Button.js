@@ -16,7 +16,7 @@ const StyledButton = styled(Button)`
 	}
 `;
 const StyledP = styled.p`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-weight: ${(props) => (props.thin ? `400` : `600`)};
 	font-size: ${(props) => (props.big ? `21px` : `16px`)};
 `;

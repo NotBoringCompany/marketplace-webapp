@@ -102,7 +102,7 @@ const ImageWrap = styled.div`
 `;
 
 const AddressTitle = styled.div`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 500;
 	font-size: 21px;

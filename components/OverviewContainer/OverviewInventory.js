@@ -148,7 +148,7 @@ const BlockComingSoon = styled.div`
 
 const ComingSoonText = styled(TextSecondary)`
 	color: #a2a2a2;
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 500;
 	font-size: 14px;

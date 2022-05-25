@@ -83,7 +83,7 @@ const CardItemActivities = ({ time, title, description, href = "#" }) => {
 };
 
 const TitleDate = styled.h5`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 500;
 	font-size: 18px;
@@ -111,7 +111,7 @@ const TimeWrap = styled.div`
 `;
 
 const TextTime = styled.span`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 500;
 	font-size: 16px;
@@ -123,7 +123,7 @@ const TextTime = styled.span`
 const DetailWrap = styled.div``;
 
 const TitleDetail = styled.h6`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 500;
 	font-size: 18px;
@@ -136,7 +136,7 @@ const TitleDetail = styled.h6`
 const DetailLinkWrap = styled.div``;
 
 const TextLink = styled.span`
-	font-family: "Mada";
+	font-family: "Lexend";
 	font-style: normal;
 	font-weight: 500;
 	font-size: 14px;
