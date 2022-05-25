@@ -144,7 +144,7 @@ const MutationImage = styled(Image)`
 	height: 45px;
 	position: relative;
 	top: calc(-121px + -250px);
-	right: -116px;
+	right: -136px;
 
 	@media (max-width: 1024px) {
 		width: 45px;
