@@ -10,6 +10,7 @@ import BasicInfo from "./BasicInfo";
 import Stats from "./Stats";
 import { mediaBreakpoint } from "utils/breakpoints";
 import HatchButtonContainer from "./HatchButtonContainer";
+import Sell from "./Sell";
 
 const CardContainer = styled.div`
 	padding: 16px;
@@ -233,6 +234,9 @@ const NBMonLargeCard = ({ nbMon, userAddress }) => {
 								<Stats nbMon={nbMon} />
 							</Tab>
 						)}
+						<Tab eventKey="sell" title="Sell">
+							<Sell nbMon={nbMon} />
+						</Tab>
 					</StyledTabs>
 				</TabsContainer>
 			</CardContainer>
