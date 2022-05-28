@@ -18,6 +18,7 @@ import NewPasswordSet from "components/NewModalContents/ForgotPassword/NewPasswo
 import ResetPassword from "components/NewModalContents/ForgotPassword/ResetPassword";
 import WaitHatching from "components/NewModalContents/Hatching/WaitHatching";
 import Listing from "components/NewModalContents/Listing";
+import CancelListing from "components/NewModalContents/Listing/CancelListing";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -34,6 +35,8 @@ const StyledModal = styled(Modal)`
 const StyledModalBody = styled(Modal.Body)`
 	padding: ${(props) => (props.nopadding ? `0` : `32px`)};
 	margin: 0;
+	border: ${(props) =>
+		props.withborder ? `3px solid ${props.bordercolor};` : `auto`};
 	border-radius: 24px;
 	background: ${(props) =>
 		props.cardpreview
@@ -89,14 +92,21 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 			centered
 			show={show}
 			bigger={newPasswordModals.includes(content) ? 1 : 0}
-			nominheight={newPasswordModals.includes(content) ? 1 : 0}
+			nominheight={
+				newPasswordModals.includes(content) || content === "cancelListNBmon"
+					? 1
+					: 0
+			}
 		>
 			<StyledModalBody
 				className={`bg-darkGray text-white ${className && className}`}
+				withborder={content === "cancelListNBmon" ? 1 : 0}
+				bordercolor={content === "cancelListNBmon" ? `#FFB4A9` : `transparent`}
 				nopadding={
 					content === "videoPreview" ||
 					content === "cardPreview" ||
-					content === "listNBmon"
+					content === "listNBmon" ||
+					content === "cancelListNBmon"
 						? 1
 						: 0
 				}
@@ -125,6 +135,7 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 
 					{/*Marketplace Listing Modal*/}
 					<Listing switchId="listNBmon" stateUtils={stateUtils} />
+					<CancelListing switchId="cancelListNBmon" stateUtils={stateUtils} />
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>

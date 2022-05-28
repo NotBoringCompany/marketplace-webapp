@@ -53,7 +53,12 @@ const CancelBtn = styled.button`
 	line-height: 24px;
 `;
 
-const ListingBox = ({ price = 0.4, usdValue = 2000, mine }) => {
+const ListingBox = ({
+	price = 0.4,
+	usdValue = 2000,
+	onCancelListing,
+	mine,
+}) => {
 	return (
 		<div className="d-flex flex-column mt-5">
 			<div className="d-flex justify-content-between w-100 mb-3">
@@ -61,7 +66,7 @@ const ListingBox = ({ price = 0.4, usdValue = 2000, mine }) => {
 					Current Offer • Fixed Price
 				</StatsText>
 
-				{mine && <CancelBtn>Cancel</CancelBtn>}
+				{mine && <CancelBtn onClick={onCancelListing}>Cancel</CancelBtn>}
 			</div>
 			<InnerContainer>
 				<div className="d-flex justify-content-between w-100 align-items-center">

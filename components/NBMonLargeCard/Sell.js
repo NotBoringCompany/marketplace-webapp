@@ -82,6 +82,7 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			show: true,
 			content: "listNBmon",
 			stage: 0,
+			price,
 		});
 
 		await delay(1000);
@@ -90,6 +91,7 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			show: true,
 			content: "listNBmon",
 			stage: 1,
+			price,
 		});
 
 		await delay(1000);
@@ -98,6 +100,7 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			show: true,
 			content: "listNBmon",
 			stage: 2,
+			price,
 		});
 		await delay(1200);
 
@@ -105,6 +108,7 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			show: true,
 			content: "listNBmon",
 			stage: 3,
+			price,
 		});
 
 		setListedPrices({ weth: price, usd: 99 });

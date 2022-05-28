@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useQuery } from "react-query";
+import AppContext from "context/AppContext";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 import { data } from "configs";
@@ -160,6 +161,7 @@ const MutationImage = styled(Image)`
 
 const DummyNBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 	const { isEgg, isHatchable } = nbMon;
+	const { statesSwitchModal } = useContext(AppContext);
 	const [listed, setListed] = useState(false);
 
 	const [listedPrices, setListedPrices] = useState({ weth: 0, usd: 0 });
@@ -175,7 +177,7 @@ const DummyNBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 				const result = await res.json();
 				setListedPrices({
 					...listedPrices,
-					usd: result.data.rates.USD * weth,
+					usd: (result.data.rates.USD * weth).toFixed(3),
 				});
 			},
 			enabled: weth > 0,
@@ -191,6 +193,33 @@ const DummyNBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 		? parseInt(nbMon.bornAt + nbMon.hatchingDuration) * 1000
 		: 0;
 	let genus;
+
+	const onCancelListing = () => {
+		statesSwitchModal.setter({
+			show: true,
+			content: "cancelListNBmon",
+			stage: 0,
+			onClickCancel: onActualCancelListing,
+		});
+	};
+
+	const onActualCancelListing = async () => {
+		// Clicks on Cancel Listing in the Remove Listing Confirmation Modal "cancelListNBmon"
+
+		//Do Metamask here (cancelling the selling...)
+
+		//Success pop up
+		statesSwitchModal.setter({
+			show: true,
+			content: "cancelListNBmon",
+			stage: 1,
+			onClickCancel: () => {},
+		});
+
+		setListedPrices({ usd: 0, weth: 0 });
+		setListed(false);
+	};
+
 	if (!isEgg) {
 		genus = nbMon.genus.toLowerCase();
 	}
@@ -250,7 +279,12 @@ const DummyNBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 
 						{listed && (
 							<div className="mt-3 mb-1 px-3">
-								<ListingBox mine={mine} price={weth} usdValue={usd} />
+								<ListingBox
+									mine={mine}
+									price={weth}
+									usdValue={usd}
+									onCancelListing={onCancelListing}
+								/>
 							</div>
 						)}
 					</div>

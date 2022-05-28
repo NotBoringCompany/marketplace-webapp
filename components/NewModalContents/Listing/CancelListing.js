@@ -1,24 +1,8 @@
 import React from "react";
-import { useRouter } from "next/router";
+import Button from "react-bootstrap/Button";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import styled from "styled-components";
-
-const BigCheckmarkSuccess = (props) => (
-	<svg
-		width={40}
-		height={40}
-		fill="none"
-		xmlns="http://www.w3.org/2000/svg"
-		{...props}
-	>
-		<path
-			d="M20 0C8.96 0 0 8.96 0 20s8.96 20 20 20 20-8.96 20-20S31.04 0 20 0Zm-4 30L6 20l2.82-2.82L16 24.34 31.18 9.16 34 12 16 30Z"
-			fill="#67DBB1"
-		/>
-	</svg>
-);
-
 const CheckmarksLogoSVG = (props) => (
 	<svg
 		width={40}
@@ -83,6 +67,21 @@ const HourglassSVG = (props) => (
 	</svg>
 );
 
+const WarningLogo = (props) => (
+	<svg
+		width={22}
+		height={19}
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		{...props}
+	>
+		<path
+			d="M0 19h22L11 0 0 19Zm12-3h-2v-2h2v2Zm0-4h-2V8h2v4Z"
+			fill="#FFB4A9"
+		/>
+	</svg>
+);
+
 const Title = styled(TextSecondary)`
 	font-size: 14px;
 	line-height: 20px;
@@ -101,11 +100,28 @@ const ListingItemLoadingContainer = styled.div`
 
 const OkButton = styled.button`
 	background: none;
-	color: #67dbb1;
+	color: #e1e3e0;
 	border: none;
-	font-weight: 300;
+	font-weight: 500;
 	font-size: 14px;
 	line-height: 20px;
+`;
+
+const CancelButton = styled(Button)`
+	background: #ffb4a9;
+	border-radius: 100px;
+	padding: 10px 12px;
+
+	font-family: "Lexend";
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 20px;
+	display: flex;
+	text-align: center;
+	letter-spacing: 0.1px;
+
+	color: #930006;
 `;
 const ApprovalStage = ({ completed = false }) => (
 	<div className="d-flex w-100 mt-3">
@@ -119,7 +135,7 @@ const ApprovalStage = ({ completed = false }) => (
 				Marketplace Approval • {completed ? `Done` : `Pending`}
 			</Title>
 			<SubTitle className="text-gray mt-2">
-				We need your approval for our marketplace to access your NFTs.
+				Are you sure you want to cancel the listing?{" "}
 			</SubTitle>
 
 			{!completed && (
@@ -171,55 +187,49 @@ const ListingStage = ({ price = 0.5, status = 0 }) => {
 	);
 };
 
-const Listing = ({ stateUtils }) => {
+const CancelListing = ({ stateUtils }) => {
 	const { setter, getter } = stateUtils;
-	const { stage, price } = getter;
-	const router = useRouter();
+
+	const { onClickCancel, stage } = getter;
+
 	return (
-		<div className="p-4 d-flex flex-column text-center align-items-center">
-			<CheckmarksLogoSVG className="overflow-visible" />
-			<TextPrimary className="mb-2 mt-4">
-				{stage === 3 ? `Item Successfully Listed` : `Checking Requirements`}
+		<div className="p-4 d-flex flex-column text-start align-items-center">
+			<WarningLogo className="overflow-visible" />
+			<TextPrimary className="my-2 mt-3">
+				{stage === 0 ? `Cancel Listing?` : `Listing Cancelled`}
 			</TextPrimary>
 
-			{stage === 0 && (
-				<>
-					<ApprovalStage />
-					<ListingStage status={0} price={price} />
-				</>
-			)}
-
-			{stage === 1 && (
-				<>
-					<ApprovalStage completed />
-					<ListingStage status={1} price={price} />
-				</>
-			)}
-
-			{stage === 2 && (
-				<>
-					<ApprovalStage completed />
-					<ListingStage status={2} price={price} />
-				</>
-			)}
-
-			{stage === 3 && (
-				<div className="d-flex flex-column">
-					<SubTitle className="text-gray text-center my-5">
-						You{"'"}ve successfully listed your NBMon for sale!
+			<div className="d-flex flex-column">
+				{stage === 0 && (
+					<SubTitle className="text-gray mt-1 mb-3">
+						Are you sure you want to cancel the listing?
 					</SubTitle>
-					<OkButton
-						onClick={() => {
-							setter({ ...getter, show: false });
-						}}
-						className="ms-auto"
+				)}
+
+				<SubTitle className={`text-gray mb-4 ${stage === 1 && `mt-2`}`}>
+					Your NBMon won{"'"}t be available in the marketplace anymore.
+				</SubTitle>
+
+				{stage === 0 && (
+					<CancelButton
+						onClick={onClickCancel}
+						variant="danger"
+						className="mx-auto mt-1 mb-3"
 					>
-						OK
-					</OkButton>
-				</div>
-			)}
+						Cancel Listing
+					</CancelButton>
+				)}
+
+				<OkButton
+					onClick={() => {
+						setter({ ...getter, show: false });
+					}}
+				>
+					Go Back
+				</OkButton>
+			</div>
 		</div>
 	);
 };
 
-export default Listing;
+export default CancelListing;
