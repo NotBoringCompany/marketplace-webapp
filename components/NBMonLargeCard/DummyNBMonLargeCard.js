@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useQuery } from "react-query";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 import { data } from "configs";
@@ -11,6 +12,7 @@ import Stats from "./Stats";
 import { mediaBreakpoint } from "utils/breakpoints";
 import HatchButtonContainer from "./HatchButtonContainer";
 import Sell from "./Sell";
+import ListingBox from "./ListingBox";
 
 const CardContainer = styled.div`
 	padding: 16px;
@@ -71,7 +73,7 @@ const TabsContainer = styled.div`
 	flex-direction: column;
 	background: transparent;
 	width: 100%;
-	padding: 16px 0;
+
 	align-items: center;
 	border-radius: 8px;
 	margin-top: -56px;
@@ -156,8 +158,32 @@ const MutationImage = styled(Image)`
 	}
 `;
 
-const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
+const DummyNBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 	const { isEgg, isHatchable } = nbMon;
+	const [listed, setListed] = useState(false);
+
+	const [listedPrices, setListedPrices] = useState({ weth: 0, usd: 0 });
+
+	const [key, setKey] = useState("info");
+	const { weth, usd } = listedPrices;
+
+	useQuery(
+		"exchangeRates",
+		() => fetch(`https://api.coinbase.com/v2/exchange-rates?currency=ETH`),
+		{
+			onSuccess: async (res) => {
+				const result = await res.json();
+				setListedPrices({
+					...listedPrices,
+					usd: result.data.rates.USD * weth,
+				});
+			},
+			enabled: weth > 0,
+			retry: 0,
+			refetchOnWindowFocus: false,
+		}
+	);
+
 	const mine = userAddress
 		? nbMon.owner.toLowerCase() === userAddress.toLowerCase()
 		: false;
@@ -221,11 +247,17 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 						<Description className="mt-2 text-white mx-auto">
 							{data.genus[genus].description}
 						</Description>
+
+						{listed && (
+							<div className="mt-3 mb-1 px-3">
+								<ListingBox mine={mine} price={weth} usdValue={usd} />
+							</div>
+						)}
 					</div>
 				)}
 
 				<TabsContainer>
-					<StyledTabs defaultActiveKey="info">
+					<StyledTabs onSelect={(k) => setKey(k)} activeKey={key}>
 						<Tab eventKey="info" title="Info">
 							<BasicInfo nbMon={nbMon} mine={mine} />
 						</Tab>
@@ -234,9 +266,14 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 								<Stats nbMon={nbMon} />
 							</Tab>
 						)}
-						{dummy && (
+						{mine && dummy && !listed && (
 							<Tab eventKey="sell" title="Sell">
-								<Sell nbMon={nbMon} />
+								<Sell
+									nbMon={nbMon}
+									setListed={setListed}
+									setListedPrices={setListedPrices}
+									setKey={setKey}
+								/>
 							</Tab>
 						)}
 					</StyledTabs>
@@ -246,4 +283,4 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 	);
 };
 
-export default NBMonLargeCard;
+export default DummyNBMonLargeCard;

@@ -1,25 +1,12 @@
-import React from "react";
-import { HeadingSuperXXS } from "components/Typography/Headings";
+import React, { useState, useContext } from "react";
 import { TextNormal } from "components/Typography/Texts";
 import styled from "styled-components";
-import { mediaBreakpoint } from "utils/breakpoints";
+// import { mediaBreakpoint } from "utils/breakpoints";
 import { InputGroup, FormControl } from "react-bootstrap";
 import MyButton from "components/Buttons/Button";
-
-const StyledHeadingSuperXXS = styled(HeadingSuperXXS)`
-	font-weight: 400;
-	font-size: 18px;
-	line-height: 24px;
-	text-align: center;
-`;
-
-const TypesContainer = styled.div`
-	max-width: 150px;
-
-	@media ${mediaBreakpoint.down.lg} {
-		width: 600px;
-	}
-`;
+import AppContext from "context/AppContext";
+import delay from "utils/delay";
+// import MarketplaceLite from "components/../abis/MarketplaceLite";
 
 const InnerContainer = styled.div`
 	background: #2c2d2d;
@@ -76,7 +63,57 @@ const StyledButton = styled(MyButton)`
 	padding-bottom: 10px;
 	font-size: 12px;
 `;
-const Sell = ({ nbMon }) => {
+const Sell = ({ setListed, setKey, setListedPrices }) => {
+	const [price, setPrice] = useState(1);
+	const { statesSwitchModal } = useContext(AppContext);
+	const handleChange = (e) => {
+		setPrice(e.target.value);
+	};
+
+	const handleBlur = (e) => {
+		if (e.target.value <= 0) {
+			setPrice(0.0001);
+		}
+	};
+
+	const handleClick = async () => {
+		await delay(150);
+		statesSwitchModal.setter({
+			show: true,
+			content: "listNBmon",
+			stage: 0,
+		});
+
+		await delay(1000);
+
+		statesSwitchModal.setter({
+			show: true,
+			content: "listNBmon",
+			stage: 1,
+		});
+
+		await delay(1000);
+
+		statesSwitchModal.setter({
+			show: true,
+			content: "listNBmon",
+			stage: 2,
+		});
+		await delay(1200);
+
+		statesSwitchModal.setter({
+			show: true,
+			content: "listNBmon",
+			stage: 3,
+		});
+
+		setListedPrices({ weth: price, usd: 99 });
+
+		setKey("info");
+
+		setListed(true);
+	};
+
 	return (
 		<OuterContainer>
 			<InnerContainer className="d-flex flex-column ">
@@ -91,15 +128,24 @@ const Sell = ({ nbMon }) => {
 					<OptionText className="mb-2">Price</OptionText>
 					<StyledInputGroup className="mb-3">
 						<FormControl
+							value={price}
+							onChange={handleChange}
+							onBlur={handleBlur}
 							placeholder="1"
 							aria-label="1"
+							type="number"
 							aria-describedby="basic-addon2"
 						/>
 						<InputGroup.Text id="basic-addon2">WETH</InputGroup.Text>
 					</StyledInputGroup>
 
 					<div className="mx-auto mt-2">
-						<StyledButton text="Start listing item" pill thinText />
+						<StyledButton
+							onClick={handleClick}
+							text="Start listing item"
+							pill
+							thinText
+						/>
 					</div>
 				</div>
 			</InnerContainer>

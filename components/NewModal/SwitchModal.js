@@ -17,6 +17,7 @@ import EmailSent from "components/NewModalContents/ForgotPassword/EmailSent";
 import NewPasswordSet from "components/NewModalContents/ForgotPassword/NewPasswordSet";
 import ResetPassword from "components/NewModalContents/ForgotPassword/ResetPassword";
 import WaitHatching from "components/NewModalContents/Hatching/WaitHatching";
+import Listing from "components/NewModalContents/Listing";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -93,7 +94,11 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 			<StyledModalBody
 				className={`bg-darkGray text-white ${className && className}`}
 				nopadding={
-					content === "videoPreview" || content === "cardPreview" ? 1 : 0
+					content === "videoPreview" ||
+					content === "cardPreview" ||
+					content === "listNBmon"
+						? 1
+						: 0
 				}
 				cardpreview={content === "cardPreview" ? 1 : 0}
 			>
@@ -117,6 +122,9 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					<EmailSent switchId="emailSent" stateUtils={stateUtils} />
 					<ResetPassword switchId="resetPassword" stateUtils={stateUtils} />
 					<NewPasswordSet switchId="newPasswordSet" stateUtils={stateUtils} />
+
+					{/*Marketplace Listing Modal*/}
+					<Listing switchId="listNBmon" stateUtils={stateUtils} />
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>

@@ -3,7 +3,6 @@ import { useMoralis } from "react-moralis";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import styled from "styled-components";
-import delay from "./delay";
 const StyledContainer = styled.div`
 	height: 100vh;
 	display: flex;
