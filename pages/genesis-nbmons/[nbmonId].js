@@ -44,7 +44,6 @@ export const BackBtnContainer = styled.div`
 
 const IndividualNBMon = () => {
 	const { query, isReady } = useRouter();
-	const router = useRouter();
 	const [nbMon, setNbmon] = useState(null);
 	const { isAuthenticated, user } = useMoralis();
 	const { nbmonId } = query;
@@ -66,10 +65,6 @@ const IndividualNBMon = () => {
 		{ refetchOnWindowFocus: false, enabled: isReady, retry: 1 }
 	);
 
-	const handleBackBtnClick = () => {
-		router.push("/nbmons");
-	};
-
 	if (isFetching || !isReady)
 		return (
 			<Layout title={`Genesis NBMon #... | Realm Hunter`}>
@@ -85,7 +80,7 @@ const IndividualNBMon = () => {
 		<Layout title={`Genesis NBMon #${nbmonId} | Realm Hunter`}>
 			<div className="position-relative">
 				{isAuthenticated && (
-					<BackBtnContainer onClick={handleBackBtnClick}>
+					<BackBtnContainer>
 						<NewButton
 							icon={<FiArrowLeft className="me-2" />}
 							isLink

@@ -1,12 +1,7 @@
-import React, { useState } from "react";
-import { useQuery } from "react-query";
+import React, { useState, useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import styled from "styled-components";
-
 import Layout from "components/Layout";
-import { useRouter } from "next/router";
-import Loading from "components/Loading";
-import NotFound from "pages/404";
 import NewButton from "components/Buttons/NewButton";
 import { FiArrowLeft } from "react-icons/fi";
 import DummyNBMonLargeCard from "components/NBMonLargeCard/DummyNBMonLargeCard";
@@ -45,50 +40,63 @@ export const BackBtnContainer = styled.div`
 `;
 
 const IndividualNBMon = () => {
-	const { isReady } = useRouter();
-	const router = useRouter();
-	const [nbMon, setNbmon] = useState(null);
+	const [nbMon, setNbmon] = useState({
+		nbmonId: 6,
+		owner: "asd",
+		hatchedAt: 1653474160,
+		isHatchable: false,
+		transferredAt: 1653473181,
+		hatchingDuration: 300,
+		strongAgainst: ["Ordinary", "Water", "Nature", "Spirit", "Psychic"],
+		weakAgainst: ["Fire", "Electric", "Earth", "Wind", "Brawler", "Magic"],
+		resistantTo: [
+			"Ordinary",
+			"Water",
+			"Electric",
+			"Wind",
+			"Frost",
+			"Crystal",
+			"Nature",
+			"Brawler",
+			"Psychic",
+		],
+		vulnerableTo: ["Fire", "Earth", "Spirit", "Magic", "Reptile", "Toxic"],
+		gender: "Female",
+		rarity: "Common",
+		mutation: "Mutated",
+		mutationType: "Water",
+		species: "Origin",
+		genus: "Lamox",
+		genusDescription:
+			"A combination of a fox and a dog. Lamoxes are very loyal to their owners but do not like too much physical touch. ",
+		behavior: "Aggressive",
+		fertility: "3000",
+		fertilityDeduction: 1000,
+		types: ["Spirit", "Electric"],
+		healthPotential: 16,
+		energyPotential: 0,
+		attackPotential: 13,
+		defensePotential: 11,
+		spAtkPotential: 22,
+		spDefPotential: 7,
+		speedPotential: 0,
+		passives: ["Resilient Fur", "Electric Bracer"],
+		isEgg: false,
+	});
 	const { isAuthenticated, user } = useMoralis();
 
-	const { isFetching, isError, error } = useQuery(
-		"individualNBMon",
-		() =>
-			fetch(
-				`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons/dummy-nbmon/${user.attributes.ethAddress}`
-			).then(async (res) => {
-				let fetchedData = await res.json();
-				console.log(fetchedData);
-				setNbmon(!fetchedData.errorName ? fetchedData : null);
-				// for some reason error not found from the API
-				//is still fetchedData and not actual error (due to status code 200)
-			}),
-		{
-			refetchOnWindowFocus: false,
-			enabled: isReady && isAuthenticated,
-			retry: 1,
+	useEffect(() => {
+		if (user && user.attributes.ethAddress) {
+			setNbmon({ ...nbMon, owner: user.attributes.ethAddress });
 		}
-	);
-
-	const handleBackBtnClick = () => {
-		router.push("/nbmons");
-	};
-
-	if (isFetching || !isReady)
-		return (
-			<Layout title={`Genesis NBMon #... | Realm Hunter`}>
-				<Loading />
-			</Layout>
-		);
-	if (isError) {
-		console.log("Error", error);
-		return <NotFound />;
-	}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user]);
 
 	return (
 		<Layout title={`Genesis NBMon | Realm Hunter`}>
 			<div className="position-relative">
 				{isAuthenticated && (
-					<BackBtnContainer onClick={handleBackBtnClick}>
+					<BackBtnContainer>
 						<NewButton
 							icon={<FiArrowLeft className="me-2" />}
 							isLink

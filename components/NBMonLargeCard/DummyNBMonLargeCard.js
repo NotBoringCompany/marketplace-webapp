@@ -172,7 +172,7 @@ const DummyNBMonLargeCard = ({
 	const [listed, setListed] = useState(isListed);
 
 	const [listedPrices, setListedPrices] = useState({
-		weth: isListed ? 1 : 0,
+		weth: isListed ? nbMon.priceEth : 0,
 		usd: 0,
 	});
 

@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
-import { useQuery } from "react-query";
 
 import Link from "next/link";
 
@@ -30,7 +28,6 @@ import Row from "react-bootstrap/Row";
 import { FaArrowDown } from "react-icons/fa";
 
 import Image from "next/image";
-import { FiArrowLeft } from "react-icons/fi";
 import Pagination from "components/Filters/Pagination";
 import SelectSort from "components/Filters/SelectSort";
 import { getRarityNumber } from "utils/other";
@@ -79,9 +76,42 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 const AccountPage = () => {
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [opacityOne, setOpacityOne] = useState(false);
-	const [allNBMons, setAllNBMons] = useState([]);
-
-	const { user } = useMoralis();
+	const [allNBMons] = useState([
+		{
+			nbmonId: 3,
+			owner: "3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5",
+			hatchedAt: 1652992179,
+			isHatchable: false,
+			transferredAt: 1652991774,
+			hatchingDuration: 300,
+			strongAgainst: ["Water", "Earth", "Brawler", "Magic", "Reptile"],
+			weakAgainst: ["Fire", "Wind", "Nature", "Spirit", "Toxic"],
+			resistantTo: ["Water", "Earth", "Nature", "Magic", "Reptile"],
+			vulnerableTo: ["Fire", "Electric", "Wind", "Frost", "Toxic"],
+			gender: "Male",
+			rarity: "Common",
+			mutation: "Not mutated",
+			mutationType: null,
+			species: "Origin",
+			genus: "Heree",
+			genusDescription:
+				"Heree has a strong connection with the forest, body made of leaves and sticks. Gets sick if he spends too much time in the city.",
+			behavior: "Aggressive",
+			fertility: "3000",
+			fertilityDeduction: 1000,
+			types: ["Nature", null],
+			healthPotential: 14,
+			energyPotential: 15,
+			attackPotential: 16,
+			defensePotential: 12,
+			spAtkPotential: 0,
+			spDefPotential: 8,
+			speedPotential: 16,
+			passives: ["Camouflage", "Wind Bracer"],
+			isEgg: false,
+			priceEth: 1,
+		},
+	]);
 
 	const [allFilteredNBMons, setAllFilteredNBMons] = useState([]);
 	const [shownNBMons, setshownNBMons] = useState([]);
@@ -97,62 +127,30 @@ const AccountPage = () => {
 	const setPageSettings = useSortStore((states) => states.setPageSettings);
 	const { show, current, totalPage } = pageSettings;
 
-	const totalPageCounter = (fetchedDataLength, show) => {
-		if (fetchedDataLength % show > 0) {
-			return parseInt(fetchedDataLength / show) + 1;
-		}
-		return parseInt(fetchedDataLength / show);
-	};
-
-	const { isFetching, error } = useQuery(
-		"nbmons",
-		() =>
-			fetch(
-				// `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons`
-				`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons/dummy-nbmon`
-			),
-		{
-			refetchOnWindowFocus: false,
-			onSuccess: async (res) => {
-				let fetchedData = await res.json();
-				fetchedData = [fetchedData];
-				setAllNBMons(
-					fetchedData.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
-				);
-
-				setPageSettings({
-					...pageSettings,
-					totalPage: totalPageCounter(fetchedData.length, show) - 1,
-				});
-			},
-		}
-	);
-
 	useEffect(() => {
-		if (!isFetching) {
-			const filtered = filterNBMons(selectedFilters, rangeFilters, allNBMons);
-			setAllFilteredNBMons(
-				filtered
-					.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
-					.map((data) => {
-						return {
-							...data,
-							rarityNum:
-								data.rarity === null
-									? -1
-									: getRarityNumber(data.rarity.toLowerCase()),
-						};
-					})
-			);
+		const filtered = filterNBMons(selectedFilters, rangeFilters, allNBMons);
+		setAllFilteredNBMons(
+			filtered
+				.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
+				.map((data) => {
+					return {
+						...data,
+						rarityNum:
+							data.rarity === null
+								? -1
+								: getRarityNumber(data.rarity.toLowerCase()),
+					};
+				})
+		);
 
-			setPageSettings({
-				...pageSettings,
-				current: 1,
-				totalPage: totalPageCounter(filtered.length, show) - 1,
-			}); // first page is page 0
-		}
+		setPageSettings({
+			...pageSettings,
+			current: 1,
+			totalPage: 0,
+		}); // first page is page 0
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedFilters, rangeFilters, isFetching, allNBMons]);
+	}, [selectedFilters, rangeFilters, allNBMons]);
 
 	useEffect(() => {
 		const reSort = allFilteredNBMons.sort((a, b) => {
@@ -242,114 +240,94 @@ const AccountPage = () => {
 					/>
 				</div>
 
-				{!isFetching && (
-					<div>
-						<div className="d-flex align-items-center mb-3">
-							<TextTotalNBMons>
-								{allFilteredNBMons.length} NBMon on sale
-							</TextTotalNBMons>
-						</div>
-
-						<FilterWrap>
-							<div className="d-flex flex-lg-row flex-column justify-content-between w-100 align-items-lg-start align-items-center">
-								<div className="d-flex align-items-center mb-lg-0 mb-4">
-									<TextSort>Sort:</TextSort>
-									<SelectSort
-										list={[
-											{
-												name: "ID",
-											},
-											{
-												name: "Rarity",
-											},
-										]}
-										defaultValue={typeSort}
-									/>
-
-									<ButtonSort
-										onClick={() =>
-											changeSortDirection(btnSort === "down" ? "up" : "down")
-										}
-									>
-										<FaArrowDown className={btnSort === "up" && "up"} />
-									</ButtonSort>
-								</div>
-
-								{totalPage + 1 >= 1 && (
-									<Pagination
-										prevOnClick={handleBackbtn}
-										nextOnClick={handleNextBtn}
-										prevDisabled={current === 1}
-										nextDisabled={current === totalPage + 1}
-										currentPage={current}
-										totalPage={totalPage + 1}
-										onChangeCurrent={handleChangeCurrentInput}
-										onBlurCurrent={() => {
-											if (current === 0)
-												setPageSettings({ ...pageSettings, current: 1 });
-										}}
-									/>
-								)}
-
-								<FilterInfo className="mx-lg-0 mx-auto mt-lg-0 mt-4">
-									<TextMore>Get more on</TextMore>
-									<TextMoreLink
-										href="https://opensea.io/"
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										<span className="pe-1">Opensea</span>
-										<Image
-											alt="Opensea"
-											src="/images/opensea_link_icon.svg"
-											width={17.5}
-											height={8.75}
-										/>
-									</TextMoreLink>
-								</FilterInfo>
-							</div>
-						</FilterWrap>
+				<div>
+					<div className="d-flex align-items-center mb-3">
+						<TextTotalNBMons>
+							{allFilteredNBMons.length} NBMon on sale
+						</TextTotalNBMons>
 					</div>
-				)}
+
+					<FilterWrap>
+						<div className="d-flex flex-lg-row flex-column justify-content-between w-100 align-items-lg-start align-items-center">
+							<div className="d-flex align-items-center mb-lg-0 mb-4">
+								<TextSort>Sort:</TextSort>
+								<SelectSort
+									list={[
+										{
+											name: "ID",
+										},
+										{
+											name: "Price",
+										},
+									]}
+									defaultValue={typeSort}
+								/>
+
+								<ButtonSort
+									onClick={() =>
+										changeSortDirection(btnSort === "down" ? "up" : "down")
+									}
+								>
+									<FaArrowDown className={btnSort === "up" && "up"} />
+								</ButtonSort>
+							</div>
+
+							{totalPage + 1 >= 1 && (
+								<Pagination
+									prevOnClick={handleBackbtn}
+									nextOnClick={handleNextBtn}
+									prevDisabled={current === 1}
+									nextDisabled={current === totalPage + 1}
+									currentPage={current}
+									totalPage={totalPage + 1}
+									onChangeCurrent={handleChangeCurrentInput}
+									onBlurCurrent={() => {
+										if (current === 0)
+											setPageSettings({ ...pageSettings, current: 1 });
+									}}
+								/>
+							)}
+
+							<FilterInfo className="mx-lg-0 mx-auto align-items-center d-flex mt-lg-0 mt-4">
+								<Image
+									alt="Eth Logo"
+									src="/images/Ethereum.svg"
+									width={21}
+									height={21}
+								/>
+								<TextMore className="ms-1">ETH</TextMore>
+							</FilterInfo>
+						</div>
+					</FilterWrap>
+				</div>
 
 				<Row className="justify-content-lg-start justify-content-center mt-4">
-					{!isFetching ? (
-						<>
-							{shownNBMons.map((nbMon) => (
-								<Col
-									xl={3}
-									lg={6}
-									md={6}
-									style={{ maxWidth: "270px" }}
-									key={`genesis-${nbMon.nbmonId}`}
-									className="mb-4 "
-								>
-									{" "}
-									<Link href={`/genesis-nbmons/${nbMon.nbmonId}`}>
-										<a>
-											{nbMon.isEgg ? (
-												<EggCard nbMon={nbMon} />
-											) : (
-												<NBMonCard nbMon={nbMon} />
-											)}
-										</a>
-									</Link>
-								</Col>
-							))}
-						</>
-					) : (
-						<Loading />
-					)}
+					<>
+						{shownNBMons.map((nbMon) => (
+							<Col
+								xl={3}
+								lg={6}
+								md={6}
+								style={{ maxWidth: "270px" }}
+								key={`genesis-${nbMon.nbmonId}`}
+								className="mb-4 "
+							>
+								{" "}
+								<Link href={`/genesis-nbmons/preview-buy`}>
+									<a>
+										{nbMon.isEgg ? (
+											<EggCard nbMon={nbMon} />
+										) : (
+											<NBMonCard nbMon={nbMon} />
+										)}
+									</a>
+								</Link>
+							</Col>
+						))}
+					</>
 				</Row>
 
-				{error && (
-					<TextPrimary className="mt-4 text-white text-center">
-						An error occured while fetching your NBMons. Please refresh this
-						page.
-					</TextPrimary>
-				)}
-
-				{!isFetching && totalPage < 0 && (
+				{totalPage < 0 && (
 					<TextPrimary className="mt-4 text-white text-center">
 						No results found 😔
 					</TextPrimary>
@@ -492,14 +470,6 @@ const TextMore = styled(TextSecondary)`
 	color: #e1e3e0;
 	display: inline-block;
 	margin-right: 4px;
-`;
-
-const TextMoreLink = styled.a`
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 20px;
-	letter-spacing: 0.25px;
-	color: #5484ff !important;
 `;
 
 const TextSort = styled(TextSecondary)`

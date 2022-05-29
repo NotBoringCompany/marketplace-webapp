@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { useQuery } from "react-query";
 import { useMoralis } from "react-moralis";
 import styled from "styled-components";
 
 import Layout from "components/Layout";
-import { useRouter } from "next/router";
-import Loading from "components/Loading";
-import NotFound from "pages/404";
+
 import NewButton from "components/Buttons/NewButton";
 import { FiArrowLeft } from "react-icons/fi";
 import DummyNBMonLargeCard from "components/NBMonLargeCard/DummyNBMonLargeCard";
@@ -45,55 +42,52 @@ export const BackBtnContainer = styled.div`
 `;
 
 const IndividualNBMon = () => {
-	const { isReady } = useRouter();
-	const router = useRouter();
-	const [nbMon, setNbmon] = useState(null);
+	const [nbMon, setNbmon] = useState({
+		nbmonId: 3,
+		owner: "3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5",
+		hatchedAt: 1652992179,
+		isHatchable: false,
+		transferredAt: 1652991774,
+		hatchingDuration: 300,
+		strongAgainst: ["Water", "Earth", "Brawler", "Magic", "Reptile"],
+		weakAgainst: ["Fire", "Wind", "Nature", "Spirit", "Toxic"],
+		resistantTo: ["Water", "Earth", "Nature", "Magic", "Reptile"],
+		vulnerableTo: ["Fire", "Electric", "Wind", "Frost", "Toxic"],
+		gender: "Male",
+		rarity: "Common",
+		mutation: "Not mutated",
+		mutationType: null,
+		species: "Origin",
+		genus: "Heree",
+		genusDescription:
+			"Heree has a strong connection with the forest, body made of leaves and sticks. Gets sick if he spends too much time in the city.",
+		behavior: "Aggressive",
+		fertility: "3000",
+		fertilityDeduction: 1000,
+		types: ["Nature", null],
+		healthPotential: 14,
+		energyPotential: 15,
+		attackPotential: 16,
+		defensePotential: 12,
+		spAtkPotential: 0,
+		spDefPotential: 8,
+		speedPotential: 16,
+		passives: ["Camouflage", "Wind Bracer"],
+		isEgg: false,
+		priceEth: 1,
+	});
 	const { isAuthenticated, user } = useMoralis();
-
-	const { isFetching, isError, error } = useQuery(
-		"individualNBMon",
-		() =>
-			fetch(
-				`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons/dummy-nbmon`
-			).then(async (res) => {
-				let fetchedData = await res.json();
-				console.log(fetchedData);
-				setNbmon(!fetchedData.errorName ? fetchedData : null);
-				// for some reason error not found from the API
-				//is still fetchedData and not actual error (due to status code 200)
-			}),
-		{
-			refetchOnWindowFocus: false,
-			enabled: isReady && isAuthenticated,
-			retry: 1,
-		}
-	);
-
-	const handleBackBtnClick = () => {
-		router.push("/nbmons");
-	};
-
-	if (isFetching || !isReady)
-		return (
-			<Layout title={`Genesis NBMon #... | Realm Hunter`}>
-				<Loading />
-			</Layout>
-		);
-	if (isError) {
-		console.log("Error", error);
-		return <NotFound />;
-	}
 
 	return (
 		<Layout title={`Genesis NBMon | Realm Hunter`}>
 			<div className="position-relative">
 				{isAuthenticated && (
-					<BackBtnContainer onClick={handleBackBtnClick}>
+					<BackBtnContainer>
 						<NewButton
 							icon={<FiArrowLeft className="me-2" />}
 							isLink
-							href="/nbmons"
-							text="Inventory"
+							href="/preview-marketplace"
+							text="Marketplace"
 						/>
 					</BackBtnContainer>
 				)}
