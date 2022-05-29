@@ -14,6 +14,7 @@ import { mediaBreakpoint } from "utils/breakpoints";
 import HatchButtonContainer from "./HatchButtonContainer";
 import Sell from "./Sell";
 import ListingBox from "./ListingBox";
+import delay from "utils/delay";
 
 const CardContainer = styled.div`
 	padding: 16px;
@@ -159,12 +160,21 @@ const MutationImage = styled(Image)`
 	}
 `;
 
-const DummyNBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
+const DummyNBMonLargeCard = ({
+	dummy = false,
+	isListed = false,
+	setNbmon = () => {},
+	nbMon,
+	userAddress,
+}) => {
 	const { isEgg, isHatchable } = nbMon;
 	const { statesSwitchModal } = useContext(AppContext);
-	const [listed, setListed] = useState(false);
+	const [listed, setListed] = useState(isListed);
 
-	const [listedPrices, setListedPrices] = useState({ weth: 0, usd: 0 });
+	const [listedPrices, setListedPrices] = useState({
+		weth: isListed ? 1 : 0,
+		usd: 0,
+	});
 
 	const [key, setKey] = useState("info");
 	const { weth, usd } = listedPrices;
@@ -218,6 +228,57 @@ const DummyNBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 
 		setListedPrices({ usd: 0, weth: 0 });
 		setListed(false);
+	};
+
+	const onBuy = () => {
+		statesSwitchModal.setter({
+			show: true,
+			content: "confirmBuyNBmon",
+			onConfirm,
+			usd,
+			weth,
+		});
+	};
+
+	const onConfirm = async () => {
+		statesSwitchModal.setter({
+			show: true,
+			content: "buyNBmon",
+			stage: 0,
+			price: weth,
+		});
+
+		await delay(1500);
+
+		statesSwitchModal.setter({
+			show: true,
+			content: "buyNBmon",
+			stage: 1,
+			price: weth,
+		});
+
+		await delay(1500);
+
+		statesSwitchModal.setter({
+			show: true,
+			content: "buyNBmon",
+			stage: 2,
+			price: weth,
+		});
+		await delay(1500);
+
+		statesSwitchModal.setter({
+			show: true,
+			content: "buyNBmon",
+			stage: 3,
+			price: weth,
+		});
+
+		setListedPrices({ weth: 0, usd: 0 });
+		setListed(true);
+		setKey("info");
+		setListed(false);
+		setNbmon({ ...nbMon, owner: userAddress.toLowerCase() });
 	};
 
 	if (!isEgg) {
@@ -284,6 +345,7 @@ const DummyNBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 									price={weth}
 									usdValue={usd}
 									onCancelListing={onCancelListing}
+									onBuy={onBuy}
 								/>
 							</div>
 						)}

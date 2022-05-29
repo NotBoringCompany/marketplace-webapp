@@ -54,7 +54,7 @@ const IndividualNBMon = () => {
 		"individualNBMon",
 		() =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons/dummy-nbmon/${user.attributes.ethAddress}`
+				`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/getNbmons/dummy-nbmon`
 			).then(async (res) => {
 				let fetchedData = await res.json();
 				console.log(fetchedData);
@@ -100,7 +100,9 @@ const IndividualNBMon = () => {
 
 				<DummyNBMonLargeCard
 					dummy
+					isListed
 					nbMon={nbMon}
+					setNbmon={setNbmon}
 					userAddress={user ? user.attributes.ethAddress : null}
 				/>
 			</div>

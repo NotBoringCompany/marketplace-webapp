@@ -17,8 +17,10 @@ import EmailSent from "components/NewModalContents/ForgotPassword/EmailSent";
 import NewPasswordSet from "components/NewModalContents/ForgotPassword/NewPasswordSet";
 import ResetPassword from "components/NewModalContents/ForgotPassword/ResetPassword";
 import WaitHatching from "components/NewModalContents/Hatching/WaitHatching";
-import Listing from "components/NewModalContents/Listing";
-import CancelListing from "components/NewModalContents/Listing/CancelListing";
+import SellNBMon from "components/NewModalContents/SellNBMon";
+import CancelListing from "components/NewModalContents/SellNBMon/CancelListing";
+import BuyNBMon from "components/NewModalContents/BuyNBMon";
+import ConfirmBuyNBMon from "components/NewModalContents/BuyNBMon/ConfirmBuyNBMon";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -106,7 +108,9 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					content === "videoPreview" ||
 					content === "cardPreview" ||
 					content === "listNBmon" ||
-					content === "cancelListNBmon"
+					content === "cancelListNBmon" ||
+					content === "buyNBmon" ||
+					content === "confirmBuyNBmon"
 						? 1
 						: 0
 				}
@@ -134,8 +138,10 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					<NewPasswordSet switchId="newPasswordSet" stateUtils={stateUtils} />
 
 					{/*Marketplace Listing Modal*/}
-					<Listing switchId="listNBmon" stateUtils={stateUtils} />
+					<SellNBMon switchId="listNBmon" stateUtils={stateUtils} />
 					<CancelListing switchId="cancelListNBmon" stateUtils={stateUtils} />
+					<BuyNBMon switchId="buyNBmon" stateUtils={stateUtils} />
+					<ConfirmBuyNBMon switchId="confirmBuyNBmon" stateUtils={stateUtils} />
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>

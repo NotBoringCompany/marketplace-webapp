@@ -57,6 +57,7 @@ const ListingBox = ({
 	price = 0.4,
 	usdValue = 2000,
 	onCancelListing,
+	onBuy = () => {},
 	mine,
 }) => {
 	return (
@@ -91,7 +92,16 @@ const ListingBox = ({
 							</div>
 						</div>
 					</div>
-					<StyledButton disabled={mine} text="Buy" pill />
+					<StyledButton
+						disabled={mine}
+						onClick={async () => {
+							if (!mine) {
+								await onBuy();
+							}
+						}}
+						text="Buy"
+						pill
+					/>
 				</div>
 			</InnerContainer>
 		</div>

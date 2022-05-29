@@ -1,23 +1,6 @@
 import React from "react";
-import { useRouter } from "next/router";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
-import { HeadingSuperXXS } from "components/Typography/Headings";
 import styled from "styled-components";
-
-const BigCheckmarkSuccess = (props) => (
-	<svg
-		width={40}
-		height={40}
-		fill="none"
-		xmlns="http://www.w3.org/2000/svg"
-		{...props}
-	>
-		<path
-			d="M20 0C8.96 0 0 8.96 0 20s8.96 20 20 20 20-8.96 20-20S31.04 0 20 0Zm-4 30L6 20l2.82-2.82L16 24.34 31.18 9.16 34 12 16 30Z"
-			fill="#67DBB1"
-		/>
-	</svg>
-);
 
 const CheckmarksLogoSVG = (props) => (
 	<svg
@@ -116,10 +99,10 @@ const ApprovalStage = ({ completed = false }) => (
 		)}
 		<div className="ms-2 d-flex flex-column">
 			<Title className={`text-${completed ? `white` : `success`}`}>
-				Marketplace Approval • {completed ? `Done` : `Pending`}
+				Spending Approval • {completed ? `Done` : `Pending`}
 			</Title>
 			<SubTitle className="text-gray mt-2">
-				We need your approval for our marketplace to access your NFTs.
+				We need your approval to spend your funds in our marketplace.
 			</SubTitle>
 
 			{!completed && (
@@ -147,11 +130,11 @@ const ListingStage = ({ price = 0.5, status = 0 }) => {
 
 				<div className="ms-2 d-flex flex-column">
 					<Title className={`text-${colorArr[status]}`}>
-						Confirm {price} WETH Listing {status === 1 && `• Pending`}
+						Confirm {price} WETH Purchase {status === 1 && `• Pending`}
 						{status === 2 && `• Confirmed`}
 					</Title>
 					<SubTitle className="text-gray mt-2">
-						You are listing your NBMon for {price} WETH.
+						You are purchasing an NBMon for {price} WETH.
 					</SubTitle>
 
 					{status === 1 && (
@@ -164,22 +147,21 @@ const ListingStage = ({ price = 0.5, status = 0 }) => {
 			{status === 2 && (
 				<ListingItemLoadingContainer className="d-flex align-items-center justify-content-center w-100">
 					<HourglassSVG className="overflow-visible" />
-					<Title className="text-success ms-2">Listing item...</Title>
+					<Title className="text-success ms-2">Purchasing item...</Title>
 				</ListingItemLoadingContainer>
 			)}
 		</div>
 	);
 };
 
-const Listing = ({ stateUtils }) => {
+const BuyNBMon = ({ stateUtils }) => {
 	const { setter, getter } = stateUtils;
 	const { stage, price } = getter;
-	const router = useRouter();
 	return (
 		<div className="p-4 d-flex flex-column text-center align-items-center">
 			<CheckmarksLogoSVG className="overflow-visible" />
 			<TextPrimary className="mb-2 mt-4">
-				{stage === 3 ? `Item Successfully Listed` : `Checking Requirements`}
+				{stage === 3 ? `Item Successfully Bought!` : `Checking Requirements`}
 			</TextPrimary>
 
 			{stage === 0 && (
@@ -206,7 +188,8 @@ const Listing = ({ stateUtils }) => {
 			{stage === 3 && (
 				<div className="d-flex flex-column">
 					<SubTitle className="text-gray text-center my-5">
-						You{"'"}ve successfully listed your NBMon for sale!
+						Congratulations, you{"'"}ve successfully bought an NBMon! This NBMon
+						is now available in your inventory.
 					</SubTitle>
 					<OkButton
 						onClick={() => {
@@ -222,4 +205,4 @@ const Listing = ({ stateUtils }) => {
 	);
 };
 
-export default Listing;
+export default BuyNBMon;

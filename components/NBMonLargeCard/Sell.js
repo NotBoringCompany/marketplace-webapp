@@ -77,7 +77,6 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 	};
 
 	const handleClick = async () => {
-		await delay(150);
 		statesSwitchModal.setter({
 			show: true,
 			content: "listNBmon",
@@ -85,7 +84,7 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			price,
 		});
 
-		await delay(1000);
+		await delay(1500);
 
 		statesSwitchModal.setter({
 			show: true,
@@ -94,7 +93,7 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			price,
 		});
 
-		await delay(1000);
+		await delay(1500);
 
 		statesSwitchModal.setter({
 			show: true,
@@ -102,7 +101,7 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			stage: 2,
 			price,
 		});
-		await delay(1200);
+		await delay(1500);
 
 		statesSwitchModal.setter({
 			show: true,
@@ -112,10 +111,8 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 		});
 
 		setListedPrices({ weth: price, usd: 99 });
-
-		setKey("info");
-
 		setListed(true);
+		setKey("info");
 	};
 
 	return (
