@@ -79,8 +79,8 @@ const IndividualNBMon = () => {
 				<Loading />
 			</Layout>
 		);
-	if (isError || !nbMon) {
-		console.log(error);
+	if (isError) {
+		console.log("Error", error);
 		return <NotFound />;
 	}
 
