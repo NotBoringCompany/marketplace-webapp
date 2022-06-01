@@ -135,7 +135,6 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 							placeholder="1"
 							aria-label="1"
 							type="number"
-							aria-describedby="basic-addon2"
 						/>
 						<InputGroup.Text id="basic-addon2">WETH</InputGroup.Text>
 					</StyledInputGroup>
