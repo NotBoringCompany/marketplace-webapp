@@ -38,8 +38,7 @@ const PriceText = styled.p`
 const StyledButton = styled(MyButton)`
 	color: red;
 	padding: 0;
-	min-width: 120px;
-	min-width: 56px;
+	min-width: 110px;
 	height: 48px;
 
 	p {
@@ -110,8 +109,8 @@ const StyledInputGroup = styled(InputGroup)`
 `;
 
 const OfferInputLabel = styled(TextNormal)`
-	font-size: 14px;
-	line-height: 20px;
+	font-size: 13px;
+	line-height: 13px;
 	color: #e1e3e0;
 `;
 
@@ -174,7 +173,7 @@ const ListingBox = ({
 				<div className="d-flex flex-column">
 					<div className="d-flex justify-content-between w-100 align-items-center flex-wrap">
 						<div className="d-flex flex-column">
-							<LabelCurrentPrice className="ms-3 text-start">
+							<LabelCurrentPrice className="text-start">
 								{listings[listingType].offerLabelText}
 							</LabelCurrentPrice>
 
@@ -197,13 +196,13 @@ const ListingBox = ({
 						<div
 							className={`d-flex ${
 								listings[listingType].withOfferInput &&
-								`mt-3 flex-md-row flex-column  w-100`
+								`mt-4 flex-md-row flex-column  w-100`
 							}`}
 						>
 							{listings[listingType].withOfferInput && (
 								<div className="d-flex flex-column me-md-3 me-0 mb-md-0 mb-3">
 									<OfferInputLabel className="mb-2 text-start">
-										Price
+										Enter Offer
 									</OfferInputLabel>
 									<StyledInputGroup className="w-md-auto">
 										<FormControl
