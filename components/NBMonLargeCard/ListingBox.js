@@ -6,6 +6,7 @@ import { TextNormal } from "components/Typography/Texts";
 import MyButton from "components/Buttons/Button";
 import { StatsText } from "./TabItemComponents";
 import { listings } from "configs/listingDetails";
+import { mediaBreakpoint } from "utils/breakpoints";
 const InnerContainer = styled.div`
 	background: #2c2d2d;
 	padding: 18px 14px;
@@ -46,6 +47,17 @@ const StyledButton = styled(MyButton)`
 		font-size: 15px;
 		line-height: 13px;
 		font-weight: 400;
+	}
+
+	@media ${mediaBreakpoint.down.md} {
+		min-width: 90px;
+	}
+
+	@media ${mediaBreakpoint.down.md} {
+		p {
+			font-size: 13px;
+			line-size: 13px;
+		}
 	}
 `;
 
