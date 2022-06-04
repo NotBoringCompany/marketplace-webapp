@@ -76,6 +76,9 @@ const IndividualNBMon = () => {
 		isEgg: false,
 		priceEth: 1,
 	});
+
+	const listingType = "fixedPrice";
+
 	const { isAuthenticated, user } = useMoralis();
 
 	return (
@@ -94,6 +97,7 @@ const IndividualNBMon = () => {
 
 				<DummyNBMonLargeCard
 					dummy
+					listingType={listingType}
 					isListed
 					nbMon={nbMon}
 					setNbmon={setNbmon}

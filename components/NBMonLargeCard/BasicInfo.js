@@ -7,6 +7,7 @@ import NewPill from "components/NewPill";
 import { IoMdMale, IoMdFemale } from "react-icons/io";
 import { mediaBreakpoint } from "utils/breakpoints";
 import { ButtonCopy } from "components/Buttons/ButtonCopy";
+import SeparatorContainer from "./SeparatorContainer";
 
 const BasicInfoContainer = styled.div`
 	display: flex;
@@ -77,29 +78,53 @@ const BasicInfo = ({ nbMon, mine = false }) => {
 				</>
 			) : (
 				<>
-					<StatsContainer>
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">Genus</StatsText>
 						<StatsText className="text-capitalize text-white">
 							{nbMon.genus}
 						</StatsText>
-					</StatsContainer>
-					<StatsContainer className="mt-4">
+					</SeparatorContainer>
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">Rarity</StatsText>
 						<NewPill pillType="rarity" content={nbMon.rarity} />
-					</StatsContainer>
-					<StatsContainer className="mt-4">
+					</SeparatorContainer>
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">Species</StatsText>
 						<NewPill pillType="species" content={nbMon.species} />
-					</StatsContainer>
-					<StatsContainer className="mt-4">
+					</SeparatorContainer>
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">Mutation</StatsText>
 						<NewPill pillType="type" content={nbMon.mutation} />
-					</StatsContainer>
-					<StatsContainer className="mt-4">
+					</SeparatorContainer>
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">Fertility</StatsText>
 						<NewPill pillType="fertility" content={nbMon.fertility} />
-					</StatsContainer>
-					<StatsContainer className="mt-4">
+					</SeparatorContainer>
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">Types</StatsText>
 						<div className="d-flex">
 							<NewPill pillType="type" content={nbMon.types[0]} />
@@ -111,17 +136,29 @@ const BasicInfo = ({ nbMon, mine = false }) => {
 								/>
 							)}
 						</div>
-					</StatsContainer>
-					<StatsContainer className="mt-4">
+					</SeparatorContainer>
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">NBMonID</StatsText>
 						<StatsText className="text-white">#{nbMon.nbmonId}</StatsText>
-					</StatsContainer>
+					</SeparatorContainer>
 
-					<StatsContainer className="mt-4">
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">Birthdate</StatsText>
 						<StatsText className="text-white">{birthDate()}</StatsText>
-					</StatsContainer>
-					<StatsContainer className="mt-4">
+					</SeparatorContainer>
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">Owned by</StatsText>
 						<div className="d-flex">
 							<StyledStatsText>
@@ -139,11 +176,15 @@ const BasicInfo = ({ nbMon, mine = false }) => {
 								/>
 							</ButtonCopy>
 						</div>
-					</StatsContainer>
-					<StatsContainer className="mt-4">
+					</SeparatorContainer>
+					<SeparatorContainer
+						small
+						noTop
+						className="w-100 justify-content-between d-flex align-items-center"
+					>
 						<StatsText className="text-white">Owner count</StatsText>
 						<StatsText className="text-white">1</StatsText>
-					</StatsContainer>
+					</SeparatorContainer>
 				</>
 			)}
 		</BasicInfoContainer>

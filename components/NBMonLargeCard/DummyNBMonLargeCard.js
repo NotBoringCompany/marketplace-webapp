@@ -15,6 +15,15 @@ import HatchButtonContainer from "./HatchButtonContainer";
 import Sell from "./Sell";
 import ListingBox from "./ListingBox";
 import delay from "utils/delay";
+import SeparatorContainer from "./SeparatorContainer";
+import NFTTable from "./NFTTable";
+
+const OuterContainer = styled.div`
+	@media (max-width: 1024px) {
+		flex-direction: column;
+		align-items: center;
+	}
+`;
 
 const CardContainer = styled.div`
 	padding: 16px;
@@ -22,7 +31,7 @@ const CardContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 456px;
+	width: 500px;
 	max-width: 80%;
 	border-radius: 20px;
 	${(props) =>
@@ -33,6 +42,11 @@ const CardContainer = styled.div`
 		top: -102px;
 	}
 	margin-bottom: 24px;
+	padding: 16px;
+
+	border-top-right-radius: ${(props) => (props.listed ? `0` : `20px`)};
+	border-bottom-right-radius: ${(props) => (props.listed ? `0` : `20px`)};
+
 	background: linear-gradient(
 			0deg,
 			rgba(255, 255, 255, 0.14),
@@ -47,6 +61,23 @@ const CardContainer = styled.div`
 
 	@media ${mediaBreakpoint.down.md} {
 		padding: 16px;
+	}
+
+	@media (max-width: 1024px) {
+		border-radius: 20px;
+	}
+`;
+
+const RightSideContainer = styled(CardContainer)`
+	padding: 48px;
+	padding-top: calc(48px - 24px);
+	border-top-left-radius: 0%;
+	border-bottom-left-radius: 0%;
+	border-top-right-radius: 20px;
+	@media (max-width: 1024px) {
+		padding: 24px;
+		margin-top: 8px;
+		border-radius: 20px;
 	}
 `;
 
@@ -163,6 +194,7 @@ const MutationImage = styled(Image)`
 const DummyNBMonLargeCard = ({
 	dummy = false,
 	isListed = false,
+	listingType,
 	setNbmon = () => {},
 	nbMon,
 	userAddress,
@@ -171,6 +203,90 @@ const DummyNBMonLargeCard = ({
 	const { statesSwitchModal } = useContext(AppContext);
 	const [listed, setListed] = useState(isListed);
 
+	const offersData = [
+		{
+			price: 1.312,
+			time: "11 months ago",
+			usd: 6969,
+			id: 123213,
+			address: "0x6ef0f724e780E5D3aD6d6f2A4FCbEF64A774eA796",
+			txHash:
+				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
+		},
+		{
+			price: 1,
+			time: "4 months ago",
+			usd: 6023,
+			id: 135132,
+			address: "0x6ef0f724e780E5D3aD66f2A4FCbEF64A774eA796",
+			txHash:
+				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
+		},
+		{
+			price: 0.512,
+			time: "2 months ago",
+			usd: 931,
+			id: 135132,
+			address: "0x6ef0f724e120E5D3aD66f2A4FCbEFeA796",
+			txHash:
+				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
+		},
+		{
+			price: 0.323,
+			time: "1 months ago",
+			usd: 741,
+			id: 135132,
+			address: "0x5fa5c1998d4c11f59c17FDE8b3f07588C23837D5",
+			txHash:
+				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
+		},
+		{
+			price: 0.123,
+			time: "21 days ago",
+			usd: 192,
+			id: 513,
+			address: "0xda6FCd7aF0E44E5d301dF3e7720a5281BBECCb2A",
+			txHash:
+				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
+		},
+		{
+			price: 0.523,
+			time: "15 days ago",
+			usd: 192,
+			id: 513,
+			address: "0xA1C97853Efe64f660F5f75D4B4997b87540bF307",
+			txHash:
+				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
+		},
+		{
+			price: 0.523,
+			time: "13 days ago",
+			usd: 192,
+			id: 513,
+			address: "0xA1C97853Efe64f660F5f75D4B4997b87540bF307",
+			txHash:
+				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
+		},
+		{
+			price: 0.2,
+			time: "8 days ago",
+			usd: 192,
+			id: 513,
+			address: "0xA1C97853Efe64f660F5f75D4B4997b87540bF307",
+			txHash:
+				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
+		},
+	];
+
+	const activitiesData = [
+		{
+			price: 0.5,
+			time: "2 days ago",
+			event: "mint",
+			txHash:
+				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
+		},
+	];
 	const [listedPrices, setListedPrices] = useState({
 		weth: isListed ? nbMon.priceEth : 0,
 		usd: 0,
@@ -286,8 +402,11 @@ const DummyNBMonLargeCard = ({
 	}
 
 	return (
-		<div className="py-4 d-flex w-100 align-items-center justify-content-center">
-			<CardContainer hatchable={mine && isEgg && isHatchable ? 1 : 0}>
+		<OuterContainer className="py-4 d-flex w-100 justify-content-center ">
+			<CardContainer
+				listed={listed}
+				hatchable={mine && isEgg && isHatchable ? 1 : 0}
+			>
 				{isEgg ? (
 					<NBMonImage
 						src={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/egg.svg`}
@@ -337,18 +456,6 @@ const DummyNBMonLargeCard = ({
 						<Description className="mt-2 text-white mx-auto">
 							{data.genus[genus].description}
 						</Description>
-
-						{listed && (
-							<div className="mt-3 mb-1 px-3">
-								<ListingBox
-									mine={mine}
-									price={weth}
-									usdValue={usd}
-									onCancelListing={onCancelListing}
-									onBuy={onBuy}
-								/>
-							</div>
-						)}
 					</div>
 				)}
 
@@ -359,7 +466,11 @@ const DummyNBMonLargeCard = ({
 						</Tab>
 						{!isEgg && (
 							<Tab eventKey="stats" title="Stats">
-								<Stats nbMon={nbMon} />
+								<Stats
+									nbMon={nbMon}
+									listed={listed}
+									activitiesData={activitiesData}
+								/>
 							</Tab>
 						)}
 						{mine && dummy && !listed && (
@@ -375,7 +486,37 @@ const DummyNBMonLargeCard = ({
 					</StyledTabs>
 				</TabsContainer>
 			</CardContainer>
-		</div>
+			{listed && (
+				<RightSideContainer>
+					<SeparatorContainer noTop className="w-100">
+						<ListingBox
+							listingType={listingType}
+							mine={mine}
+							price={weth}
+							usdValue={usd}
+							onCancelListing={onCancelListing}
+							onBuy={onBuy}
+						/>
+					</SeparatorContainer>
+					{(listingType === "absoluteBidding" ||
+						listingType === "minimumBidding") && (
+						<SeparatorContainer noTop className="w-100">
+							<NFTTable
+								userAddress={userAddress.toLowerCase()}
+								data={offersData}
+							/>
+						</SeparatorContainer>
+					)}
+
+					<NFTTable
+						type="Activities"
+						className="mt-3 w-100"
+						userAddress={userAddress.toLowerCase()}
+						data={activitiesData}
+					/>
+				</RightSideContainer>
+			)}
+		</OuterContainer>
 	);
 };
 

@@ -107,6 +107,7 @@ const IndividualNBMon = () => {
 				)}
 
 				<DummyNBMonLargeCard
+					listingType={"fixedPrice"}
 					dummy
 					nbMon={nbMon}
 					userAddress={user ? user.attributes.ethAddress : null}

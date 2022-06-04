@@ -135,7 +135,7 @@ const OfferDetail = ({
 	const TextComponent = ({ text, value, className = "" }) => (
 		<div className={`d-flex flex-column ${className}`}>
 			<HeaderDetailText className="mb-1">{text}</HeaderDetailText>
-			<ValueDetailText>{value}</ValueDetailText>
+			<ValueDetailText className="">{value}</ValueDetailText>
 		</div>
 	);
 
@@ -165,7 +165,7 @@ const OfferDetail = ({
 };
 
 const ListingBox = ({
-	listingType = "fixedPrice",
+	listingType = "absoluteBidding",
 	price = 0.4,
 	usdValue = 2000,
 	onCancelListing,
@@ -173,8 +173,8 @@ const ListingBox = ({
 	mine,
 }) => {
 	return (
-		<div className="d-flex flex-column mt-5">
-			<div className="d-flex justify-content-between w-100 mb-3">
+		<div className="d-flex flex-column w-100">
+			<div className="d-flex justify-content-between mb-3">
 				<StatsText className="text-white">
 					Current Offer • {listings[listingType].title}
 				</StatsText>
