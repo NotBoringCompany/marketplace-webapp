@@ -43,7 +43,11 @@ const StyledTrack = styled.div`
 
 import React from "react";
 
-const CustomSlider = ({ values = [0, 0], onChange = () => {} }) => {
+const CustomSlider = ({
+	values = [0, 0],
+	valuesMax = 3000,
+	onChange = () => {},
+}) => {
 	const Thumb = (props) => <StyledThumb {...props}></StyledThumb>;
 
 	const Track = (props, state) => (
@@ -52,7 +56,7 @@ const CustomSlider = ({ values = [0, 0], onChange = () => {} }) => {
 
 	return (
 		<StyledSlider
-			max={3000}
+			max={valuesMax}
 			min={0}
 			onChange={(e) => onChange(e)}
 			value={values}

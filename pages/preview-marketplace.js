@@ -6,7 +6,6 @@ import Layout from "components/Layout";
 import MyButton from "components/Buttons/Button";
 
 import styled from "styled-components";
-import mustBeAuthed from "utils/mustBeAuthed";
 import filterNBMons from "utils/filterNBMons";
 
 import FiltersWithModal from "components/Filters/FiltersWithModal";
@@ -15,7 +14,6 @@ import FertilityFilter from "components/Filters/FertilityFilter";
 import { mediaBreakpoint } from "utils/breakpoints";
 import CheckBoxFilters from "components/Filters/CheckBoxFilters";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
-import Loading from "components/Loading";
 import NBMonCard from "components/NBMonPreviewCard/NBMonCard";
 import EggCard from "components/NBMonPreviewCard/EggCard";
 
@@ -32,6 +30,9 @@ import Pagination from "components/Filters/Pagination";
 import SelectSort from "components/Filters/SelectSort";
 import { getRarityNumber } from "utils/other";
 import { HeadingSuperXXS } from "components/Typography/Headings";
+import CardLink from "components/CardLink";
+import PriceFilter from "components/Filters/PriceFilter";
+import filterNBMonsWithPrice from "utils/filterNBMonsWithPrice";
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const clearFilter = useFilterStore((state) => state.clearFilter);
@@ -62,6 +63,8 @@ const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 			<CheckBoxFilters />
 
 			<FertilityFilter />
+
+			<PriceFilter />
 
 			<MyButton
 				className="d-xl-none d-block mb-3"
@@ -109,13 +112,13 @@ const AccountPage = () => {
 			speedPotential: 16,
 			passives: ["Camouflage", "Wind Bracer"],
 			isEgg: false,
-			priceEth: 1,
+			priceEth: 2.3,
 		},
 	]);
 
 	const [allFilteredNBMons, setAllFilteredNBMons] = useState([]);
 	const [shownNBMons, setshownNBMons] = useState([]);
-	const { selectedFilters, rangeFilters } = useFilterStore();
+	const { selectedFilters, rangeFilters, price } = useFilterStore();
 
 	const btnSort = useSortStore((states) => states.sortingDetails.btnSort);
 	const typeSort = useSortStore((states) => states.sortingDetails.typeSort);
@@ -128,7 +131,12 @@ const AccountPage = () => {
 	const { show, current, totalPage } = pageSettings;
 
 	useEffect(() => {
-		const filtered = filterNBMons(selectedFilters, rangeFilters, allNBMons);
+		const filtered = filterNBMonsWithPrice(
+			selectedFilters,
+			rangeFilters,
+			price,
+			allNBMons
+		);
 		setAllFilteredNBMons(
 			filtered
 				.sort((a, b) => parseInt(a.nbmonId) - parseInt(b.nbmonId))
@@ -150,7 +158,7 @@ const AccountPage = () => {
 		}); // first page is page 0
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedFilters, rangeFilters, allNBMons]);
+	}, [selectedFilters, rangeFilters, allNBMons, price]);
 
 	useEffect(() => {
 		const reSort = allFilteredNBMons.sort((a, b) => {
@@ -240,13 +248,22 @@ const AccountPage = () => {
 					/>
 				</div>
 
-				<div>
-					<div className="d-flex align-items-center mb-3">
+				<div className="d-flex justify-content-between mb-5 flex-lg-row flex-column ">
+					<CardLink active text="NBMon" href={"/preview-marketplace"} />
+					<CardLink
+						className={"mx-lg-3 mx-0 my-lg-0 my-3"}
+						text="Artifacts"
+						href={"#"}
+					/>
+					<CardLink text="Land" href={"#"} />
+				</div>
+
+				<div className="d-flex flex-column">
+					<div className="d-flex align-items-center mb-2 justify-content-lg-start justify-content-center">
 						<TextTotalNBMons>
 							{allFilteredNBMons.length} NBMon on sale
 						</TextTotalNBMons>
 					</div>
-
 					<FilterWrap>
 						<div className="d-flex flex-lg-row flex-column justify-content-between w-100 align-items-lg-start align-items-center">
 							<div className="d-flex align-items-center mb-lg-0 mb-4">

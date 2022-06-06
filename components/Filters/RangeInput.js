@@ -5,11 +5,14 @@ import styled from "styled-components";
 const RangeInput = ({
 	min = 0,
 	max = 0,
+	onlyInteger = true,
 	onChange = () => {},
 	onBlur = () => {},
 }) => {
 	const handleChange = (e) => {
-		let val = parseInt(e.target.value);
+		let val = onlyInteger
+			? parseInt(e.target.value)
+			: parseFloat(e.target.value);
 		if (isNaN(val)) val = "";
 		if (val < 0) val = 0;
 		onChange({ val, e });

@@ -167,6 +167,10 @@ export const useFilterStore = create((set, get) => ({
 			currentMax: 3000,
 		},
 	},
+	price: {
+		currentMin: 0,
+		currentMax: 10000,
+	},
 	clearing: false,
 
 	addFilter: (data) => {
@@ -221,6 +225,15 @@ export const useFilterStore = create((set, get) => ({
 			},
 		}));
 	},
+	setPriceRange: (data) => {
+		const { max, min } = data;
+		set(() => ({
+			price: {
+				currentMin: min,
+				currentMax: max,
+			},
+		}));
+	},
 	clearFilter: () => {
 		set((state) => ({
 			...state,
@@ -230,6 +243,10 @@ export const useFilterStore = create((set, get) => ({
 					currentMin: 0,
 					currentMax: 3000,
 				},
+			},
+			price: {
+				currentMin: 0,
+				currentMax: 10000,
 			},
 			clearing: !state.clearing,
 		}));
