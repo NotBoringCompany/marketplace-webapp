@@ -301,11 +301,11 @@ const AccountPage = () => {
 
 								<FilterInfo className="mx-lg-0 mx-auto mt-lg-0 mt-4">
 									<TextMore>Get more on our </TextMore>
-									<TextMoreLink href="/preview-marketplace">
-										<a className="pe-1">
-											<span>Marketplace</span>
-										</a>
-									</TextMoreLink>
+									<Link passHref href="/preview-marketplace">
+										<TextMoreLink className="pe-1 text-primary">
+											Marketplace
+										</TextMoreLink>
+									</Link>
 								</FilterInfo>
 							</div>
 						</FilterWrap>
@@ -495,14 +495,12 @@ const TextMore = styled(TextSecondary)`
 	margin-right: 4px;
 `;
 
-const TextMoreLink = styled(Link)`
-	& a {
-		font-weight: 400;
-		font-size: 14px;
-		line-height: 20px;
-		letter-spacing: 0.25px;
-		color: ##67dbb1 !important;
-	}
+const TextMoreLink = styled.a`
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 20px;
+	letter-spacing: 0.25px;
+	color: #67dbb1 !important;
 `;
 
 const TextSort = styled(TextSecondary)`
