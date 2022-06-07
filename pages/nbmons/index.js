@@ -362,7 +362,6 @@ const AccountPage = () => {
 const StyledContainer = styled.div`
 	background: #1d1d1d;
 	padding: 32px;
-	min-height: 1321px;
 	padding-left: calc(24% + 32px);
 
 	& .pagingContainer > svg:first-child {

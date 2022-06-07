@@ -31,6 +31,7 @@ const CardText = styled(TextPrimary)`
 	font-weight: 400;
 	font-size: 22px;
 	line-height: 28px;
+	color: ${(props) => (props.active ? `#f0f0f0` : `rgba(255, 255, 255, 0.44)`)};
 `;
 
 const StyledLink = styled.a`
@@ -39,14 +40,23 @@ const StyledLink = styled.a`
 	@media ${mediaBreakpoint.down.lg} {
 		width: 240px;
 	}
+
+	&:hover {
+		cursor: ${(props) => (props.active ? `auto` : `not-allowed`)};
+	}
 `;
 
 const CardLink = ({ active = false, className = "", text = "", href = "" }) => {
 	return (
-		<Link href={href} passHref>
-			<StyledLink className={`${className} mx-lg-0 mx-auto`}>
+		<Link href={active ? href : `#`} passHref>
+			<StyledLink
+				active={active ? 1 : 0}
+				className={`${className} mx-lg-0 mx-auto`}
+			>
 				<Card active={active ? 1 : 0}>
-					<CardText className={`text-white ms-auto`}>{text}</CardText>
+					<CardText active={active ? 1 : 0} className={`ms-auto`}>
+						{text}
+					</CardText>
 				</Card>
 			</StyledLink>
 		</Link>

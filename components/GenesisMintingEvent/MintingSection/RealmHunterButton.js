@@ -17,6 +17,7 @@ const RealmHunterButton = () => {
 				thinText
 				newTab
 				isLink
+				className={"ms-auto"}
 				href="https://realmhunter.io"
 				text="visit realmhunter.io"
 			/>

@@ -48,7 +48,9 @@ const Layout = ({
 						className="d-none d-lg-block"
 					/>
 				)}
-				<div className="bg-primary" style={{ minHeight: "100vh" }}>
+				<div
+					style={{ minHeight: "calc(100vh - 150px)", background: "#1d1d1d" }}
+				>
 					{isInitializing ? <Loading /> : children}
 				</div>
 			</div>

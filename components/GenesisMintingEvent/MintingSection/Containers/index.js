@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { mediaBreakpoint } from "utils/breakpoints";
 
 export const MainSection = styled.div`
-	min-height: 100vh;
+	min-height: calc(100vh + 30px);
 
 	@media ${mediaBreakpoint.down.lg} and (orientation: landscape) {
 		min-height: calc(100vh + 380px);
