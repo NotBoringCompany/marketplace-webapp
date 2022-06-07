@@ -300,19 +300,11 @@ const AccountPage = () => {
 								)}
 
 								<FilterInfo className="mx-lg-0 mx-auto mt-lg-0 mt-4">
-									<TextMore>Get more on</TextMore>
-									<TextMoreLink
-										href="https://opensea.io/"
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										<span className="pe-1">Opensea</span>
-										<Image
-											alt="Opensea"
-											src="/images/opensea_link_icon.svg"
-											width={17.5}
-											height={8.75}
-										/>
+									<TextMore>Get more on our </TextMore>
+									<TextMoreLink href="/preview-marketplace">
+										<a className="pe-1">
+											<span>Marketplace</span>
+										</a>
 									</TextMoreLink>
 								</FilterInfo>
 							</div>
@@ -503,12 +495,14 @@ const TextMore = styled(TextSecondary)`
 	margin-right: 4px;
 `;
 
-const TextMoreLink = styled.a`
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 20px;
-	letter-spacing: 0.25px;
-	color: #5484ff !important;
+const TextMoreLink = styled(Link)`
+	& a {
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 20px;
+		letter-spacing: 0.25px;
+		color: ##67dbb1 !important;
+	}
 `;
 
 const TextSort = styled(TextSecondary)`
