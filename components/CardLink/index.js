@@ -42,7 +42,7 @@ const StyledLink = styled.a`
 	}
 
 	&:hover {
-		cursor: ${(props) => (props.active ? `auto` : `not-allowed`)};
+		cursor: ${(props) => (props.active ? `pointer` : `not-allowed`)};
 	}
 `;
 
