@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { MainText } from "./Texts";
 import Table from "react-bootstrap/Table";
+import { mediaBreakpoint } from "utils/breakpoints";
 
 const TableContainer = styled.div`
 	& .table-responsive {
@@ -106,13 +107,14 @@ const TableContainer = styled.div`
 
 	& tr th,
 	& tr td {
-		width: 84px;
-		margin: 0 8px;
+		line-break: anywhere;
+		margin: 0;
+		width: calc(100% / 3);
+		padding: 8px;
 	}
-
-	& tr th:nth-child(2),
-	& tr th:nth-child(3) {
-		text-align: center;
+	& tr th:first-child,
+	& tr td:first-child {
+		padding-left: 8px;
 	}
 `;
 
@@ -140,11 +142,26 @@ const TimeText = styled.td`
 	}
 `;
 
+const TimeTextP = styled.p`
+	font-weight: 500;
+	margin: 0;
+	font-size: 11px;
+	line-height: 16px;
+	letter-spacing: 0.5px;
+	& a {
+		color: #bfc9c2;
+	}
+
+	& a:hover {
+		color: #bfc9c2;
+	}
+`;
+
 const LinkText = styled(TimeText)`
 	text-decoration: underline;
 `;
 
-const USDText = styled(TimeText)`
+const USDTextP = styled(TimeTextP)`
 	font-size: 11px;
 	color: #bfc9c2;
 `;
@@ -169,7 +186,9 @@ const EmptyContainer = styled.div`
 	letter-spacing: 0.4px;
 	color: #e1e3e0;
 `;
-
+const LinkTextP = styled(TimeTextP)`
+	text-decoration: underline;
+`;
 const OffersTable = ({ offers, userAddress }) => (
 	<TableContainer className="w-100 d-flex">
 		<Table borderless responsive>
@@ -183,12 +202,10 @@ const OffersTable = ({ offers, userAddress }) => (
 			<tbody>
 				{[...offers].reverse().map((a) => (
 					<tr key={a.id}>
-						<div className="d-flex flex-column">
-							<TimeText>
-								<b>{a.price}</b> WETH
-							</TimeText>
-							<USDText>~${a.usd}</USDText>
-						</div>
+						<td className="d-flex flex-column">
+							<TimeTextP as="p">{a.price} WETH</TimeTextP>
+							<USDTextP as="p">~${a.usd}</USDTextP>
+						</td>
 						<LinkText className="text-center">
 							<a
 								href={`https://rinkeby.etherscan.io/tx/${a.txHash}`}
@@ -221,8 +238,8 @@ const Activities = ({ activities }) => (
 			<tbody>
 				{[...activities].reverse().map((a) => (
 					<tr key={a.id}>
-						<div className="d-flex flex-column">
-							<LinkText className="text-start text-capitalize">
+						<td className="d-flex flex-column">
+							<LinkTextP className="text-start text-capitalize">
 								<a
 									href={`https://rinkeby.etherscan.io/tx/${a.txHash}`}
 									target="_blank"
@@ -230,8 +247,8 @@ const Activities = ({ activities }) => (
 								>
 									{a.event}
 								</a>
-							</LinkText>
-						</div>
+							</LinkTextP>
+						</td>
 						<TimeText>{a.price === -1 ? `-` : `${a.price} WETH`}</TimeText>
 						<TimeText>{a.time}</TimeText>
 					</tr>

@@ -149,7 +149,7 @@ const StyledTabs = styled(Tabs)`
 		padding: 8px 40px;
 		border-radius: 100px;
 		border: none;
-		color: #fff;
+		color: #bfc9c2;
 	}
 
 	& .nav-link.active {
@@ -433,7 +433,10 @@ const DummyNBMonLargeCard = ({
 				) : (
 					<div className="afterImage   text-center w-100">
 						<div className="d-flex w-100 justify-content-center align-items-center">
-							<HeadingSM as="h1" className="text-white text-capitalize me-2">
+							<HeadingSM
+								as="h1"
+								className="text-whitePrimary text-capitalize me-2"
+							>
 								{genus}
 							</HeadingSM>
 							{nbMon.gender === "Male" ? (
@@ -453,7 +456,7 @@ const DummyNBMonLargeCard = ({
 							)}
 						</div>
 
-						<Description className="mt-2 text-white mx-auto">
+						<Description className="mt-2 text-whitePrimary mx-auto">
 							{data.genus[genus].description}
 						</Description>
 					</div>

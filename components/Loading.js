@@ -9,11 +9,11 @@ const StyledContainer = styled.div`
 		height: 180px;
 		margin: auto;
 	}
+	background: #1d1d1d;
 `;
-import { TextPrimary } from "./Typography/Texts";
 const Loading = () => {
 	return (
-		<StyledContainer className="bg-primary">
+		<StyledContainer>
 			{/* <TextPrimary className="text-white m-auto">Loading...</TextPrimary> */}
 			<Image
 				src={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/loading_anim.svg`}

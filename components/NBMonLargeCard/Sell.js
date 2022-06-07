@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
 import { TextNormal } from "components/Typography/Texts";
 import styled from "styled-components";
-// import { mediaBreakpoint } from "utils/breakpoints";
+import { mediaBreakpoint } from "utils/breakpoints";
 import { InputGroup, FormControl } from "react-bootstrap";
 import MyButton from "components/Buttons/Button";
 import AppContext from "context/AppContext";
 import delay from "utils/delay";
+
 // import MarketplaceLite from "components/../abis/MarketplaceLite";
 
 const InnerContainer = styled.div`
@@ -19,6 +20,10 @@ const InnerContainer = styled.div`
 const OuterContainer = styled.div`
 	display: flex;
 	padding: 0 24px;
+
+	@media ${mediaBreakpoint.down.md} {
+		padding: 0;
+	}
 `;
 
 const OptionText = styled(TextNormal)`

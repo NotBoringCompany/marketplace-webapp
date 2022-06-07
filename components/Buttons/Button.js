@@ -5,6 +5,8 @@ import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import { MdArrowBackIos } from "react-icons/md";
 
+import { mediaBreakpoint } from "utils/breakpoints";
+
 const StyledButton = styled(Button)`
 	padding: ${(props) =>
 		props.pill ? (props.big ? `10px 24px` : `4px 22px`) : `8px 24px;`};
@@ -19,6 +21,10 @@ const StyledP = styled.p`
 	font-family: "Lexend";
 	font-weight: ${(props) => (props.thin ? `400` : `600`)};
 	font-size: ${(props) => (props.big ? `21px` : `16px`)};
+
+	@media ${mediaBreakpoint.down.md} {
+		font-size: ${(props) => (props.big ? `18px` : `14px`)};
+	}
 `;
 const MyButton = ({
 	text,

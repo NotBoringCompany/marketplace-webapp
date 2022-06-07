@@ -110,7 +110,7 @@ const ConfirmBuyNBMon = ({ stateUtils }) => {
 
 				<StyledButton
 					onClick={onConfirm}
-					className="mt-4"
+					className="mt-4 w-100"
 					variant={"info"}
 					text={"Confirm"}
 				/>
