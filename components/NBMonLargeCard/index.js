@@ -230,7 +230,7 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 				<TabsContainer>
 					<StyledTabs defaultActiveKey="info">
 						<Tab eventKey="info" title="Info">
-							<BasicInfo nbMon={nbMon} mine={mine} />
+							<BasicInfo listed={false} nbMon={nbMon} mine={mine} />
 						</Tab>
 						{!isEgg && (
 							<Tab eventKey="stats" title="Stats">

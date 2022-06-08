@@ -465,15 +465,16 @@ const DummyNBMonLargeCard = ({
 				<TabsContainer>
 					<StyledTabs onSelect={(k) => setKey(k)} activeKey={key}>
 						<Tab eventKey="info" title="Info">
-							<BasicInfo nbMon={nbMon} mine={mine} />
+							<BasicInfo
+								listed={listed}
+								nbMon={nbMon}
+								mine={mine}
+								activitiesData={activitiesData}
+							/>
 						</Tab>
 						{!isEgg && (
 							<Tab eventKey="stats" title="Stats">
-								<Stats
-									nbMon={nbMon}
-									listed={listed}
-									activitiesData={activitiesData}
-								/>
+								<Stats nbMon={nbMon} />
 							</Tab>
 						)}
 						{mine && dummy && !listed && (

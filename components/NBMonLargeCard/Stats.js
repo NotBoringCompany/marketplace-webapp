@@ -37,7 +37,7 @@ const TypesContainer = styled.div`
 	}
 `;
 
-const Stats = ({ nbMon, listed, activitiesData = [] }) => {
+const Stats = ({ nbMon }) => {
 	return (
 		<div className="d-flex flex-column align-items-center p-0 p-lg-3 pt-0">
 			<TypesContainer>
@@ -170,14 +170,6 @@ const Stats = ({ nbMon, listed, activitiesData = [] }) => {
 					</StatsText>
 				</StatsContainer>
 			</SeparatorContainer>
-
-			{!listed && (
-				<NFTTable
-					type="Activities"
-					data={activitiesData}
-					className="w-100 mt-3"
-				/>
-			)}
 		</div>
 	);
 };

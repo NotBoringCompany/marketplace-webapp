@@ -23,6 +23,10 @@ const Card = styled.div`
 	@media ${mediaBreakpoint.down.lg} {
 		width: 240px;
 	}
+
+	&.inactive:hover {
+		cursor: not-allowed;
+	}
 `;
 
 const CardText = styled(TextPrimary)`
@@ -47,19 +51,30 @@ const StyledLink = styled.a`
 `;
 
 const CardLink = ({ active = false, className = "", text = "", href = "" }) => {
+	if (active)
+		return (
+			<Link href={active ? href : `#`} passHref>
+				<StyledLink
+					active={active ? 1 : 0}
+					className={`${className} mx-lg-0 mx-auto`}
+				>
+					<Card active={active ? 1 : 0}>
+						<CardText active={active ? 1 : 0} className={`ms-auto`}>
+							{text}
+						</CardText>
+					</Card>
+				</StyledLink>
+			</Link>
+		);
 	return (
-		<Link href={active ? href : `#`} passHref>
-			<StyledLink
-				active={active ? 1 : 0}
-				className={`${className} mx-lg-0 mx-auto`}
-			>
-				<Card active={active ? 1 : 0}>
-					<CardText active={active ? 1 : 0} className={`ms-auto`}>
-						{text}
-					</CardText>
-				</Card>
-			</StyledLink>
-		</Link>
+		<Card
+			active={active ? 1 : 0}
+			className={`${className} inactive mx-lg-0 mx-auto`}
+		>
+			<CardText active={active ? 1 : 0} className={`ms-auto`}>
+				{text}
+			</CardText>
+		</Card>
 	);
 };
 

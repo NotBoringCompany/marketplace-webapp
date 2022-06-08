@@ -1,10 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import { StatsContainer, StatsText } from "./TabItemComponents";
-import Pill from "components/Pill";
+import { StatsText } from "./TabItemComponents";
 import NewPill from "components/NewPill";
-import { IoMdMale, IoMdFemale } from "react-icons/io";
+import NFTTable from "./NFTTable";
 import { mediaBreakpoint } from "utils/breakpoints";
 import { ButtonCopy } from "components/Buttons/ButtonCopy";
 import SeparatorContainer from "./SeparatorContainer";
@@ -27,7 +26,12 @@ const StyledStatsText = styled(StatsText)`
 	}
 `;
 
-const BasicInfo = ({ nbMon, mine = false }) => {
+const BasicInfo = ({
+	nbMon,
+	listed = false,
+	activitiesData = [],
+	mine = false,
+}) => {
 	const birthDate = () => {
 		const properDate = parseInt(nbMon.hatchedAt) * 1000;
 		const day =
@@ -186,6 +190,14 @@ const BasicInfo = ({ nbMon, mine = false }) => {
 						<StatsText className="text-white">1</StatsText>
 					</SeparatorContainer>
 				</>
+			)}
+
+			{!listed && (
+				<NFTTable
+					type="Activities"
+					data={activitiesData}
+					className="w-100 mt-3"
+				/>
 			)}
 		</BasicInfoContainer>
 	);
