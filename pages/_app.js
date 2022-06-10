@@ -7,9 +7,13 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 // import { useContext } from "react";
 import "styles/globals.css";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "styles/root.scss";
 import "styles/styles.scss";
+
+import "styles/clock.css";
+import "styles/timepicker.css";
 
 import { AppProvider } from "context/AppContext";
 

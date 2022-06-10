@@ -7,6 +7,8 @@ import MyButton from "components/Buttons/Button";
 import AppContext from "context/AppContext";
 import delay from "utils/delay";
 
+import TimePicker from "react-time-picker/dist/entry.nostyle";
+
 // import MarketplaceLite from "components/../abis/MarketplaceLite";
 
 const InnerContainer = styled.div`
@@ -70,6 +72,9 @@ const StyledButton = styled(MyButton)`
 `;
 const Sell = ({ setListed, setKey, setListedPrices }) => {
 	const [price, setPrice] = useState(1);
+	const [timeValue, setTimeValue] = useState(
+		new Date(Date.now() + 60 * 1000 * 5)
+	);
 	const { statesSwitchModal } = useContext(AppContext);
 	const handleChange = (e) => {
 		setPrice(e.target.value);
@@ -144,7 +149,18 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 						<InputGroup.Text id="basic-addon2">WETH</InputGroup.Text>
 					</StyledInputGroup>
 
-					<div className="mx-auto mt-2">
+					<TimePicker
+						onChange={(v) => {
+							setTimeValue(v);
+						}}
+						format={"hh:mm a"}
+						value={timeValue}
+						clockIcon={null}
+						clearIcon={null}
+						amPmAriaLabel={"Select AM/PM"}
+					/>
+
+					<div className="mx-auto mt-5">
 						<StyledButton
 							onClick={handleClick}
 							text="Start listing item"
