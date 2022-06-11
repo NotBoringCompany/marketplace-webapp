@@ -79,7 +79,9 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 
 	const [dateValue, setDateValue] = useState(new Date(currentDate));
 	const [timeValue, setTimeValue] = useState(
-		`${timePlusFiveMinutes.getHours()}:${timePlusFiveMinutes.getMinutes()}`
+		`${timePlusFiveMinutes.getHours()}:${
+			timePlusFiveMinutes.getMinutes() < 10 ? `0` : ``
+		}${timePlusFiveMinutes.getMinutes()}`
 	);
 	const [actualDateAndTime, setActualDateAndTime] = useState(0);
 
@@ -88,11 +90,15 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 	const { statesSwitchModal } = useContext(AppContext);
 
 	useEffect(() => {
-		const formattedDateAndtime = `${
-			dateValue.getMonth() + 1
-		}/${dateValue.getDate()}/${dateValue.getFullYear()} ${timeValue}`;
-		const parsed = Date.parse(new Date(formattedDateAndtime));
-		setActualDateAndTime(parsed);
+		if (dateValue) {
+			const formattedDateAndtime = `${
+				dateValue.getMonth() + 1
+			}/${dateValue.getDate()}/${dateValue.getFullYear()} ${timeValue}`;
+			const parsed = Date.parse(new Date(formattedDateAndtime));
+			setActualDateAndTime(parsed);
+		} else {
+			setBtnDisabled(true);
+		}
 	}, [dateValue, timeValue]);
 
 	useEffect(() => {
@@ -189,7 +195,6 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 								minDate={new Date()}
 								dateFormat="dd/MM/yyyy"
 								onChange={(date) => {
-									console.log(date);
 									setDateValue(date);
 								}}
 							/>
