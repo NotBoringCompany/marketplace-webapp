@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 // import { useContext } from "react";
+import "react-datepicker/dist/react-datepicker.css";
+
 import "styles/globals.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";

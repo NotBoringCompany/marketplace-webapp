@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { TextNormal } from "components/Typography/Texts";
 import styled from "styled-components";
 import { mediaBreakpoint } from "utils/breakpoints";
@@ -8,6 +8,7 @@ import AppContext from "context/AppContext";
 import delay from "utils/delay";
 
 import TimePicker from "react-time-picker/dist/entry.nostyle";
+import DatePicker from "react-datepicker";
 
 // import MarketplaceLite from "components/../abis/MarketplaceLite";
 
@@ -23,7 +24,7 @@ const OuterContainer = styled.div`
 	display: flex;
 	padding: 0 24px;
 
-	@media ${mediaBreakpoint.down.md} {
+	@media ${mediaBreakpoint.down.lg} {
 		padding: 0;
 	}
 `;
@@ -71,11 +72,41 @@ const StyledButton = styled(MyButton)`
 	font-size: 12px;
 `;
 const Sell = ({ setListed, setKey, setListedPrices }) => {
+	const currentDate = Date.now();
+	const timePlusFiveMinutes = new Date(currentDate + 60 * 1000 * 5);
+
 	const [price, setPrice] = useState(1);
+
+	const [dateValue, setDateValue] = useState(new Date(currentDate));
 	const [timeValue, setTimeValue] = useState(
-		new Date(Date.now() + 60 * 1000 * 5)
+		`${timePlusFiveMinutes.getHours()}:${timePlusFiveMinutes.getMinutes()}`
 	);
+	const [actualDateAndTime, setActualDateAndTime] = useState(0);
+
+	const [btnDisabled, setBtnDisabled] = useState(true);
+
 	const { statesSwitchModal } = useContext(AppContext);
+
+	useEffect(() => {
+		const formattedDateAndtime = `${
+			dateValue.getMonth() + 1
+		}/${dateValue.getDate()}/${dateValue.getFullYear()} ${timeValue}`;
+		const parsed = Date.parse(new Date(formattedDateAndtime));
+		setActualDateAndTime(parsed);
+	}, [dateValue, timeValue]);
+
+	useEffect(() => {
+		if (actualDateAndTime > 0) {
+			if (actualDateAndTime < Date.now()) {
+				//disable
+				setBtnDisabled(true);
+			} else {
+				//allow to click btn
+				setBtnDisabled(false);
+			}
+		}
+	}, [actualDateAndTime]);
+
 	const handleChange = (e) => {
 		setPrice(e.target.value);
 	};
@@ -149,22 +180,49 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 						<InputGroup.Text id="basic-addon2">WETH</InputGroup.Text>
 					</StyledInputGroup>
 
-					<TimePicker
-						onChange={(v) => {
-							setTimeValue(v);
-						}}
-						format={"hh:mm a"}
-						value={timeValue}
-						clockIcon={null}
-						clearIcon={null}
-						amPmAriaLabel={"Select AM/PM"}
-					/>
+					<div className="d-flex flex-md-row flex-column">
+						<div className="d-flex flex-column w-100">
+							<OptionText className="mb-2">End Date</OptionText>
 
-					<div className="mx-auto mt-5">
+							<DatePicker
+								selected={dateValue}
+								minDate={new Date()}
+								dateFormat="dd/MM/yyyy"
+								onChange={(date) => {
+									console.log(date);
+									setDateValue(date);
+								}}
+							/>
+						</div>
+
+						<div className="d-flex ms-lg-1 ms-0 flex-column w-100 mt-md-0 mt-3">
+							<OptionText className="mb-2">End Time</OptionText>
+
+							<TimePicker
+								onChange={(v) => {
+									setTimeValue(v);
+								}}
+								onKeyUp={(e) => {
+									if (e.target.value > 59) {
+										setTimeValue(`${timeValue.split(":")[0]}:00`);
+									}
+								}}
+								className="w-100 "
+								format={"hh:mm a"}
+								value={timeValue}
+								clockIcon={null}
+								clearIcon={null}
+								amPmAriaLabel={"Select AM/PM"}
+							/>
+						</div>
+					</div>
+
+					<div className="mx-auto mt-4">
 						<StyledButton
 							onClick={handleClick}
 							text="Start listing item"
 							pill
+							disabled={btnDisabled}
 							thinText
 						/>
 					</div>
