@@ -258,7 +258,7 @@ const Activities = ({ activities }) => (
 	</TableContainer>
 );
 
-const Offers = ({ className, userAddress, data = [], type = "Offers" }) => {
+const NFTTable = ({ className, userAddress, data = [], type = "Offers" }) => {
 	return (
 		<div className={`d-flex flex-column ${className}`}>
 			<MainText as="p" className="text-white text-start mb-2">
@@ -280,4 +280,4 @@ const Offers = ({ className, userAddress, data = [], type = "Offers" }) => {
 	);
 };
 
-export default Offers;
+export default NFTTable;

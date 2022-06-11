@@ -280,6 +280,7 @@ const DummyNBMonLargeCard = ({
 
 	const activitiesData = [
 		{
+			id: 12312,
 			price: 0.5,
 			time: "2 days ago",
 			event: "mint",
