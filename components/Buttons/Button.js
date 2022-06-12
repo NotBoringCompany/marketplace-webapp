@@ -20,10 +20,10 @@ const StyledButton = styled(Button)`
 const StyledP = styled.p`
 	font-family: "Lexend";
 	font-weight: ${(props) => (props.thin ? `400` : `600`)};
-	font-size: ${(props) => (props.big ? `21px` : `16px`)};
+	font-size: ${(props) => (props.big ? `21px` : `15px`)};
 
 	@media ${mediaBreakpoint.down.md} {
-		font-size: ${(props) => (props.big ? `18px` : `14px`)};
+		font-size: ${(props) => (props.big ? `18px` : `13px`)};
 	}
 `;
 const MyButton = ({

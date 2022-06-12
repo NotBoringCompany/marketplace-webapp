@@ -34,17 +34,6 @@ const OptionText = styled(TextNormal)`
 	color: #e1e3e0;
 `;
 
-const FixedButton = styled.div`
-	width: 100%;
-	background: #67dbb1;
-	padding: 9px;
-	width: 100%;
-	border-radius: 4px;
-	&:hover {
-		cursor: pointer;
-	}
-`;
-
 const StyledButton = styled(MyButton)`
 	padding: 8px 40px;
 
