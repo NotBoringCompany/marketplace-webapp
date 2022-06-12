@@ -230,7 +230,7 @@ input[type="number"] {
 	text-align: center;
 	padding: 9px;
 	border-radius: 8px;
-	border: 2px solid rgba(176, 176, 176, 0.35);
+	border: 1.5px solid #89938d;
 }
 
 .react-datepicker {

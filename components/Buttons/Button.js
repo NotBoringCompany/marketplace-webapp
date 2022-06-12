@@ -42,9 +42,9 @@ const MyButton = ({
 	pill = false,
 	big = false,
 	thinText = false,
+	textColor = "white",
 	...props
 }) => {
-	let textColor = "text-light";
 	if (variant && variant.includes("outline-"))
 		textColor = variant.split("-")[0];
 	target = newTab ? `_blank` : target;

@@ -21,7 +21,7 @@
 	background: #181818;
 	padding: 9px;
 	border-radius: 8px;
-	border: 2px solid rgba(176, 176, 176, 0.35);
+	border: 1.5px solid #89938d;
 }
 .react-time-picker__inputGroup {
 	min-width: calc((4px * 3) + 0.54em * 6 + 0.217em * 2);
