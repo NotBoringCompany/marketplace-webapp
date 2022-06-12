@@ -291,7 +291,7 @@ const Sell = ({
 						</StyledTabs>
 					</TabsContainer>
 
-					<div className="mx-auto mt-4">
+					<div className="mx-auto mt-4 mb-2">
 						<StyledButton
 							textColor={"text-black"}
 							onClick={handleClick}
