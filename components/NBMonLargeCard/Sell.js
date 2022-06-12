@@ -4,15 +4,12 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import styled from "styled-components";
 import { mediaBreakpoint } from "utils/breakpoints";
-import { InputGroup, FormControl } from "react-bootstrap";
 import MyButton from "components/Buttons/Button";
 import AppContext from "context/AppContext";
 import delay from "utils/delay";
 
-import TimePicker from "react-time-picker/dist/entry.nostyle";
-import DatePicker from "react-datepicker";
-
-// import MarketplaceLite from "components/../abis/MarketplaceLite";
+import FixedPrice from "components/SellerPOVComponents/FixedPrice";
+import TimedAuction from "components/SellerPOVComponents/TimedAuction";
 
 const InnerContainer = styled.div`
 	background: #2c2d2d;
@@ -48,26 +45,6 @@ const FixedButton = styled.div`
 	}
 `;
 
-const StyledInputGroup = styled(InputGroup)`
-	& input {
-		background: ${(props) => (props.variant === "light" ? `#fff` : `#181818`)};
-		border: 1.5px solid #89938d;
-		color: ${(props) => (props.variant === "light" ? `#181818` : `#fff`)};
-		border-radius: 8px;
-		padding: 10px 16px;
-		&:focus {
-			background: ${(props) => (props.variant === "light" ? `#fff` : `black`)};
-			color: ${(props) => (props.variant === "light" ? `#212121` : `#fff`)};
-		}
-	}
-
-	& .input-group-text {
-		border: 1.5px solid #89938d;
-		border-left: none;
-		background: ${(props) => (props.variant === "light" ? `#fff` : `#181818`)};
-		color: #fff;
-	}
-`;
 const StyledButton = styled(MyButton)`
 	padding: 8px 40px;
 
@@ -182,11 +159,18 @@ const StyledTabs = styled(Tabs)`
 	}
 `;
 
-const Sell = ({ setListed, setKey, setListedPrices }) => {
+const Sell = ({
+	setListed,
+	setKey,
+	setListedPrices,
+	setListingType,
+	listedPrices,
+}) => {
 	const currentDate = Date.now();
 	const timePlusFiveMinutes = new Date(currentDate + 60 * 1000 * 5);
 
-	const [price, setPrice] = useState(1);
+	const [activeKey, setActiveKey] = useState("fixedPrice");
+	const { weth, usd, endPrice } = listedPrices;
 
 	const [dateValue, setDateValue] = useState(new Date(currentDate));
 	const [timeValue, setTimeValue] = useState(
@@ -220,26 +204,22 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			} else {
 				//allow to click btn
 				setBtnDisabled(false);
+
+				if (weth <= 0) {
+					setBtnDisabled(true);
+				} else {
+					setBtnDisabled(false);
+				}
 			}
 		}
-	}, [actualDateAndTime]);
-
-	const handleChange = (e) => {
-		setPrice(e.target.value);
-	};
-
-	const handleBlur = (e) => {
-		if (e.target.value <= 0) {
-			setPrice(0.0001);
-		}
-	};
+	}, [actualDateAndTime, endPrice, weth]);
 
 	const handleClick = async () => {
 		statesSwitchModal.setter({
 			show: true,
 			content: "listNBmon",
 			stage: 0,
-			price,
+			price: weth,
 		});
 
 		await delay(1500);
@@ -248,7 +228,7 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			show: true,
 			content: "listNBmon",
 			stage: 1,
-			price,
+			price: weth,
 		});
 
 		await delay(1500);
@@ -257,7 +237,7 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			show: true,
 			content: "listNBmon",
 			stage: 2,
-			price,
+			price: weth,
 		});
 		await delay(1500);
 
@@ -265,10 +245,11 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 			show: true,
 			content: "listNBmon",
 			stage: 3,
-			price,
+			price: weth,
 		});
 
-		setListedPrices({ weth: price, usd: 99 });
+		// setListedPrices({ weth: price, usd: 99 });
+		setListingType(activeKey);
 		setListed(true);
 		setKey("info");
 	};
@@ -279,59 +260,30 @@ const Sell = ({ setListed, setKey, setListedPrices }) => {
 				<div className="d-flex flex-column">
 					<OptionText className="mb-2">Option</OptionText>
 					<TabsContainer>
-						<StyledTabs onSelect={(k) => {}} activeKey={"fixed"}>
-							<Tab eventKey="fixed" title="Fixed">
-								<OptionText className="mb-2">Price</OptionText>
-								<StyledInputGroup className="mb-3">
-									<FormControl
-										value={price}
-										onChange={handleChange}
-										onBlur={handleBlur}
-										placeholder="1"
-										aria-label="1"
-										type="number"
-									/>
-									<InputGroup.Text id="basic-addon2">WETH</InputGroup.Text>
-								</StyledInputGroup>
-
-								<div className="d-flex flex-md-row flex-column">
-									<div className="d-flex flex-column w-100">
-										<OptionText className="mb-2">End Date</OptionText>
-
-										<DatePicker
-											selected={dateValue}
-											minDate={new Date()}
-											dateFormat="dd/MM/yyyy"
-											onChange={(date) => {
-												setDateValue(date);
-											}}
-										/>
-									</div>
-
-									<div className="d-flex ms-lg-1 ms-0 flex-column w-100 mt-md-0 mt-3">
-										<OptionText className="mb-2">End Time</OptionText>
-
-										<TimePicker
-											onChange={(v) => {
-												setTimeValue(v);
-											}}
-											onKeyUp={(e) => {
-												if (e.target.value > 59) {
-													setTimeValue(`${timeValue.split(":")[0]}:00`);
-												}
-											}}
-											className="w-100 "
-											format={"hh:mm a"}
-											value={timeValue}
-											clockIcon={null}
-											clearIcon={null}
-											amPmAriaLabel={"Select AM/PM"}
-										/>
-									</div>
-								</div>
+						<StyledTabs onSelect={(k) => setActiveKey(k)} activeKey={activeKey}>
+							<Tab eventKey="fixedPrice" title="Fixed">
+								<FixedPrice
+									onDateChange={setDateValue}
+									onPriceChange={setListedPrices}
+									onTimeValueChange={setTimeValue}
+									timeValue={timeValue}
+									dateValue={dateValue}
+									price={weth}
+									minDate={new Date(currentDate)}
+								/>
 							</Tab>
 							<Tab eventKey="timedAuction" title="Timed Auction">
-								<>asdsad</>
+								<TimedAuction
+									onDateChange={setDateValue}
+									onPriceChange={setListedPrices}
+									onTimeValueChange={setTimeValue}
+									timeValue={timeValue}
+									dateValue={dateValue}
+									listedPrices={listedPrices}
+									price={weth}
+									endPrice={endPrice}
+									minDate={new Date(currentDate)}
+								/>
 							</Tab>
 							<Tab eventKey="bidding" title="Bidding">
 								<>asdsad</>

@@ -128,8 +128,8 @@ const OfferInputLabel = styled(TextNormal)`
 
 const OfferDetail = ({
 	endsIn = null,
-	startPrice = null,
-	endPrice = null,
+	startPrice = 0,
+	endPrice = 0,
 	className,
 }) => {
 	const TextComponent = ({ text, value, className = "" }) => (
@@ -150,14 +150,14 @@ const OfferDetail = ({
 				<TextComponent
 					className="mt-md-0 mt-3"
 					text="Start price"
-					value={startPrice}
+					value={`${startPrice} WETH`}
 				/>
 			)}
 			{endPrice && (
 				<TextComponent
 					className="mt-md-0 mt-3 "
 					text="End price"
-					value={endPrice}
+					value={`${endPrice} WETH`}
 				/>
 			)}
 		</OfferDetailContainer>
@@ -170,6 +170,8 @@ const ListingBox = ({
 	usdValue = 2000,
 	onCancelListing,
 	onBuy = () => {},
+	endPrice = 0,
+	startPrice = 0,
 	mine,
 }) => {
 	return (
@@ -244,7 +246,12 @@ const ListingBox = ({
 							/>
 						</div>
 					</div>
-					<OfferDetail className="mt-4" endsIn={"20 min."} />
+					<OfferDetail
+						className="mt-4"
+						endsIn={"TODO"}
+						endPrice={endPrice}
+						startPrice={price}
+					/>
 				</div>
 			</InnerContainer>
 		</div>

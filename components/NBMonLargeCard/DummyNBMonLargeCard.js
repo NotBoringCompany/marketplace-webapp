@@ -194,7 +194,7 @@ const MutationImage = styled(Image)`
 const DummyNBMonLargeCard = ({
 	dummy = false,
 	isListed = false,
-	listingType,
+
 	setNbmon = () => {},
 	nbMon,
 	userAddress,
@@ -202,6 +202,7 @@ const DummyNBMonLargeCard = ({
 	const { isEgg, isHatchable } = nbMon;
 	const { statesSwitchModal } = useContext(AppContext);
 	const [listed, setListed] = useState(isListed);
+	const [listingType, setListingType] = useState("fixedPrice");
 
 	const offersData = [
 		{
@@ -289,12 +290,14 @@ const DummyNBMonLargeCard = ({
 		},
 	];
 	const [listedPrices, setListedPrices] = useState({
-		weth: isListed ? nbMon.priceEth : 0,
-		usd: 0,
+		weth: isListed ? nbMon.priceEth : 1,
+		usd: 1300,
+		endPrice: 2,
 	});
 
 	const [key, setKey] = useState("info");
-	const { weth, usd } = listedPrices;
+
+	const { weth, usd, endPrice } = listedPrices;
 
 	useQuery(
 		"exchangeRates",
@@ -343,7 +346,7 @@ const DummyNBMonLargeCard = ({
 			onClickCancel: () => {},
 		});
 
-		setListedPrices({ usd: 0, weth: 0 });
+		setListedPrices({ usd: 1, weth: 1, endPrice: 2 });
 		setListed(false);
 	};
 
@@ -391,8 +394,6 @@ const DummyNBMonLargeCard = ({
 			price: weth,
 		});
 
-		setListedPrices({ weth: 0, usd: 0 });
-		setListed(true);
 		setKey("info");
 		setListed(false);
 		setNbmon({ ...nbMon, owner: userAddress.toLowerCase() });
@@ -484,6 +485,8 @@ const DummyNBMonLargeCard = ({
 									nbMon={nbMon}
 									setListed={setListed}
 									setListedPrices={setListedPrices}
+									setListingType={setListingType}
+									listedPrices={listedPrices}
 									setKey={setKey}
 								/>
 							</Tab>
@@ -501,9 +504,11 @@ const DummyNBMonLargeCard = ({
 							usdValue={usd}
 							onCancelListing={onCancelListing}
 							onBuy={onBuy}
+							endPrice={endPrice}
 						/>
 					</SeparatorContainer>
 					{(listingType === "absoluteBidding" ||
+						listingType === "timedAuction" ||
 						listingType === "minimumBidding") && (
 						<SeparatorContainer noTop className="w-100">
 							<NFTTable
