@@ -199,7 +199,8 @@ const DummyNBMonLargeCard = ({
 	nbMon,
 	userAddress,
 }) => {
-	const { isEgg, isHatchable } = nbMon;
+	const { isEgg, isHatchable, currentHighestBid } = nbMon;
+	console.log("NBMON", nbMon);
 	const { statesSwitchModal } = useContext(AppContext);
 	const [listed, setListed] = useState(isListed);
 	const [listingType, setListingType] = useState("fixedPrice");
@@ -218,7 +219,7 @@ const DummyNBMonLargeCard = ({
 			price: 1,
 			time: "4 months ago",
 			usd: 6023,
-			id: 135132,
+			id: 1354132,
 			address: "0x6ef0f724e780E5D3aD66f2A4FCbEF64A774eA796",
 			txHash:
 				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
@@ -227,7 +228,7 @@ const DummyNBMonLargeCard = ({
 			price: 0.512,
 			time: "2 months ago",
 			usd: 931,
-			id: 135132,
+			id: 1315132,
 			address: "0x6ef0f724e120E5D3aD66f2A4FCbEFeA796",
 			txHash:
 				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
@@ -236,7 +237,7 @@ const DummyNBMonLargeCard = ({
 			price: 0.323,
 			time: "1 months ago",
 			usd: 741,
-			id: 135132,
+			id: 1351332,
 			address: "0x5fa5c1998d4c11f59c17FDE8b3f07588C23837D5",
 			txHash:
 				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
@@ -254,7 +255,7 @@ const DummyNBMonLargeCard = ({
 			price: 0.523,
 			time: "15 days ago",
 			usd: 192,
-			id: 513,
+			id: 5133,
 			address: "0xA1C97853Efe64f660F5f75D4B4997b87540bF307",
 			txHash:
 				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
@@ -263,7 +264,7 @@ const DummyNBMonLargeCard = ({
 			price: 0.523,
 			time: "13 days ago",
 			usd: 192,
-			id: 513,
+			id: 5113,
 			address: "0xA1C97853Efe64f660F5f75D4B4997b87540bF307",
 			txHash:
 				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
@@ -272,7 +273,7 @@ const DummyNBMonLargeCard = ({
 			price: 0.2,
 			time: "8 days ago",
 			usd: 192,
-			id: 513,
+			id: 85,
 			address: "0xA1C97853Efe64f660F5f75D4B4997b87540bF307",
 			txHash:
 				"0xe47586b618e22e17c858d067bab5e037cb8ab4af75e4d4028b3e2e676507dd59",
@@ -293,6 +294,11 @@ const DummyNBMonLargeCard = ({
 		weth: isListed ? nbMon.priceEth : 1,
 		usd: 1300,
 		endPrice: 2,
+	});
+
+	const [biddingPrices, setBiddingPrices] = useState({
+		minAmount: 0,
+		reservedAmount: 0,
 	});
 
 	const [key, setKey] = useState("info");
@@ -487,7 +493,10 @@ const DummyNBMonLargeCard = ({
 									setListedPrices={setListedPrices}
 									setListingType={setListingType}
 									listedPrices={listedPrices}
+									listingType={listingType}
 									setKey={setKey}
+									setBiddingPrices={setBiddingPrices}
+									biddingPrices={biddingPrices}
 								/>
 							</Tab>
 						)}
@@ -505,6 +514,8 @@ const DummyNBMonLargeCard = ({
 							onCancelListing={onCancelListing}
 							onBuy={onBuy}
 							endPrice={endPrice}
+							biddingPrices={biddingPrices}
+							currentHighestBid={currentHighestBid}
 						/>
 					</SeparatorContainer>
 					{(listingType === "absoluteBidding" ||

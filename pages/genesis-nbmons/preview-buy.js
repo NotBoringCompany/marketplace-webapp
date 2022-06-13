@@ -75,6 +75,7 @@ const IndividualNBMon = () => {
 		passives: ["Camouflage", "Wind Bracer"],
 		isEgg: false,
 		priceEth: 1,
+		currentHighestBid: 0,
 	});
 
 	const listingType = "fixedPrice";

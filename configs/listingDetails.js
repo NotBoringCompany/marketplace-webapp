@@ -23,4 +23,10 @@ export const listings = {
 		buyButtonText: "Send Offer",
 		withOfferInput: true,
 	},
+	reservedBidding: {
+		title: "Reserved Bidding",
+		offerLabelText: "Current Highest Bid",
+		buyButtonText: "Send Offer",
+		withOfferInput: true,
+	},
 };

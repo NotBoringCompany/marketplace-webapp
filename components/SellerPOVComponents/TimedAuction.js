@@ -41,17 +41,20 @@ const TimedAuction = ({
 	onTimeValueChange = () => {},
 	timeValue = null,
 	dateValue = null,
-	price = 1,
-	endPrice,
 	minDate,
 	listedPrices,
 }) => {
-	const handleChangePriceStart = (e) => {
-		onPriceChange({
-			...listedPrices,
-			[e.target.name]: e.target.value,
-			usd: 1515,
-		});
+	const { endPrice, price } = listedPrices;
+	const handleChangePrice = (e) => {
+		const num = e.target.value;
+
+		if (!isNaN(num)) {
+			onPriceChange({
+				...listedPrices,
+				[e.target.name]: num,
+				usd: 1515,
+			});
+		}
 	};
 
 	const handleBlurPriceStart = (e) => {
@@ -78,7 +81,7 @@ const TimedAuction = ({
 				<FormControl
 					name="weth"
 					value={price}
-					onChange={handleChangePriceStart}
+					onChange={handleChangePrice}
 					onBlur={handleBlurPriceStart}
 					placeholder="1"
 					aria-label="1"
@@ -128,7 +131,7 @@ const TimedAuction = ({
 				<FormControl
 					name="endPrice"
 					value={endPrice}
-					onChange={handleChangePriceStart}
+					onChange={handleChangePrice}
 					onBlur={handleBlurPriceStart}
 					placeholder="1"
 					aria-label="1"

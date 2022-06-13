@@ -82,6 +82,8 @@ const IndividualNBMon = () => {
 		speedPotential: 0,
 		passives: ["Resilient Fur", "Electric Bracer"],
 		isEgg: false,
+		priceEth: 1,
+		currentHighestBid: 0,
 	});
 	const { isAuthenticated, user } = useMoralis();
 

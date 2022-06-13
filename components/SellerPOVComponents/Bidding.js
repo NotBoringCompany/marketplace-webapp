@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 
 import { TextNormal } from "components/Typography/Texts";
 import styled from "styled-components";
+import { whitespace } from "utils/whitespace";
 
 const OptionText = styled(TextNormal)`
 	font-size: 14px;
@@ -35,35 +36,65 @@ const StyledInputGroup = styled(InputGroup)`
 	}
 `;
 
-const FixedPrice = ({
+const Bidding = ({
 	onDateChange = () => {},
 	onPriceChange = () => {},
 	onTimeValueChange = () => {},
 	timeValue = null,
 	dateValue = null,
-	price = 1,
 	minDate,
+	biddingPrices,
 }) => {
+	const { minAmount, reservedAmount } = biddingPrices;
 	const handleChangePrice = (e) => {
 		const num = e.target.value;
 
 		if (!isNaN(num)) {
-			onPriceChange({ weth: num, usd: 1515 });
+			onPriceChange({
+				...biddingPrices,
+				[e.target.name]: num,
+				usd: 1515,
+			});
 		}
 	};
 
 	const handleBlurPrice = (e) => {
-		if (e.target.value <= 0) {
-			onPriceChange({ weth: 0.00001, usd: 0.01 });
+		if (e.target.value < 0 || whitespace(e.target.value)) {
+			if (e.target.name === "weth") {
+				onPriceChange({
+					...biddingPrices,
+					[e.target.name]: 0,
+				});
+			} else {
+				onPriceChange({
+					...biddingPrices,
+					[e.target.name]: 0,
+				});
+			}
 		}
 	};
 
 	return (
 		<>
-			<OptionText className="mb-2">Price</OptionText>
+			<OptionText className="mb-2">Minimum Amount (Optional)</OptionText>
 			<StyledInputGroup className="mb-3">
 				<FormControl
-					value={price}
+					name="minAmount"
+					value={minAmount}
+					onChange={handleChangePrice}
+					onBlur={handleBlurPrice}
+					placeholder="1"
+					aria-label="1"
+					type="number"
+				/>
+				<InputGroup.Text id="basic-addon2">WETH</InputGroup.Text>
+			</StyledInputGroup>
+
+			<OptionText className="mb-2 mt-3">Reserved Amount (Optional)</OptionText>
+			<StyledInputGroup className="mb-3">
+				<FormControl
+					name="reservedAmount"
+					value={reservedAmount}
 					onChange={handleChangePrice}
 					onBlur={handleBlurPrice}
 					placeholder="1"
@@ -112,4 +143,4 @@ const FixedPrice = ({
 	);
 };
 
-export default FixedPrice;
+export default Bidding;

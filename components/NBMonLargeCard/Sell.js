@@ -10,6 +10,7 @@ import delay from "utils/delay";
 
 import FixedPrice from "components/SellerPOVComponents/FixedPrice";
 import TimedAuction from "components/SellerPOVComponents/TimedAuction";
+import Bidding from "components/SellerPOVComponents/Bidding";
 
 const InnerContainer = styled.div`
 	background: #2c2d2d;
@@ -153,13 +154,17 @@ const Sell = ({
 	setKey,
 	setListedPrices,
 	setListingType,
+	setBiddingPrices,
+	biddingPrices,
 	listedPrices,
+	listingType,
 }) => {
 	const currentDate = Date.now();
 	const timePlusFiveMinutes = new Date(currentDate + 60 * 1000 * 5);
 
 	const [activeKey, setActiveKey] = useState("fixedPrice");
 	const { weth, usd, endPrice } = listedPrices;
+	const { minAmount, reservedAmount } = biddingPrices;
 
 	const [dateValue, setDateValue] = useState(new Date(currentDate));
 	const [timeValue, setTimeValue] = useState(
@@ -202,6 +207,23 @@ const Sell = ({
 			}
 		}
 	}, [actualDateAndTime, endPrice, weth]);
+
+	useEffect(() => {
+		if (listingType === "bidding") {
+			console.log("asd");
+			if (parseFloat(minAmount) === 0 && parseFloat(reservedAmount) === 0) {
+				setListingType("absoluteBidding");
+			} else if (
+				parseFloat(minAmount) > 0 &&
+				parseFloat(reservedAmount) === 0
+			) {
+				setListingType("minimumBidding");
+			} else {
+				setListingType("reservedBidding");
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [listingType]);
 
 	const handleClick = async () => {
 		statesSwitchModal.setter({
@@ -256,8 +278,8 @@ const Sell = ({
 									onPriceChange={setListedPrices}
 									onTimeValueChange={setTimeValue}
 									timeValue={timeValue}
-									dateValue={dateValue}
 									price={weth}
+									dateValue={dateValue}
 									minDate={new Date(currentDate)}
 								/>
 							</Tab>
@@ -269,13 +291,19 @@ const Sell = ({
 									timeValue={timeValue}
 									dateValue={dateValue}
 									listedPrices={listedPrices}
-									price={weth}
-									endPrice={endPrice}
 									minDate={new Date(currentDate)}
 								/>
 							</Tab>
 							<Tab eventKey="bidding" title="Bidding">
-								<>asdsad</>
+								<Bidding
+									onDateChange={setDateValue}
+									biddingPrices={biddingPrices}
+									onPriceChange={setBiddingPrices}
+									onTimeValueChange={setTimeValue}
+									timeValue={timeValue}
+									dateValue={dateValue}
+									minDate={new Date(currentDate)}
+								/>
 							</Tab>
 						</StyledTabs>
 					</TabsContainer>

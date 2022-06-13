@@ -148,7 +148,7 @@ const OfferDetail = ({
 			{endsIn && <TextComponent text="Ends in" value={endsIn} />}
 			{startPrice && (
 				<TextComponent
-					className="mt-md-0 mt-3"
+					className={`mt-md-0 mt-3 ${!endPrice && `ms-md-auto`}`}
 					text="Start price"
 					value={`${startPrice} WETH`}
 				/>
@@ -172,8 +172,18 @@ const ListingBox = ({
 	onBuy = () => {},
 	endPrice = 0,
 	startPrice = 0,
+	biddingPrices,
+	currentHighestBid,
 	mine,
 }) => {
+	const bidding = listingType.toLowerCase().includes("bidding");
+	let minimumAmount = 0;
+	let reservedAmount = 0;
+	if (bidding) {
+		minimumAmount = biddingPrices.minAmount;
+		reservedAmount = biddingPrices.reservedAmount;
+	}
+
 	return (
 		<div className="d-flex flex-column w-100">
 			<div className="d-flex justify-content-between mb-3">
@@ -200,7 +210,9 @@ const ListingBox = ({
 								/>
 
 								<div className="d-flex flex-column ms-1  ">
-									<PriceText className="text-start">{price} WETH</PriceText>
+									<PriceText className="text-start">
+										{bidding ? currentHighestBid : price} WETH
+									</PriceText>
 									<LabelCurrentPrice className="text-start mt-1">
 										~${usdValue}
 									</LabelCurrentPrice>
@@ -246,11 +258,12 @@ const ListingBox = ({
 							/>
 						</div>
 					</div>
+
 					<OfferDetail
 						className="mt-4"
 						endsIn={"TODO"}
-						endPrice={endPrice}
-						startPrice={price}
+						endPrice={!bidding ? endPrice : 0}
+						startPrice={!bidding ? price : minimumAmount}
 					/>
 				</div>
 			</InnerContainer>

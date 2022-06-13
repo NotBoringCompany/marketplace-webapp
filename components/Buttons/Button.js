@@ -42,7 +42,7 @@ const MyButton = ({
 	pill = false,
 	big = false,
 	thinText = false,
-	textColor = "white",
+	textColor = "text-white",
 	...props
 }) => {
 	if (variant && variant.includes("outline-"))
