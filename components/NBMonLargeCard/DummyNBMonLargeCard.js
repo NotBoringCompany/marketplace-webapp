@@ -200,7 +200,6 @@ const DummyNBMonLargeCard = ({
 	userAddress,
 }) => {
 	const { isEgg, isHatchable, currentHighestBid } = nbMon;
-	console.log("NBMON", nbMon);
 	const { statesSwitchModal } = useContext(AppContext);
 	const [listed, setListed] = useState(isListed);
 	const [listingType, setListingType] = useState("fixedPrice");
