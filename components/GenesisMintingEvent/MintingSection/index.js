@@ -67,6 +67,7 @@ const MintingSection = () => {
 		isWhitelisted: false,
 		amountMinted: 0,
 		hasMintedFive: false,
+		isProfileRegistered: false,
 	});
 	const [timeStamps, setTimeStamps] = useState({
 		now: 0,
@@ -249,13 +250,22 @@ const MintingSection = () => {
 			if (
 				!hasMintedFive &&
 				haveBeenMinted < supplyLimit &&
-				((isWhitelistOpen && isWhitelisted) || (isPublicOpen && !isWhitelisted))
+				((isWhitelistOpen && isWhitelisted) ||
+					(isPublicOpen && !isWhitelisted)) &&
+				isProfileRegistered
 			) {
 				setUserStatus({ ...userStatus, canMint: true });
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasMintedFive, isPublicOpen, isWhitelistOpen, isLoading, isFetching]);
+	}, [
+		hasMintedFive,
+		isPublicOpen,
+		isWhitelistOpen,
+		isLoading,
+		isFetching,
+		isProfileRegistered,
+	]);
 
 	useEffect(() => {
 		if (amountMinted === 5 || hasMintedFive) {
