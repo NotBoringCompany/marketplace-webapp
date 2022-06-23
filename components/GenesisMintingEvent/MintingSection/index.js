@@ -30,6 +30,7 @@ import NotWhitelistedBox from "./NotWhitelistedBox";
 import Timers from "./Timers";
 import BlurredStats from "./BlurredStats";
 import Thankyou from "./Thankyou";
+import MintingStep from "./MintingStep";
 
 const StyledHeadingMD = styled(HeadingMD)`
 	& span.skinny {
@@ -82,7 +83,13 @@ const MintingSection = () => {
 	const [videoLoaded, setVideoLoaded] = useState(false);
 	const { statesSwitchModal } = useContext(AppContext);
 	const { haveBeenMinted, supplyLimit } = supplyData;
-	const { canMint, isWhitelisted, amountMinted, hasMintedFive } = userStatus;
+	const {
+		canMint,
+		isWhitelisted,
+		amountMinted,
+		isProfileRegistered,
+		hasMintedFive,
+	} = userStatus;
 	const { isWhitelistOpen, isPublicOpen, isMintingEnded } = timeStamps;
 
 	const { whitelistOpenAt } = timeStamps;
@@ -414,9 +421,28 @@ const MintingSection = () => {
 						{!isMintingEnded ? (
 							<>
 								<Timers timeStampsStates={{ timeStamps, setTimeStamps }} />
-								{!isAuthenticated ? (
-									<MetamaskButton big className="mt-lg-5 mt-2 text-white" />
-								) : (
+								{(!isAuthenticated || !isProfileRegistered) && (
+									<div className="d-flex flex-column">
+										{!isAuthenticated && (
+											<MetamaskButton big className="mt-lg-5 my-2 text-white" />
+										)}
+										<div className="d-flex mt-3 w-100 justify-content-between">
+											<MintingStep
+												step={1}
+												stepText="Log In"
+												className="me-4"
+												active={!isAuthenticated}
+											/>
+
+											<MintingStep
+												step={2}
+												stepText="Register Address on Blockchain"
+												active={!isProfileRegistered && isAuthenticated}
+											/>
+										</div>
+									</div>
+								)}
+								{isAuthenticated && (
 									<>
 										{!isWhitelistOpen &&
 											!isPublicOpen &&

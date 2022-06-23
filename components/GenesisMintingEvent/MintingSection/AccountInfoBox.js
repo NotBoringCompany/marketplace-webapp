@@ -10,7 +10,7 @@ const AccountInfo = ({ user }) => {
 		<BlurContainer className="mt-lg-5 mt-2 text-white">
 			<div className="d-flex align-items-center">
 				<IoIosCheckmarkCircleOutline className="me-2 checkmark-icon" />
-				<Heading18 as="p">You are logged in</Heading18>
+				<Heading18 as="p">You are logged in & registered</Heading18>
 			</div>
 			<TextSecondary className="mt-1">
 				{user && user.attributes && user.attributes.ethAddress}
