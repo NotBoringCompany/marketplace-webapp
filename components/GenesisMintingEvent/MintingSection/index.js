@@ -31,6 +31,7 @@ import Timers from "./Timers";
 import BlurredStats from "./BlurredStats";
 import Thankyou from "./Thankyou";
 import MintingStep from "./MintingStep";
+import RegisterProfileButton from "components/Buttons/RegisterProfileButton";
 
 const StyledHeadingMD = styled(HeadingMD)`
 	& span.skinny {
@@ -181,7 +182,11 @@ const MintingSection = () => {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(mintData),
+					body: JSON.stringify({
+						...mintData,
+						purchaseType:
+							isWhitelisted && amountMinted === 0 ? `whitelisted` : `public`,
+					}),
 				}
 			),
 		{
@@ -235,7 +240,8 @@ const MintingSection = () => {
 
 	const trfEth = useWeb3Transfer({
 		amount: Moralis.Units.ETH(
-			parseFloat(process.env.NEXT_PUBLIC_MINTING_PRICE)
+			parseFloat(process.env.NEXT_PUBLIC_MINTING_PRICE) +
+				parseFloat(process.env.NEXT_PUBLIC_MINTING_GAS_FEE)
 		),
 		receiver: process.env.NEXT_PUBLIC_RECEIVER_WALLET,
 		type: "native",
@@ -317,9 +323,12 @@ const MintingSection = () => {
 						throw e;
 					});
 
+					console.log("RRRR", r);
+
 					const mintData = {
 						purchaserAddress: user.attributes.ethAddress,
 						txHash: r.transactionHash,
+						txGasFee: process.env.NEXT_PUBLIC_MINTING_GAS_FEE,
 					};
 					mintMutation.mutate(mintData);
 
@@ -426,6 +435,13 @@ const MintingSection = () => {
 										{!isAuthenticated && (
 											<MetamaskButton big className="mt-lg-5 my-2 text-white" />
 										)}
+										{isAuthenticated && !isProfileRegistered && (
+											<RegisterProfileButton
+												big
+												addresses={user && [user.attributes.ethAddress]}
+												className="mt-lg-5 my-2 text-white"
+											/>
+										)}
 										<div className="d-flex mt-3 w-100 justify-content-between">
 											<MintingStep
 												step={1}
@@ -442,7 +458,7 @@ const MintingSection = () => {
 										</div>
 									</div>
 								)}
-								{isAuthenticated && (
+								{isAuthenticated && isProfileRegistered && (
 									<>
 										{!isWhitelistOpen &&
 											!isPublicOpen &&

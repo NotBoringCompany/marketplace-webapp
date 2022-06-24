@@ -68,8 +68,11 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 	const { show, content } = getter;
 
 	const close = () => {
-		if (cantClickOutside(content)) return;
-		setter({ ...getter, show: false });
+		//cant click outside to close modal
+		return;
+
+		// if (cantClickOutside(content)) return;
+		// setter({ ...getter, show: false });
 	};
 
 	const cantClickOutside = () => {
