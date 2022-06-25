@@ -184,8 +184,12 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 	);
 
 	const handleGetHatchSignature = async () => {
-		// generateSignatureMutation.mutate(); // gets signature from backend
-		setter({ ...getter, show: true, content: "metamaskConfirmation" });
+		setter({
+			...getter,
+			show: true,
+			content: "metamaskConfirmation",
+			extraContent: "hatching fee",
+		});
 
 		await trfHatchingFee.fetch({
 			onSuccess: async (tx) => {
@@ -246,7 +250,12 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 
 	const handleHatch = async (signature) => {
 		if (signature) {
-			setter({ ...getter, show: true, content: "metamaskConfirmation" });
+			setter({
+				...getter,
+				show: true,
+				content: "metamaskConfirmation",
+				extraContent: "hatching your egg",
+			});
 			await hatchFromEgg.runContractFunction({
 				onSuccess: async (tx) => {
 					console.log("tx", tx);

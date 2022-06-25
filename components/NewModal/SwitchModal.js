@@ -120,7 +120,10 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 				cardpreview={content === "cardPreview" ? 1 : 0}
 			>
 				<Switch test={content}>
-					<MetamaskConfirmation switchId="metamaskConfirmation" />
+					<MetamaskConfirmation
+						stateUtils={stateUtils}
+						switchId="metamaskConfirmation"
+					/>
 
 					{/*Genesis minting modals*/}
 					<WaitTransaction switchId="waitTransaction" />
