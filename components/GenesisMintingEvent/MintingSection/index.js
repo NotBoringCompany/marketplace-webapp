@@ -96,7 +96,7 @@ const MintingSection = () => {
 	const { whitelistOpenAt } = timeStamps;
 
 	const [antiRace, setAntiRace] = useState(true);
-
+	const useWhiteListMintRouteAndPrice = isWhitelisted && amountMinted === 0;
 	const userConfigs = useQuery(
 		"userConfigs",
 		() =>
@@ -175,7 +175,7 @@ const MintingSection = () => {
 		(mintData) =>
 			fetch(
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonMinting/${
-					isWhitelisted && amountMinted === 0 ? `whitelistedMint` : `publicMint`
+					useWhiteListMintRouteAndPrice ? `whitelistedMint` : `publicMint`
 				}`,
 				{
 					method: "POST",
@@ -184,8 +184,9 @@ const MintingSection = () => {
 					},
 					body: JSON.stringify({
 						...mintData,
-						purchaseType:
-							isWhitelisted && amountMinted === 0 ? `whitelisted` : `public`,
+						purchaseType: useWhiteListMintRouteAndPrice
+							? `whitelisted`
+							: `public`,
 					}),
 				}
 			),
@@ -240,8 +241,11 @@ const MintingSection = () => {
 
 	const trfEth = useWeb3Transfer({
 		amount: Moralis.Units.ETH(
-			parseFloat(process.env.NEXT_PUBLIC_MINTING_PRICE) +
-				parseFloat(process.env.NEXT_PUBLIC_MINTING_GAS_FEE)
+			useWhiteListMintRouteAndPrice
+				? parseFloat(process.env.NEXT_PUBLIC_WHITELISTED_MINTING_PRICE) +
+						parseFloat(process.env.NEXT_PUBLIC_MINTING_GAS_FEE)
+				: parseFloat(process.env.NEXT_PUBLIC_MINTING_PRICE) +
+						parseFloat(process.env.NEXT_PUBLIC_MINTING_GAS_FEE)
 		),
 		receiver: process.env.NEXT_PUBLIC_RECEIVER_WALLET,
 		type: "native",

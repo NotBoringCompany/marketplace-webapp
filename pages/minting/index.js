@@ -1521,6 +1521,20 @@ const Index = () => {
 			</button>
 			<button
 				onClick={async () => {
+					const h =
+						"0xc157712bb94583bac8ad4658621bd51994d81b83eaec074e38aa31105e54a7a9";
+					const sig = await web3.eth.personal.sign(
+						h,
+						user && user.attributes.ethAddress
+					);
+					console.log("Hash:", h);
+					console.log("sig", sig);
+				}}
+			>
+				test sig hashhhh
+			</button>
+			<button
+				onClick={async () => {
 					// const x = await checkToken.runContractFunction(
 					// 	"0x01BE23585060835E02B77ef475b0Cc51aA1e0709"
 					// );

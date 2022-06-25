@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 
 import TitleWithLink from "components/Typography/TitleWithLink";
@@ -30,7 +30,7 @@ const OverviewActivies = ({ activities }) => {
 			{[...activities]
 				.sort((a, b) => new Date(b.dateGroup) - new Date(a.dateGroup))
 				.map((activity) => (
-					<>
+					<Fragment key={activity.dateGroup}>
 						<TitleDate className="mt-3">{activity.dateGroup}</TitleDate>
 
 						<ListActivites>
@@ -48,7 +48,7 @@ const OverviewActivies = ({ activities }) => {
 									/>
 								))}
 						</ListActivites>
-					</>
+					</Fragment>
 				))}
 		</div>
 	);

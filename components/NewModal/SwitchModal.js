@@ -75,14 +75,14 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 		// setter({ ...getter, show: false });
 	};
 
-	const cantClickOutside = () => {
-		return [
-			"cardPreview",
-			"videoPreview",
-			"userConfirmation",
-			"waitHatching",
-		].includes(content);
-	};
+	// const cantClickOutside = () => {
+	// 	return [
+	// 		"cardPreview",
+	// 		"videoPreview",
+	// 		"userConfirmation",
+	// 		"waitHatching",
+	// 	].includes(content);
+	// };
 
 	const newPasswordModals = [
 		"forgotPassword",

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
-import { useWeb3Contract } from "react-moralis";
+import { useMoralis, useWeb3Transfer, useWeb3Contract } from "react-moralis";
 import Countdown from "react-countdown";
 import HatchButton from "components/Buttons/HatchButton";
 import { HeadingXXS } from "components/Typography/Headings";
@@ -9,15 +9,17 @@ import MintingGenesis from "components/../abis/MintingGenesis.json";
 
 const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 	const { statesSwitchModal } = useContext(AppContext);
+	const { user, Moralis } = useMoralis();
 	const [getNBmon, setGetNBmon] = useState(0);
-	const [key, setKey] = useState(null);
+	const [signature, setSignature] = useState(null);
 
 	useEffect(() => {
-		if (key) {
-			handleHatch(key);
+		if (signature) {
+			console.log("SIGNATURE", signature);
+			handleHatch(signature);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [key]);
+	}, [signature]);
 
 	const { getter, setter } = statesSwitchModal;
 
@@ -30,17 +32,26 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 		contractAddress: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
 		functionName: "hatchFromEgg",
 		params: {
-			_key: key,
-			_nbmonId: nbmonId,
+			_signature: signature,
 		},
 	});
 
-	const statsRandomizer = useMutation(
-		() =>
+	const trfHatchingFee = useWeb3Transfer({
+		amount: Moralis.Units.ETH(process.env.NEXT_PUBLIC_GENESIS_HATCHING_PRICE),
+		receiver: process.env.NEXT_PUBLIC_RECEIVER_WALLET,
+		type: "native",
+	});
+
+	const generateSignatureMutation = useMutation(
+		(hatchData) =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonHatching/randomizeHatchingStats`,
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisNBMonHatching/hatch`,
 				{
 					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(hatchData),
 				}
 			),
 		{
@@ -48,12 +59,12 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 				const res = await response.json();
 
 				if (response.ok) {
-					if (res.key) {
-						setKey(res.key);
-						console.log("Hatching key: ", res.key);
+					if (res.signature) {
+						setSignature(res.signature);
+						console.log("Hatching signature: ", res.signature);
 					} else {
 						console.log("Retrying due to error:", res.reason && res.reason);
-						statsRandomizer.mutate();
+						generateSignatureMutation.mutate(hatchData);
 					}
 				} else {
 					console.log("ERROR HATCHING", res);
@@ -62,18 +73,19 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 						content: "txError",
 						detail: {
 							title: "Hatching Error",
-							text: `We are sorry, there was a problem in getting your hatching key. \n\n Please refresh this page \n and try again.. (400)`,
+							text: `We are sorry, there was a problem in getting your hatching signature. \n\n Please refresh this page \n and try again.. (400)`,
 						},
 					});
 				}
 			},
-			onError: (_) => {
+			onError: (err) => {
+				console.log("ERROR HATCHING!", err);
 				setter({
 					show: true,
 					content: "txError",
 					detail: {
 						title: "Hatching Error",
-						text: "We are sorry, there was a problem in getting your hatching key. \n\n Please refresh this page \n and try again.",
+						text: "We are sorry, there was a problem in getting your hatching signature. \n\n Please refresh this page \n and try again.",
 					},
 				});
 			},
@@ -171,14 +183,71 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 		}
 	);
 
-	const handleGetHatchKey = () => {
-		statsRandomizer.mutate(); // gets key from backend
+	const handleGetHatchSignature = async () => {
+		// generateSignatureMutation.mutate(); // gets signature from backend
+		setter({ ...getter, show: true, content: "metamaskConfirmation" });
+
+		await trfHatchingFee.fetch({
+			onSuccess: async (tx) => {
+				statesSwitchModal.setter({
+					show: true,
+					content: "waitTransaction",
+				});
+				const r = await tx.wait().catch((e) => {
+					throw e;
+				});
+
+				console.log("trfHatchingFee", r);
+
+				const hatchData = {
+					purchaserAddress: user && user.attributes.ethAddress,
+					txHash: r.transactionHash,
+					txGasFee: 0,
+					purchaseType: "genesisHatching",
+					nbmonId,
+				};
+				generateSignatureMutation.mutate(hatchData);
+
+				setter({
+					show: true,
+					content: "userConfirmation",
+					loading: true,
+				});
+			},
+			onError: (e) => {
+				statesSwitchModal.setter({
+					content: "txError",
+					show: false,
+				});
+				if (e.code === "INSUFFICIENT_FUNDS") {
+					statesSwitchModal.setter({
+						show: true,
+						content: "txError",
+						detail: {
+							title: "Transaction Error",
+							text: `You have insufficient funds to \n make this transaction. \n\n Wallet address: ${user.attributes.ethAddress}`,
+						},
+					});
+					// code 4001 is user cancellation
+				} else if (!e.code || (e.code && e.code !== 4001)) {
+					statesSwitchModal.setter({
+						show: true,
+						content: "txError",
+						detail: {
+							title: "Transaction Error",
+							text: "We are sorry, an unexpected \n error occured during transaction. \n \n Please contact us to let us know \n the details.",
+						},
+					});
+				}
+				setDisableHatchBtn(false);
+			},
+		});
 	};
 
-	const handleHatch = async (key) => {
-		if (key) {
+	const handleHatch = async (signature) => {
+		if (signature) {
 			setter({ ...getter, show: true, content: "metamaskConfirmation" });
-			hatchFromEgg.runContractFunction({
+			await hatchFromEgg.runContractFunction({
 				onSuccess: async (tx) => {
 					console.log("tx", tx);
 					setter({
@@ -189,6 +258,7 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 						throw e;
 					});
 					console.log("metamask trf done!", awaited);
+					console.log("trx hash", awaited.transactionHash);
 					addToActivity.mutate(awaited.transactionHash);
 					uploadMetadataToS3.mutate(nbmonId);
 					setGetNBmon(nbmonId); // starting the mechanism to show the video preview
@@ -249,10 +319,10 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 			setter({
 				show: true,
 				content: "userConfirmation",
-				nbmonId,
 				setDisableHatchBtn,
-				onClickHatchKey: handleGetHatchKey,
+				onClickHatchSignature: handleGetHatchSignature,
 			});
+
 			setDisableHatchBtn(true);
 		}
 	};

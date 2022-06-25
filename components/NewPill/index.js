@@ -47,13 +47,13 @@ const NewPill = ({
 	noText = false,
 	...props
 }) => {
-	content = content ? content.toLowerCase() : pillType;
-
+	content = content ? content.toString().toLowerCase() : pillType;
 	let modifiedPillType = pillType === "mutation" ? "type" : pillType;
 
 	const exists =
 		modifiedPillType in nbmonColorSchemes.colors &&
 		content in nbmonColorSchemes.colors[modifiedPillType];
+
 	const imageDecider = () => {
 		const set = new Set(["rarity", "mutation", "type"]);
 		return set.has(pillType);

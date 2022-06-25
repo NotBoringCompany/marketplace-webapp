@@ -22,9 +22,10 @@ const CancelButton = styled.button`
 
 const UserConfirm = ({ stateUtils }) => {
 	const { setter, getter } = stateUtils;
-	const { setDisableHatchBtn, onClickHatchKey } = getter;
+	const { setDisableHatchBtn, onClickHatchSignature } = getter;
+	let loadingNonState = getter.loading ? getter.loading : false;
 
-	const [loading, setLoading] = useState(false);
+	const [loading] = useState(loadingNonState);
 
 	const handleClose = () => {
 		setDisableHatchBtn(false);
@@ -34,16 +35,14 @@ const UserConfirm = ({ stateUtils }) => {
 	return (
 		<div className="d-flex flex-column">
 			<TextPrimary className="text-center mb-4">
-				{loading
-					? "Generating hatching key"
-					: "Are you sure you want to hatch?"}
+				{loading ? "Generating signature" : "Are you sure you want to hatch?"}
 			</TextPrimary>
 			{loading ? (
 				<Image
 					src={"/images/key_purple.svg"}
 					height={29}
 					width={29}
-					alt="Hatching Key"
+					alt="Signature"
 				/>
 			) : (
 				<>
@@ -52,7 +51,7 @@ const UserConfirm = ({ stateUtils }) => {
 			)}
 			{loading ? (
 				<Subtitle className="text-center mt-4">
-					Please wait while we generate your hatching key.
+					Please wait while we generate your hatching signature.
 					<br />
 					<br />
 					Thank you for your patience.
@@ -61,8 +60,7 @@ const UserConfirm = ({ stateUtils }) => {
 				<>
 					<HatchButton
 						onClick={() => {
-							setLoading(true);
-							onClickHatchKey();
+							onClickHatchSignature();
 						}}
 						className="mt-3"
 					/>
