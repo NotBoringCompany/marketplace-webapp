@@ -65,7 +65,7 @@ const StyledTabs = styled(Tabs)`
 	& > li {
 		margin-right: 0;
 		border-radius: 0%;
-		width: calc(100% / 3);
+		width: 100%;
 	}
 
 	& > li:first-child {
@@ -283,7 +283,7 @@ const Sell = ({
 									minDate={new Date(currentDate)}
 								/>
 							</Tab>
-							<Tab eventKey="timedAuction" title="Timed Auction">
+							{/* <Tab eventKey="timedAuction" title="Timed Auction">
 								<TimedAuction
 									onDateChange={setDateValue}
 									onPriceChange={setListedPrices}
@@ -304,7 +304,7 @@ const Sell = ({
 									dateValue={dateValue}
 									minDate={new Date(currentDate)}
 								/>
-							</Tab>
+							</Tab> */}
 						</StyledTabs>
 					</TabsContainer>
 

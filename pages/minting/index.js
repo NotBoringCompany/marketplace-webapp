@@ -7,6 +7,8 @@ import {
 } from "react-moralis";
 import Web3 from "web3";
 import NBMonMinting from "../../abis/MintingGenesis.json";
+import MarketplaceABI from "../../abis/Marketplace.json";
+import BEP_20_ABI from "../../abis/BEP_20.json";
 
 //TODO: NEEDS TO BE REVISITED
 //THIS IS JUST FOR TESTING PURPOSES...
@@ -14,1253 +16,6 @@ import NBMonMinting from "../../abis/MintingGenesis.json";
 const randomIntFromInterval = (min, max) => {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 };
-
-const TEST_ABI = [
-	{
-		inputs: [
-			{
-				internalType: "bytes32",
-				name: "_messageHash",
-				type: "bytes32",
-			},
-		],
-		name: "getEthSignedMessageHash",
-		outputs: [
-			{
-				internalType: "bytes32",
-				name: "",
-				type: "bytes32",
-			},
-		],
-		stateMutability: "pure",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_nftAddress",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "_tokenId",
-				type: "uint256",
-			},
-			{
-				internalType: "address",
-				name: "_paymentTokenAddress",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "_price",
-				type: "uint256",
-			},
-			{
-				internalType: "uint256",
-				name: "_nonce",
-				type: "uint256",
-			},
-		],
-		name: "getMessageHash",
-		outputs: [
-			{
-				internalType: "bytes32",
-				name: "",
-				type: "bytes32",
-			},
-		],
-		stateMutability: "pure",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "bytes32",
-				name: "_ethSignedMessageHash",
-				type: "bytes32",
-			},
-			{
-				internalType: "bytes",
-				name: "_signature",
-				type: "bytes",
-			},
-		],
-		name: "recoverSigner",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "pure",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "bytes",
-				name: "sig",
-				type: "bytes",
-			},
-		],
-		name: "splitSignature",
-		outputs: [
-			{
-				internalType: "bytes32",
-				name: "r",
-				type: "bytes32",
-			},
-			{
-				internalType: "bytes32",
-				name: "s",
-				type: "bytes32",
-			},
-			{
-				internalType: "uint8",
-				name: "v",
-				type: "uint8",
-			},
-		],
-		stateMutability: "pure",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_signer",
-				type: "address",
-			},
-			{
-				internalType: "address",
-				name: "_nftAddress",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "_tokenId",
-				type: "uint256",
-			},
-			{
-				internalType: "address",
-				name: "_paymentTokenAddress",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "_price",
-				type: "uint256",
-			},
-			{
-				internalType: "uint256",
-				name: "_nonce",
-				type: "uint256",
-			},
-			{
-				internalType: "bytes",
-				name: "signature",
-				type: "bytes",
-			},
-		],
-		name: "verify",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "pure",
-		type: "function",
-	},
-];
-
-const MARKETPLACE_ABI = [
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: "address",
-				name: "account",
-				type: "address",
-			},
-		],
-		name: "Paused",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: "address[]",
-				name: "_addresses",
-				type: "address[]",
-			},
-			{
-				indexed: true,
-				internalType: "uint256[]",
-				name: "_values",
-				type: "uint256[]",
-			},
-			{
-				indexed: false,
-				internalType: "enum GenesisMarketplace.SaleType",
-				name: "_saleType",
-				type: "uint8",
-			},
-		],
-		name: "Sold",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: "address",
-				name: "account",
-				type: "address",
-			},
-		],
-		name: "Unpaused",
-		type: "event",
-	},
-	{
-		inputs: [],
-		name: "admin",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address[3]",
-				name: "_addresses",
-				type: "address[3]",
-			},
-			{
-				internalType: "uint256[2]",
-				name: "_values",
-				type: "uint256[2]",
-			},
-			{
-				internalType: "string",
-				name: "_txSalt",
-				type: "string",
-			},
-			{
-				internalType: "enum GenesisMarketplace.SaleType",
-				name: "_saleType",
-				type: "uint8",
-			},
-			{
-				internalType: "bytes",
-				name: "_signature",
-				type: "bytes",
-			},
-		],
-		name: "atomicMatch",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "burner",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "ceo",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "devCut",
-		outputs: [
-			{
-				internalType: "uint16",
-				name: "",
-				type: "uint16",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address[3]",
-				name: "_addresses",
-				type: "address[3]",
-			},
-			{
-				internalType: "uint256[2]",
-				name: "_values",
-				type: "uint256[2]",
-			},
-			{
-				internalType: "string",
-				name: "_txSalt",
-				type: "string",
-			},
-			{
-				internalType: "enum GenesisMarketplace.SaleType",
-				name: "_saleType",
-				type: "uint8",
-			},
-			{
-				internalType: "bytes",
-				name: "_signature",
-				type: "bytes",
-			},
-		],
-		name: "ignoreSignature",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_nftContract",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "_tokenId",
-				type: "uint256",
-			},
-			{
-				internalType: "address",
-				name: "_paymentToken",
-				type: "address",
-			},
-			{
-				internalType: "enum GenesisMarketplace.SaleType",
-				name: "_saleType",
-				type: "uint8",
-			},
-			{
-				internalType: "address",
-				name: "_seller",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "_price",
-				type: "uint256",
-			},
-			{
-				internalType: "string",
-				name: "_txSalt",
-				type: "string",
-			},
-		],
-		name: "listingHash",
-		outputs: [
-			{
-				internalType: "bytes32",
-				name: "",
-				type: "bytes32",
-			},
-		],
-		stateMutability: "pure",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "manager",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "minter",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "nbExchequer",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newAdmin",
-				type: "address",
-			},
-		],
-		name: "newAdmin",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newBurner",
-				type: "address",
-			},
-		],
-		name: "newBurner",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newCEO",
-				type: "address",
-			},
-		],
-		name: "newCEO",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newManager",
-				type: "address",
-			},
-		],
-		name: "newManager",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newMinter",
-				type: "address",
-			},
-		],
-		name: "newMinter",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "pause",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "paused",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		name: "paymentTokens",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address[]",
-				name: "_paymentTokens",
-				type: "address[]",
-			},
-		],
-		name: "removePaymentTokens",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "salesFee",
-		outputs: [
-			{
-				internalType: "uint16",
-				name: "",
-				type: "uint16",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint16",
-				name: "_devCut",
-				type: "uint16",
-			},
-		],
-		name: "setDevCut",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_nbExchequer",
-				type: "address",
-			},
-		],
-		name: "setNBExchequer",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address[]",
-				name: "_paymentTokens",
-				type: "address[]",
-			},
-		],
-		name: "setPaymentTokens",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint16",
-				name: "_salesFee",
-				type: "uint16",
-			},
-		],
-		name: "setSalesFee",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_teamWallet",
-				type: "address",
-			},
-		],
-		name: "setTeamWallet",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "teamWallet",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "unpause",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "bytes",
-				name: "",
-				type: "bytes",
-			},
-		],
-		name: "usedSignatures",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-];
-
-const BEP_20_ABI = [
-	{
-		inputs: [
-			{
-				internalType: "string",
-				name: "name_",
-				type: "string",
-			},
-			{
-				internalType: "string",
-				name: "symbol_",
-				type: "string",
-			},
-		],
-		stateMutability: "nonpayable",
-		type: "constructor",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: "address",
-				name: "owner",
-				type: "address",
-			},
-			{
-				indexed: true,
-				internalType: "address",
-				name: "spender",
-				type: "address",
-			},
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "value",
-				type: "uint256",
-			},
-		],
-		name: "Approval",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: "address",
-				name: "_owner",
-				type: "address",
-			},
-			{
-				indexed: true,
-				internalType: "address",
-				name: "_spender",
-				type: "address",
-			},
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "_oldValue",
-				type: "uint256",
-			},
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "_value",
-				type: "uint256",
-			},
-		],
-		name: "Approved",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: "address",
-				name: "by",
-				type: "address",
-			},
-			{
-				indexed: true,
-				internalType: "address",
-				name: "from",
-				type: "address",
-			},
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "value",
-				type: "uint256",
-			},
-		],
-		name: "Burnt",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: "address",
-				name: "from",
-				type: "address",
-			},
-			{
-				indexed: true,
-				internalType: "address",
-				name: "to",
-				type: "address",
-			},
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "value",
-				type: "uint256",
-			},
-		],
-		name: "Minted",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: "address",
-				name: "account",
-				type: "address",
-			},
-		],
-		name: "Paused",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: "address",
-				name: "from",
-				type: "address",
-			},
-			{
-				indexed: true,
-				internalType: "address",
-				name: "to",
-				type: "address",
-			},
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "value",
-				type: "uint256",
-			},
-		],
-		name: "Transfer",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: true,
-				internalType: "address",
-				name: "_by",
-				type: "address",
-			},
-			{
-				indexed: true,
-				internalType: "address",
-				name: "_from",
-				type: "address",
-			},
-			{
-				indexed: true,
-				internalType: "address",
-				name: "_to",
-				type: "address",
-			},
-			{
-				indexed: false,
-				internalType: "uint256",
-				name: "_value",
-				type: "uint256",
-			},
-		],
-		name: "Transferred",
-		type: "event",
-	},
-	{
-		anonymous: false,
-		inputs: [
-			{
-				indexed: false,
-				internalType: "address",
-				name: "account",
-				type: "address",
-			},
-		],
-		name: "Unpaused",
-		type: "event",
-	},
-	{
-		inputs: [],
-		name: "admin",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_owner",
-				type: "address",
-			},
-			{
-				internalType: "address",
-				name: "spender",
-				type: "address",
-			},
-		],
-		name: "allowance",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "",
-				type: "uint256",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "spender",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "amount",
-				type: "uint256",
-			},
-		],
-		name: "approve",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "account",
-				type: "address",
-			},
-		],
-		name: "balanceOf",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "",
-				type: "uint256",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "burner",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "ceo",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "decimals",
-		outputs: [
-			{
-				internalType: "uint8",
-				name: "",
-				type: "uint8",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "spender",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "subtractedValue",
-				type: "uint256",
-			},
-		],
-		name: "decreaseAllowance",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "spender",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "addedValue",
-				type: "uint256",
-			},
-		],
-		name: "increaseAllowance",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "manager",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "minter",
-		outputs: [
-			{
-				internalType: "address",
-				name: "",
-				type: "address",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "name",
-		outputs: [
-			{
-				internalType: "string",
-				name: "",
-				type: "string",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newAdmin",
-				type: "address",
-			},
-		],
-		name: "newAdmin",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newBurner",
-				type: "address",
-			},
-		],
-		name: "newBurner",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newCEO",
-				type: "address",
-			},
-		],
-		name: "newCEO",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newManager",
-				type: "address",
-			},
-		],
-		name: "newManager",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "_newMinter",
-				type: "address",
-			},
-		],
-		name: "newMinter",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "pause",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "paused",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "symbol",
-		outputs: [
-			{
-				internalType: "string",
-				name: "",
-				type: "string",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "totalSupply",
-		outputs: [
-			{
-				internalType: "uint256",
-				name: "",
-				type: "uint256",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "recipient",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "amount",
-				type: "uint256",
-			},
-		],
-		name: "transfer",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "address",
-				name: "sender",
-				type: "address",
-			},
-			{
-				internalType: "address",
-				name: "recipient",
-				type: "address",
-			},
-			{
-				internalType: "uint256",
-				name: "amount",
-				type: "uint256",
-			},
-		],
-		name: "transferFrom",
-		outputs: [
-			{
-				internalType: "bool",
-				name: "",
-				type: "bool",
-			},
-		],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-	{
-		inputs: [],
-		name: "unpause",
-		outputs: [],
-		stateMutability: "nonpayable",
-		type: "function",
-	},
-];
 
 const Index = () => {
 	const { Moralis, user, isAuthenticated, enableWeb3 } = useMoralis();
@@ -1278,14 +33,11 @@ const Index = () => {
 	// }, [signature]);
 	const mintingAbi = NBMonMinting;
 
-	const nbmon_id_sold = 2;
+	const nbmon_id_sold = 1;
 
-	const SELLER_ADDRESS = "0x6ef0f724e780E5D3aD66f2A4FCbEF64A774eA796";
+	const SELLER_ADDRESS = "0x43aC37241B9040a82D2b99334F9eD7dcd6c07fD1";
 
-	const PAYMENT_TOKEN_ADDRESS = "0x01BE23585060835E02B77ef475b0Cc51aA1e0709";
-
-	const MARKETPLACE_CONTRACT_ADDRESS =
-		"0x8E71d31d525A298c2C065fCcf1eAd3D595c06A20";
+	const PAYMENT_TOKEN_ADDRESS = "0x01BE23585060835E02B77ef475b0Cc51aA1e0709"; // LINK ADDRESS
 
 	const SALT = 123213;
 
@@ -1327,50 +79,58 @@ const Index = () => {
 		functionName: "setApprovalForAll",
 		abi: mintingAbi,
 		params: {
-			operator: MARKETPLACE_CONTRACT_ADDRESS,
+			operator: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
 			approved: true,
 		},
 	});
 
 	const listingHash = useWeb3Contract({
-		contractAddress: MARKETPLACE_CONTRACT_ADDRESS,
+		contractAddress: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
 		functionName: "listingHash",
-		abi: MARKETPLACE_ABI,
+		abi: MarketplaceABI,
 		params: {
 			_nftContract: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
 			_tokenId: nbmon_id_sold,
 			_paymentToken: PAYMENT_TOKEN_ADDRESS,
 			_saleType: 0,
 			_seller: user && user.attributes.ethAddress,
-			_price: Web3.utils.toWei("0.005", "ether"),
+			_price: Web3.utils.toWei("0.2", "ether"),
+			_startingPrice: 0,
+			_endingPrice: 0,
+			_minimumReserveBid: 0,
+			_duration: 10000,
 			_txSalt: SALT,
 		},
 	});
 
 	const setPaymentTokens = useWeb3Contract({
-		contractAddress: MARKETPLACE_CONTRACT_ADDRESS,
+		contractAddress: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
 		functionName: "setPaymentTokens",
-		abi: MARKETPLACE_ABI,
+		abi: MarketplaceABI,
 		params: {
 			_paymentTokens: [PAYMENT_TOKEN_ADDRESS],
 		},
 	});
 
 	const atomicMatch = useWeb3Contract({
-		contractAddress: MARKETPLACE_CONTRACT_ADDRESS,
+		contractAddress: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
 		functionName: "atomicMatch",
-		abi: MARKETPLACE_ABI,
+		abi: MarketplaceABI,
 		params: {
-			_addresses: [
+			addresses: [
 				process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
 				PAYMENT_TOKEN_ADDRESS,
 				SELLER_ADDRESS,
 			],
-			_values: [nbmon_id_sold, Web3.utils.toWei("0.005", "ether")],
-			_txSalt: SALT,
+			_tokenId: nbmon_id_sold,
 			_saleType: 0,
+			//Price, Starting Price, Ending Price, Min. Res bid, Winning Bid
+			uint88s: [Web3.utils.toWei("0.2", "ether"), 0, 0, 0, 0],
+			//Duration, Seconds passed (required for timed auction)
+			uint24s: [10000, 0],
+			_txSalt: SALT,
 			_signature:
-				"0x5608b5938a9ffcec635e7f841a7b0c957a0ad210f707ccf714c7dec4ffb8f2b27bd409ba5819099cbaa28ed4d3fb20e36291d5db75f398f1b393147da743d8a21b",
+				"0xf0a89709ed8c4158b8fde44c6edef6216eb4ec5b000f56c75c784a672f9fafb6529f94bab1b977e607034a86e8f05565d14727454e94a86ba1ae5d9deee027d91c",
 		},
 	});
 
@@ -1379,7 +139,7 @@ const Index = () => {
 		functionName: "approve",
 		abi: BEP_20_ABI,
 		params: {
-			spender: MARKETPLACE_CONTRACT_ADDRESS,
+			spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
 			amount: Web3.utils.toWei("100000000000000000000000000", "ether"),
 		},
 	});
@@ -1476,6 +236,8 @@ const Index = () => {
 			<br />
 			NBMON CONTRACT: {process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT}
 			<br />
+			MARKETPLACE CONTRACT: {process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT}
+			<br />
 			{/* {isLoading && "loading"} */}
 			<br />
 			{/* {error && error} */}
@@ -1519,7 +281,7 @@ const Index = () => {
 			>
 				list item {nbmon_id_sold}
 			</button>
-			<button
+			{/* <button
 				onClick={async () => {
 					const h =
 						"0xc157712bb94583bac8ad4658621bd51994d81b83eaec074e38aa31105e54a7a9";
@@ -1532,7 +294,7 @@ const Index = () => {
 				}}
 			>
 				test sig hashhhh
-			</button>
+			</button> */}
 			<button
 				onClick={async () => {
 					// const x = await checkToken.runContractFunction(
@@ -1545,7 +307,10 @@ const Index = () => {
 						process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT
 					);
 					const z = await contract.methods
-						.isApprovedForAll(SELLER_ADDRESS, MARKETPLACE_CONTRACT_ADDRESS)
+						.isApprovedForAll(
+							user && user.attributes.ethAddress,
+							process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT
+						)
 						.call();
 
 					console.log(z);
@@ -1594,10 +359,9 @@ const Index = () => {
 					const z = await contract.methods
 						.allowance(
 							user && user.attributes.ethAddress,
-							MARKETPLACE_CONTRACT_ADDRESS
+							process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT
 						)
 						.call();
-
 					console.log(z);
 				}}
 			>
@@ -1627,8 +391,8 @@ const Index = () => {
 					// console.log(x);
 
 					const contract = new web3.eth.Contract(
-						MARKETPLACE_ABI,
-						MARKETPLACE_CONTRACT_ADDRESS
+						MarketplaceABI,
+						process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT
 					);
 					const z = await contract.methods
 						.paymentTokens(PAYMENT_TOKEN_ADDRESS)

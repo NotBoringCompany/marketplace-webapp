@@ -194,7 +194,6 @@ const MutationImage = styled(Image)`
 const DummyNBMonLargeCard = ({
 	dummy = false,
 	isListed = false,
-
 	setNbmon = () => {},
 	nbMon,
 	userAddress,

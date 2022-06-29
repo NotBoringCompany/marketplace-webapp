@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 import { data } from "configs";
@@ -12,13 +12,20 @@ import { mediaBreakpoint } from "utils/breakpoints";
 import HatchButtonContainer from "./HatchButtonContainer";
 import Sell from "./Sell";
 
+const OuterContainer = styled.div`
+	@media (max-width: 1024px) {
+		flex-direction: column;
+		align-items: center;
+	}
+`;
+
 const CardContainer = styled.div`
 	padding: 16px;
 	padding-bottom: 0px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 456px;
+	width: 500px;
 	max-width: 80%;
 	border-radius: 20px;
 	${(props) =>
@@ -29,6 +36,11 @@ const CardContainer = styled.div`
 		top: -102px;
 	}
 	margin-bottom: 24px;
+	padding: 16px;
+
+	border-top-right-radius: ${(props) => (props.listed ? `0` : `20px`)};
+	border-bottom-right-radius: ${(props) => (props.listed ? `0` : `20px`)};
+
 	background: linear-gradient(
 			0deg,
 			rgba(255, 255, 255, 0.14),
@@ -43,6 +55,23 @@ const CardContainer = styled.div`
 
 	@media ${mediaBreakpoint.down.md} {
 		padding: 16px;
+	}
+
+	@media (max-width: 1024px) {
+		border-radius: 20px;
+	}
+`;
+
+const RightSideContainer = styled(CardContainer)`
+	padding: 48px;
+	padding-top: calc(48px - 24px);
+	border-top-left-radius: 0%;
+	border-bottom-left-radius: 0%;
+	border-top-right-radius: 20px;
+	@media (max-width: 1024px) {
+		padding: 24px;
+		margin-top: 8px;
+		border-radius: 20px;
 	}
 `;
 
@@ -71,7 +100,7 @@ const TabsContainer = styled.div`
 	flex-direction: column;
 	background: transparent;
 	width: 100%;
-	padding: 16px 0;
+
 	align-items: center;
 	border-radius: 8px;
 	margin-top: -56px;
@@ -155,8 +184,12 @@ const MutationImage = styled(Image)`
 		right: -96px;
 	}
 `;
-
-const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
+const NBMonLargeCard = ({
+	dummy = false,
+	nbMon,
+	userAddress,
+	isListed = false,
+}) => {
 	const { isEgg, isHatchable } = nbMon;
 	const mine = userAddress
 		? nbMon.owner.toLowerCase() === userAddress.toLowerCase()
@@ -165,6 +198,20 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 		? parseInt(nbMon.bornAt + nbMon.hatchingDuration) * 1000
 		: 0;
 	let genus;
+
+	const [key, setKey] = useState("info");
+	const [listed, setListed] = useState(isListed);
+	const [listingType, setListingType] = useState("fixedPrice");
+	const [listedPrices, setListedPrices] = useState({
+		weth: isListed ? nbMon.priceEth : 1,
+		usd: 1300,
+		endPrice: 2,
+	});
+	const [biddingPrices, setBiddingPrices] = useState({
+		minAmount: 0,
+		reservedAmount: 0,
+	});
+
 	if (!isEgg) {
 		genus = nbMon.genus.toLowerCase();
 	}
@@ -228,7 +275,7 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 				)}
 
 				<TabsContainer>
-					<StyledTabs defaultActiveKey="info">
+					<StyledTabs onSelect={(k) => setKey(k)} activeKey={key}>
 						<Tab eventKey="info" title="Info">
 							<BasicInfo listed={false} nbMon={nbMon} mine={mine} />
 						</Tab>
@@ -237,11 +284,19 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 								<Stats nbMon={nbMon} />
 							</Tab>
 						)}
-						{dummy && (
-							<Tab eventKey="sell" title="Sell">
-								<Sell nbMon={nbMon} />
-							</Tab>
-						)}
+						<Tab eventKey="sell" title="Sell">
+							<Sell
+								nbMon={nbMon}
+								setListed={setListed}
+								setListedPrices={setListedPrices}
+								setListingType={setListingType}
+								listedPrices={listedPrices}
+								listingType={listingType}
+								setKey={setKey}
+								setBiddingPrices={setBiddingPrices}
+								biddingPrices={biddingPrices}
+							/>
+						</Tab>
 					</StyledTabs>
 				</TabsContainer>
 			</CardContainer>
