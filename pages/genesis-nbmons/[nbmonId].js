@@ -4,7 +4,7 @@ import { useMoralis } from "react-moralis";
 import styled from "styled-components";
 
 import Layout from "components/Layout";
-import { useRouter } from "next/router";
+import { useRouter, Router } from "next/router";
 import Loading from "components/Loading";
 import NotFound from "pages/404";
 import NewButton from "components/Buttons/NewButton";
@@ -44,6 +44,7 @@ export const BackBtnContainer = styled.div`
 
 const IndividualNBMon = () => {
 	const { query, isReady } = useRouter();
+	const router = useRouter();
 	const [nbMon, setNbmon] = useState(null);
 	const { isAuthenticated, user } = useMoralis();
 	const { nbmonId } = query;
@@ -56,11 +57,20 @@ const IndividualNBMon = () => {
 					process.env.NEXT_PUBLIC_NEW_REST_API_URL
 				}/genesisNBMon/getGenesisNBMon/${parseInt(nbmonId)}`
 			).then(async (res) => {
-				let fetchedData = await res.json();
-				console.log(fetchedData);
-				setNbmon(!fetchedData.errorName ? fetchedData : null);
-				// for some reason error not found from the API
-				//is still fetchedData and not actual error (due to status code 200)
+				if (nbmonId === "undefined") {
+					//For some reason nbmonId can be undefined from backend (redirect from minting).
+					//This is a "hacky" way to improve the user UX so they don't get redirected
+					//to a 404 page upon minting. Instead, they'll be redirected to their inventory page.
+					throw Error("nbmonId_undefined");
+				} else {
+					let fetchedData = await res.json();
+
+					if (res.ok) {
+						setNbmon(!fetchedData.error ? fetchedData : null);
+					} else {
+						throw Error(res.status);
+					}
+				}
 			}),
 		{ refetchOnWindowFocus: false, enabled: isReady, retry: 1 }
 	);
@@ -71,9 +81,13 @@ const IndividualNBMon = () => {
 				<Loading />
 			</Layout>
 		);
-	if (isError || !nbMon) {
-		console.log(error);
-		return <NotFound />;
+	if (isError) {
+		if (error.message === "nbmonId_undefined") {
+			router.push("/nbmons");
+			return <></>;
+		} else {
+			return <NotFound />;
+		}
 	}
 
 	return (
