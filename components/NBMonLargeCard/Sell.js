@@ -65,7 +65,7 @@ const StyledTabs = styled(Tabs)`
 	& > li {
 		margin-right: 0;
 		border-radius: 0%;
-		width: 100%;
+		width: calc(100% / 3);
 	}
 
 	& > li:first-child {
@@ -270,7 +270,7 @@ const Sell = ({
 			<InnerContainer className="d-flex flex-column ">
 				<div className="d-flex flex-column">
 					<OptionText className="mb-2">Option</OptionText>
-					<TabsContainer>
+					{/* <TabsContainer>
 						<StyledTabs onSelect={(k) => setActiveKey(k)} activeKey={activeKey}>
 							<Tab eventKey="fixedPrice" title="Fixed">
 								<FixedPrice
@@ -283,7 +283,7 @@ const Sell = ({
 									minDate={new Date(currentDate)}
 								/>
 							</Tab>
-							{/* <Tab eventKey="timedAuction" title="Timed Auction">
+							<Tab eventKey="timedAuction" title="Timed Auction">
 								<TimedAuction
 									onDateChange={setDateValue}
 									onPriceChange={setListedPrices}
@@ -304,11 +304,10 @@ const Sell = ({
 									dateValue={dateValue}
 									minDate={new Date(currentDate)}
 								/>
-							</Tab> */}
+							</Tab>
 						</StyledTabs>
-					</TabsContainer>
-
-					<div className="mx-auto mt-4 mb-2">
+					</TabsContainer> */}
+					{/* <div className="mx-auto mt-4 mb-2">
 						<StyledButton
 							textColor={"text-black"}
 							onClick={handleClick}
@@ -317,7 +316,10 @@ const Sell = ({
 							disabled={btnDisabled}
 							thinText
 						/>
-					</div>
+					</div> */}
+					<TextNormal className="text-center text-white">
+						WORK IN PROGRESS 💚
+					</TextNormal>
 				</div>
 			</InnerContainer>
 		</OuterContainer>

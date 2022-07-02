@@ -11,11 +11,12 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 	const { statesSwitchModal } = useContext(AppContext);
 	const { user, Moralis } = useMoralis();
 	const [getNBmon, setGetNBmon] = useState(0);
+	const [hatchDataStates, setHatchDataStates] = useState(null);
 	const [signature, setSignature] = useState(null);
 
 	useEffect(() => {
 		if (signature) {
-			console.log("SIGNATURE", signature);
+			console.log("Now hatching with signature:", signature);
 			handleHatch(signature);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,7 +65,7 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 						console.log("Hatching signature: ", res.signature);
 					} else {
 						console.log("Retrying due to error:", res.reason && res.reason);
-						generateSignatureMutation.mutate(hatchData);
+						generateSignatureMutation.mutate(hatchDataStates);
 					}
 				} else {
 					console.log("ERROR HATCHING", res);
@@ -210,6 +211,7 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 					purchaseType: "genesisHatching",
 					nbmonId,
 				};
+				setHatchDataStates(hatchData);
 				generateSignatureMutation.mutate(hatchData);
 
 				setter({
