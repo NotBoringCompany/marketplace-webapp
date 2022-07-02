@@ -69,15 +69,7 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 					}
 				} else {
 					console.log("ERROR HATCHING", response);
-					// setter({
-					// 	show: true,
-					// 	content: "txError",
-					// 	detail: {
-					// 		title: "Hatching Error",
-					// 		text: `We are sorry, there was a problem in getting your hatching signature. \n\n Please refresh this page \n and try again.. (400)`,
-					// 	},
-					// });
-
+					console.log("now refetching...");
 					generateSignatureMutation.mutate(hatchDataStates);
 				}
 			},
