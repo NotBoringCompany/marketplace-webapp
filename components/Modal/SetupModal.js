@@ -101,9 +101,7 @@ const SetupModal = ({ stateUtils }) => {
 			setShowWrongNetworkModal(!showWrongNetworkModal);
 		} else {
 			if (validCreds) {
-				try {
-					await setEmailAndPassword();
-				} catch (e) {}
+				await setEmailAndPassword();
 			}
 
 			setAuthDetail({
