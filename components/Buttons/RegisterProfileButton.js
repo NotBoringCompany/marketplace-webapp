@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import AppContext from "context/AppContext";
 import { useRouter } from "next/router";
 import { useWeb3Contract } from "react-moralis";
 import NBMonMintingABI from "../../abis/MintingGenesis.json";
@@ -14,6 +15,8 @@ const RegisterProfileButton = ({
 }) => {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
+	const { statesSwitchModal } = useContext(AppContext);
+
 	//Registers the user's profile
 	const addMinters = useWeb3Contract({
 		contractAddress: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,

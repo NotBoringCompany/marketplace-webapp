@@ -74,25 +74,36 @@ const SetupModal = ({ stateUtils }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isUserUpdating, userError, user]);
 
+	const setEmailAndPassword = async () => {
+		setAuthDetail({
+			...authDetail,
+			errors: {
+				password: "",
+				email: "",
+			},
+		});
+
+		await setUserData({
+			email,
+			password,
+		});
+
+		// at this point... we've successfully registered to moralis.
+
+		//calls backend blabla,, creates hash.. -> saves it in _User
+
+		return;
+	};
+
 	const link = async (e) => {
 		e.preventDefault();
 		if (chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) {
 			setShowWrongNetworkModal(!showWrongNetworkModal);
 		} else {
 			if (validCreds) {
-				setAuthDetail({
-					...authDetail,
-					errors: {
-						password: "",
-						email: "",
-					},
-				});
-				await setUserData({
-					email,
-					password,
-				});
-
-				return;
+				try {
+					await setEmailAndPassword();
+				} catch (e) {}
 			}
 
 			setAuthDetail({
