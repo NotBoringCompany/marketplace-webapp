@@ -18,6 +18,8 @@ import { validEmail } from "utils/validEmail";
 import { whitespace } from "utils/whitespace";
 import AppContext from "context/AppContext";
 
+import sha256 from 'crypto-js/sha256';
+
 const CustomHeadingXXS = styled(HeadingXXS)`
 	font-size: 24px;
 `;
@@ -88,9 +90,17 @@ const SetupModal = ({ stateUtils }) => {
 			password,
 		});
 
+		const min = 1000;
+		const max = 9999;
+		const nonce = min + Math.random() * (max - min);
+
+		const userUniqueHash = sha256(nonce + email);
+
 		// at this point... we've successfully registered to moralis.
 
 		//calls backend blabla,, creates hash.. -> saves it in _User
+
+		user.set("userUniqueHash", userUniqueHash);
 
 		return;
 	};
