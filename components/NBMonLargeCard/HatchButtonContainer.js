@@ -88,6 +88,31 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 		}
 	);
 
+	const updateNBMon = useMutation(
+		(id) =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/genesisnbmonhatching/updateHatchedNBMon`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ id }),
+				}
+			),
+		{
+			onSuccess: () => {
+				uploadMetadataToS3.mutate(nbmonId);
+				setGetNBmon(nbmonId); // starting the mechanism to show the video preview
+				console.log("nbmon updated!");
+			},
+			onError: (e) => {
+				console.log("error updating nbmon", e);
+			},
+			retry: 3,
+		}
+	);
+
 	useQuery(
 		"getHatchedNBmon",
 		() =>
@@ -264,9 +289,9 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 					});
 					console.log("metamask trf done!", awaited);
 					console.log("trx hash", awaited.transactionHash);
+
+					updateNBMon.mutate(nbmonId);
 					addToActivity.mutate(awaited.transactionHash);
-					uploadMetadataToS3.mutate(nbmonId);
-					setGetNBmon(nbmonId); // starting the mechanism to show the video preview
 				},
 				onError: (e) => {
 					setter({

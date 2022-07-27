@@ -1,16 +1,23 @@
 import React, { useState, useContext, useEffect } from "react";
+import Web3 from "web3";
 import { TextNormal } from "components/Typography/Texts";
+import { useMoralis, useWeb3Contract } from "react-moralis";
+import { useMutation } from "react-query";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import styled from "styled-components";
 import { mediaBreakpoint } from "utils/breakpoints";
 import MyButton from "components/Buttons/Button";
 import AppContext from "context/AppContext";
-import delay from "utils/delay";
+import isApprovedForAll from "utils/blockchain-services/marketplace/isApprovedForAll";
 
 import FixedPrice from "components/SellerPOVComponents/FixedPrice";
 import TimedAuction from "components/SellerPOVComponents/TimedAuction";
 import Bidding from "components/SellerPOVComponents/Bidding";
+import CryptoJS from "crypto-js";
+
+import NBMonMinting from "../../abis/MintingGenesis.json";
+import MarketplaceABI from "../../abis/Marketplace.json";
 
 const InnerContainer = styled.div`
 	background: #2c2d2d;
@@ -149,23 +156,62 @@ const StyledTabs = styled(Tabs)`
 	}
 `;
 
-const Sell = ({
-	setListed,
-	setKey,
-	setListedPrices,
-	setListingType,
-	setBiddingPrices,
-	biddingPrices,
-	listedPrices,
-	listingType,
-}) => {
+const Sell = ({ setKey, nbMon, userAddress, onListed }) => {
 	const currentDate = Date.now();
+	const txSalt = CryptoJS.lib.WordArray.random(256).toString();
+	const { Moralis } = useMoralis();
+
+	const web3 = new Web3(Moralis.provider);
+
+	const { statesSwitchModal } = useContext(AppContext);
+
+	const [listedPrices, setListedPrices] = useState({
+		weth: 0,
+		endPrice: 0,
+		usd: 1300,
+	});
+
+	const [biddingPrices, setBiddingPrices] = useState({
+		minAmount: 0,
+		reservedAmount: 0,
+	});
+
+	const [listingType, setListingType] = useState("fixedPrice");
+
+	const LISTING_TYPE_ENUM = {
+		fixedPrice: 0,
+		timedAuction: 1,
+		bidding: 2,
+	};
+
 	const timePlusFiveMinutes = new Date(currentDate + 60 * 1000 * 5);
+
+	const handleMetaMaskError = (e) => {
+		//Error
+		if (!e.code || (e.code && e.code !== 4001)) {
+			statesSwitchModal.setter({
+				show: true,
+				content: "txError",
+				detail: {
+					title: "Something went wrong",
+					text: `We are sorry, an unexpected \n error occured during transaction. \n \n Please contact us to let us know \n the details. ${
+						e.code && e.code
+					}`,
+				},
+			});
+		} else {
+			statesSwitchModal.setter({
+				show: false,
+				content: "txError",
+				detail: {},
+			});
+		}
+	};
 
 	const [activeKey, setActiveKey] = useState("fixedPrice");
 	const { weth, usd, endPrice } = listedPrices;
 	const { minAmount, reservedAmount } = biddingPrices;
-
+	const [saleDuration, setSaleDuration] = useState(0);
 	const [dateValue, setDateValue] = useState(new Date(currentDate));
 	const [timeValue, setTimeValue] = useState(
 		`${timePlusFiveMinutes.getHours()}:${
@@ -176,7 +222,113 @@ const Sell = ({
 
 	const [btnDisabled, setBtnDisabled] = useState(true);
 
-	const { statesSwitchModal } = useContext(AppContext);
+	const setApprovalForAll = useWeb3Contract({
+		contractAddress: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
+		functionName: "setApprovalForAll",
+		abi: NBMonMinting,
+		params: {
+			operator: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+			approved: true,
+		},
+	});
+
+	const listingHash = useWeb3Contract({
+		contractAddress: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+		functionName: "listingHash",
+		abi: MarketplaceABI,
+		params: {
+			_nftContract: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
+			_tokenId: nbMon.nbmonId,
+			_paymentToken: process.env.NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS,
+			_saleType: LISTING_TYPE_ENUM[activeKey],
+			_seller: userAddress,
+			_price: Web3.utils.toWei(
+				activeKey === "fixedPrice"
+					? listedPrices.weth.toString()
+						? listedPrices.weth.toString()
+						: "0"
+					: "0",
+				"ether"
+			),
+			_startingPrice: Web3.utils.toWei(
+				activeKey === "fixedPrice"
+					? "0"
+					: listedPrices.weth.toString()
+					? listedPrices.weth.toString()
+					: "0",
+				"ether"
+			),
+			_endingPrice: Web3.utils.toWei(
+				activeKey === "fixedPrice"
+					? "0"
+					: listedPrices.endPrice.toString()
+					? listedPrices.endPrice.toString()
+					: "0",
+				"ether"
+			),
+			_minimumReserveBid: reservedAmount,
+			_duration: saleDuration,
+			_txSalt: txSalt,
+		},
+	});
+
+	const listMutation = useMutation(
+		({ actualDateAndTime, signature }) =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/marketplace/listItem`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						nftContract: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
+						tokenId: nbMon.nbmonId,
+						paymentToken: process.env.NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS,
+						saleType: LISTING_TYPE_ENUM[activeKey],
+						seller: userAddress,
+						price: activeKey === "fixedPrice" ? Number(listedPrices.weth) : 0,
+						startingPrice:
+							activeKey === "fixedPrice" ? 0 : Number(listedPrices.weth),
+						endingPrice:
+							activeKey === "fixedPrice" ? 0 : Number(listedPrices.endPrice),
+						endingTime: actualDateAndTime,
+						minimumReserveBid: reservedAmount,
+						txSalt,
+						duration: saleDuration,
+						signature,
+					}),
+				}
+			),
+		{
+			onSuccess: async (response) => {
+				console.log("SUCCESS", response);
+				statesSwitchModal.setter({
+					show: true,
+					content: "listNBmon",
+					stage: 3,
+					price: weth,
+				});
+
+				setKey("info");
+				onListed(true);
+				//step3
+			},
+			onError: (e) => {
+				console.log("Listing error:", e);
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Listing Error",
+						text: "We are sorry, an unexpected \n minting error occured. \n \n Please contact us to let us know \n the details.",
+					},
+				});
+			},
+			onSettled: () => {},
+			retry: 0,
+		}
+	);
 
 	useEffect(() => {
 		if (dateValue) {
@@ -205,6 +357,10 @@ const Sell = ({
 					setBtnDisabled(false);
 				}
 			}
+			const duration =
+				Math.round(actualDateAndTime / 1000) - Math.round(Date.now() / 1000);
+			setSaleDuration(duration);
+			console.log("duration..", duration);
 		}
 	}, [actualDateAndTime, endPrice, weth]);
 
@@ -225,6 +381,33 @@ const Sell = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [listingType]);
 
+	const generateListingSignature = async () => {
+		try {
+			const hash = await listingHash.runContractFunction({
+				throwOnError: true,
+				params: {},
+			});
+
+			const sig = await web3.eth.personal.sign(hash, userAddress);
+
+			return sig;
+		} catch (e) {
+			handleMetaMaskError(e);
+		}
+	};
+
+	const confirmSetApproval = async () => {
+		try {
+			const setApproval = await setApprovalForAll.runContractFunction({
+				throwOnError: true,
+			});
+
+			await setApproval.wait();
+		} catch (e) {
+			handleMetaMaskError(e);
+		}
+	};
+
 	const handleClick = async () => {
 		statesSwitchModal.setter({
 			show: true,
@@ -233,7 +416,9 @@ const Sell = ({
 			price: weth,
 		});
 
-		await delay(1500);
+		const isApproved = await isApprovedForAll(userAddress, Moralis.provider);
+
+		if (!isApproved) await confirmSetApproval();
 
 		statesSwitchModal.setter({
 			show: true,
@@ -242,7 +427,15 @@ const Sell = ({
 			price: weth,
 		});
 
-		await delay(1500);
+		const signature = await generateListingSignature();
+		console.log(signature);
+
+		statesSwitchModal.setter({
+			show: false,
+			content: "listNBmon",
+			stage: 1,
+			price: weth,
+		});
 
 		statesSwitchModal.setter({
 			show: true,
@@ -250,19 +443,8 @@ const Sell = ({
 			stage: 2,
 			price: weth,
 		});
-		await delay(1500);
 
-		statesSwitchModal.setter({
-			show: true,
-			content: "listNBmon",
-			stage: 3,
-			price: weth,
-		});
-
-		// setListedPrices({ weth: price, usd: 99 });
-		setListingType(activeKey);
-		setListed(true);
-		setKey("info");
+		listMutation.mutate({ actualDateAndTime, signature });
 	};
 
 	return (
@@ -270,7 +452,7 @@ const Sell = ({
 			<InnerContainer className="d-flex flex-column ">
 				<div className="d-flex flex-column">
 					<OptionText className="mb-2">Option</OptionText>
-					{/* <TabsContainer>
+					<TabsContainer>
 						<StyledTabs onSelect={(k) => setActiveKey(k)} activeKey={activeKey}>
 							<Tab eventKey="fixedPrice" title="Fixed">
 								<FixedPrice
@@ -278,7 +460,7 @@ const Sell = ({
 									onPriceChange={setListedPrices}
 									onTimeValueChange={setTimeValue}
 									timeValue={timeValue}
-									price={weth}
+									price={listedPrices.weth}
 									dateValue={dateValue}
 									minDate={new Date(currentDate)}
 								/>
@@ -306,20 +488,17 @@ const Sell = ({
 								/>
 							</Tab>
 						</StyledTabs>
-					</TabsContainer> */}
-					{/* <div className="mx-auto mt-4 mb-2">
+					</TabsContainer>{" "}
+					<div className="mx-auto mt-4 mb-2">
 						<StyledButton
 							textColor={"text-black"}
 							onClick={handleClick}
 							text="Start listing item"
 							pill
-							disabled={btnDisabled}
+							disabled={btnDisabled || listMutation.isLoading}
 							thinText
 						/>
-					</div> */}
-					<TextNormal className="text-center text-white">
-						WORK IN PROGRESS 💚
-					</TextNormal>
+					</div>
 				</div>
 			</InnerContainer>
 		</OuterContainer>

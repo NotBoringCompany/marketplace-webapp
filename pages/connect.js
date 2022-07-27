@@ -24,6 +24,7 @@ const StyledContainer = styled(Container)`
 	padding-top: 32px;
 	padding-bottom: 32px;
 	min-height: 100vh;
+	background: #1d1d1d;
 `;
 
 const Connect = () => {
@@ -159,23 +160,8 @@ const Connect = () => {
 
 	return (
 		<Layout showMonsters title="Connect | Realm Hunter">
-			<StyledContainer className="bg-primary d-flex flex-column justify-content-center position-relative">
+			<StyledContainer className="d-flex flex-column justify-content-center position-relative">
 				<Row>
-					{/* <Col
-						xl={6}
-						lg={6}
-						md={12}
-						className="d-flex d-lg-block justify-content-center"
-					>
-						<MyButton
-							variant="outline-secondary"
-							text="Back to Marketplace"
-							isLink
-							backIcon
-							to="/"
-						/>
-					</Col> */}
-
 					<Col
 						className="mt-5 mt-lg-0 d-flex flex-column align-items-center"
 						xl={12}

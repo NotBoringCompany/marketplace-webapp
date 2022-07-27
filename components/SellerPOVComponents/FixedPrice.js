@@ -48,13 +48,13 @@ const FixedPrice = ({
 		const num = e.target.value;
 
 		if (!isNaN(num)) {
-			onPriceChange({ weth: num, usd: 1515 });
+			onPriceChange({ weth: num, endPrice: 0, usd: 1515 });
 		}
 	};
 
 	const handleBlurPrice = (e) => {
 		if (e.target.value <= 0) {
-			onPriceChange({ weth: 0.00001, usd: 0.01 });
+			onPriceChange({ weth: 0.00001, endPrice: 0, usd: 0.01 });
 		}
 	};
 

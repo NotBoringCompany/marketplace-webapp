@@ -23,6 +23,16 @@ const Index = () => {
 	const [signature, setSignature] = useState(null);
 	const [hash, setHash] = useState(null);
 
+	const [nbmonId, setNBmonId] = useState(1);
+	const [tit, titz] = useState("");
+
+	useEffect(() => {
+		if (tit === "aw") {
+			console.log("cahnging nbmon");
+			setNBmonId(4);
+		}
+	}, [tit]);
+
 	// useEffect(() => {
 	// 	if (signature) {
 	// 		verify.runContractFunction().then((verified) => {
@@ -149,7 +159,7 @@ const Index = () => {
 		functionName: "ownerOf",
 		abi: mintingAbi,
 		params: {
-			tokenId: 3,
+			tokenId: nbmonId,
 		},
 	});
 
@@ -374,6 +384,13 @@ const Index = () => {
 				}}
 			>
 				Check owner of
+			</button>
+			<button
+				onClick={async () => {
+					titz("aw");
+				}}
+			>
+				chg nbmon
 			</button>
 			<br />
 			<button

@@ -107,7 +107,9 @@ const ApprovalStage = ({ completed = false }) => (
 
 			{!completed && (
 				<SubTitle className="text-gray mt-2">
-					Waiting for confirmation....
+					<b>Waiting for confirmation.</b> If you{"'"}ve confirmed, please allow
+					several moments to wait until the transaction has been resolved in the
+					blockchain. 😊
 				</SubTitle>
 			)}
 		</div>
@@ -139,7 +141,9 @@ const ListingStage = ({ price = 0.5, status = 0 }) => {
 
 					{status === 1 && (
 						<SubTitle className="text-gray mt-2">
-							Waiting for confirmation....
+							<b>Waiting for confirmation.</b> If you{"'"}ve confirmed, please
+							allow several moments to wait until the transaction has been
+							resolved in the blockchain. 😊
 						</SubTitle>
 					)}
 				</div>
