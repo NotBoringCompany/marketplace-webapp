@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { TextNormal } from "components/Typography/Texts";
+import { useMoralis } from "react-moralis";
+import { useMutation } from "react-query";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import styled from "styled-components";
@@ -7,10 +9,12 @@ import { mediaBreakpoint } from "utils/breakpoints";
 import MyButton from "components/Buttons/Button";
 import AppContext from "context/AppContext";
 import delay from "utils/delay";
+import isApprovedForAll from "utils/blockchain-services/marketplace/isApprovedForAll";
 
 import FixedPrice from "components/SellerPOVComponents/FixedPrice";
 import TimedAuction from "components/SellerPOVComponents/TimedAuction";
 import Bidding from "components/SellerPOVComponents/Bidding";
+import CryptoJS from "crypto-js";
 
 const InnerContainer = styled.div`
 	background: #2c2d2d;
@@ -149,17 +153,28 @@ const StyledTabs = styled(Tabs)`
 	}
 `;
 
-const Sell = ({
-	setListed,
-	setKey,
-	setListedPrices,
-	setListingType,
-	setBiddingPrices,
-	biddingPrices,
-	listedPrices,
-	listingType,
-}) => {
+const Sell = ({ setKey, nbMon, userAddress, onListed }) => {
 	const currentDate = Date.now();
+
+	const [listedPrices, setListedPrices] = useState({
+		weth: 0,
+		endPrice: 0,
+		usd: 1300,
+	});
+
+	const [biddingPrices, setBiddingPrices] = useState({
+		minAmount: 0,
+		reservedAmount: 0,
+	});
+
+	const [listingType, setListingType] = useState("fixedPrice");
+
+	const LISTING_TYPE_ENUM = {
+		fixedPrice: 0,
+		timedAuction: 1,
+		bidding: 2,
+	};
+
 	const timePlusFiveMinutes = new Date(currentDate + 60 * 1000 * 5);
 
 	const [activeKey, setActiveKey] = useState("fixedPrice");
@@ -177,6 +192,54 @@ const Sell = ({
 	const [btnDisabled, setBtnDisabled] = useState(true);
 
 	const { statesSwitchModal } = useContext(AppContext);
+	const txSalt = CryptoJS.lib.WordArray.random(256).toString();
+
+	const listMutation = useMutation(
+		(endingTime) =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/marketplace/listItem`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						nftContract: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
+						tokenId: nbMon.nbmonId,
+						paymentToken: process.env.NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS,
+						saleType: LISTING_TYPE_ENUM[activeKey],
+						seller: userAddress,
+						startingPrice: Number(listedPrices.weth),
+						endingPrice: Number(listedPrices.endPrice),
+						endingTime: endingTime,
+						minimumReserveBid: reservedAmount,
+						txSalt,
+						signature: "someSignature",
+					}),
+				}
+			),
+		{
+			onSuccess: async (response) => {
+				console.log("SUCCESS", response);
+				setKey("info");
+				onListed(true);
+				//step3
+			},
+			onError: (e) => {
+				console.log("Listing error:", e);
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Listing Error",
+						text: "We are sorry, an unexpected \n minting error occured. \n \n Please contact us to let us know \n the details.",
+					},
+				});
+			},
+			onSettled: () => {},
+			retry: 0,
+		}
+	);
 
 	useEffect(() => {
 		if (dateValue) {
@@ -226,43 +289,48 @@ const Sell = ({
 	}, [listingType]);
 
 	const handleClick = async () => {
-		statesSwitchModal.setter({
-			show: true,
-			content: "listNBmon",
-			stage: 0,
-			price: weth,
-		});
+		// statesSwitchModal.setter({
+		// 	show: true,
+		// 	content: "listNBmon",
+		// 	stage: 0,
+		// 	price: weth,
+		// });
 
-		await delay(1500);
+		console.log(await isApprovedForAll(userAddress, Moralis.provider));
 
-		statesSwitchModal.setter({
-			show: true,
-			content: "listNBmon",
-			stage: 1,
-			price: weth,
-		});
+		// await delay(1500);
 
-		await delay(1500);
+		// statesSwitchModal.setter({
+		// 	show: true,
+		// 	content: "listNBmon",
+		// 	stage: 1,
+		// 	price: weth,
+		// });
 
-		statesSwitchModal.setter({
-			show: true,
-			content: "listNBmon",
-			stage: 2,
-			price: weth,
-		});
-		await delay(1500);
+		// await delay(1500);
 
-		statesSwitchModal.setter({
-			show: true,
-			content: "listNBmon",
-			stage: 3,
-			price: weth,
-		});
+		// statesSwitchModal.setter({
+		// 	show: true,
+		// 	content: "listNBmon",
+		// 	stage: 2,
+		// 	price: weth,
+		// });
+		// await delay(1500);
 
-		// setListedPrices({ weth: price, usd: 99 });
-		setListingType(activeKey);
-		setListed(true);
-		setKey("info");
+		// statesSwitchModal.setter({
+		// 	show: true,
+		// 	content: "listNBmon",
+		// 	stage: 3,
+		// 	price: weth,
+		// });
+
+		// // setListedPrices({ weth: price, usd: 99 });
+		// setListingType(activeKey);
+		// setListed(true);
+		// setKey("info");
+
+		// console.log("actualDateAndTime", actualDateAndTime);
+		// listMutation.mutate(actualDateAndTime);
 	};
 
 	return (
@@ -270,7 +338,7 @@ const Sell = ({
 			<InnerContainer className="d-flex flex-column ">
 				<div className="d-flex flex-column">
 					<OptionText className="mb-2">Option</OptionText>
-					{/* <TabsContainer>
+					<TabsContainer>
 						<StyledTabs onSelect={(k) => setActiveKey(k)} activeKey={activeKey}>
 							<Tab eventKey="fixedPrice" title="Fixed">
 								<FixedPrice
@@ -278,7 +346,7 @@ const Sell = ({
 									onPriceChange={setListedPrices}
 									onTimeValueChange={setTimeValue}
 									timeValue={timeValue}
-									price={weth}
+									price={listedPrices.weth}
 									dateValue={dateValue}
 									minDate={new Date(currentDate)}
 								/>
@@ -306,20 +374,17 @@ const Sell = ({
 								/>
 							</Tab>
 						</StyledTabs>
-					</TabsContainer> */}
-					{/* <div className="mx-auto mt-4 mb-2">
+					</TabsContainer>{" "}
+					<div className="mx-auto mt-4 mb-2">
 						<StyledButton
 							textColor={"text-black"}
 							onClick={handleClick}
 							text="Start listing item"
 							pill
-							disabled={btnDisabled}
+							disabled={btnDisabled || listMutation.isLoading}
 							thinText
 						/>
-					</div> */}
-					<TextNormal className="text-center text-white">
-						WORK IN PROGRESS 💚
-					</TextNormal>
+					</div>
 				</div>
 			</InnerContainer>
 		</OuterContainer>

@@ -184,12 +184,7 @@ const MutationImage = styled(Image)`
 		right: -96px;
 	}
 `;
-const NBMonLargeCard = ({
-	dummy = false,
-	nbMon,
-	userAddress,
-	isListed = false,
-}) => {
+const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 	const { isEgg, isHatchable } = nbMon;
 	const mine = userAddress
 		? nbMon.owner.toLowerCase() === userAddress.toLowerCase()
@@ -200,17 +195,7 @@ const NBMonLargeCard = ({
 	let genus;
 
 	const [key, setKey] = useState("info");
-	const [listed, setListed] = useState(isListed);
-	const [listingType, setListingType] = useState("fixedPrice");
-	const [listedPrices, setListedPrices] = useState({
-		weth: isListed ? nbMon.priceEth : 1,
-		usd: 1300,
-		endPrice: 2,
-	});
-	const [biddingPrices, setBiddingPrices] = useState({
-		minAmount: 0,
-		reservedAmount: 0,
-	});
+	const [isListed, setIsListed] = useState(nbMon.isListed);
 
 	if (!isEgg) {
 		genus = nbMon.genus.toLowerCase();
@@ -284,19 +269,16 @@ const NBMonLargeCard = ({
 								<Stats nbMon={nbMon} />
 							</Tab>
 						)}
-						<Tab eventKey="sell" title="Sell">
-							<Sell
-								nbMon={nbMon}
-								setListed={setListed}
-								setListedPrices={setListedPrices}
-								setListingType={setListingType}
-								listedPrices={listedPrices}
-								listingType={listingType}
-								setKey={setKey}
-								setBiddingPrices={setBiddingPrices}
-								biddingPrices={biddingPrices}
-							/>
-						</Tab>
+						{mine && !isListed && (
+							<Tab eventKey="sell" title="Sell">
+								<Sell
+									nbMon={nbMon}
+									userAddress={userAddress}
+									setKey={setKey}
+									onListed={setIsListed}
+								/>
+							</Tab>
+						)}
 					</StyledTabs>
 				</TabsContainer>
 			</CardContainer>
