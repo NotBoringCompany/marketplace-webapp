@@ -315,10 +315,10 @@ const MyNavbar = ({ showSubnav }) => {
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<LinkMenuItemContainer className="d-flex flex-lg-row flex-column">
-						<Link href="/preview-marketplace">
+						<Link href="/marketplace">
 							<a
 								className={`ms-lg-4 mx-auto px-3 align-items-center justify-content-center d-flex mb-lg-0 mb-3 ${
-									router.pathname === "/preview-marketplace" && `active`
+									router.pathname === "/marketplace" && `active`
 								}`}
 							>
 								<MdStorefront className="me-2" />

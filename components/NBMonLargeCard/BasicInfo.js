@@ -191,14 +191,14 @@ const BasicInfo = ({
 					</SeparatorContainer>
 				</>
 			)}
-
+			{/* 
 			{!listed && (
 				<NFTTable
 					type="Activities"
 					data={activitiesData}
 					className="w-100 mt-3"
 				/>
-			)}
+			)} */}
 		</BasicInfoContainer>
 	);
 };

@@ -90,7 +90,7 @@ const IndividualNBMon = () => {
 						<NewButton
 							icon={<FiArrowLeft className="me-2" />}
 							isLink
-							href="/preview-marketplace"
+							href="/marketplace"
 							text="Marketplace"
 						/>
 					</BackBtnContainer>

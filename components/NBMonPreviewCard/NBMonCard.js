@@ -239,7 +239,7 @@ const NBMonCard = ({ nbMon, ...props }) => {
 						)}
 					</div>
 
-					{nbMon.priceEth && (
+					{nbMon.listingData && nbMon.listingData.price && (
 						<div className="mx-auto d-flex mt-4 align-items-center">
 							<Image
 								alt="Eth Logo"
@@ -249,7 +249,7 @@ const NBMonCard = ({ nbMon, ...props }) => {
 							/>
 							<div className="ms-2 d-flex flex-column">
 								<ETHPriceText className="text-start mb-1">
-									{nbMon.priceEth} WETH
+									{nbMon.listingData.price} WETH
 								</ETHPriceText>
 								<USDPriceText className="text-center">~ $1200</USDPriceText>
 							</div>

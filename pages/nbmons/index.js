@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import { useQuery } from "react-query";
 
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+
+import Image from "next/image";
 import Link from "next/link";
+
+import { FiArrowLeft } from "react-icons/fi";
 
 import Layout from "components/Layout";
 import MyButton from "components/Buttons/Button";
-
-import styled from "styled-components";
-import mustBeAuthed from "utils/mustBeAuthed";
-import filterNBMons from "utils/filterNBMons";
-
+import NewButton from "components/Buttons/NewButton";
+import Pagination from "components/Filters/Pagination";
+import SelectSort from "components/Filters/SelectSort";
+import { HeadingSuperXXS } from "components/Typography/Headings";
 import FiltersWithModal from "components/Filters/FiltersWithModal";
 import FertilityFilter from "components/Filters/FertilityFilter";
-
 import { mediaBreakpoint } from "utils/breakpoints";
 import CheckBoxFilters from "components/Filters/CheckBoxFilters";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
@@ -21,21 +25,17 @@ import Loading from "components/Loading";
 import NBMonCard from "components/NBMonPreviewCard/NBMonCard";
 import EggCard from "components/NBMonPreviewCard/EggCard";
 
+import styled from "styled-components";
+
 import { useFilterStore } from "stores/filterStore";
 import { useSortStore } from "stores/sortStore";
 
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-
 import { FaArrowDown } from "react-icons/fa";
 
-import Image from "next/image";
-import NewButton from "components/Buttons/NewButton";
-import { FiArrowLeft } from "react-icons/fi";
-import Pagination from "components/Filters/Pagination";
-import SelectSort from "components/Filters/SelectSort";
 import { getRarityNumber } from "utils/other";
-import { HeadingSuperXXS } from "components/Typography/Headings";
+import mustBeAuthed from "utils/mustBeAuthed";
+import filterNBMons from "utils/filterNBMons";
+import totalPageCounter from "utils/totalPagecounter";
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const clearFilter = useFilterStore((state) => state.clearFilter);
@@ -97,13 +97,6 @@ const AccountPage = () => {
 	const pageSettings = useSortStore((states) => states.pageSettings);
 	const setPageSettings = useSortStore((states) => states.setPageSettings);
 	const { show, current, totalPage } = pageSettings;
-
-	const totalPageCounter = (fetchedDataLength, show) => {
-		if (fetchedDataLength % show > 0) {
-			return parseInt(fetchedDataLength / show) + 1;
-		}
-		return parseInt(fetchedDataLength / show);
-	};
 
 	const { isFetching, error } = useQuery(
 		"allMyNBMons",
@@ -249,7 +242,7 @@ const AccountPage = () => {
 							isLink
 							href="/overview"
 							className="mb-5 mx-lg-0 mx-auto"
-							text="Back to Overview"
+							text="Account Overview"
 						/>
 
 						<div className="d-flex align-items-center mb-3">
@@ -301,7 +294,7 @@ const AccountPage = () => {
 
 								<FilterInfo className="mx-lg-0 mx-auto mt-lg-0 mt-4">
 									<TextMore>Get more on our </TextMore>
-									<Link passHref href="/preview-marketplace">
+									<Link passHref href="/marketplace">
 										<TextMoreLink className="pe-1 text-primary">
 											Marketplace
 										</TextMoreLink>

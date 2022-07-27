@@ -420,16 +420,6 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 							currentHighestBid={null}
 						/>
 					</SeparatorContainer>
-					{/* {(listingType === "absoluteBidding" ||
-						listingType === "timedAuction" ||
-						listingType === "minimumBidding") && (
-						<SeparatorContainer noTop className="w-100">
-							<NFTTable
-								userAddress={userAddress.toLowerCase()}
-								data={offersData}
-							/>
-						</SeparatorContainer>
-					)} */}
 				</RightSideContainer>
 			)}
 		</OuterContainer>

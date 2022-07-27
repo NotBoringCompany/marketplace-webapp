@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useSortStore } from "stores/sortStore";
+import { useSortMarketplaceStore } from "stores/sortStore";
 
 const SelectSort = ({ list = [], defaultValue }) => {
 	const [selected, setSelected] = useState(defaultValue);
 	const [isOpen, setIsOpen] = useState(false);
-	const changeSortType = useSortStore((states) => states.changeSortType);
+	const changeSortType = useSortMarketplaceStore(
+		(states) => states.changeSortType
+	);
 
 	return (
 		<Wrapper>
@@ -19,6 +21,7 @@ const SelectSort = ({ list = [], defaultValue }) => {
 								key={i}
 								className={selected === data.name && "active"}
 								onClick={(e) => {
+									console.log(e.target.textContent);
 									setSelected(e.target.textContent);
 									changeSortType(e.target.textContent);
 									setIsOpen(false);

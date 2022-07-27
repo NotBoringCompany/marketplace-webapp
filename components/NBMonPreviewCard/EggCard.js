@@ -62,6 +62,23 @@ const IDContainer = styled.div`
 	}
 `;
 
+const ETHPriceText = styled.p`
+	margin: 0;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 13px;
+	line-height: 15px;
+`;
+
+const USDPriceText = styled.p`
+	margin: 0;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 11px;
+	line-height: 12px;
+	color: #afafaf;
+`;
+
 const EggCard = ({ nbMon, ...props }) => {
 	const { className } = props;
 	const { isHatchable, nbmonId } = nbMon;
@@ -88,6 +105,23 @@ const EggCard = ({ nbMon, ...props }) => {
 						Genesis NBMon Egg
 					</HeadingSuperXXS>
 				</div>
+
+				{nbMon.listingData && nbMon.listingData.price && (
+					<div className="mx-auto d-flex mt-4 align-items-center">
+						<Image
+							alt="Eth Logo"
+							src="/images/Ethereum.svg"
+							width={28}
+							height={28}
+						/>
+						<div className="ms-2 d-flex flex-column">
+							<ETHPriceText className="text-start mb-1">
+								{nbMon.listingData.price} WETH
+							</ETHPriceText>
+							<USDPriceText className="text-center">~ $1200</USDPriceText>
+						</div>
+					</div>
+				)}
 			</div>
 		</Card>
 	);

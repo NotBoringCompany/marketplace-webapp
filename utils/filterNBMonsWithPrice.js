@@ -33,11 +33,11 @@ export default function filterNBMonsWithPrice(
 		);
 	});
 
-	const x = fertilityFiltered.filter((item) => {
-		return (
-			item.priceEth >= price.currentMin && item.priceEth <= price.currentMax
-		);
+	return fertilityFiltered.filter((item) => {
+		if (item.listingData)
+			return (
+				item.listingData.price >= price.currentMin &&
+				item.listingData.price <= price.currentMax
+			);
 	});
-
-	return x;
 }
