@@ -94,13 +94,11 @@ const SetupModal = ({ stateUtils }) => {
 		const max = 9999;
 		const nonce = min + Math.random() * (max - min);
 
-		const userUniqueHash = sha256(nonce + email);
+		const userUniqueHash = sha256(nonce + email).toString();
 
-		// at this point... we've successfully registered to moralis.
-
-		//calls backend blabla,, creates hash.. -> saves it in _User
-
-		user.set("userUniqueHash", userUniqueHash);
+		await setUserData({
+			userUniqueHash: userUniqueHash
+		});
 
 		return;
 	};
