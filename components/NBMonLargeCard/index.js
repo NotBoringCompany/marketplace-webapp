@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useMutation } from "react-query";
+import AppContext from "context/AppContext";
 import styled from "styled-components";
 import Image from "react-bootstrap/Image";
 import { data } from "configs";
@@ -11,10 +13,13 @@ import Stats from "./Stats";
 import { mediaBreakpoint } from "utils/breakpoints";
 import HatchButtonContainer from "./HatchButtonContainer";
 import Sell from "./Sell";
+import SeparatorContainer from "./SeparatorContainer";
+import ListingBox from "./ListingBox";
+import dateFormatter from "utils/dateFormatter";
 
 const OuterContainer = styled.div`
 	@media (max-width: 1024px) {
-		flex-direction: column;
+		flex-direction: column-reverse;
 		align-items: center;
 	}
 `;
@@ -55,6 +60,8 @@ const CardContainer = styled.div`
 
 	@media ${mediaBreakpoint.down.md} {
 		padding: 16px;
+		margin-bottom: 0;
+		margin-top: 110px;
 	}
 
 	@media (max-width: 1024px) {
@@ -186,6 +193,13 @@ const MutationImage = styled(Image)`
 `;
 const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 	const { isEgg, isHatchable } = nbMon;
+
+	const isNBmonListed = nbMon.isListed;
+
+	console.log(nbMon.listingData, "listingData");
+
+	const { statesSwitchModal } = useContext(AppContext);
+
 	const mine = userAddress
 		? nbMon.owner.toLowerCase() === userAddress.toLowerCase()
 		: false;
@@ -195,14 +209,114 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 	let genus;
 
 	const [key, setKey] = useState("info");
-	const [isListed, setIsListed] = useState(nbMon.isListed);
+	const [isListed, setIsListed] = useState(isNBmonListed);
+
+	const [endingTime, setEndingTime] = useState(
+		isNBmonListed ? nbMon.listingData.endingTime : 0
+	);
+
+	const [listedPrices, setListedPrices] = useState({
+		weth: !isNBmonListed
+			? 0
+			: nbMon.listingData.listingType === "fixedPrice"
+			? nbMon.listingData.price
+			: nbMon.listingData.startingPrice,
+		endPrice: !isNBmonListed ? 0 : nbMon.listingData.endingPrice,
+		usd: 0,
+	});
+
+	const [biddingPrices, setBiddingPrices] = useState({
+		minAmount: 0,
+		reservedAmount: 0,
+	});
+
+	const cancelSaleMutation = useMutation(
+		() =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/marketplace/cancelSale`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						nbmonId: nbMon.nbmonId,
+					}),
+				}
+			),
+		{
+			onSuccess: async (_) => {
+				//Success pop up
+				statesSwitchModal.setter({
+					show: true,
+					content: "cancelListNBmon",
+					stage: 1,
+					onClickCancel: () => {},
+				});
+
+				setListedPrices({
+					weth: 0,
+					endPrice: 0,
+					usd: 0,
+				});
+				setIsListed(false);
+			},
+			onError: (e) => {
+				console.log("Cancelling Listing Error:", e);
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Cancelling Listing Error",
+						text: "We are sorry, an unexpected \n minting error occured. \n \n Please contact us to let us know \n the details.",
+					},
+				});
+			},
+			retry: 0,
+		}
+	);
 
 	if (!isEgg) {
 		genus = nbMon.genus.toLowerCase();
 	}
 
+	const [listingType, setListingType] = useState(
+		isNBmonListed ? nbMon.listingData.listingType : "fixedPrice"
+	);
+
+	const onCancelListing = () => {
+		statesSwitchModal.setter({
+			show: true,
+			content: "cancelListNBmon",
+			stage: 0,
+			onClickCancel: onActualCancelListing,
+			isCancelling: false,
+		});
+	};
+
+	const onActualCancelListing = () => {
+		statesSwitchModal.setter({
+			show: true,
+			content: "cancelListNBmon",
+			stage: 0,
+			onClickCancel: onActualCancelListing,
+			isCancelling: true,
+		});
+		cancelSaleMutation.mutate();
+	};
+
+	const onBuy = () => {
+		statesSwitchModal.setter({
+			show: true,
+			content: "confirmBuyNBmon",
+			onConfirm,
+			usd,
+			weth,
+		});
+	};
+
 	return (
-		<div className="py-4 d-flex w-100 align-items-center justify-content-center">
+		<OuterContainer className="py-4 d-flex w-100 justify-content-center ">
 			<CardContainer hatchable={mine && isEgg && isHatchable ? 1 : 0}>
 				{isEgg ? (
 					<NBMonImage
@@ -273,16 +387,52 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 							<Tab eventKey="sell" title="Sell">
 								<Sell
 									nbMon={nbMon}
+									setEndingTime={setEndingTime}
 									userAddress={userAddress}
 									setKey={setKey}
 									onListed={setIsListed}
+									setListingType={setListingType}
+									listingType={listingType}
+									listedPrices={listedPrices}
+									setListedPrices={setListedPrices}
+									setBiddingPrices={setBiddingPrices}
+									biddingPrices={biddingPrices}
 								/>
 							</Tab>
 						)}
 					</StyledTabs>
 				</TabsContainer>
 			</CardContainer>
-		</div>
+
+			{isListed && (
+				<RightSideContainer>
+					<SeparatorContainer noTop className="w-100">
+						<ListingBox
+							listingType={listingType}
+							mine={mine}
+							price={listedPrices.weth}
+							usdValue={0}
+							onCancelListing={onCancelListing}
+							onBuy={onBuy}
+							endsIn={dateFormatter(Date.now(), endingTime)}
+							endPrice={null}
+							biddingPrices={biddingPrices}
+							currentHighestBid={null}
+						/>
+					</SeparatorContainer>
+					{/* {(listingType === "absoluteBidding" ||
+						listingType === "timedAuction" ||
+						listingType === "minimumBidding") && (
+						<SeparatorContainer noTop className="w-100">
+							<NFTTable
+								userAddress={userAddress.toLowerCase()}
+								data={offersData}
+							/>
+						</SeparatorContainer>
+					)} */}
+				</RightSideContainer>
+			)}
+		</OuterContainer>
 	);
 };
 

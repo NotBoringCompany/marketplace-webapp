@@ -156,7 +156,19 @@ const StyledTabs = styled(Tabs)`
 	}
 `;
 
-const Sell = ({ setKey, nbMon, userAddress, onListed }) => {
+const Sell = ({
+	setKey,
+	nbMon,
+	userAddress,
+	onListed,
+	listingType,
+	setListingType,
+	setEndingTime,
+	listedPrices,
+	setListedPrices,
+	setBiddingPrices,
+	biddingPrices,
+}) => {
 	const currentDate = Date.now();
 	const txSalt = CryptoJS.lib.WordArray.random(256).toString();
 	const { Moralis } = useMoralis();
@@ -165,23 +177,11 @@ const Sell = ({ setKey, nbMon, userAddress, onListed }) => {
 
 	const { statesSwitchModal } = useContext(AppContext);
 
-	const [listedPrices, setListedPrices] = useState({
-		weth: 0,
-		endPrice: 0,
-		usd: 1300,
-	});
-
-	const [biddingPrices, setBiddingPrices] = useState({
-		minAmount: 0,
-		reservedAmount: 0,
-	});
-
-	const [listingType, setListingType] = useState("fixedPrice");
-
 	const LISTING_TYPE_ENUM = {
 		fixedPrice: 0,
 		timedAuction: 1,
-		bidding: 2,
+		minimumBidding: 2,
+		absoluteBidding: 2,
 	};
 
 	const timePlusFiveMinutes = new Date(currentDate + 60 * 1000 * 5);
@@ -297,6 +297,7 @@ const Sell = ({ setKey, nbMon, userAddress, onListed }) => {
 						txSalt,
 						duration: saleDuration,
 						signature,
+						listingType,
 					}),
 				}
 			),
@@ -312,6 +313,7 @@ const Sell = ({ setKey, nbMon, userAddress, onListed }) => {
 
 				setKey("info");
 				onListed(true);
+				setEndingTime(actualDateAndTime);
 				//step3
 			},
 			onError: (e) => {
@@ -365,8 +367,7 @@ const Sell = ({ setKey, nbMon, userAddress, onListed }) => {
 	}, [actualDateAndTime, endPrice, weth]);
 
 	useEffect(() => {
-		if (listingType === "bidding") {
-			console.log("asd");
+		if (activeKey === "bidding") {
 			if (parseFloat(minAmount) === 0 && parseFloat(reservedAmount) === 0) {
 				setListingType("absoluteBidding");
 			} else if (
@@ -377,9 +378,11 @@ const Sell = ({ setKey, nbMon, userAddress, onListed }) => {
 			} else {
 				setListingType("reservedBidding");
 			}
+		} else {
+			setListingType(activeKey);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [listingType]);
+	}, [activeKey, minAmount, reservedAmount]);
 
 	const generateListingSignature = async () => {
 		try {
@@ -430,21 +433,22 @@ const Sell = ({ setKey, nbMon, userAddress, onListed }) => {
 		const signature = await generateListingSignature();
 		console.log(signature);
 
-		statesSwitchModal.setter({
-			show: false,
-			content: "listNBmon",
-			stage: 1,
-			price: weth,
-		});
-
-		statesSwitchModal.setter({
-			show: true,
-			content: "listNBmon",
-			stage: 2,
-			price: weth,
-		});
-
-		listMutation.mutate({ actualDateAndTime, signature });
+		//If MetaMask request wasn't cancelled
+		if (signature) {
+			statesSwitchModal.setter({
+				show: false,
+				content: "listNBmon",
+				stage: 1,
+				price: weth,
+			});
+			statesSwitchModal.setter({
+				show: true,
+				content: "listNBmon",
+				stage: 2,
+				price: weth,
+			});
+			listMutation.mutate({ actualDateAndTime, signature });
+		}
 	};
 
 	return (

@@ -63,7 +63,7 @@ const CancelButton = styled(Button)`
 const CancelListing = ({ stateUtils }) => {
 	const { setter, getter } = stateUtils;
 
-	const { onClickCancel, stage } = getter;
+	const { onClickCancel, stage, isCancelling } = getter;
 
 	return (
 		<div className="p-4 d-flex flex-column text-start align-items-center">
@@ -85,21 +85,24 @@ const CancelListing = ({ stateUtils }) => {
 
 				{stage === 0 && (
 					<CancelButton
+						disabled={isCancelling}
 						onClick={onClickCancel}
 						variant="danger"
 						className="mx-auto mt-1 mb-3"
 					>
-						Cancel Listing
+						{isCancelling ? `Cancelling...` : `Cancel Listing`}
 					</CancelButton>
 				)}
 
-				<OkButton
-					onClick={() => {
-						setter({ ...getter, show: false });
-					}}
-				>
-					Go Back
-				</OkButton>
+				{!isCancelling && (
+					<OkButton
+						onClick={() => {
+							setter({ ...getter, show: false });
+						}}
+					>
+						Go Back
+					</OkButton>
+				)}
 			</div>
 		</div>
 	);

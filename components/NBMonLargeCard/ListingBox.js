@@ -145,7 +145,9 @@ const OfferDetail = ({
 				startPrice || endPrice ? `between` : `center`
 			}`}
 		>
-			{endsIn && <TextComponent text="Ends in" value={endsIn} />}
+			{endsIn && (
+				<TextComponent text="Ends:" value={endsIn} className="text-center" />
+			)}
 			{startPrice && (
 				<TextComponent
 					className={`mt-md-0 mt-3 ${!endPrice && `ms-md-auto`}`}
@@ -172,6 +174,7 @@ const ListingBox = ({
 	onBuy = () => {},
 	endPrice = 0,
 	startPrice = 0,
+	endsIn = 0,
 	biddingPrices,
 	currentHighestBid,
 	mine,
@@ -261,9 +264,9 @@ const ListingBox = ({
 
 					<OfferDetail
 						className="mt-4"
-						endsIn={"TODO"}
+						endsIn={endsIn}
 						endPrice={!bidding ? endPrice : 0}
-						startPrice={!bidding ? price : minimumAmount}
+						startPrice={!bidding ? 0 : minimumAmount}
 					/>
 				</div>
 			</InnerContainer>
