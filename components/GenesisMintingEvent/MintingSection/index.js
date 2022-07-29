@@ -235,7 +235,7 @@ const MintingSection = () => {
 			onSettled: () => {
 				setTrxAndMintingLoading(false);
 			},
-			retry: 0,
+			retry: 3,
 		}
 	);
 
