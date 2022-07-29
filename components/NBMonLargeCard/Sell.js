@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Web3 from "web3";
+
 import { TextNormal } from "components/Typography/Texts";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import { useMutation } from "react-query";
@@ -14,7 +15,6 @@ import isApprovedForAll from "utils/blockchain-services/marketplace/isApprovedFo
 import FixedPrice from "components/SellerPOVComponents/FixedPrice";
 import TimedAuction from "components/SellerPOVComponents/TimedAuction";
 import Bidding from "components/SellerPOVComponents/Bidding";
-import CryptoJS from "crypto-js";
 
 import NBMonMinting from "../../abis/MintingGenesis.json";
 import MarketplaceABI from "../../abis/Marketplace.json";
@@ -168,9 +168,12 @@ const Sell = ({
 	setListedPrices,
 	setBiddingPrices,
 	biddingPrices,
+	txSalt,
 }) => {
 	const currentDate = Date.now();
-	const txSalt = CryptoJS.lib.WordArray.random(256).toString();
+
+	console.log("SALT", txSalt);
+
 	const { Moralis } = useMoralis();
 
 	const web3 = new Web3(Moralis.provider);
@@ -242,31 +245,13 @@ const Sell = ({
 			_paymentToken: process.env.NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS,
 			_saleType: LISTING_TYPE_ENUM[activeKey],
 			_seller: userAddress,
-			_price: Web3.utils.toWei(
-				activeKey === "fixedPrice"
-					? listedPrices.weth.toString()
-						? listedPrices.weth.toString()
-						: "0"
-					: "0",
-				"ether"
-			),
-			_startingPrice: Web3.utils.toWei(
-				activeKey === "fixedPrice"
-					? "0"
-					: listedPrices.weth.toString()
-					? listedPrices.weth.toString()
-					: "0",
-				"ether"
-			),
-			_endingPrice: Web3.utils.toWei(
-				activeKey === "fixedPrice"
-					? "0"
-					: listedPrices.endPrice.toString()
-					? listedPrices.endPrice.toString()
-					: "0",
-				"ether"
-			),
-			_minimumReserveBid: reservedAmount,
+			_price:
+				isNaN(listedPrices.weth) || listedPrices.weth < 0 || !listedPrices.weth
+					? 0
+					: Web3.utils.toWei(listedPrices.weth.toString(), "ether"),
+			_startingPrice: 0,
+			_endingPrice: 0,
+			_minimumReserveBid: 0,
 			_duration: saleDuration,
 			_txSalt: txSalt,
 		},
@@ -388,10 +373,11 @@ const Sell = ({
 		try {
 			const hash = await listingHash.runContractFunction({
 				throwOnError: true,
-				params: {},
 			});
 
 			const sig = await web3.eth.personal.sign(hash, userAddress);
+
+			console.log(sig);
 
 			return sig;
 		} catch (e) {
@@ -419,6 +405,13 @@ const Sell = ({
 			price: weth,
 		});
 
+		console.log(userAddress, "userAddress");
+		console.log("listedPricesWeth", listedPrices.weth.toString());
+		console.log("listingTypeEnum", LISTING_TYPE_ENUM[activeKey]);
+		console.log("nbMon.nbmonId", nbMon.nbmonId);
+		console.log("reservedAmount", reservedAmount);
+		console.log("txSalt", txSalt);
+
 		const isApproved = await isApprovedForAll(userAddress, Moralis.provider);
 
 		if (!isApproved) await confirmSetApproval();
@@ -431,7 +424,7 @@ const Sell = ({
 		});
 
 		const signature = await generateListingSignature();
-		console.log(signature);
+		console.log("signature", signature);
 
 		//If MetaMask request wasn't cancelled
 		if (signature) {

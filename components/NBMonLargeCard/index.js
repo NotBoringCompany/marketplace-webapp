@@ -191,7 +191,7 @@ const MutationImage = styled(Image)`
 		right: -96px;
 	}
 `;
-const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
+const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 	const { isEgg, isHatchable } = nbMon;
 
 	const isNBmonListed = nbMon.isListed;
@@ -305,14 +305,27 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 		cancelSaleMutation.mutate();
 	};
 
-	const onBuy = () => {
+	const onConfirm = () => {
+		console.log("ASD");
+
 		statesSwitchModal.setter({
 			show: true,
-			content: "confirmBuyNBmon",
-			onConfirm,
-			usd,
-			weth,
+			content: "buyNBmon",
+			stage: 0,
+			price: nbMon.listingData.price,
 		});
+	};
+
+	const onBuy = () => {
+		if (nbMon.listingData) {
+			statesSwitchModal.setter({
+				show: true,
+				content: "confirmBuyNBmon",
+				onConfirm,
+				usd: 0,
+				weth: nbMon.listingData.price,
+			});
+		}
 	};
 
 	return (
@@ -397,6 +410,7 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress }) => {
 									setListedPrices={setListedPrices}
 									setBiddingPrices={setBiddingPrices}
 									biddingPrices={biddingPrices}
+									txSalt={txSalt}
 								/>
 							</Tab>
 						)}

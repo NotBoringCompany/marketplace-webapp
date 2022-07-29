@@ -11,6 +11,8 @@ import NewButton from "components/Buttons/NewButton";
 import { FiArrowLeft } from "react-icons/fi";
 import NBMonLargeCard from "components/NBMonLargeCard";
 
+import CryptoJS from "crypto-js";
+
 import { mediaBreakpoint } from "utils/breakpoints";
 
 export const BackBtnContainer = styled.div`
@@ -48,6 +50,9 @@ const IndividualNBMon = () => {
 	const [nbMon, setNbmon] = useState(null);
 	const { isAuthenticated, user } = useMoralis();
 	const { nbmonId } = query;
+	const txSalt = CryptoJS.lib.WordArray.random(64).toString();
+
+	const fromMarketplace = isReady && query.src && query.src === "marketplace";
 
 	const { isFetching, isError, error } = useQuery(
 		"individualNBMon",
@@ -93,20 +98,33 @@ const IndividualNBMon = () => {
 	return (
 		<Layout title={`Genesis NBMon #${nbmonId} | Realm Hunter`}>
 			<div className="position-relative">
-				{isAuthenticated && (
-					<BackBtnContainer>
-						<NewButton
-							icon={<FiArrowLeft className="me-2" />}
-							isLink
-							href="/nbmons"
-							text="Inventory"
-						/>
-					</BackBtnContainer>
+				{isReady && (
+					<>
+						<BackBtnContainer>
+							$
+							{isAuthenticated ? (
+								<NewButton
+									icon={<FiArrowLeft className="me-2" />}
+									isLink
+									href={`${fromMarketplace ? `/marketplace` : "/nbmons"}`}
+									text={`${fromMarketplace ? `Marketplace` : `Inventory`}`}
+								/>
+							) : (
+								<NewButton
+									icon={<FiArrowLeft className="me-2" />}
+									isLink
+									href={`/marketplace`}
+									text={`Marketplace`}
+								/>
+							)}
+						</BackBtnContainer>
+					</>
 				)}
 
 				<NBMonLargeCard
 					nbMon={nbMon}
 					userAddress={user ? user.attributes.ethAddress : null}
+					txSalt={txSalt}
 				/>
 			</div>
 		</Layout>
