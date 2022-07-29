@@ -1,4 +1,7 @@
 import React, { useState, useContext } from "react";
+import { useRouter } from "next/router";
+import { useMoralis, useWeb3Contract } from "react-moralis";
+import Web3 from "web3";
 import { useMutation } from "react-query";
 import AppContext from "context/AppContext";
 import styled from "styled-components";
@@ -16,6 +19,11 @@ import Sell from "./Sell";
 import SeparatorContainer from "./SeparatorContainer";
 import ListingBox from "./ListingBox";
 import dateFormatter from "utils/dateFormatter";
+import isMarketplaceSpendingAllowanceEnough from "utils/blockchain-services/marketplace/isMarketplaceSpendingAllowanceEnough";
+
+import BEP_20_ABI from "components/../abis/BEP_20.json";
+import MarketplaceABI from "components/../abis/Marketplace.json";
+import delay from "utils/delay";
 
 const OuterContainer = styled.div`
 	@media (max-width: 1024px) {
@@ -192,21 +200,12 @@ const MutationImage = styled(Image)`
 	}
 `;
 const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
+	const { Moralis } = useMoralis();
+	const router = useRouter();
+
 	const { isEgg, isHatchable } = nbMon;
-
 	const isNBmonListed = nbMon.isListed;
-
-	console.log(nbMon.listingData, "listingData");
-
-	const { statesSwitchModal } = useContext(AppContext);
-
-	const mine = userAddress
-		? nbMon.owner.toLowerCase() === userAddress.toLowerCase()
-		: false;
-	const hatchesAt = isEgg
-		? parseInt(nbMon.bornAt + nbMon.hatchingDuration) * 1000
-		: 0;
-	let genus;
+	const BUY_ALLOWANCE = Math.pow(10, 59);
 
 	const [key, setKey] = useState("info");
 	const [isListed, setIsListed] = useState(isNBmonListed);
@@ -229,6 +228,23 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 		minAmount: 0,
 		reservedAmount: 0,
 	});
+
+	//If nbmon is for sale, it has these (listingData):
+	const sellerAddress = nbMon.listingData ? nbMon.listingData.seller : "";
+	const saleSignature = nbMon.listingData ? nbMon.listingData.signature : "";
+	const salePrice = nbMon.listingData ? nbMon.listingData.price : "0";
+	const saleTxSalt = nbMon.listingData ? nbMon.listingData.txSalt : "";
+	const saleDuration = nbMon.listingData ? nbMon.listingData.duration : "";
+
+	const { statesSwitchModal } = useContext(AppContext);
+
+	const mine = userAddress
+		? nbMon.owner.toLowerCase() === userAddress.toLowerCase()
+		: false;
+	const hatchesAt = isEgg
+		? parseInt(nbMon.bornAt + nbMon.hatchingDuration) * 1000
+		: 0;
+	let genus;
 
 	const cancelSaleMutation = useMutation(
 		() =>
@@ -276,6 +292,45 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 		}
 	);
 
+	const buyMutation = useMutation(
+		() =>
+			fetch(`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/marketplace/buy`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					nbmonId: nbMon.nbmonId,
+					purchaserAddress: userAddress,
+				}),
+			}),
+		{
+			onSuccess: async (_) => {
+				//Success pop up
+				statesSwitchModal.setter({
+					show: true,
+					content: "buyNBmon",
+					stage: 3,
+					price: salePrice,
+				});
+				await delay(10000);
+				window && router.reload(window.location.pathname);
+			},
+			onError: (e) => {
+				console.log("Cancelling Listing Error:", e);
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Buying Error",
+						text: "We are sorry, an unexpected \n minting error occured. \n \n Please contact us to let us know \n the details.",
+					},
+				});
+			},
+			retry: 0,
+		}
+	);
+
 	if (!isEgg) {
 		genus = nbMon.genus.toLowerCase();
 	}
@@ -283,6 +338,127 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 	const [listingType, setListingType] = useState(
 		isNBmonListed ? nbMon.listingData.listingType : "fixedPrice"
 	);
+
+	const handleMetaMaskError = (e) => {
+		console.log(e.code);
+		if (e.code) {
+			if (e.code === "INSUFFICIENT_FUNDS") {
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Transaction Error",
+						text: `You have insufficient funds to \n make this transaction. \n\n Wallet address: ${userAddress}`,
+					},
+				});
+			} else if (e.code === "UNPREDICTABLE_GAS_LIMIT") {
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Transaction Error",
+						text: `Your balance is too low to \n buy this item. \n\n Wallet address: ${userAddress}`,
+					},
+				});
+				//-4001 is user cancellation
+			} else if (e.code !== 4001) {
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Something went wrong",
+						text: `We are sorry, an unexpected \n error occured during transaction. \n \n Please contact us to let us know \n the details. ${
+							e.code && e.code
+						}`,
+					},
+				});
+			} else {
+				statesSwitchModal.setter({
+					show: false,
+					content: "txError",
+					detail: {},
+				});
+			}
+		} else {
+			//User cancellation
+			statesSwitchModal.setter({
+				show: false,
+				content: "txError",
+				detail: {},
+			});
+		}
+	};
+
+	const buyerApproval = useWeb3Contract({
+		contractAddress: process.env.NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS,
+		functionName: "approve",
+		abi: BEP_20_ABI,
+		params: {
+			spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+			amount: Web3.utils.toWei(String(BigInt(BUY_ALLOWANCE)), "ether"),
+		},
+	});
+
+	const atomicMatch = useWeb3Contract({
+		contractAddress: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+		functionName: "atomicMatch",
+		abi: MarketplaceABI,
+		params: {
+			addresses: [
+				process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
+				process.env.NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS,
+				sellerAddress,
+			],
+			_tokenId: nbMon.nbmonId,
+			_saleType: 0,
+			/*0. Price, 
+			1. Starting Price, 
+			2. Ending Price, 
+			3. Min. Res bid, 
+			4. Winning Bid*/
+			uint88s: [Web3.utils.toWei(salePrice.toString(), "ether"), 0, 0, 0, 0],
+			//Duration, Seconds passed (required for timed auction)
+			uint24s: [saleDuration, 0],
+			_txSalt: saleTxSalt,
+			_signature: saleSignature,
+		},
+	});
+
+	const confirmBuyerApproval = async () => {
+		try {
+			console.log("DADA");
+			const runBuyerApproval = await buyerApproval.runContractFunction({
+				throwOnError: true,
+			});
+			console.log("runBuyerApproval", runBuyerApproval);
+
+			const z = await runBuyerApproval.wait();
+			return true;
+		} catch (e) {
+			handleMetaMaskError(e);
+		}
+	};
+
+	const confirmAtomicMatch = async () => {
+		try {
+			const runAtomicMatch = await atomicMatch.runContractFunction({
+				throwOnError: true,
+			});
+
+			statesSwitchModal.setter({
+				show: true,
+				content: "buyNBmon",
+				stage: 2,
+				price: salePrice,
+			});
+
+			await runAtomicMatch.wait();
+
+			buyMutation.mutate();
+		} catch (e) {
+			handleMetaMaskError(e);
+		}
+	};
 
 	const onCancelListing = () => {
 		statesSwitchModal.setter({
@@ -305,18 +481,49 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 		cancelSaleMutation.mutate();
 	};
 
-	const onConfirm = () => {
-		console.log("ASD");
-
+	const onConfirm = async () => {
 		statesSwitchModal.setter({
 			show: true,
 			content: "buyNBmon",
 			stage: 0,
 			price: nbMon.listingData.price,
 		});
+
+		const isAllowanceEnough = await isMarketplaceSpendingAllowanceEnough(
+			userAddress,
+			Moralis.provider,
+			BUY_ALLOWANCE
+		);
+
+		let confirmedAllowance = false;
+
+		if (!isAllowanceEnough) {
+			confirmedAllowance = await confirmBuyerApproval();
+		} else {
+			confirmedAllowance = true;
+		}
+
+		if (confirmedAllowance) {
+			statesSwitchModal.setter({
+				show: false,
+				content: "buyNBmon",
+				stage: 0,
+				price: nbMon.listingData.price,
+			});
+
+			statesSwitchModal.setter({
+				show: true,
+				content: "buyNBmon",
+				stage: 1,
+				price: nbMon.listingData.price,
+			});
+
+			await confirmAtomicMatch();
+		}
 	};
 
 	const onBuy = () => {
+		console.log("DD");
 		if (nbMon.listingData) {
 			statesSwitchModal.setter({
 				show: true,
@@ -325,6 +532,8 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 				usd: 0,
 				weth: nbMon.listingData.price,
 			});
+		} else {
+			console.log("aw");
 		}
 	};
 
@@ -432,6 +641,7 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 							endPrice={null}
 							biddingPrices={biddingPrices}
 							currentHighestBid={null}
+							userAddress={userAddress}
 						/>
 					</SeparatorContainer>
 				</RightSideContainer>

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { InputGroup, FormControl } from "react-bootstrap";
 import Image from "next/image";
+import MetamaskButton from "components/Buttons/MetamaskButton";
 import { TextNormal } from "components/Typography/Texts";
 import MyButton from "components/Buttons/Button";
 import { StatsText } from "./TabItemComponents";
@@ -38,8 +39,8 @@ const PriceText = styled.p`
 
 const StyledButton = styled(MyButton)`
 	color: red;
-	padding: 0;
 	min-width: 110px;
+	padding: 0 32px;
 	height: 48px;
 
 	p {
@@ -178,6 +179,7 @@ const ListingBox = ({
 	biddingPrices,
 	currentHighestBid,
 	mine,
+	userAddress,
 }) => {
 	const bidding = listingType.toLowerCase().includes("bidding");
 	let minimumAmount = 0;
@@ -248,17 +250,34 @@ const ListingBox = ({
 								</div>
 							)}
 
-							<StyledButton
-								disabled={mine}
-								onClick={async () => {
-									if (!mine) {
-										await onBuy();
+							{!userAddress ? (
+								<MetamaskButton
+									defaultText="Log-in to Buy"
+									className="mt-3 mt-lg-0"
+								/>
+							) : (
+								<StyledButton
+									disabled={mine}
+									onClick={async () => {
+										if (userAddress) {
+											if (!mine) {
+												await onBuy();
+											} else {
+												alert("AAA");
+											}
+										}
+									}}
+									className={`${
+										listings[listingType].withOfferInput && `mt-auto`
+									} mt-3 mt-lg-0`}
+									text={
+										userAddress
+											? listings[listingType].buyButtonText
+											: "Log-in to buy"
 									}
-								}}
-								className={listings[listingType].withOfferInput && `mt-auto`}
-								text={listings[listingType].buyButtonText}
-								pill
-							/>
+									pill
+								/>
+							)}
 						</div>
 					</div>
 

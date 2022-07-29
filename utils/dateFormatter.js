@@ -23,7 +23,7 @@ const months = [
 	"Dec",
 ];
 
-const sentenceGenerator = (differenceInDays, fDate, sDate) => {
+const sentenceGenerator = (differenceInDays, _, sDate) => {
 	const hoursAndMinutesGenerator = () =>
 		`${secondDate.getHours() < 10 ? `0` : ``}${secondDate.getHours()}:${
 			secondDate.getMinutes() < 10 ? `0` : ``
@@ -50,8 +50,13 @@ const dayDifference = (fDate, sDate) => {
 
 	if (firstDate.getFullYear() !== secondDate.getFullYear()) return -8888; // different year
 
-	const diffTime = Math.abs(secondDate - firstDate);
-	return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+	const difference = sDate - fDate;
+
+	const totalDays = difference / (1000 * 3600 * 24);
+
+	if (parseInt(totalDays) === 0) return 0;
+
+	return Math.ceil(totalDays);
 };
 
 const dateFormatter = (fDate, sDate) => {

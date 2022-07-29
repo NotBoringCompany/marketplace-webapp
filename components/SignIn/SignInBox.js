@@ -67,7 +67,7 @@ const SignInBox = ({
 				<MyButton
 					type="submit"
 					// onClick={auth}
-					text={!isAuthenticating ? "Sign In" : "Signing In..."}
+					text={!isAuthenticating ? "Log In" : "Logging In..."}
 					disabled={isAuthenticating}
 					className="w-100 mt-3 mb-3 text-secondary"
 				/>
@@ -80,7 +80,7 @@ const SignInBox = ({
 
 			<TextSecondary className="mt-4 text-white">
 				You must previously have connected your wallet, as well as your email
-				address to our marketplace to be able to sign in using email & password.
+				address to our marketplace to be able to log-in using email & password.
 			</TextSecondary>
 			<LinkCustom href="/faq" className="mt-3 text-gray" text="FAQ" />
 		</Box>

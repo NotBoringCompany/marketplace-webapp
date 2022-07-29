@@ -19,19 +19,22 @@ const randomIntFromInterval = (min, max) => {
 
 const Index = () => {
 	const { Moralis, user, isAuthenticated, enableWeb3 } = useMoralis();
+	const nbmon_id_sold = 10;
+
 	const web3 = new Web3(Moralis.provider);
 	const [signature, setSignature] = useState(null);
 	const [hash, setHash] = useState(null);
+	const DURATIOn = 10000000;
 
-	const [nbmonId, setNBmonId] = useState(1);
+	const [nbmonId, setNBmonId] = useState(nbmon_id_sold);
 	const [tit, titz] = useState("");
 
-	useEffect(() => {
-		if (tit === "aw") {
-			console.log("cahnging nbmon");
-			setNBmonId(4);
-		}
-	}, [tit]);
+	// useEffect(() => {
+	// 	if (tit === "aw") {
+	// 		console.log("cahnging nbmon");
+	// 		setNBmonId(4);
+	// 	}
+	// }, [tit]);
 
 	// useEffect(() => {
 	// 	if (signature) {
@@ -43,13 +46,11 @@ const Index = () => {
 	// }, [signature]);
 	const mintingAbi = NBMonMinting;
 
-	const nbmon_id_sold = 1;
-
-	const SELLER_ADDRESS = "0x43aC37241B9040a82D2b99334F9eD7dcd6c07fD1";
+	const SELLER_ADDRESS = "0xa48BafFb6e6d09111a420Bfa00225B1f722c704b";
 
 	const PAYMENT_TOKEN_ADDRESS = "0x01BE23585060835E02B77ef475b0Cc51aA1e0709"; // LINK ADDRESS
 
-	const SALT = 123213;
+	const SALT = "1234";
 
 	const executeF = async () => {
 		await setApprovalForAll.runContractFunction();
@@ -101,14 +102,14 @@ const Index = () => {
 		params: {
 			_nftContract: process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
 			_tokenId: nbmon_id_sold,
-			_paymentToken: PAYMENT_TOKEN_ADDRESS,
+			_paymentToken: process.env.NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS,
 			_saleType: 0,
-			_seller: user && user.attributes.ethAddress,
-			_price: Web3.utils.toWei("0.2", "ether"),
+			_seller: SELLER_ADDRESS,
+			_price: Web3.utils.toWei("0.05", "ether"),
 			_startingPrice: 0,
 			_endingPrice: 0,
 			_minimumReserveBid: 0,
-			_duration: 10000,
+			_duration: DURATIOn,
 			_txSalt: SALT,
 		},
 	});
@@ -129,18 +130,22 @@ const Index = () => {
 		params: {
 			addresses: [
 				process.env.NEXT_PUBLIC_NBMON_MINTING_CONTRACT,
-				PAYMENT_TOKEN_ADDRESS,
+				process.env.NEXT_PUBLIC_PAYMENT_TOKEN_ADDRESS,
 				SELLER_ADDRESS,
 			],
 			_tokenId: nbmon_id_sold,
 			_saleType: 0,
-			//Price, Starting Price, Ending Price, Min. Res bid, Winning Bid
-			uint88s: [Web3.utils.toWei("0.2", "ether"), 0, 0, 0, 0],
+			/*0. Price, 
+			1. Starting Price, 
+			2. Ending Price, 
+			3. Min. Res bid, 
+			4. Winning Bid*/
+			uint88s: [Web3.utils.toWei("0.05", "ether"), 0, 0, 0, 0],
 			//Duration, Seconds passed (required for timed auction)
-			uint24s: [10000, 0],
+			uint24s: [DURATIOn, 0],
 			_txSalt: SALT,
 			_signature:
-				"0xf0a89709ed8c4158b8fde44c6edef6216eb4ec5b000f56c75c784a672f9fafb6529f94bab1b977e607034a86e8f05565d14727454e94a86ba1ae5d9deee027d91c",
+				"0x8e66150e4f4d1ec60286c2ccb737231aadf46b8c2ad45b672ea4321681a078d437982653fa54c3d3e39c9db1f37e3786ec963105a760d645e5ad66589516fc061b",
 		},
 	});
 
@@ -342,7 +347,9 @@ const Index = () => {
 				onClick={async () => {
 					// const approval = await buyerApproval.runContractFunction();
 					// console.log("Approval:", approval);
-
+					console.log(
+						"479f66b83f307812292a8d645b972408074fc3db9c4415fc09305a9e125541030bdc9e8c1af349437185545b2a2aaaf3029916b17dd0b7a4d5459fc5f9ed91d2ff4333ce87eb387f2b584aba96f3abe396c26aef00e4bb5c616bac3c041dc9f2cd02d458c9c73cdf8315509a2bc75c303defb4bf44de14df733f580be76ce5fd767a2929af9129cb7a08090dbb0f0040029bf514880200292ffb9796b29ced9213ff7444a7876ae7e112e62051ea7340c6dc6797287b4ba4cc34c9fddcd426c2e8d93974d372f7851c5641818f5fcfb9d684db1b3b30eef3746b0f58cf8be45d6ae0885f91b7fe2e0b6815ac28ea6f500fd0af04a97cfe1e0adee05b7ee48d42"
+					);
 					const buy = await atomicMatch.runContractFunction();
 					console.log("Bought?", buy);
 				}}

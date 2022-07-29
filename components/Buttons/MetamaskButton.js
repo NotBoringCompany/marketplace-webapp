@@ -4,7 +4,11 @@ import AppContext from "context/AppContext";
 
 import MyButton from "./Button";
 
-const MetamaskButton = ({ big = false, className }) => {
+const MetamaskButton = ({
+	big = false,
+	className,
+	defaultText = "Log-in with Metamask",
+}) => {
 	const [triedAuth, setTriedAuth] = useState(false);
 	const {
 		isWeb3Enabled,
@@ -71,7 +75,7 @@ const MetamaskButton = ({ big = false, className }) => {
 			onClick={authCrypto}
 			disabled={isAuthenticating}
 			img={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/metamask.svg`}
-			text={!isAuthenticating ? "Log-in with Metamask" : "Connecting..."}
+			text={!isAuthenticating ? defaultText : "Connecting..."}
 		/>
 	);
 };

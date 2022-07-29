@@ -172,8 +172,6 @@ const Sell = ({
 }) => {
 	const currentDate = Date.now();
 
-	console.log("SALT", txSalt);
-
 	const { Moralis } = useMoralis();
 
 	const web3 = new Web3(Moralis.provider);
@@ -347,7 +345,6 @@ const Sell = ({
 			const duration =
 				Math.round(actualDateAndTime / 1000) - Math.round(Date.now() / 1000);
 			setSaleDuration(duration);
-			console.log("duration..", duration);
 		}
 	}, [actualDateAndTime, endPrice, weth]);
 
@@ -398,19 +395,19 @@ const Sell = ({
 	};
 
 	const handleClick = async () => {
-		statesSwitchModal.setter({
-			show: true,
-			content: "listNBmon",
-			stage: 0,
-			price: weth,
-		});
-
 		console.log(userAddress, "userAddress");
 		console.log("listedPricesWeth", listedPrices.weth.toString());
 		console.log("listingTypeEnum", LISTING_TYPE_ENUM[activeKey]);
 		console.log("nbMon.nbmonId", nbMon.nbmonId);
 		console.log("reservedAmount", reservedAmount);
 		console.log("txSalt", txSalt);
+
+		statesSwitchModal.setter({
+			show: true,
+			content: "listNBmon",
+			stage: 0,
+			price: weth,
+		});
 
 		const isApproved = await isApprovedForAll(userAddress, Moralis.provider);
 
@@ -424,7 +421,6 @@ const Sell = ({
 		});
 
 		const signature = await generateListingSignature();
-		console.log("signature", signature);
 
 		//If MetaMask request wasn't cancelled
 		if (signature) {

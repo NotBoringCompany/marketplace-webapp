@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import styled from "styled-components";
 
@@ -145,11 +146,6 @@ const ListingStage = ({ price = 0.5, status = 0 }) => {
 					{status === 1 && (
 						<SubTitle className="text-gray mt-2">
 							<b>Waiting for confirmation...</b>{" "}
-							<i>
-								If you{"'"}ve confirmed, please allow several moments to wait
-								until the transaction has been resolved in the blockchain.
-							</i>{" "}
-							😊
 						</SubTitle>
 					)}
 				</div>
@@ -165,6 +161,7 @@ const ListingStage = ({ price = 0.5, status = 0 }) => {
 };
 
 const BuyNBMon = ({ stateUtils }) => {
+	const router = useRouter();
 	const { setter, getter } = stateUtils;
 	const { stage, price } = getter;
 	return (
@@ -200,14 +197,17 @@ const BuyNBMon = ({ stateUtils }) => {
 					<SubTitle className="text-gray text-center my-5">
 						Congratulations, you{"'"}ve successfully bought an NBMon! This NBMon
 						is now available in your inventory.
+						<br />
+						<br /> This page will automatically reloads in a moment...
 					</SubTitle>
 					<OkButton
 						onClick={() => {
 							setter({ ...getter, show: false });
+							window && router.reload(window.location.pathname);
 						}}
 						className="ms-auto"
 					>
-						OK
+						Reload page
 					</OkButton>
 				</div>
 			)}
