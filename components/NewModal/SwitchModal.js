@@ -69,27 +69,21 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 
 	const close = () => {
 		//cant click outside to close modal
-		return;
+		if (cantClickOutside(content)) setter({ ...getter, show: false });
 
-		// if (cantClickOutside(content)) return;
-		// setter({ ...getter, show: false });
+		return;
 	};
 
-	// const cantClickOutside = () => {
-	// 	return [
-	// 		"cardPreview",
-	// 		"videoPreview",
-	// 		"userConfirmation",
-	// 		"waitHatching",
-	// 	].includes(content);
-	// };
+	const cantClickOutside = () => {
+		return [
+			"confirmBuyNBmon",
+			"emailSent",
+			"newPasswordSet",
+			"resetPassword",
+		].includes(content);
+	};
 
-	const newPasswordModals = [
-		"forgotPassword",
-		"emailSent",
-		"newPasswordSet",
-		"resetPassword",
-	];
+	const newPasswordModals = ["emailSent", "newPasswordSet", "resetPassword"];
 
 	return (
 		<StyledModal
