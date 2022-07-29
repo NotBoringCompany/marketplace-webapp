@@ -345,12 +345,14 @@ const Marketplace = () => {
 									className="mb-4 "
 								>
 									{" "}
-									<Link href={`/genesis-nbmons/${nbMon.nbmonId}`}>
+									<Link
+										href={`/genesis-nbmons/${nbMon.nbmonId}?src=marketplace`}
+									>
 										<a>
 											{nbMon.isEgg ? (
-												<EggCard nbMon={nbMon} />
+												<EggCard nbMon={nbMon} showPriceIfOnSale />
 											) : (
-												<NBMonCard nbMon={nbMon} />
+												<NBMonCard nbMon={nbMon} showPriceIfOnSale />
 											)}
 										</a>
 									</Link>
