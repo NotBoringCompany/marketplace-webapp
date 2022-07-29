@@ -125,7 +125,7 @@ const USDPriceText = styled.p`
 	color: #afafaf;
 `;
 
-const NBMonCard = ({ nbMon, ...props }) => {
+const NBMonCard = ({ nbMon, showPriceIfOnSale = false, ...props }) => {
 	const { className } = props;
 	const { nbmonId, fertility, species, gender, mutation } = nbMon;
 
@@ -239,8 +239,8 @@ const NBMonCard = ({ nbMon, ...props }) => {
 						)}
 					</div>
 
-					{nbMon.listingData && nbMon.listingData.price && (
-						<div className="mx-auto d-flex mt-4 align-items-center">
+					{nbMon.listingData && nbMon.listingData.price && showPriceIfOnSale && (
+						<div className="mx-auto d-flex mt-4 align-it ems-center">
 							<Image
 								alt="Eth Logo"
 								src="/images/Ethereum.svg"

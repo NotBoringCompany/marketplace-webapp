@@ -79,7 +79,7 @@ const USDPriceText = styled.p`
 	color: #afafaf;
 `;
 
-const EggCard = ({ nbMon, ...props }) => {
+const EggCard = ({ nbMon, showPriceIfOnSale = false, ...props }) => {
 	const { className } = props;
 	const { isHatchable, nbmonId } = nbMon;
 	return (
@@ -106,7 +106,7 @@ const EggCard = ({ nbMon, ...props }) => {
 					</HeadingSuperXXS>
 				</div>
 
-				{nbMon.listingData && nbMon.listingData.price && (
+				{nbMon.listingData && nbMon.listingData.price && showPriceIfOnSale && (
 					<div className="mx-auto d-flex mt-4 align-items-center">
 						<Image
 							alt="Eth Logo"
