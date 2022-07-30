@@ -13,8 +13,6 @@ import AppContext from "context/AppContext";
 import isApprovedForAll from "utils/blockchain-services/marketplace/isApprovedForAll";
 
 import FixedPrice from "components/SellerPOVComponents/FixedPrice";
-import TimedAuction from "components/SellerPOVComponents/TimedAuction";
-import Bidding from "components/SellerPOVComponents/Bidding";
 
 import NBMonMinting from "../../abis/MintingGenesis.json";
 import MarketplaceABI from "../../abis/Marketplace.json";
@@ -299,6 +297,7 @@ const Sell = ({
 				setKey("info");
 				onListed(true);
 				setEndingTime(actualDateAndTime);
+				setListedPrices({ ...listedPrices, weth: weth });
 				//step3
 			},
 			onError: (e) => {

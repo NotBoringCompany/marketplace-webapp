@@ -224,7 +224,7 @@ const NBMonLargeCard = ({
 	//If nbmon is for sale, it has these (listingData):
 	const sellerAddress = nbMon.listingData ? nbMon.listingData.seller : "";
 	const saleSignature = nbMon.listingData ? nbMon.listingData.signature : "";
-	const salePrice = nbMon.listingData ? nbMon.listingData.price : "0";
+	const salePrice = nbMon.listingData ? nbMon.listingData.price : 0;
 	const saleTxSalt = nbMon.listingData ? nbMon.listingData.txSalt : "";
 	const saleDuration = nbMon.listingData ? nbMon.listingData.duration : "";
 	const salePriceUsd = nbMon.listingData
@@ -494,7 +494,7 @@ const NBMonLargeCard = ({
 			show: true,
 			content: "buyNBmon",
 			stage: 0,
-			price: nbMon.listingData.price,
+			price: nbMon.listingData ? nbMon.listingData.price : listedPrices.weth,
 		});
 
 		const isAllowanceEnough = await isMarketplaceSpendingAllowanceEnough(
@@ -516,14 +516,14 @@ const NBMonLargeCard = ({
 				show: false,
 				content: "buyNBmon",
 				stage: 0,
-				price: nbMon.listingData.price,
+				price: nbMon.listingData ? nbMon.listingData.price : listedPrices.weth,
 			});
 
 			statesSwitchModal.setter({
 				show: true,
 				content: "buyNBmon",
 				stage: 1,
-				price: nbMon.listingData.price,
+				price: nbMon.listingData ? nbMon.listingData.price : listedPrices.weth,
 			});
 
 			await confirmAtomicMatch();
@@ -535,8 +535,8 @@ const NBMonLargeCard = ({
 			show: true,
 			content: "confirmBuyNBmon",
 			onConfirm,
-			usd: salePriceUsd ? salePriceUsd : listedPrices.usd,
-			weth: salePrice ? salePrice : listedPrices.weth,
+			usd: listedPrices.usd,
+			weth: listedPrices.weth,
 		});
 	};
 

@@ -8,6 +8,7 @@ import EthLogo from "public/images/eth_logo.svg";
 import { TextSecondary } from "components/Typography/Texts";
 import GenesisTag from "./GenesisTag";
 import TopTag from "./TopTag";
+import exchangeRateCalculator from "utils/exchangeRateCalculator";
 
 const Card = styled.div`
 	padding: 8px 10px;
@@ -79,7 +80,7 @@ const USDPriceText = styled.p`
 	color: #afafaf;
 `;
 
-const EggCard = ({ nbMon, showPriceIfOnSale = false, ...props }) => {
+const EggCard = ({ nbMon, showPriceIfOnSale = false, usdToEth, ...props }) => {
 	const { className } = props;
 	const { isHatchable, nbmonId } = nbMon;
 	return (
@@ -118,7 +119,9 @@ const EggCard = ({ nbMon, showPriceIfOnSale = false, ...props }) => {
 							<ETHPriceText className="text-start mb-1">
 								{nbMon.listingData.price} WETH
 							</ETHPriceText>
-							<USDPriceText className="text-center">~ $1200</USDPriceText>
+							<USDPriceText className="text-center">
+								~ ${exchangeRateCalculator(usdToEth, nbMon.listingData.price)}
+							</USDPriceText>
 						</div>
 					</div>
 				)}

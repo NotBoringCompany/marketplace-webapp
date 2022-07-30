@@ -54,8 +54,6 @@ const dayDifference = (fDate, sDate) => {
 
 	const totalDays = difference / (1000 * 3600 * 24);
 
-	if (parseInt(totalDays) === 0) return 0;
-
 	return Math.ceil(totalDays);
 };
 

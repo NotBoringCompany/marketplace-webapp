@@ -17,8 +17,5 @@ export default async function isMarketplaceSpendingAllowanceEnough(
 		.allowance(userAddress, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT)
 		.call();
 
-	console.log("currentAllowance", currentAllowance);
-	console.log("allowanceAmount", allowanceAmount);
-
 	return currentAllowance >= allowanceAmount;
 }

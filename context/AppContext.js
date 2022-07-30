@@ -54,11 +54,11 @@ export const AppProvider = ({ children }) => {
 							accounts[0].toLowerCase()
 					) {
 						logout();
+						window && window.location.reload();
 					} else {
 						window && window.location.reload();
 					}
 				}
-
 				if (accounts.length === 0) window && window.location.reload();
 			});
 	}, [isAuthenticated, user]);
