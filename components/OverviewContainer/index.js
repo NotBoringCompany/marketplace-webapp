@@ -21,7 +21,8 @@ const OverviewContainer = () => {
 
 	const { usdPrice, exchangeLoading, exchangeError } = useGetUsdExchange(
 		balance,
-		isLoading
+		isLoading,
+		true
 	);
 
 	const nbmons = useQuery(

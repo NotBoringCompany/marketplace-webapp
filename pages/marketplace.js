@@ -108,7 +108,7 @@ const Marketplace = () => {
 		usdPrice: usdToEth,
 		exchangeLoading,
 		exchangeError,
-	} = useGetUsdExchange(null, false, false);
+	} = useGetUsdExchange();
 
 	const { isFetching, error } = useQuery(
 		"allMyNBMons",

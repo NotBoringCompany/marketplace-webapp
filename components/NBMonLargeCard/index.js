@@ -24,6 +24,7 @@ import isMarketplaceSpendingAllowanceEnough from "utils/blockchain-services/mark
 import BEP_20_ABI from "components/../abis/BEP_20.json";
 import MarketplaceABI from "components/../abis/Marketplace.json";
 import delay from "utils/delay";
+import exchangeRateCalculator from "utils/exchangeRateCalculator";
 
 const OuterContainer = styled.div`
 	@media (max-width: 1024px) {
@@ -199,7 +200,13 @@ const MutationImage = styled(Image)`
 		right: -96px;
 	}
 `;
-const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
+const NBMonLargeCard = ({
+	dummy = false,
+	nbMon,
+	userAddress,
+	usdToEth,
+	txSalt,
+}) => {
 	const { Moralis } = useMoralis();
 	const router = useRouter();
 
@@ -214,6 +221,16 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 		isNBmonListed ? nbMon.listingData.endingTime : 0
 	);
 
+	//If nbmon is for sale, it has these (listingData):
+	const sellerAddress = nbMon.listingData ? nbMon.listingData.seller : "";
+	const saleSignature = nbMon.listingData ? nbMon.listingData.signature : "";
+	const salePrice = nbMon.listingData ? nbMon.listingData.price : "0";
+	const saleTxSalt = nbMon.listingData ? nbMon.listingData.txSalt : "";
+	const saleDuration = nbMon.listingData ? nbMon.listingData.duration : "";
+	const salePriceUsd = nbMon.listingData
+		? exchangeRateCalculator(usdToEth, nbMon.listingData.price)
+		: "";
+
 	const [listedPrices, setListedPrices] = useState({
 		weth: !isNBmonListed
 			? 0
@@ -221,20 +238,13 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 			? nbMon.listingData.price
 			: nbMon.listingData.startingPrice,
 		endPrice: !isNBmonListed ? 0 : nbMon.listingData.endingPrice,
-		usd: 0,
+		usd: salePriceUsd,
 	});
 
 	const [biddingPrices, setBiddingPrices] = useState({
 		minAmount: 0,
 		reservedAmount: 0,
 	});
-
-	//If nbmon is for sale, it has these (listingData):
-	const sellerAddress = nbMon.listingData ? nbMon.listingData.seller : "";
-	const saleSignature = nbMon.listingData ? nbMon.listingData.signature : "";
-	const salePrice = nbMon.listingData ? nbMon.listingData.price : "0";
-	const saleTxSalt = nbMon.listingData ? nbMon.listingData.txSalt : "";
-	const saleDuration = nbMon.listingData ? nbMon.listingData.duration : "";
 
 	const { statesSwitchModal } = useContext(AppContext);
 
@@ -426,13 +436,11 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 
 	const confirmBuyerApproval = async () => {
 		try {
-			console.log("DADA");
 			const runBuyerApproval = await buyerApproval.runContractFunction({
 				throwOnError: true,
 			});
-			console.log("runBuyerApproval", runBuyerApproval);
 
-			const z = await runBuyerApproval.wait();
+			await runBuyerApproval.wait();
 			return true;
 		} catch (e) {
 			handleMetaMaskError(e);
@@ -523,17 +531,14 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 	};
 
 	const onBuy = () => {
-		console.log("DD");
 		if (nbMon.listingData) {
 			statesSwitchModal.setter({
 				show: true,
 				content: "confirmBuyNBmon",
 				onConfirm,
-				usd: 0,
+				usd: salePriceUsd,
 				weth: nbMon.listingData.price,
 			});
-		} else {
-			console.log("aw");
 		}
 	};
 
@@ -634,7 +639,7 @@ const NBMonLargeCard = ({ dummy = false, nbMon, userAddress, txSalt }) => {
 							listingType={listingType}
 							mine={mine}
 							price={listedPrices.weth}
-							usdValue={0}
+							usdValue={salePriceUsd}
 							onCancelListing={onCancelListing}
 							onBuy={onBuy}
 							endsIn={dateFormatter(Date.now(), endingTime)}

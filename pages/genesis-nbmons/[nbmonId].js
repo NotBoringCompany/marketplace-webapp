@@ -14,6 +14,8 @@ import NBMonLargeCard from "components/NBMonLargeCard";
 import CryptoJS from "crypto-js";
 
 import { mediaBreakpoint } from "utils/breakpoints";
+import useGetUsdExchange from "utils/hooks/useGetUsdExchange";
+import exchangeRateCalculator from "utils/exchangeRateCalculator";
 
 export const BackBtnContainer = styled.div`
 	position: absolute;
@@ -51,6 +53,8 @@ const IndividualNBMon = () => {
 	const { isAuthenticated, user } = useMoralis();
 	const { nbmonId } = query;
 	const txSalt = CryptoJS.lib.WordArray.random(64).toString();
+
+	const { usdPrice: usdToEth } = useGetUsdExchange();
 
 	const fromMarketplace = isReady && query.src && query.src === "marketplace";
 
@@ -125,6 +129,7 @@ const IndividualNBMon = () => {
 					nbMon={nbMon}
 					userAddress={user ? user.attributes.ethAddress : null}
 					txSalt={txSalt}
+					usdToEth={usdToEth}
 				/>
 			</div>
 		</Layout>

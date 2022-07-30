@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import useExchangeRate from "./useExchangeRate";
 import exchangeRateDecoder from "utils/exchangeRateDecoder";
 
-const useGetUsdExchange = (balance, isLoading, fromBalance = true) => {
+const useGetUsdExchange = (
+	balance = null,
+	isLoading = false,
+	fromBalance = false
+) => {
 	const [usdPrice, setUsdPrice] = useState(0);
 	const {
 		data: exchangeData,
