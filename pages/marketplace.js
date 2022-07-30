@@ -36,6 +36,7 @@ import CardLink from "components/CardLink";
 import PriceFilter from "components/Filters/PriceFilter";
 
 import totalPageCounter from "utils/totalPagecounter";
+import useGetUsdExchange from "utils/hooks/useGetUsdExchange";
 
 const Filters = ({ filterOpen, opacityOne, handleFilterButton }) => {
 	const clearFilter = useFilterStore((state) => state.clearFilter);
@@ -102,6 +103,12 @@ const Marketplace = () => {
 	const setPageSettings = useSortMarketplaceStore(
 		(states) => states.setPageSettings
 	);
+
+	const {
+		usdPrice: usdToEth,
+		exchangeLoading,
+		exchangeError,
+	} = useGetUsdExchange(null, false, false);
 
 	const { isFetching, error } = useQuery(
 		"allMyNBMons",
@@ -350,9 +357,21 @@ const Marketplace = () => {
 									>
 										<a>
 											{nbMon.isEgg ? (
-												<EggCard nbMon={nbMon} showPriceIfOnSale />
+												<EggCard
+													nbMon={nbMon}
+													showPriceIfOnSale
+													usdToEth={
+														exchangeError || exchangeLoading ? 0 : usdToEth
+													}
+												/>
 											) : (
-												<NBMonCard nbMon={nbMon} showPriceIfOnSale />
+												<NBMonCard
+													nbMon={nbMon}
+													showPriceIfOnSale
+													usdToEth={
+														exchangeError || exchangeLoading ? 0 : usdToEth
+													}
+												/>
 											)}
 										</a>
 									</Link>

@@ -8,6 +8,7 @@ import GenesisTag from "./GenesisTag";
 import { data } from "configs";
 import NewPill from "components/NewPill";
 import { nbmonColorSchemes } from "configs/nbmonColorSchemes";
+import exchangeRateCalculator from "utils/exchangeRateCalculator";
 
 const OuterCard = styled.div`
 	position: relative;
@@ -125,7 +126,12 @@ const USDPriceText = styled.p`
 	color: #afafaf;
 `;
 
-const NBMonCard = ({ nbMon, showPriceIfOnSale = false, ...props }) => {
+const NBMonCard = ({
+	nbMon,
+	showPriceIfOnSale = false,
+	usdToEth,
+	...props
+}) => {
 	const { className } = props;
 	const { nbmonId, fertility, species, gender, mutation } = nbMon;
 
@@ -251,7 +257,9 @@ const NBMonCard = ({ nbMon, showPriceIfOnSale = false, ...props }) => {
 								<ETHPriceText className="text-start mb-1">
 									{nbMon.listingData.price} WETH
 								</ETHPriceText>
-								<USDPriceText className="text-center">~ $1200</USDPriceText>
+								<USDPriceText className="text-center">
+									~ ${exchangeRateCalculator(usdToEth, nbMon.listingData.price)}
+								</USDPriceText>
 							</div>
 						</div>
 					)}

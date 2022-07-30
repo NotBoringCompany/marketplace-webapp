@@ -6,9 +6,10 @@ import OverviewInventory from "./OverviewInventory";
 import OverviewWallet from "./OverviewWallet";
 import OverviewActivies from "./OverviewActivies";
 
+import useGetUsdExchange from "utils/hooks/useGetUsdExchange";
+
 const OverviewContainer = () => {
 	const { user, isInitializing, isLoading: moralisLoading } = useMoralis();
-	const [usdPrice, setUsdPrice] = useState(1);
 	const [totalNBMons, setTotalNBMons] = useState(0);
 	const {
 		data: balance,
@@ -18,27 +19,9 @@ const OverviewContainer = () => {
 
 	const [activities, setActivities] = useState([]);
 
-	const exchangeRates = useQuery(
-		"exchangeRates",
-		() => fetch(`https://api.coinbase.com/v2/exchange-rates?currency=ETH`),
-		{
-			onSuccess: async (res) => {
-				const result = await res.json();
-				if (balance.balance === undefined) {
-					setUsdPrice("Please connect your metamask");
-				} else {
-					setUsdPrice(
-						`$${(
-							result.data.rates.USD *
-							(balance.balance / Math.pow(10, 18))
-						).toFixed(3)}`
-					);
-				}
-			},
-			enabled: !isLoading,
-			retry: 0,
-			refetchOnWindowFocus: false,
-		}
+	const { usdPrice, exchangeLoading, exchangeError } = useGetUsdExchange(
+		balance,
+		isLoading
 	);
 
 	const nbmons = useQuery(
@@ -91,10 +74,10 @@ const OverviewContainer = () => {
 						: "Error in getting balance"
 				}
 				totalEthUsd1={
-					exchangeRates.isLoading
+					exchangeLoading
 						? ""
-						: !exchangeRates.error
-						? `${usdPrice}`
+						: !exchangeError
+						? usdPrice
 						: "Error in getting USD price"
 				}
 			/>
