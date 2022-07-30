@@ -18,6 +18,7 @@ import Bidding from "components/SellerPOVComponents/Bidding";
 
 import NBMonMinting from "../../abis/MintingGenesis.json";
 import MarketplaceABI from "../../abis/Marketplace.json";
+import exchangeRateCalculator from "utils/exchangeRateCalculator";
 
 const InnerContainer = styled.div`
 	background: #2c2d2d;
@@ -72,7 +73,7 @@ const StyledTabs = styled(Tabs)`
 	& > li {
 		margin-right: 0;
 		border-radius: 0%;
-		width: calc(100% / 3);
+		width: calc(100% / 1);
 	}
 
 	& > li:first-child {
@@ -169,6 +170,7 @@ const Sell = ({
 	setBiddingPrices,
 	biddingPrices,
 	txSalt,
+	usdToEth,
 }) => {
 	const currentDate = Date.now();
 
@@ -402,6 +404,14 @@ const Sell = ({
 		console.log("reservedAmount", reservedAmount);
 		console.log("txSalt", txSalt);
 
+		setListedPrices({
+			...listedPrices,
+			usd: exchangeRateCalculator(usdToEth, listedPrices.weth),
+			weth: listedPrices.weth,
+		});
+
+		console.log(exchangeRateCalculator(usdToEth, listedPrices.weth));
+
 		statesSwitchModal.setter({
 			show: true,
 			content: "listNBmon",
@@ -447,7 +457,7 @@ const Sell = ({
 					<OptionText className="mb-2">Option</OptionText>
 					<TabsContainer>
 						<StyledTabs onSelect={(k) => setActiveKey(k)} activeKey={activeKey}>
-							<Tab eventKey="fixedPrice" title="Fixed">
+							<Tab eventKey="fixedPrice" title="Fixed Price Selling">
 								<FixedPrice
 									onDateChange={setDateValue}
 									onPriceChange={setListedPrices}
@@ -458,7 +468,7 @@ const Sell = ({
 									minDate={new Date(currentDate)}
 								/>
 							</Tab>
-							<Tab eventKey="timedAuction" title="Timed Auction">
+							{/* <Tab eventKey="timedAuction" title="Timed Auction">
 								<TimedAuction
 									onDateChange={setDateValue}
 									onPriceChange={setListedPrices}
@@ -479,7 +489,7 @@ const Sell = ({
 									dateValue={dateValue}
 									minDate={new Date(currentDate)}
 								/>
-							</Tab>
+							</Tab> */}
 						</StyledTabs>
 					</TabsContainer>{" "}
 					<div className="mx-auto mt-4 mb-2">

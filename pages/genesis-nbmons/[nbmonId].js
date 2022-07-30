@@ -4,7 +4,7 @@ import { useMoralis } from "react-moralis";
 import styled from "styled-components";
 
 import Layout from "components/Layout";
-import { useRouter, Router } from "next/router";
+import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import NotFound from "pages/404";
 import NewButton from "components/Buttons/NewButton";
@@ -15,7 +15,6 @@ import CryptoJS from "crypto-js";
 
 import { mediaBreakpoint } from "utils/breakpoints";
 import useGetUsdExchange from "utils/hooks/useGetUsdExchange";
-import exchangeRateCalculator from "utils/exchangeRateCalculator";
 
 export const BackBtnContainer = styled.div`
 	position: absolute;

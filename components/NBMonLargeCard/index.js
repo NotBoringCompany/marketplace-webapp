@@ -323,7 +323,7 @@ const NBMonLargeCard = ({
 					stage: 3,
 					price: salePrice,
 				});
-				await delay(10000);
+				await delay(6500);
 				window && router.reload(window.location.pathname);
 			},
 			onError: (e) => {
@@ -531,21 +531,19 @@ const NBMonLargeCard = ({
 	};
 
 	const onBuy = () => {
-		if (nbMon.listingData) {
-			statesSwitchModal.setter({
-				show: true,
-				content: "confirmBuyNBmon",
-				onConfirm,
-				usd: salePriceUsd,
-				weth: nbMon.listingData.price,
-			});
-		}
+		statesSwitchModal.setter({
+			show: true,
+			content: "confirmBuyNBmon",
+			onConfirm,
+			usd: salePriceUsd ? salePriceUsd : listedPrices.usd,
+			weth: salePrice ? salePrice : listedPrices.weth,
+		});
 	};
 
 	return (
 		<OuterContainer className="py-4 d-flex w-100 justify-content-center ">
 			<CardContainer
-				listed={isNBmonListed}
+				listed={isListed}
 				hatchable={mine && isEgg && isHatchable ? 1 : 0}
 			>
 				{isEgg ? (
@@ -628,6 +626,7 @@ const NBMonLargeCard = ({
 									setBiddingPrices={setBiddingPrices}
 									biddingPrices={biddingPrices}
 									txSalt={txSalt}
+									usdToEth={usdToEth}
 								/>
 							</Tab>
 						)}
@@ -642,7 +641,7 @@ const NBMonLargeCard = ({
 							listingType={listingType}
 							mine={mine}
 							price={listedPrices.weth}
-							usdValue={salePriceUsd}
+							usdValue={listedPrices.usd ? listedPrices.usd : salePriceUsd}
 							onCancelListing={onCancelListing}
 							onBuy={onBuy}
 							endsIn={dateFormatter(Date.now(), endingTime)}

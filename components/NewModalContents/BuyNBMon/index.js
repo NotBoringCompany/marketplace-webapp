@@ -198,7 +198,7 @@ const BuyNBMon = ({ stateUtils }) => {
 						Congratulations, you{"'"}ve successfully bought an NBMon! This NBMon
 						is now available in your inventory.
 						<br />
-						<br /> This page will automatically reloads in a moment...
+						<br /> This page will automatically reload in a moment...
 					</SubTitle>
 					<OkButton
 						onClick={() => {

@@ -262,8 +262,6 @@ const ListingBox = ({
 										if (userAddress) {
 											if (!mine) {
 												await onBuy();
-											} else {
-												alert("AAA");
 											}
 										}
 									}}
