@@ -544,7 +544,10 @@ const NBMonLargeCard = ({
 
 	return (
 		<OuterContainer className="py-4 d-flex w-100 justify-content-center ">
-			<CardContainer hatchable={mine && isEgg && isHatchable ? 1 : 0}>
+			<CardContainer
+				listed={isNBmonListed}
+				hatchable={mine && isEgg && isHatchable ? 1 : 0}
+			>
 				{isEgg ? (
 					<NBMonImage
 						src={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/images/egg.svg`}
