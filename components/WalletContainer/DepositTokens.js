@@ -1,22 +1,18 @@
 import {useState, React} from "react";
 import styled from "styled-components";
-import TitleWithLink from "components/Typography/TitleWithLink";
 import { mediaBreakpoint } from "utils/breakpoints";
-import Image from "next/image";
-import { TextSecondary, TextPrimary, TextNormal } from "components/Typography/Texts";
+import { TextSecondary, TextNormal } from "components/Typography/Texts";
 import { StatsText } from "components/NBMonLargeCard/TabItemComponents";
 import Link from "next/link";
 import { HeadingSuperXXS } from "components/typography/Headings";
 
 import InputGroup from "react-bootstrap/InputGroup";
-import {FormControl, FormGroup} from "react-bootstrap/FormControl";
-import { useQuery } from "react-query";
 import { useMoralis } from "react-moralis";
-import axios from "axios";
 
 const DepositTokens = ({
 	tokenName, 
-	availableAmount, 
+	availableAmount,
+	resAllowance
 }) => {
 	const { user, isInitializing, isLoading: moralisLoading } = useMoralis();
 
@@ -70,6 +66,12 @@ const DepositTokens = ({
         <div className="px-3 mt-5">
             <TitleWithLinkAlt title={"Deposit " + tokenName}/>
 			<CardOverview className="mt-4">
+				{resAllowance < depositAmount && (
+					<WarningText>
+						WARNING: Your allowance to our wallet is too low for your deposit amount. 
+						Please increase your allowance before continuing.
+					</WarningText>
+				)}
 				<ParText className="mt-3">You are about to deposit {tokenName} in exchange for x{tokenName}.</ParText>
 				<AvailableText className="mt-4">Available: {availableAmount}</AvailableText>
 				<DepositFieldsText className="mt-4">Amount</DepositFieldsText>
@@ -171,6 +173,14 @@ const ParText = styled(TextNormal)`
 	line-height: 16px;
 	letter-spacing: 0.5px;
 	color: #67dbb1;
+`;
+
+const WarningText = styled(TextNormal)`
+	font-weight: 300;
+	font-size: 18px;
+	line-height: 22px;
+	letter-spacing: 0.5px;
+	color: #ffcc00;
 `;
 
 const ClaimContainer = styled.div`

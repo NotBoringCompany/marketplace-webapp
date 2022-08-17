@@ -1,18 +1,6 @@
-import {useState, React} from "react";
+import {React} from "react";
 import styled from "styled-components";
-import TitleWithLink from "components/Typography/TitleWithLink";
-import { mediaBreakpoint } from "utils/breakpoints";
-import Image from "next/image";
-import { TextSecondary, TextPrimary, TextNormal } from "components/Typography/Texts";
-import { StatsText } from "components/NBMonLargeCard/TabItemComponents";
-import Link from "next/link";
-import { HeadingSuperXXS } from "components/typography/Headings";
-
-import InputGroup from "react-bootstrap/InputGroup";
-import {FormControl, FormGroup} from "react-bootstrap/FormControl";
-import { useQuery } from "react-query";
-import { useMoralis } from "react-moralis";
-import axios from "axios";
+import { TextNormal } from "components/Typography/Texts";
 
 /**
  * This function checks the requirement to level up to the next tier. If the user is already a magnate, it will show

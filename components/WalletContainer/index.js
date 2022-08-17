@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useMoralis, useNativeBalance } from "react-moralis";
 import styled from "styled-components";
-import OverviewWallet from "components/OverviewContainer/OverviewWallet";
 import RealmTokens from "./RealmTokens";
 import DepositTokens from "./DepositTokens";
 import ClaimTokens from "./ClaimTokens";
 import WebAppTier from "./WebAppTier";
-
-import useGetUsdExchange from "utils/hooks/useGetUsdExchange";
 
 
 const WalletContainer = () => { 
@@ -20,12 +17,30 @@ const WalletContainer = () => {
 	const [showClaimContainer, setShowClaimContainer] = useState(false);
 	const [tokenContainer, setTokenContainer] = useState('');
 	const [tokenName, setTokenName] = useState('');
+	const [resAllowance, setResAllowance] = useState(0);
 
     const {
 		data: balance,
 		error,
 		isLoading,
 	} = useNativeBalance({ chain: process.env.NEXT_PUBLIC_CHAIN_ID });
+
+	const getRESAllowance = useQuery(
+		"resAllowance",
+		() =>
+			fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/currencies/getRESAllowance/${user.attributes.ethAddress}`
+			),
+		{
+			onSuccess: async (res) => {
+				const allowance = await res.json();
+				setResAllowance(allowance);
+			},
+			enabled: user && !isInitializing && !moralisLoading,
+			retry: 0,
+			refetchOnWindowFocus: false
+		},
+	);
 
 	const getRES = useQuery(
 		"res",
@@ -119,6 +134,7 @@ const WalletContainer = () => {
 					tokenName === "RES" ? resOwned : ""
 					// : recOwned {NOT AVAILABLE YET}
 				}
+				resAllowance={resAllowance}
 				/>
 			)}
 
