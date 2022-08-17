@@ -4,7 +4,7 @@ import { useMoralis, useNativeBalance } from "react-moralis";
 import styled from "styled-components";
 import OverviewInventory from "./OverviewInventory";
 import OverviewWallet from "./OverviewWallet";
-import OverviewActivies from "./OverviewActivies";
+import OverviewActivies from "./OverviewActivities";
 
 import useGetUsdExchange from "utils/hooks/useGetUsdExchange";
 

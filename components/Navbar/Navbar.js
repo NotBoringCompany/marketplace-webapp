@@ -274,6 +274,22 @@ const RightContent = () => {
 								</a>
 							</Link>
 
+							<Link href="/wallet">
+								<a
+									className={`my-3 content  d-flex ${
+										router.pathname === "/wallet" && `active`
+									}`}
+								>
+									{router.pathname === "/wallet" ? (
+										// CHANGE TO WALLET SVG ONCE BUILT
+										<InventoryFilledSVG />
+									) : (
+										<InventorySVG />
+									)}
+									<TextSecondary className="ms-3">Wallet</TextSecondary>
+								</a>
+							</Link>
+
 							<hr />
 
 							<Link href="#">
