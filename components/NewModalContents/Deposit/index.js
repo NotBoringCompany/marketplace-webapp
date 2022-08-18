@@ -34,12 +34,12 @@ const DepositRES = ({ stateUtils }) => {
 	const depositAmountTooLow = depositAmount <= 0;
 
 	const increaseAllowance = useWeb3Contract({
-		contractAddress: process.env.NEXT_PUBLIC_REALM_SAHRDS_CONTRACT,
+		contractAddress: process.env.NEXT_PUBLIC_REALM_SHARDS_CONTRACT,
 		functionName: "increaseAllowance",
 		abi: RealmShardsABI,
 
 		params: {
-			spender: process.env.NEXT_PUBLIC_REALM_SAHRDS_CONTRACT,
+			spender: process.env.NEXT_PUBLIC_REALM_SHARDS_CONTRACT,
 			addedValue: depositAmount > 0 ? depositAmount : depositAmount,
 		},
 	});
