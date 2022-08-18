@@ -1,29 +1,22 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { useMoralis, useNativeBalance } from "react-moralis";
+import { useMoralis } from "react-moralis";
 import styled from "styled-components";
 import RealmTokens from "./RealmTokens";
 import DepositTokens from "./DepositTokens";
 import ClaimTokens from "./ClaimTokens";
 import WebAppTier from "./WebAppTier";
 
-
-const WalletContainer = () => { 
-    const { user, isInitializing, isLoading: moralisLoading } = useMoralis();
+const WalletContainer = () => {
+	const { user, isInitializing, isLoading: moralisLoading } = useMoralis();
 	const [resOwned, setResOwned] = useState(0);
 	const [xResOwned, setxResOwned] = useState(0);
-	const [webAppTier, setWebAppTier] = useState('');
+	const [webAppTier, setWebAppTier] = useState("");
 	const [showDepositContainer, setShowDepositContainer] = useState(false);
 	const [showClaimContainer, setShowClaimContainer] = useState(false);
-	const [tokenContainer, setTokenContainer] = useState('');
-	const [tokenName, setTokenName] = useState('');
+	const [tokenContainer, setTokenContainer] = useState("");
+	const [tokenName, setTokenName] = useState("");
 	const [resAllowance, setResAllowance] = useState(0);
-
-    const {
-		data: balance,
-		error,
-		isLoading,
-	} = useNativeBalance({ chain: process.env.NEXT_PUBLIC_CHAIN_ID });
 
 	const getRESAllowance = useQuery(
 		"resAllowance",
@@ -38,8 +31,8 @@ const WalletContainer = () => {
 			},
 			enabled: user && !isInitializing && !moralisLoading,
 			retry: 0,
-			refetchOnWindowFocus: false
-		},
+			refetchOnWindowFocus: false,
+		}
 	);
 
 	const getRES = useQuery(
@@ -55,7 +48,7 @@ const WalletContainer = () => {
 			},
 			enabled: user && !isInitializing && !moralisLoading,
 			retry: 0,
-			refetchOnWindowFocus: false
+			refetchOnWindowFocus: false,
 		}
 	);
 
@@ -68,17 +61,18 @@ const WalletContainer = () => {
 		{
 			onSuccess: async (res) => {
 				const ownedxRES = await res.json();
+				console.log(ownedxRES);
 				setxResOwned(ownedxRES);
 			},
 			enabled: user && !isInitializing && !moralisLoading,
 			retry: 0,
-			refetchOnWindowFocus: false
+			refetchOnWindowFocus: false,
 		}
-	)
+	);
 
 	const getWebAppTier = useQuery(
 		"webAppTier",
-		() => 
+		() =>
 			fetch(
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/tierSystem/getWebAppTier/${user.attributes.ethAddress}`
 			),
@@ -89,30 +83,15 @@ const WalletContainer = () => {
 			},
 			enabled: user && !isInitializing && !moralisLoading,
 			retry: 0,
-			refetchOnWindowFocus: false
+			refetchOnWindowFocus: false,
 		}
-	)
+	);
 
-    return (
-        <Wrapper>
-			{/* <OverviewWallet
-				addressEth={user && user.attributes.ethAddress}
-				totalEth1={
-					isLoading
-						? ""
-						: !error
-						? balance.formatted
-						: "Error in getting balance"
-				}
-				totalEthUsd1={
-					exchangeLoading
-						? ""
-						: !exchangeError
-						? usdPrice
-						: "Error in getting USD price"
-				}
-			/> */}
-			<WebAppTier loading={getWebAppTier.isLoading} tier={webAppTier}/>
+	console.log({ xResOwned });
+
+	return (
+		<Wrapper>
+			<WebAppTier loading={getWebAppTier.isLoading} tier={webAppTier} />
 			<RealmTokens
 				loading={getRES.isLoading && getxRES.isLoading}
 				resOwned={resOwned}
@@ -128,46 +107,21 @@ const WalletContainer = () => {
 			/>
 
 			{tokenContainer === "Deposit" && showDepositContainer && (
-				<DepositTokens 
-				tokenName={tokenName} 
-				availableAmount={
-					tokenName === "RES" ? resOwned : ""
-					// : recOwned {NOT AVAILABLE YET}
-				}
-				resAllowance={resAllowance}
+				<DepositTokens
+					tokenName={tokenName}
+					availableAmount={tokenName === "RES" ? resOwned : ""}
+					resAllowance={resAllowance}
 				/>
 			)}
 
 			{tokenContainer === "Claim" && showClaimContainer && (
-				<ClaimTokens 
-				tokenName={tokenName} 
-				availableAmount={
-					tokenName === "xRES" ? xResOwned : ""
-					// : xrecOwned {NOT AVAILABLE YET}
-				}
+				<ClaimTokens
+					tokenName={tokenName}
+					availableAmount={tokenName === "xRES" ? xResOwned : ""}
 				/>
 			)}
-			{/* {showDepositTokens && (
-				<DepositTokens 
-					tokenName={tokenName} 
-					availableAmount={
-						tokenName === "RES" ? resOwned : ""
-						// : recOwned {NOT AVAILABLE YET}
-					}
-				/>
-			)}
-			{showClaimTokens && (
-				<ClaimTokens 
-					tokenName={tokenName} 
-					availableAmount={
-						tokenName === "RES" ? resOwned : ""
-						// : recOwned {NOT AVAILABLE YET}
-					}
-				/>
-			)} */}
-
-        </Wrapper>
-    );
+		</Wrapper>
+	);
 };
 
 const Wrapper = styled.div`
