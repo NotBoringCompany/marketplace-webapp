@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useMutation } from "react-query";
 import { useMoralis } from "react-moralis";
 import Link from "next/link";
 import styled from "styled-components";
@@ -10,38 +11,30 @@ import MyButton from "components/Buttons/Button";
 import ModalButton from "components/Buttons/ModalButton";
 
 const DepositRES = ({ stateUtils }) => {
+	const { user } = useMoralis();
+
 	const { getter } = stateUtils;
 
-	const { availableAmount, tokenName, resAllowance } = getter;
+	const {
+		availableAmount,
+		tokenName,
+		resAllowance,
+		statesSwitchModal,
+		playfabId,
+	} = getter;
 
 	const resAllowanceInt = parseInt(resAllowance.hex, 16);
 
-	const { user } = useMoralis();
-
 	const [depositAmount, setDepositAmount] = useState(0);
-	const [result, setResult] = useState("");
-
 	const [success, setSuccess] = useState(false);
 
 	const resAllowanceAmountTooLow = resAllowanceInt < depositAmount;
 	const availableAmountTooLow = availableAmount < depositAmount;
 	const depositAmountTooLow = depositAmount <= 0;
 
-	const handleDeposit = async (e) => {
-		e.preventDefault();
-		try {
-			let getPlayfabId = await fetch(
-				`${
-					process.env.NEXT_PUBLIC_NEW_REST_API_URL
-				}/account/getPlayfabId/${user.attributes.ethAddress.toLowerCase()}`,
-				{
-					method: "GET",
-				}
-			);
-
-			let playfabId = await getPlayfabId.json();
-
-			let deposit = await fetch(
+	const depositMutation = useMutation(
+		() =>
+			fetch(
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/currencies/deposit${tokenName}`,
 				{
 					method: "POST",
@@ -50,40 +43,64 @@ const DepositRES = ({ stateUtils }) => {
 					},
 					body: JSON.stringify({
 						amount: depositAmount,
-						playfabId: playfabId,
+						playfabId,
 					}),
 				}
-			);
-
-			let depositResponse = await deposit.json();
-
-			if (deposit.status === 200) {
-				setSuccess(true);
-
-				setTimeout(() => {
-					window && window.location.reload();
-				}, 5000);
-			} else {
-				setResult("An error has occured.");
-			}
-		} catch (err) {
-			console.error("Error here", err.response.data);
+			),
+		{
+			onSuccess: async (response) => {
+				//Showing success message
+				const res = await response.json();
+				if (response.ok) {
+					setSuccess(true);
+					setTimeout(() => {
+						window.location.reload();
+					}, 5000);
+				} else {
+					//Due to using `fetch`, the error still falls within onSuccess.
+					//To "fix" this behaviour, use axios.
+					console.log(`Depositing ${tokenName} Error:`, res);
+					statesSwitchModal.setter({
+						show: true,
+						content: "txError",
+						detail: {
+							title: "Depositing Error",
+							text: "We are sorry, an unexpected \n error occured. \n \n Please contact us to let us \n know the details.",
+						},
+					});
+				}
+			},
+			retry: 0,
 		}
+	);
+
+	const depositDisabled =
+		resAllowanceAmountTooLow ||
+		availableAmountTooLow ||
+		depositAmountTooLow ||
+		depositMutation.isLoading ||
+		!playfabId;
+
+	const handleDeposit = () => {
+		if (!depositDisabled) depositMutation.mutate();
 	};
 
 	return (
 		<OuterContainer>
 			<TitleWithLink title={"Deposit RES"} className="mb-3" />
+
 			{!success ? (
 				<MainContent
 					resAllowanceAmountTooLow={resAllowanceAmountTooLow}
 					availableAmountTooLow={availableAmountTooLow}
-					depositAmountTooLow={depositAmountTooLow}
 					tokenName={tokenName}
 					availableAmount={availableAmount}
 					depositAmount={depositAmount}
 					onDepositAmountChanged={setDepositAmount}
 					handleDeposit={handleDeposit}
+					playfabId={playfabId}
+					depositMutationLoading={depositMutation.isLoading}
+					depositDisabled={depositDisabled}
 				/>
 			) : (
 				<SuccessMessage depositAmount={depositAmount} tokenName={tokenName} />
@@ -91,27 +108,7 @@ const DepositRES = ({ stateUtils }) => {
 		</OuterContainer>
 	);
 };
-const SuccessMessage = ({ depositAmount, tokenName }) => {
-	return (
-		<div className="d-flex flex-column">
-			<p className="mt-4 fw-light small">
-				<b>Congratulations!</b> You have successfully deposited{" "}
-				<span className="text-secondary">
-					{depositAmount} {tokenName} for {depositAmount} x{tokenName}{" "}
-				</span>
-				.<br />
-				<br /> This page will automatically reload in a moment...
-			</p>
-			<ModalButton
-				onClick={() => {
-					window && window.location.reload();
-				}}
-			>
-				OK
-			</ModalButton>
-		</div>
-	);
-};
+
 const TitleWithLink = ({ title, textLink, href = "#", className = "" }) => {
 	return (
 		<Inner className={className}>
@@ -132,12 +129,14 @@ const TitleWithLink = ({ title, textLink, href = "#", className = "" }) => {
 const MainContent = ({
 	resAllowanceAmountTooLow,
 	availableAmountTooLow,
-	depositAmountTooLow,
 	tokenName,
 	availableAmount,
 	depositAmount,
 	onDepositAmountChanged,
 	handleDeposit,
+	playfabId,
+	depositMutationLoading = false,
+	depositDisabled = false,
 }) => {
 	return (
 		<>
@@ -161,6 +160,20 @@ const MainContent = ({
 				</div>
 			)}
 
+			{!playfabId && (
+				<div className="d-flex flex-column">
+					<WarningContainer className="my-3">
+						<p className="m-0 small text-black">
+							This account is currently not connected to any game account.
+							<br />
+							<br />
+							Please create an account in the game (Realm Hunter) to be able to
+							deposit.
+						</p>
+					</WarningContainer>
+				</div>
+			)}
+
 			<ParText className="mt-3">
 				You are about to deposit {tokenName} in exchange for x{tokenName}.
 			</ParText>
@@ -173,6 +186,7 @@ const MainContent = ({
 			<StyledInputGroup className="my-3">
 				<FormControl
 					type="number"
+					readOnly={!playfabId}
 					value={depositAmount}
 					placeholder={`1`}
 					onChange={(e) => onDepositAmountChanged(e.target.value)}
@@ -186,6 +200,7 @@ const MainContent = ({
 				<FormControl
 					type="number"
 					value={depositAmount}
+					readOnly={!playfabId}
 					placeholder={`1`}
 					onChange={(e) => onDepositAmountChanged(e.target.value)}
 				/>
@@ -203,16 +218,34 @@ const MainContent = ({
 			<MyButton
 				onClick={handleDeposit}
 				thinText
-				disabled={
-					resAllowanceAmountTooLow ||
-					availableAmountTooLow ||
-					depositAmountTooLow
-				}
+				disabled={depositDisabled}
 				className="mt-4 w-100 py-2"
-				text="Deposit"
+				text={depositMutationLoading ? `Processing...` : `Deposit`}
 				pill
 			/>
 		</>
+	);
+};
+
+const SuccessMessage = ({ depositAmount, tokenName }) => {
+	return (
+		<div className="d-flex flex-column">
+			<p className="mt-4 fw-light small">
+				<b>Congratulations!</b> You have successfully deposited{" "}
+				<span className="text-secondary">
+					{depositAmount} {tokenName} for {depositAmount} x{tokenName}{" "}
+				</span>
+				.<br />
+				<br /> This page will automatically reload in a moment...
+			</p>
+			<ModalButton
+				onClick={() => {
+					window && window.location.reload();
+				}}
+			>
+				OK
+			</ModalButton>
+		</div>
 	);
 };
 
@@ -287,6 +320,11 @@ const StyledInputGroup = styled(InputGroup)`
 			background: ${(props) => (props.variant === "light" ? `#fff` : `black`)};
 			color: ${(props) => (props.variant === "light" ? `#212121` : `#fff`)};
 		}
+	}
+
+	& input.form-control:disabled,
+	& input.form-control[readonly] {
+		background: #393939;
 	}
 
 	& .input-group-text {

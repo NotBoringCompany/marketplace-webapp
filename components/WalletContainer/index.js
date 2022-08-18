@@ -18,6 +18,7 @@ const WalletContainer = () => {
 	const [tokenContainer, setTokenContainer] = useState("");
 	const [tokenName, setTokenName] = useState("");
 	const [resAllowance, setResAllowance] = useState(0);
+	const [playfabId, setPlayfabId] = useState(null);
 
 	const { statesSwitchModal } = useContext(AppContext);
 
@@ -90,6 +91,31 @@ const WalletContainer = () => {
 		}
 	);
 
+	const getPlayfabId = useQuery(
+		"playfabId",
+		() =>
+			fetch(
+				`${
+					process.env.NEXT_PUBLIC_NEW_REST_API_URL
+				}/account/getPlayfabId/${user.attributes.ethAddress.toLowerCase()}`
+			),
+		{
+			onSuccess: async (res) => {
+				const playfabId = await res.json();
+
+				//The format of API result above is irregular. Needs fixing.
+
+				if (!playfabId.error) {
+					// if it returns an error obj
+					setPlayfabId(playfabId);
+				}
+			},
+			enabled: user && !isInitializing && !moralisLoading,
+			retry: 0,
+			refetchOnWindowFocus: false,
+		}
+	);
+
 	return (
 		<Wrapper>
 			<WebAppTier loading={getWebAppTier.isLoading} tier={webAppTier} />
@@ -107,6 +133,7 @@ const WalletContainer = () => {
 				setTokenName={setTokenName}
 				statesSwitchModal={statesSwitchModal}
 				resAllowance={resAllowance}
+				playfabId={playfabId}
 			/>
 
 			{tokenContainer === "Deposit" && showDepositContainer && (
