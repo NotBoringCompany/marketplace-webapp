@@ -7,6 +7,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import { TextSecondary, TextNormal } from "components/Typography/Texts";
 import { HeadingSuperXXS } from "components/typography/Headings";
 import MyButton from "components/Buttons/Button";
+import ModalButton from "components/Buttons/ModalButton";
 
 const DepositRES = ({ stateUtils }) => {
 	const { getter } = stateUtils;
@@ -19,6 +20,8 @@ const DepositRES = ({ stateUtils }) => {
 
 	const [depositAmount, setDepositAmount] = useState(0);
 	const [result, setResult] = useState("");
+
+	const [success, setSuccess] = useState(false);
 
 	const resAllowanceAmountTooLow = resAllowanceInt < depositAmount;
 	const availableAmountTooLow = availableAmount < depositAmount;
@@ -55,13 +58,11 @@ const DepositRES = ({ stateUtils }) => {
 			let depositResponse = await deposit.json();
 
 			if (deposit.status === 200) {
-				setDepositAmount(0);
-				setResult(
-					`You have successfully deposited ${depositAmount} ${tokenName} for ${depositAmount} x${tokenName}`
-				);
-				// setTimeout(() => {
-				// 	window.location.reload();
-				// }, 2000);
+				setSuccess(true);
+
+				setTimeout(() => {
+					window && window.location.reload();
+				}, 5000);
 			} else {
 				setResult("An error has occured.");
 			}
@@ -70,11 +71,76 @@ const DepositRES = ({ stateUtils }) => {
 		}
 	};
 
-	console.log({ resAllowance });
-
 	return (
 		<OuterContainer>
 			<TitleWithLink title={"Deposit RES"} className="mb-3" />
+			{!success ? (
+				<MainContent
+					resAllowanceAmountTooLow={resAllowanceAmountTooLow}
+					availableAmountTooLow={availableAmountTooLow}
+					depositAmountTooLow={depositAmountTooLow}
+					tokenName={tokenName}
+					availableAmount={availableAmount}
+					depositAmount={depositAmount}
+					onDepositAmountChanged={setDepositAmount}
+					handleDeposit={handleDeposit}
+				/>
+			) : (
+				<SuccessMessage depositAmount={depositAmount} tokenName={tokenName} />
+			)}
+		</OuterContainer>
+	);
+};
+const SuccessMessage = ({ depositAmount, tokenName }) => {
+	return (
+		<div className="d-flex flex-column">
+			<p className="mt-4 fw-light small">
+				<b>Congratulations!</b> You have successfully deposited{" "}
+				<span className="text-secondary">
+					{depositAmount} {tokenName} for {depositAmount} x{tokenName}{" "}
+				</span>
+				.<br />
+				<br /> This page will automatically reload in a moment...
+			</p>
+			<ModalButton
+				onClick={() => {
+					window && window.location.reload();
+				}}
+			>
+				OK
+			</ModalButton>
+		</div>
+	);
+};
+const TitleWithLink = ({ title, textLink, href = "#", className = "" }) => {
+	return (
+		<Inner className={className}>
+			<Title as="h2">{title}</Title>
+			{textLink && (
+				<LinkWrap className="ms-2">
+					<Link href={href}>
+						<a>
+							<TextLink>{textLink}</TextLink>
+						</a>
+					</Link>
+				</LinkWrap>
+			)}
+		</Inner>
+	);
+};
+
+const MainContent = ({
+	resAllowanceAmountTooLow,
+	availableAmountTooLow,
+	depositAmountTooLow,
+	tokenName,
+	availableAmount,
+	depositAmount,
+	onDepositAmountChanged,
+	handleDeposit,
+}) => {
+	return (
+		<>
 			{resAllowanceAmountTooLow && (
 				<div className="d-flex flex-column">
 					<WarningContainer className="my-3">
@@ -109,7 +175,7 @@ const DepositRES = ({ stateUtils }) => {
 					type="number"
 					value={depositAmount}
 					placeholder={`1`}
-					onChange={(e) => setDepositAmount(e.target.value)}
+					onChange={(e) => onDepositAmountChanged(e.target.value)}
 				/>
 				<InputGroup.Text id="basic-addon2">{tokenName}</InputGroup.Text>
 			</StyledInputGroup>
@@ -121,7 +187,7 @@ const DepositRES = ({ stateUtils }) => {
 					type="number"
 					value={depositAmount}
 					placeholder={`1`}
-					onChange={(e) => setDepositAmount(e.target.value)}
+					onChange={(e) => onDepositAmountChanged(e.target.value)}
 				/>
 				<InputGroup.Text id="basic-addon2">x{tokenName}</InputGroup.Text>
 			</StyledInputGroup>
@@ -146,26 +212,10 @@ const DepositRES = ({ stateUtils }) => {
 				text="Deposit"
 				pill
 			/>
-		</OuterContainer>
+		</>
 	);
 };
 
-const TitleWithLink = ({ title, textLink, href = "#", className = "" }) => {
-	return (
-		<Inner className={className}>
-			<Title as="h2">{title}</Title>
-			{textLink && (
-				<LinkWrap className="ms-2">
-					<Link href={href}>
-						<a>
-							<TextLink>{textLink}</TextLink>
-						</a>
-					</Link>
-				</LinkWrap>
-			)}
-		</Inner>
-	);
-};
 const WarningContainer = styled.div`
 	padding: 16px;
 	background: #ffcc00;
