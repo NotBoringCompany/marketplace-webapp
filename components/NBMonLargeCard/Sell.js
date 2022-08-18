@@ -307,7 +307,7 @@ const Sell = ({
 					content: "txError",
 					detail: {
 						title: "Listing Error",
-						text: "We are sorry, an unexpected \n minting error occured. \n \n Please contact us to let us know \n the details.",
+						text: "We are sorry, an unexpected \n minting error occured. \n \n Please contact us to let us \n know the details.",
 					},
 				});
 			},

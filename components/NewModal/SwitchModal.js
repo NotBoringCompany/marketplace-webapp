@@ -21,6 +21,7 @@ import SellNBMon from "components/NewModalContents/SellNBMon";
 import CancelListing from "components/NewModalContents/SellNBMon/CancelListing";
 import BuyNBMon from "components/NewModalContents/BuyNBMon";
 import ConfirmBuyNBMon from "components/NewModalContents/BuyNBMon/ConfirmBuyNBMon";
+import Deposit from "components/NewModalContents/Deposit";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -51,10 +52,10 @@ const StyledModalBody = styled(Modal.Body)`
 			: `unset`};
 `;
 
-const Switch = ({ test, children }) => {
+const Switch = ({ shown, children }) => {
 	if (children) {
 		return children.find((child) => {
-			return child.props.switchId === test;
+			return child.props.switchId === shown;
 		});
 	}
 
@@ -69,17 +70,18 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 
 	const close = () => {
 		//cant click outside to close modal
-		if (cantClickOutside(content)) setter({ ...getter, show: false });
+		if (canClickOutside(content)) setter({ ...getter, show: false });
 
 		return;
 	};
 
-	const cantClickOutside = () => {
+	const canClickOutside = () => {
 		return [
 			"confirmBuyNBmon",
 			"emailSent",
 			"newPasswordSet",
 			"resetPassword",
+			"deposit",
 		].includes(content);
 	};
 
@@ -90,9 +92,13 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 			onHide={close}
 			centered
 			show={show}
-			bigger={newPasswordModals.includes(content) ? 1 : 0}
+			bigger={
+				newPasswordModals.includes(content) || content === "deposit" ? 1 : 0
+			}
 			nominheight={
-				newPasswordModals.includes(content) || content === "cancelListNBmon"
+				newPasswordModals.includes(content) ||
+				content === "cancelListNBmon" ||
+				content === "deposit"
 					? 1
 					: 0
 			}
@@ -107,13 +113,14 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					content === "listNBmon" ||
 					content === "cancelListNBmon" ||
 					content === "buyNBmon" ||
-					content === "confirmBuyNBmon"
+					content === "confirmBuyNBmon" ||
+					content === "deposit"
 						? 1
 						: 0
 				}
 				cardpreview={content === "cardPreview" ? 1 : 0}
 			>
-				<Switch test={content}>
+				<Switch shown={content}>
 					<MetamaskConfirmation
 						stateUtils={stateUtils}
 						switchId="metamaskConfirmation"
@@ -125,23 +132,26 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					<SuccessMinting switchId="successMinting" stateUtils={stateUtils} />
 					<Error switchId="txError" stateUtils={stateUtils} />
 
-					{/*Hatching modal*/}
+					{/*Hatching modals*/}
 					<UserConfirm switchId="userConfirmation" stateUtils={stateUtils} />
 					<VideoPreview switchId="videoPreview" stateUtils={stateUtils} />
 					<CardPreview switchId="cardPreview" stateUtils={stateUtils} />
 					<WaitHatching switchId="waitHatching" />
 
-					{/*New Password modal*/}
+					{/*New Password modals*/}
 					<ForgotPassword switchId="forgotPassword" stateUtils={stateUtils} />
 					<EmailSent switchId="emailSent" stateUtils={stateUtils} />
 					<ResetPassword switchId="resetPassword" stateUtils={stateUtils} />
 					<NewPasswordSet switchId="newPasswordSet" stateUtils={stateUtils} />
 
-					{/*Marketplace Listing Modal*/}
+					{/*Marketplace Listing modals*/}
 					<SellNBMon switchId="listNBmon" stateUtils={stateUtils} />
 					<CancelListing switchId="cancelListNBmon" stateUtils={stateUtils} />
 					<BuyNBMon switchId="buyNBmon" stateUtils={stateUtils} />
 					<ConfirmBuyNBMon switchId="confirmBuyNBmon" stateUtils={stateUtils} />
+
+					{/*Wallet page modals*/}
+					<Deposit switchId="deposit" stateUtils={stateUtils} />
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>

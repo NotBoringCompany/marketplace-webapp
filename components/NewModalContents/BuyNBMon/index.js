@@ -2,6 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import styled from "styled-components";
+import ModalButton from "components/Buttons/ModalButton";
 
 const CheckmarksLogoSVG = (props) => (
 	<svg
@@ -83,14 +84,6 @@ const ListingItemLoadingContainer = styled.div`
 	margin-top: 32px;
 `;
 
-const OkButton = styled.button`
-	background: none;
-	color: #67dbb1;
-	border: none;
-	font-weight: 300;
-	font-size: 14px;
-	line-height: 20px;
-`;
 const ApprovalStage = ({ completed = false }) => (
 	<div className="d-flex w-100 mt-3">
 		{completed ? (
@@ -200,7 +193,7 @@ const BuyNBMon = ({ stateUtils }) => {
 						<br />
 						<br /> This page will automatically reload in a moment...
 					</SubTitle>
-					<OkButton
+					<ModalButton
 						onClick={() => {
 							setter({ ...getter, show: false });
 							window && router.reload(window.location.pathname);
@@ -208,7 +201,7 @@ const BuyNBMon = ({ stateUtils }) => {
 						className="ms-auto"
 					>
 						Reload page
-					</OkButton>
+					</ModalButton>
 				</div>
 			)}
 		</div>

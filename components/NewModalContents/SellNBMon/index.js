@@ -1,8 +1,7 @@
-import React from "react";
 import { useRouter } from "next/router";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
-import { HeadingSuperXXS } from "components/Typography/Headings";
 import styled from "styled-components";
+import ModalButton from "components/Buttons/ModalButton";
 
 const BigCheckmarkSuccess = (props) => (
 	<svg
@@ -99,14 +98,6 @@ const ListingItemLoadingContainer = styled.div`
 	margin-top: 32px;
 `;
 
-const OkButton = styled.button`
-	background: none;
-	color: #67dbb1;
-	border: none;
-	font-weight: 300;
-	font-size: 14px;
-	line-height: 20px;
-`;
 const ApprovalStage = ({ completed = false }) => (
 	<div className="d-flex w-100 mt-3">
 		{completed ? (
@@ -213,14 +204,15 @@ const SellNBMon = ({ stateUtils }) => {
 					<SubTitle className="text-gray text-center my-5">
 						You{"'"}ve successfully listed your NBMon for sale!
 					</SubTitle>
-					<OkButton
+
+					<ModalButton
 						onClick={() => {
 							setter({ ...getter, show: false });
 						}}
 						className="ms-auto"
 					>
 						OK
-					</OkButton>
+					</ModalButton>
 				</div>
 			)}
 		</div>

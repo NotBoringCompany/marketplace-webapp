@@ -1,7 +1,7 @@
-import React from "react";
 import Button from "react-bootstrap/Button";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
 import styled from "styled-components";
+import ModalButton from "components/Buttons/ModalButton";
 
 const WarningLogo = (props) => (
 	<svg
@@ -32,15 +32,6 @@ const SubTitle = styled(Title)`
 
 const ListingItemLoadingContainer = styled.div`
 	margin-top: 32px;
-`;
-
-const OkButton = styled.button`
-	background: none;
-	color: #e1e3e0;
-	border: none;
-	font-weight: 500;
-	font-size: 14px;
-	line-height: 20px;
 `;
 
 const CancelButton = styled(Button)`
@@ -78,11 +69,9 @@ const CancelListing = ({ stateUtils }) => {
 						Are you sure you want to cancel the listing?
 					</SubTitle>
 				)}
-
 				<SubTitle className={`text-gray mb-4 ${stage === 1 && `mt-2`}`}>
 					Your NBMon won{"'"}t be available in the marketplace anymore.
 				</SubTitle>
-
 				{stage === 0 && (
 					<CancelButton
 						disabled={isCancelling}
@@ -95,13 +84,14 @@ const CancelListing = ({ stateUtils }) => {
 				)}
 
 				{!isCancelling && (
-					<OkButton
+					<ModalButton
+						color="#e1e3e0"
 						onClick={() => {
 							setter({ ...getter, show: false });
 						}}
 					>
 						Go Back
-					</OkButton>
+					</ModalButton>
 				)}
 			</div>
 		</div>
