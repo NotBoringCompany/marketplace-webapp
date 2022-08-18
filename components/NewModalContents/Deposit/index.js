@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Web3 from "web3";
 import { useMutation } from "react-query";
 import { useWeb3Contract } from "react-moralis";
 import Link from "next/link";
@@ -39,8 +40,11 @@ const DepositRES = ({ stateUtils }) => {
 		abi: RealmShardsABI,
 
 		params: {
-			spender: process.env.NEXT_PUBLIC_REALM_SHARDS_CONTRACT,
-			addedValue: depositAmount > 0 ? depositAmount : depositAmount,
+			spender: process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS,
+			addedValue:
+				depositAmount > 0
+					? Web3.utils.toWei(depositAmount.toString(), "ether")
+					: Web3.utils.toWei("100", "ether"),
 		},
 	});
 
@@ -56,7 +60,7 @@ const DepositRES = ({ stateUtils }) => {
 
 			console.log({ awaited });
 		} catch (e) {
-			console.log(ERROR, { e });
+			console.log({ e });
 		}
 	};
 
@@ -129,7 +133,7 @@ const DepositRES = ({ stateUtils }) => {
 					playfabId={playfabId}
 					depositMutationLoading={depositMutation.isLoading}
 					depositDisabled={depositDisabled}
-					onIncreaseAllowance={handleIncreaseAllowance}
+					handleIncreaseAllowance={handleIncreaseAllowance}
 				/>
 			) : (
 				<SuccessMessage depositAmount={depositAmount} tokenName={tokenName} />
