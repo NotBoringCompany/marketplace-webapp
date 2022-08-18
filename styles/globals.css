@@ -61,6 +61,10 @@ button p {
 	margin: 0;
 }
 
+p {
+	margin: 0;
+}
+
 .btn-outline-secondary:hover {
 	color: #fff !important;
 }

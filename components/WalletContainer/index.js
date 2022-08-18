@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useQuery } from "react-query";
 import { useMoralis } from "react-moralis";
+import AppContext from "context/AppContext";
 import styled from "styled-components";
 import RealmTokens from "./RealmTokens";
 import DepositTokens from "./DepositTokens";
@@ -17,6 +18,8 @@ const WalletContainer = () => {
 	const [tokenContainer, setTokenContainer] = useState("");
 	const [tokenName, setTokenName] = useState("");
 	const [resAllowance, setResAllowance] = useState(0);
+
+	const { statesSwitchModal } = useContext(AppContext);
 
 	const getRESAllowance = useQuery(
 		"resAllowance",
@@ -87,8 +90,6 @@ const WalletContainer = () => {
 		}
 	);
 
-	console.log({ xResOwned });
-
 	return (
 		<Wrapper>
 			<WebAppTier loading={getWebAppTier.isLoading} tier={webAppTier} />
@@ -104,6 +105,8 @@ const WalletContainer = () => {
 				setShowClaimContainer={setShowClaimContainer}
 				tokenName={tokenName}
 				setTokenName={setTokenName}
+				statesSwitchModal={statesSwitchModal}
+				resAllowance={resAllowance}
 			/>
 
 			{tokenContainer === "Deposit" && showDepositContainer && (

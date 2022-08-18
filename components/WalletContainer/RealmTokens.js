@@ -21,6 +21,8 @@ const RealmTokens = ({
 		setShowDepositContainer,
 		// tokenName,
 		setTokenName,
+		statesSwitchModal,
+		resAllowance,
 	} = props;
 
 	return (
@@ -44,10 +46,17 @@ const RealmTokens = ({
 
 						<MyButton
 							onClick={() => {
-								setTokenContainer("Deposit");
-								setShowDepositContainer(!showDepositContainer);
-								setShowClaimContainer(false);
-								setTokenName("RES");
+								// setTokenContainer("Deposit");
+								// setShowDepositContainer(!showDepositContainer);
+								// setShowClaimContainer(false);
+								// setTokenName("RES");
+								statesSwitchModal.setter({
+									content: "depositRES",
+									availableAmount: resOwned,
+									tokenName: "RES",
+									resAllowance,
+									show: true,
+								});
 							}}
 							text="Deposit"
 							pill
