@@ -1,76 +1,88 @@
-import {useState, React} from "react";
+import { useState, React } from "react";
 import styled from "styled-components";
 import { mediaBreakpoint } from "utils/breakpoints";
 import { TextSecondary, TextNormal } from "components/Typography/Texts";
 import { StatsText } from "components/NBMonLargeCard/TabItemComponents";
 import Link from "next/link";
-import { HeadingSuperXXS } from "components/typography/Headings";
+import { HeadingSuperXXS } from "components/Typography/Headings";
 
 import InputGroup from "react-bootstrap/InputGroup";
 import { useMoralis } from "react-moralis";
 
-const ClaimTokens = ({
-    tokenName,
-    availableAmount
-}) => {
-    const { user, isInitializing, isLoading: moralisLoading } = useMoralis();
+const ClaimTokens = ({ tokenName, availableAmount }) => {
+	const { user, isInitializing, isLoading: moralisLoading } = useMoralis();
 
-    const [claimAmount, setClaimAmount] = useState(0);
-    const [result, setResult] = useState('');
+	const [claimAmount, setClaimAmount] = useState(0);
+	const [result, setResult] = useState("");
 
-    const handleClaim = async (e) => {
-        e.preventDefault();
-        try {
-            let getPlayfabId = await fetch(`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/account/getPlayfabId/${(user.attributes.ethAddress).toLowerCase()}`, {
-				method: "GET"
-			});
+	const handleClaim = async (e) => {
+		e.preventDefault();
+		try {
+			let getPlayfabId = await fetch(
+				`${
+					process.env.NEXT_PUBLIC_NEW_REST_API_URL
+				}/account/getPlayfabId/${user.attributes.ethAddress.toLowerCase()}`,
+				{
+					method: "GET",
+				}
+			);
 
-            let playfabId = await getPlayfabId.json();
+			let playfabId = await getPlayfabId.json();
 
 			console.log(playfabId);
 			console.log(typeof playfabId);
 
-			let claim = await fetch(`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/currencies/claim${tokenName}`, {
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json'
-				  },
-				body: JSON.stringify({
-					amount: claimAmount,
-					playfabId: playfabId
-				}),
-			});
+			let claim = await fetch(
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/currencies/claim${tokenName}`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						amount: claimAmount,
+						playfabId: playfabId,
+					}),
+				}
+			);
 
-            console.log(claimAmount);
+			console.log(claimAmount);
 
-            let claimResponse = await claim.json();
+			let claimResponse = await claim.json();
 
-            console.log(claimResponse);
+			console.log(claimResponse);
 
-            if (claim.status === 200) {
+			if (claim.status === 200) {
 				setClaimAmount(0);
-				setResult(`You have successfully claimed ${claimAmount} x${tokenName} for ${claimAmount} ${tokenName}`);
+				setResult(
+					`You have successfully claimed ${claimAmount} x${tokenName} for ${claimAmount} ${tokenName}`
+				);
 				setTimeout(() => {
 					window.location.reload();
 				}, 2000);
 			} else {
 				setResult("An error has occured.");
 			}
-        } catch (err) {
-            console.error(err);
-        }
-    }
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
-    return (
-        <div className="px-3 mt-5">
-            <TitleWithLinkAlt title={"Claim " + tokenName}/>
-            <CardOverview className="mt-4">
-                <ParText className="mt-3">You are about to claim {tokenName} in exchange for {tokenName.slice(1)}.</ParText>
-                <AvailableText className="mt-4">Available: {availableAmount}</AvailableText>
-                <DepositFieldsText className="mt-4">Amount</DepositFieldsText>
-                <StyledInputGroup className="mt-4 mb-3">
+	return (
+		<div className="px-3 mt-5">
+			<TitleWithLinkAlt title={"Claim " + tokenName} />
+			<CardOverview className="mt-4">
+				<ParText className="mt-3">
+					You are about to claim {tokenName} in exchange for{" "}
+					{tokenName.slice(1)}.
+				</ParText>
+				<AvailableText className="mt-4">
+					Available: {availableAmount}
+				</AvailableText>
+				<DepositFieldsText className="mt-4">Amount</DepositFieldsText>
+				<StyledInputGroup className="mt-4 mb-3">
 					<form>
-						<input 
+						<input
 							type="number"
 							value={claimAmount}
 							placeholder={`x${tokenName}`}
@@ -78,11 +90,11 @@ const ClaimTokens = ({
 						/>
 						<button onClick={handleClaim}>Claim</button>
 					</form>
-				</StyledInputGroup>   
-            </CardOverview>
-        </div>
-    );
-}
+				</StyledInputGroup>
+			</CardOverview>
+		</div>
+	);
+};
 
 const TitleWithLinkAlt = ({ title, textLink, href = "#" }) => {
 	return (
@@ -126,12 +138,11 @@ const AvailableText = styled(TextNormal)`
 	font-size: 12px;
 	line-height: 18px;
 	color: #fff;
-
 `;
 
 const Inner = styled.div`
-    alignItems: center;
-    justifyContent: center;
+	alignitems: center;
+	justifycontent: center;
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: flex-end;
@@ -169,14 +180,14 @@ const ParText = styled(TextNormal)`
 `;
 
 const ClaimContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 0 24px;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: 0 24px;
 
-    @media ${mediaBreakpoint.down.lg} {
-        padding: 0;
-    }
+	@media ${mediaBreakpoint.down.lg} {
+		padding: 0;
+	}
 `;
 
 const ExampleText = styled(StatsText)`

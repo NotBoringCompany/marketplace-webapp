@@ -48,7 +48,7 @@ const RealmTokens = ({
 						<MyButton
 							onClick={() => {
 								statesSwitchModal.setter({
-									content: "depositRES",
+									content: "deposit",
 									availableAmount: resOwned,
 									tokenName: "RES",
 									resAllowance,

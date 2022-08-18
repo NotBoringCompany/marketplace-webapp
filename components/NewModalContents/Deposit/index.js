@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { useMutation } from "react-query";
-import { useMoralis } from "react-moralis";
+import { useWeb3Contract } from "react-moralis";
 import Link from "next/link";
 import styled from "styled-components";
 import FormControl from "react-bootstrap/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
 import { TextSecondary, TextNormal } from "components/Typography/Texts";
-import { HeadingSuperXXS } from "components/typography/Headings";
+import { HeadingSuperXXS } from "components/Typography/Headings";
 import MyButton from "components/Buttons/Button";
 import ModalButton from "components/Buttons/ModalButton";
+import RealmShardsABI from "abis/RealmShards.json";
 
 const DepositRES = ({ stateUtils }) => {
-	const { user } = useMoralis();
+	console.log({ RealmShardsABI });
 
 	const { getter } = stateUtils;
 
@@ -31,6 +32,33 @@ const DepositRES = ({ stateUtils }) => {
 	const resAllowanceAmountTooLow = resAllowanceInt < depositAmount;
 	const availableAmountTooLow = availableAmount < depositAmount;
 	const depositAmountTooLow = depositAmount <= 0;
+
+	const increaseAllowance = useWeb3Contract({
+		contractAddress: process.env.NEXT_PUBLIC_REALM_SAHRDS_CONTRACT,
+		functionName: "increaseAllowance",
+		abi: RealmShardsABI,
+
+		params: {
+			spender: process.env.NEXT_PUBLIC_REALM_SAHRDS_CONTRACT,
+			addedValue: depositAmount > 0 ? depositAmount : depositAmount,
+		},
+	});
+
+	const handleIncreaseAllowance = async () => {
+		try {
+			const increasedAllowance = await increaseAllowance.runContractFunction({
+				throwOnError: true,
+			});
+
+			console.log({ increasedAllowance });
+
+			const awaited = await increasedAllowance.wait();
+
+			console.log({ awaited });
+		} catch (e) {
+			console.log(ERROR, { e });
+		}
+	};
 
 	const depositMutation = useMutation(
 		() =>
@@ -101,6 +129,7 @@ const DepositRES = ({ stateUtils }) => {
 					playfabId={playfabId}
 					depositMutationLoading={depositMutation.isLoading}
 					depositDisabled={depositDisabled}
+					onIncreaseAllowance={handleIncreaseAllowance}
 				/>
 			) : (
 				<SuccessMessage depositAmount={depositAmount} tokenName={tokenName} />
@@ -135,6 +164,7 @@ const MainContent = ({
 	onDepositAmountChanged,
 	handleDeposit,
 	playfabId,
+	handleIncreaseAllowance,
 	depositMutationLoading = false,
 	depositDisabled = false,
 }) => {
@@ -150,7 +180,7 @@ const MainContent = ({
 					</WarningContainer>
 
 					<MyButton
-						onClick={() => {}}
+						onClick={handleIncreaseAllowance}
 						thinText
 						className="mt-0 mb-3 w-100 py-2"
 						text="Increase Allowance"

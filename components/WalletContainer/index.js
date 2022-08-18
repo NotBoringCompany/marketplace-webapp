@@ -4,7 +4,6 @@ import { useMoralis } from "react-moralis";
 import AppContext from "context/AppContext";
 import styled from "styled-components";
 import RealmTokens from "./RealmTokens";
-import DepositTokens from "./DepositTokens";
 import ClaimTokens from "./ClaimTokens";
 import WebAppTier from "./WebAppTier";
 
@@ -135,14 +134,6 @@ const WalletContainer = () => {
 				resAllowance={resAllowance}
 				playfabId={playfabId}
 			/>
-
-			{tokenContainer === "Deposit" && showDepositContainer && (
-				<DepositTokens
-					tokenName={tokenName}
-					availableAmount={tokenName === "RES" ? resOwned : ""}
-					resAllowance={resAllowance}
-				/>
-			)}
 
 			{tokenContainer === "Claim" && showClaimContainer && (
 				<ClaimTokens

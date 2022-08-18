@@ -21,7 +21,7 @@ import SellNBMon from "components/NewModalContents/SellNBMon";
 import CancelListing from "components/NewModalContents/SellNBMon/CancelListing";
 import BuyNBMon from "components/NewModalContents/BuyNBMon";
 import ConfirmBuyNBMon from "components/NewModalContents/BuyNBMon/ConfirmBuyNBMon";
-import DepositRES from "components/NewModalContents/DepositRES";
+import Deposit from "components/NewModalContents/Deposit";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -81,7 +81,7 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 			"emailSent",
 			"newPasswordSet",
 			"resetPassword",
-			"depositRES",
+			"deposit",
 		].includes(content);
 	};
 
@@ -93,12 +93,12 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 			centered
 			show={show}
 			bigger={
-				newPasswordModals.includes(content) || content === "depositRES" ? 1 : 0
+				newPasswordModals.includes(content) || content === "deposit" ? 1 : 0
 			}
 			nominheight={
 				newPasswordModals.includes(content) ||
 				content === "cancelListNBmon" ||
-				content === "depositRES"
+				content === "deposit"
 					? 1
 					: 0
 			}
@@ -114,7 +114,7 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					content === "cancelListNBmon" ||
 					content === "buyNBmon" ||
 					content === "confirmBuyNBmon" ||
-					content === "depositRES"
+					content === "deposit"
 						? 1
 						: 0
 				}
@@ -151,7 +151,7 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					<ConfirmBuyNBMon switchId="confirmBuyNBmon" stateUtils={stateUtils} />
 
 					{/*Wallet page modals*/}
-					<DepositRES switchId="depositRES" stateUtils={stateUtils} />
+					<Deposit switchId="deposit" stateUtils={stateUtils} />
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>
