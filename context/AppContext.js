@@ -77,8 +77,6 @@ export const AppProvider = ({ children }) => {
 				if (accounts.length === 0) window && window.location.reload();
 			});
 		if (user && isAuthenticated) {
-			// addUserDataMutation.mutate({objId});
-
 			addUserDataMutation.mutate({ objId: user.id, playfabId: "" });
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

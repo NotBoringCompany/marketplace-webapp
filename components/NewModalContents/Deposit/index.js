@@ -32,7 +32,7 @@ const DepositRES = ({ stateUtils }) => {
 		playfabId,
 	} = getter;
 
-	const resAllowanceInt = parseInt(resAllowance.hex, 16);
+	const resAllowanceInt = parseInt(resAllowance.hex, 16) * Math.pow(10, -18);
 
 	const [depositAmount, setDepositAmount] = useState(1);
 	const { user, Moralis } = useMoralis();
@@ -68,20 +68,23 @@ const DepositRES = ({ stateUtils }) => {
 		try {
 			statesSwitchModal.setter({
 				show: true,
-				content: "increaseAllowance",
+				content: "metamaskConfirmation",
 			});
 
 			const increasedAllowance = await increaseAllowance.runContractFunction({
 				throwOnError: true,
 			});
 
-			console.log({ increasedAllowance });
+			statesSwitchModal.setter({
+				show: true,
+				content: "increaseAllowanceLoading",
+			});
 
 			await increasedAllowance.wait();
 
 			statesSwitchModal.setter({
 				show: true,
-				content: "increaseAllowance",
+				content: "increaseAllowanceSuccess",
 			});
 
 			reload();
