@@ -208,13 +208,13 @@ const ListingBox = ({
 
 							<div className="d-flex align-items-center mt-3">
 								<Image
-									alt="Eth Logo"
-									src="/images/Ethereum.svg"
-									width={28}
-									height={28}
+									alt="LINK"
+									src="/images/link-logo.png"
+									width={24}
+									height={24}
 								/>
 
-								<div className="d-flex flex-column ms-1  ">
+								<div className="d-flex flex-column ms-2">
 									<PriceText className="text-start">
 										{bidding ? currentHighestBid : price}{" "}
 										{process.env.NEXT_PUBLIC_CURRENCY_NAME}
