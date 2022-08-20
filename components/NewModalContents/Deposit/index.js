@@ -6,15 +6,22 @@ import Link from "next/link";
 import styled from "styled-components";
 import FormControl from "react-bootstrap/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
-import { TextSecondary, TextNormal } from "components/Typography/Texts";
+import {
+	TextSecondary,
+	TextNormal,
+	TextPrimary,
+} from "components/Typography/Texts";
 import { HeadingSuperXXS } from "components/Typography/Headings";
 import MyButton from "components/Buttons/Button";
 import ModalButton from "components/Buttons/ModalButton";
 import RealmShardsABI from "abis/RealmShards.json";
 
-const DepositRES = ({ stateUtils }) => {
-	console.log({ RealmShardsABI });
+const reload = () =>
+	setTimeout(() => {
+		window.location.reload();
+	}, 5000);
 
+const DepositRES = ({ stateUtils }) => {
 	const { getter } = stateUtils;
 
 	const {
@@ -27,7 +34,7 @@ const DepositRES = ({ stateUtils }) => {
 
 	const resAllowanceInt = parseInt(resAllowance.hex, 16);
 
-	const [depositAmount, setDepositAmount] = useState(0);
+	const [depositAmount, setDepositAmount] = useState(1);
 	const { user, Moralis } = useMoralis();
 	const [success, setSuccess] = useState(false);
 
@@ -59,17 +66,51 @@ const DepositRES = ({ stateUtils }) => {
 
 	const handleIncreaseAllowance = async () => {
 		try {
+			statesSwitchModal.setter({
+				show: true,
+				content: "increaseAllowance",
+			});
+
 			const increasedAllowance = await increaseAllowance.runContractFunction({
 				throwOnError: true,
 			});
 
 			console.log({ increasedAllowance });
 
-			const awaited = await increasedAllowance.wait();
+			await increasedAllowance.wait();
 
-			console.log({ awaited });
+			statesSwitchModal.setter({
+				show: true,
+				content: "increaseAllowance",
+			});
+
+			reload();
 		} catch (e) {
-			console.log({ e });
+			statesSwitchModal.setter({
+				content: "txError",
+				show: false,
+			});
+			if (e.code === "INSUFFICIENT_FUNDS") {
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Transaction Error",
+						text: `You have insufficient funds to \n make this transaction`,
+					},
+				});
+				// code 4001 is user cancellation
+			} else if (!e.code || (e.code && e.code !== 4001)) {
+				console.log({ e });
+				statesSwitchModal.setter({
+					show: true,
+					content: "txError",
+					detail: {
+						title: "Increase Allowance Error",
+						text: "We are sorry, an unexpected \n error occured. \n \n Please contact us to let us \n know the details.",
+					},
+				});
+			}
 		}
 	};
 
@@ -91,9 +132,7 @@ const DepositRES = ({ stateUtils }) => {
 				const res = await response.json();
 				if (response.ok) {
 					setSuccess(true);
-					setTimeout(() => {
-						window.location.reload();
-					}, 5000);
+					reload();
 				} else {
 					//Due to using `fetch`, the error still falls within onSuccess.
 					//To "fix" this behaviour, use axios.
@@ -169,7 +208,7 @@ const DepositRES = ({ stateUtils }) => {
 
 	return (
 		<OuterContainer>
-			<TitleWithLink title={"Deposit RES"} className="mb-3" />
+			<TitleWithLink title={"Deposit RES"} className="mb-2" />
 
 			{!success ? (
 				<MainContent
@@ -251,7 +290,7 @@ const MainContent = ({
 				</div>
 			)}
 
-			<ParText className="mt-3">
+			<ParText className="mt-1">
 				You are about to deposit {tokenName} in exchange for x{tokenName}.
 			</ParText>
 
@@ -307,7 +346,7 @@ const MainContent = ({
 const TitleWithLink = ({ title, textLink, href = "#", className = "" }) => {
 	return (
 		<Inner className={className}>
-			<Title as="h2">{title}</Title>
+			<TextPrimary as="h2">{title}</TextPrimary>
 			{textLink && (
 				<LinkWrap className="ms-2">
 					<Link href={href}>

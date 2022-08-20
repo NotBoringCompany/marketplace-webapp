@@ -22,6 +22,7 @@ import CancelListing from "components/NewModalContents/SellNBMon/CancelListing";
 import BuyNBMon from "components/NewModalContents/BuyNBMon";
 import ConfirmBuyNBMon from "components/NewModalContents/BuyNBMon/ConfirmBuyNBMon";
 import Deposit from "components/NewModalContents/Deposit";
+import IncreaseAllowanceSuccess from "components/NewModalContents/Deposit/IncreaseAllowanceSuccess";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -152,6 +153,10 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 
 					{/*Wallet page modals*/}
 					<Deposit switchId="deposit" stateUtils={stateUtils} />
+					<IncreaseAllowanceSuccess
+						switchId="increaseAllowance"
+						stateUtils={stateUtils}
+					/>
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>
