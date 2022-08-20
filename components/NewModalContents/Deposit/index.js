@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Web3 from "web3";
 import { useMutation } from "react-query";
-import { useWeb3Contract } from "react-moralis";
+import { useWeb3Contract, useWeb3Transfer, useMoralis } from "react-moralis";
 import Link from "next/link";
 import styled from "styled-components";
 import FormControl from "react-bootstrap/FormControl";
@@ -28,11 +28,20 @@ const DepositRES = ({ stateUtils }) => {
 	const resAllowanceInt = parseInt(resAllowance.hex, 16);
 
 	const [depositAmount, setDepositAmount] = useState(0);
+	const { user, Moralis } = useMoralis();
 	const [success, setSuccess] = useState(false);
+
+	const [gasFeeTrxLoading, setGasFeeTrxLoading] = useState(false);
 
 	const resAllowanceAmountTooLow = resAllowanceInt < depositAmount;
 	const availableAmountTooLow = availableAmount < depositAmount;
 	const depositAmountTooLow = depositAmount <= 0;
+
+	const trfDepositGasFee = useWeb3Transfer({
+		amount: Moralis.Units.ETH(process.env.NEXT_PUBLIC_RES_GAS_FEE),
+		receiver: process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS,
+		type: "native",
+	});
 
 	const increaseAllowance = useWeb3Contract({
 		contractAddress: process.env.NEXT_PUBLIC_REALM_SHARDS_CONTRACT,
@@ -44,7 +53,7 @@ const DepositRES = ({ stateUtils }) => {
 			addedValue:
 				depositAmount > 0
 					? Web3.utils.toWei(depositAmount.toString(), "ether")
-					: Web3.utils.toWei("100", "ether"),
+					: Web3.utils.toWei("100", "ether"), //safeguard -> just in-case
 		},
 	});
 
@@ -65,7 +74,7 @@ const DepositRES = ({ stateUtils }) => {
 	};
 
 	const depositMutation = useMutation(
-		() =>
+		(data) =>
 			fetch(
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/currencies/deposit${tokenName}`,
 				{
@@ -73,10 +82,7 @@ const DepositRES = ({ stateUtils }) => {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify({
-						amount: depositAmount,
-						playfabId,
-					}),
+					body: JSON.stringify(data),
 				}
 			),
 		{
@@ -102,6 +108,7 @@ const DepositRES = ({ stateUtils }) => {
 					});
 				}
 			},
+
 			retry: 0,
 		}
 	);
@@ -111,10 +118,53 @@ const DepositRES = ({ stateUtils }) => {
 		availableAmountTooLow ||
 		depositAmountTooLow ||
 		depositMutation.isLoading ||
+		gasFeeTrxLoading ||
 		!playfabId;
 
-	const handleDeposit = () => {
-		if (!depositDisabled) depositMutation.mutate();
+	const handleDeposit = async () => {
+		if (!depositDisabled) {
+			setGasFeeTrxLoading(true);
+			await trfDepositGasFee.fetch({
+				onSuccess: async (tx) => {
+					const txRes = await tx.wait();
+					depositMutation.mutate({
+						purchaserAddress: user.attributes.ethAddress,
+						amount: depositAmount,
+						playfabId,
+						txHash: txRes.transactionHash,
+					});
+					setGasFeeTrxLoading(false);
+				},
+				onError: (e) => {
+					statesSwitchModal.setter({
+						content: "txError",
+						show: false,
+					});
+					if (e.code === "INSUFFICIENT_FUNDS") {
+						statesSwitchModal.setter({
+							show: true,
+							content: "txError",
+							detail: {
+								title: "Transaction Error",
+								text: `You have insufficient funds to \n make this transaction`,
+							},
+						});
+						// code 4001 is user cancellation
+					} else if (!e.code || (e.code && e.code !== 4001)) {
+						console.log({ e });
+						statesSwitchModal.setter({
+							show: true,
+							content: "txError",
+							detail: {
+								title: "Deposit Gas Fee Error",
+								text: "We are sorry, an unexpected \n error occured. \n \n Please contact us to let us \n know the details.",
+							},
+						});
+					}
+					setGasFeeTrxLoading(false);
+				},
+			});
+		}
 	};
 
 	return (
@@ -131,31 +181,15 @@ const DepositRES = ({ stateUtils }) => {
 					onDepositAmountChanged={setDepositAmount}
 					handleDeposit={handleDeposit}
 					playfabId={playfabId}
-					depositMutationLoading={depositMutation.isLoading}
-					depositDisabled={depositDisabled}
 					handleIncreaseAllowance={handleIncreaseAllowance}
+					depositMutationLoading={depositMutation.isLoading}
+					trfDepositGasFeeLoading={gasFeeTrxLoading}
+					depositDisabled={depositDisabled}
 				/>
 			) : (
 				<SuccessMessage depositAmount={depositAmount} tokenName={tokenName} />
 			)}
 		</OuterContainer>
-	);
-};
-
-const TitleWithLink = ({ title, textLink, href = "#", className = "" }) => {
-	return (
-		<Inner className={className}>
-			<Title as="h2">{title}</Title>
-			{textLink && (
-				<LinkWrap className="ms-2">
-					<Link href={href}>
-						<a>
-							<TextLink>{textLink}</TextLink>
-						</a>
-					</Link>
-				</LinkWrap>
-			)}
-		</Inner>
 	);
 };
 
@@ -169,9 +203,18 @@ const MainContent = ({
 	handleDeposit,
 	playfabId,
 	handleIncreaseAllowance,
+	trfDepositGasFeeLoading = false,
 	depositMutationLoading = false,
 	depositDisabled = false,
 }) => {
+	const isLoading = trfDepositGasFeeLoading || depositMutationLoading;
+	let buttonText = isLoading
+		? `${
+				trfDepositGasFeeLoading
+					? `Transferring gas fee...`
+					: `Processing deposit...`
+		  }`
+		: `Deposit`;
 	return (
 		<>
 			{resAllowanceAmountTooLow && (
@@ -254,10 +297,27 @@ const MainContent = ({
 				thinText
 				disabled={depositDisabled}
 				className="mt-4 w-100 py-2"
-				text={depositMutationLoading ? `Processing...` : `Deposit`}
+				text={buttonText}
 				pill
 			/>
 		</>
+	);
+};
+
+const TitleWithLink = ({ title, textLink, href = "#", className = "" }) => {
+	return (
+		<Inner className={className}>
+			<Title as="h2">{title}</Title>
+			{textLink && (
+				<LinkWrap className="ms-2">
+					<Link href={href}>
+						<a>
+							<TextLink>{textLink}</TextLink>
+						</a>
+					</Link>
+				</LinkWrap>
+			)}
+		</Inner>
 	);
 };
 

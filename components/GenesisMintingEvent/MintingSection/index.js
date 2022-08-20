@@ -327,8 +327,6 @@ const MintingSection = () => {
 						throw e;
 					});
 
-					console.log("RRRR", r);
-
 					const mintData = {
 						purchaserAddress: user.attributes.ethAddress,
 						txHash: r.transactionHash,
