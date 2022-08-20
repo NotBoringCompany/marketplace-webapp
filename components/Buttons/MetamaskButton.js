@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
+import { useMutation } from "react-query";
 import { useMoralis, useChain } from "react-moralis";
 import AppContext from "context/AppContext";
 
@@ -16,8 +17,10 @@ const MetamaskButton = ({
 		authError,
 		authenticate,
 		isAuthenticating,
+		isAuthenticated,
 		web3EnableError,
 		enableWeb3,
+		user,
 	} = useMoralis();
 
 	const { chainId } = useChain();
@@ -48,6 +51,16 @@ const MetamaskButton = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [chainId, triedAuth]);
 
+	useEffect(() => {
+		console.log("AAAAA");
+		console.log({ isAuthenticated });
+		if (isAuthenticated) {
+			//
+			console.log({ user });
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isAuthenticated]);
+
 	const authCrypto = async () => {
 		if (!chainId && !isWeb3Enabled && typeof window.ethereum === "undefined") {
 			setShowModalNoMM(true);
@@ -65,7 +78,14 @@ const MetamaskButton = ({
 			return;
 		}
 
-		await authenticate({ provider: "metamask" });
+		await authenticate({
+			provider: "metamask",
+			onSuccess: () => {
+				setTimeout(() => {
+					console.log({ user }, "AAAA");
+				}, 3000);
+			},
+		});
 	};
 	return (
 		<MyButton

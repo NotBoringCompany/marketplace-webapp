@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { useMoralis, useChain } from "react-moralis";
+import { useMutation } from "react-query";
 import { useRouter } from "next/router";
 import SetupModal from "components/Modal/SetupModal";
 import WrongNetwork from "components/Modal/WrongNetwork";
@@ -42,6 +43,20 @@ export const AppProvider = ({ children }) => {
 		setter: setJustHatchedNBMon,
 	};
 
+	const addUserDataMutation = useMutation(
+		(data) =>
+			fetch(`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/account/addUserData`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			}),
+		{
+			retry: 0,
+		}
+	);
+
 	useEffect(() => {
 		if (window.ethereum)
 			window.ethereum.on("accountsChanged", function (accounts) {
@@ -61,12 +76,19 @@ export const AppProvider = ({ children }) => {
 				}
 				if (accounts.length === 0) window && window.location.reload();
 			});
+		if (user && isAuthenticated) {
+			// addUserDataMutation.mutate({objId});
+
+			addUserDataMutation.mutate({ objId: user.id, playfabId: "" });
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isAuthenticated, user]);
 
 	useEffect(() => {
 		setTimeout(() => {
 			enableWeb3({ provider: "metamask" });
 		}, 100);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isWeb3Enabled, isAuthenticated]);
 
 	useEffect(() => {

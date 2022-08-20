@@ -14,7 +14,7 @@ const StyledContainer = styled.div`
 `;
 const mustBeUnauthed = (Component) => {
 	const Unauthed = (props) => {
-		const { isAuthenticated, isInitializing } = useMoralis();
+		const { isAuthenticated, isInitializing, user } = useMoralis();
 
 		const router = useRouter();
 		let description = "";
@@ -40,6 +40,7 @@ const mustBeUnauthed = (Component) => {
 		if (!isInitializing) {
 			// If user is not logged in, return login component
 			if (isAuthenticated) {
+				console.log({ user }, "FFFFF");
 				router.replace("/nbmons");
 			} else {
 				return <Component {...props} />;
