@@ -87,7 +87,9 @@ const Bidding = ({
 					aria-label="1"
 					type="number"
 				/>
-				<InputGroup.Text id="basic-addon2">WETH</InputGroup.Text>
+				<InputGroup.Text id="basic-addon2">
+					{process.env.NEXT_PUBLIC_CURRENCY_NAME}
+				</InputGroup.Text>
 			</StyledInputGroup>
 
 			<OptionText className="mb-2 mt-3">Reserved Amount (Optional)</OptionText>
@@ -101,7 +103,9 @@ const Bidding = ({
 					aria-label="1"
 					type="number"
 				/>
-				<InputGroup.Text id="basic-addon2">WETH</InputGroup.Text>
+				<InputGroup.Text id="basic-addon2">
+					{process.env.NEXT_PUBLIC_CURRENCY_NAME}
+				</InputGroup.Text>
 			</StyledInputGroup>
 
 			<div className="d-flex flex-md-row flex-column">

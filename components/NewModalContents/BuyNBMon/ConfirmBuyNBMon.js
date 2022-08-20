@@ -1,5 +1,6 @@
 import React from "react";
 import { TextPrimary, TextSecondary } from "components/Typography/Texts";
+import Image from "next/image";
 import styled from "styled-components";
 import MyButton from "components/Buttons/Button";
 import { mediaBreakpoint } from "utils/breakpoints";
@@ -89,21 +90,32 @@ const ConfirmBuyNBMon = ({ stateUtils }) => {
 			<div className="d-flex flex-column w-100">
 				<div className="d-flex justify-content-between mb-3">
 					<Text>Price</Text>
-					<StyledText>{weth} WETH</StyledText>
+					<StyledText>
+						{weth} {process.env.NEXT_PUBLIC_CURRENCY_NAME}
+					</StyledText>
 				</div>
 
 				<div className="d-flex justify-content-between">
 					<Text>Pay With</Text>
 					<div className="d-flex">
-						<WrappedETHLogoSVG className="me-2 overflow-visible" />
-						<StyledText>WETH</StyledText>
+						<Image
+							width={19}
+							height={19}
+							alt="LOGO"
+							src="/images/link-logo.png"
+						/>
+						<StyledText className="ms-2">
+							{process.env.NEXT_PUBLIC_CURRENCY_NAME}
+						</StyledText>
 					</div>
 				</div>
 
 				<InnerContainer className="w-100 mt-3 d-flex justify-content-between">
 					<Text>Total</Text>
 					<div className="d-flex flex-column">
-						<StyledText className="mb-2 text-end">{weth} WETH</StyledText>
+						<StyledText className="mb-2 text-end">
+							{weth} {process.env.NEXT_PUBLIC_CURRENCY_NAME}
+						</StyledText>
 						<USDText className="text-end">~${usd}</USDText>
 					</div>
 				</InnerContainer>

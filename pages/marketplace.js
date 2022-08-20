@@ -329,11 +329,13 @@ const Marketplace = () => {
 							<FilterInfo className="mx-lg-0 mx-auto align-items-center d-flex mt-lg-0 mt-4">
 								<Image
 									alt="Eth Logo"
-									src="/images/Ethereum.svg"
+									src="/images/link-logo.png"
 									width={21}
 									height={21}
 								/>
-								<TextMore className="ms-1">ETH</TextMore>
+								<TextMore className="ms-2">
+									{process.env.NEXT_PUBLIC_CURRENCY_NAME}
+								</TextMore>
 							</FilterInfo>
 						</div>
 					</FilterWrap>

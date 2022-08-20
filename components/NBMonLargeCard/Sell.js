@@ -375,8 +375,6 @@ const Sell = ({
 
 			const sig = await web3.eth.personal.sign(hash, userAddress);
 
-			console.log(sig);
-
 			return sig;
 		} catch (e) {
 			handleMetaMaskError(e);
@@ -385,31 +383,25 @@ const Sell = ({
 
 	const confirmSetApproval = async () => {
 		try {
+			console.log("ASd");
 			const setApproval = await setApprovalForAll.runContractFunction({
 				throwOnError: true,
 			});
 
 			await setApproval.wait();
+
+			await handleGenerateListingSignature();
 		} catch (e) {
 			handleMetaMaskError(e);
 		}
 	};
 
 	const handleClick = async () => {
-		console.log(userAddress, "userAddress");
-		console.log("listedPricesWeth", listedPrices.weth.toString());
-		console.log("listingTypeEnum", LISTING_TYPE_ENUM[activeKey]);
-		console.log("nbMon.nbmonId", nbMon.nbmonId);
-		console.log("reservedAmount", reservedAmount);
-		console.log("txSalt", txSalt);
-
 		setListedPrices({
 			...listedPrices,
 			usd: exchangeRateCalculator(usdToEth, listedPrices.weth),
 			weth: listedPrices.weth,
 		});
-
-		console.log(exchangeRateCalculator(usdToEth, listedPrices.weth));
 
 		statesSwitchModal.setter({
 			show: true,
@@ -420,8 +412,14 @@ const Sell = ({
 
 		const isApproved = await isApprovedForAll(userAddress, Moralis.provider);
 
-		if (!isApproved) await confirmSetApproval();
+		if (!isApproved) {
+			await confirmSetApproval();
+		} else {
+			await handleGenerateListingSignature();
+		}
+	};
 
+	const handleGenerateListingSignature = async () => {
 		statesSwitchModal.setter({
 			show: true,
 			content: "listNBmon",

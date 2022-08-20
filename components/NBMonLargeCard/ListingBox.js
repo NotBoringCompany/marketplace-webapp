@@ -153,14 +153,14 @@ const OfferDetail = ({
 				<TextComponent
 					className={`mt-md-0 mt-3 ${!endPrice && `ms-md-auto`}`}
 					text="Start price"
-					value={`${startPrice} WETH`}
+					value={`${startPrice} ${process.env.NEXT_PUBLIC_CURRENCY_NAME}`}
 				/>
 			)}
 			{endPrice && (
 				<TextComponent
 					className="mt-md-0 mt-3 "
 					text="End price"
-					value={`${endPrice} WETH`}
+					value={`${endPrice} ${process.env.NEXT_PUBLIC_CURRENCY_NAME}`}
 				/>
 			)}
 		</OfferDetailContainer>
@@ -216,7 +216,8 @@ const ListingBox = ({
 
 								<div className="d-flex flex-column ms-1  ">
 									<PriceText className="text-start">
-										{bidding ? currentHighestBid : price} WETH
+										{bidding ? currentHighestBid : price}{" "}
+										{process.env.NEXT_PUBLIC_CURRENCY_NAME}
 									</PriceText>
 									<LabelCurrentPrice className="text-start mt-1">
 										~${usdValue}
@@ -245,7 +246,9 @@ const ListingBox = ({
 											type="number"
 											aria-describedby="basic-addon2"
 										/>
-										<InputGroup.Text id="basic-addon2">WETH</InputGroup.Text>
+										<InputGroup.Text id="basic-addon2">
+											{process.env.NEXT_PUBLIC_CURRENCY_NAME}
+										</InputGroup.Text>
 									</StyledInputGroup>
 								</div>
 							)}

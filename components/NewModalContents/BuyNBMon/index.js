@@ -100,13 +100,13 @@ const ApprovalStage = ({ completed = false }) => (
 			</SubTitle>
 
 			{!completed && (
-				<SubTitle className="text-gray mt-2">
-					<b>Waiting for confirmation...</b>{" "}
-					<i>
-						If you{"'"}ve confirmed, please allow several moments to wait until
-						the transaction has been resolved in the blockchain.
+				<SubTitle className="text-gray mt-1">
+					<b>Waiting for confirmation...</b> <br />
+					<br />
+					<i className="small">
+						If you{"'"}ve confirmed on Metamask, please allow a few moments
+						until the transaction has been resolved in the blockchain.
 					</i>{" "}
-					😊
 				</SubTitle>
 			)}
 		</div>
@@ -129,11 +129,13 @@ const ListingStage = ({ price = 0.5, status = 0 }) => {
 
 				<div className="ms-2 d-flex flex-column">
 					<Title className={`text-${colorArr[status]}`}>
-						Confirm {price} WETH Purchase {status === 1 && `• Pending`}
+						Confirm {price} {process.env.NEXT_PUBLIC_CURRENCY_NAME} Purchase{" "}
+						{status === 1 && `• Pending`}
 						{status === 2 && `• Confirmed`}
 					</Title>
 					<SubTitle className="text-gray mt-2">
-						You are purchasing an NBMon for {price} WETH.
+						You are purchasing an NBMon for {price}{" "}
+						{process.env.NEXT_PUBLIC_CURRENCY_NAME}.
 					</SubTitle>
 
 					{status === 1 && (

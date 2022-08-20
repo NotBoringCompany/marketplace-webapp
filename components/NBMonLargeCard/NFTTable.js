@@ -203,7 +203,9 @@ const OffersTable = ({ offers, userAddress }) => (
 				{[...offers].reverse().map((a) => (
 					<tr key={a.id}>
 						<td className="d-flex flex-column">
-							<TimeTextP as="p">{a.price} WETH</TimeTextP>
+							<TimeTextP as="p">
+								{a.price} {process.env.NEXT_PUBLIC_CURRENCY_NAME}
+							</TimeTextP>
 							<USDTextP as="p">~${a.usd}</USDTextP>
 						</td>
 						<LinkText className="text-center">
@@ -249,7 +251,11 @@ const Activities = ({ activities }) => (
 								</a>
 							</LinkTextP>
 						</td>
-						<TimeText>{a.price === -1 ? `-` : `${a.price} WETH`}</TimeText>
+						<TimeText>
+							{a.price === -1
+								? `-`
+								: `${a.price} ${process.env.NEXT_PUBLIC_CURRENCY_NAME}`}
+						</TimeText>
 						<TimeText>{a.time}</TimeText>
 					</tr>
 				))}

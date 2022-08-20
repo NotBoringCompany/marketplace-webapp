@@ -90,8 +90,14 @@ const EggCard = ({ nbMon, showPriceIfOnSale = false, usdToEth, ...props }) => {
 		>
 			{isHatchable && <TopTag background={`#7B61FF`} text="Hatchable" />}
 			<GenesisTag background={isHatchable ? `#7B61FF` : null} />
-			<div className="d-flex w-100 justify-content-between">
-				<Image src={EthLogo} width={12} height={12} alt="ETH Logo" />
+			<div className="d-flex w-100 justify-content-between items-center">
+				<div
+					style={{ width: "16px", height: "16px" }}
+					className="position-relative mt-2"
+				>
+					<Image src="/images/link-logo.png" layout="fill" alt="ETH Logo" />
+				</div>
+
 				<IDContainer className="mt-2">
 					<TextSecondary className="text-gray">#{nbmonId}</TextSecondary>
 				</IDContainer>
@@ -110,14 +116,15 @@ const EggCard = ({ nbMon, showPriceIfOnSale = false, usdToEth, ...props }) => {
 				{nbMon.listingData && nbMon.listingData.price && showPriceIfOnSale && (
 					<div className="mx-auto d-flex mt-4 align-items-center">
 						<Image
-							alt="Eth Logo"
-							src="/images/Ethereum.svg"
-							width={28}
-							height={28}
+							alt="LINK Logo"
+							src="/images/link-logo.png"
+							width={24}
+							height={24}
 						/>
 						<div className="ms-2 d-flex flex-column">
 							<ETHPriceText className="text-start mb-1">
-								{nbMon.listingData.price} WETH
+								{nbMon.listingData.price}{" "}
+								{process.env.NEXT_PUBLIC_CURRENCY_NAME}
 							</ETHPriceText>
 							<USDPriceText className="text-center">
 								~ ${exchangeRateCalculator(usdToEth, nbMon.listingData.price)}
