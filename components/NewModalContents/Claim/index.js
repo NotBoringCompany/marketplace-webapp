@@ -290,6 +290,13 @@ const MainContent = ({
 			</StyledInputGroup>
 			<AvailableText className="mt-1">Claiming fee: {claimFee}%</AvailableText>
 
+			<AvailableText className="mt-3 text-success">
+				You are paying <u>{claimFee}% claiming fee</u>, which equates to{" "}
+				<u>
+					{calculatedValue} {tokenName.slice(1)}.
+				</u>
+			</AvailableText>
+
 			{outsideLimit && (
 				<WarningContainer className="my-3">
 					<p className="m-0 small text-black">
