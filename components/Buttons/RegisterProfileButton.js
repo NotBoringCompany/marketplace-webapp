@@ -65,7 +65,6 @@ const RegisterProfileButton = ({
 				setLoading(false);
 			},
 		});
-		console.log(addingMinter, " added minter");
 	};
 	return (
 		<MyButton

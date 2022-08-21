@@ -29,9 +29,6 @@ const ClaimTokens = ({ tokenName, availableAmount }) => {
 
 			let playfabId = await getPlayfabId.json();
 
-			console.log(playfabId);
-			console.log(typeof playfabId);
-
 			let claim = await fetch(
 				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/currencies/claim${tokenName}`,
 				{

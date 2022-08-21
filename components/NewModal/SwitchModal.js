@@ -156,8 +156,6 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					<Deposit switchId="deposit" stateUtils={stateUtils} />
 					<IncreaseAllowanceLoading switchId="increaseAllowanceLoading" />
 					<IncreaseAllowanceSuccess switchId="increaseAllowanceSuccess" />
-
-					<div switchId="none"></div>
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>

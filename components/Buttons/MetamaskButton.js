@@ -34,7 +34,7 @@ const MetamaskButton = ({
 		}
 
 		if (web3EnableError) {
-			console.log("Errorxxx:", web3EnableError);
+			console.log("Error [Web3]:", web3EnableError);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasAuthError, web3EnableError]);
@@ -50,16 +50,6 @@ const MetamaskButton = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [chainId, triedAuth]);
-
-	useEffect(() => {
-		console.log("AAAAA");
-		console.log({ isAuthenticated });
-		if (isAuthenticated) {
-			//
-			console.log({ user });
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isAuthenticated]);
 
 	const authCrypto = async () => {
 		if (!chainId && !isWeb3Enabled && typeof window.ethereum === "undefined") {
@@ -80,11 +70,6 @@ const MetamaskButton = ({
 
 		await authenticate({
 			provider: "metamask",
-			onSuccess: () => {
-				setTimeout(() => {
-					console.log({ user }, "AAAA");
-				}, 3000);
-			},
 		});
 	};
 	return (
