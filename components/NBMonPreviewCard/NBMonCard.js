@@ -247,13 +247,17 @@ const NBMonCard = ({
 					</div>
 
 					{nbMon.listingData && nbMon.listingData.price && showPriceIfOnSale && (
-						<div className="mx-auto d-flex mt-4 align-it ems-center">
-							<Image
-								alt="Eth Logo"
-								src="/images/link-logo.png"
-								width={24}
-								height={24}
-							/>
+						<div className="mx-auto d-flex mt-4 align-items-center">
+							<div
+								style={{ width: "24px", height: "24px" }}
+								className="position-relative"
+							>
+								<Image
+									src="/images/link-logo.png"
+									layout="fill"
+									alt="ETH Logo"
+								/>
+							</div>
 							<div className="ms-2 d-flex flex-column">
 								<ETHPriceText className="text-start mb-1">
 									{nbMon.listingData.price}{" "}
