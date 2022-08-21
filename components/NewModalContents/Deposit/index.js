@@ -11,17 +11,12 @@ import {
 	TextNormal,
 	TextPrimary,
 } from "components/Typography/Texts";
-import { HeadingSuperXXS } from "components/Typography/Headings";
 import MyButton from "components/Buttons/Button";
 import ModalButton from "components/Buttons/ModalButton";
 import RealmShardsABI from "abis/RealmShards.json";
+import reload from "utils/reload";
 
-const reload = () =>
-	setTimeout(() => {
-		window.location.reload();
-	}, 5000);
-
-const DepositRES = ({ stateUtils }) => {
+const Deposit = ({ stateUtils }) => {
 	const { getter } = stateUtils;
 
 	const {
@@ -207,7 +202,7 @@ const DepositRES = ({ stateUtils }) => {
 							show: true,
 							content: "txError",
 							detail: {
-								title: "Deposit Gas Fee Error",
+								title: "Gas Fee Transaction Error",
 								text: "We are sorry, an unexpected \n error occured. \n \n Please contact us to let us \n know the details.",
 							},
 						});
@@ -308,7 +303,7 @@ const MainContent = ({
 				You are about to deposit {tokenName} in exchange for x{tokenName}.
 			</ParText>
 
-			<DepositFieldsText className="mt-4">Amount</DepositFieldsText>
+			<DepositFieldsText className="mt-4">Deposit Amount</DepositFieldsText>
 			<AvailableText className="mt-1">
 				Available {tokenName}: {availableAmount}
 			</AvailableText>
@@ -316,7 +311,7 @@ const MainContent = ({
 			<StyledInputGroup className="my-3">
 				<FormControl
 					type="number"
-					readOnly={!playfabId}
+					readOnly={!playfabId || isLoading}
 					value={depositAmount}
 					placeholder={`1`}
 					onChange={(e) => onDepositAmountChanged(e.target.value)}
@@ -330,7 +325,7 @@ const MainContent = ({
 				<FormControl
 					type="number"
 					value={depositAmount}
-					readOnly={!playfabId}
+					readOnly={!playfabId || isLoading}
 					placeholder={`1`}
 					onChange={(e) => onDepositAmountChanged(e.target.value)}
 				/>
@@ -395,7 +390,7 @@ const SuccessMessage = ({ depositAmount, tokenName }) => {
 			</p>
 			<ModalButton
 				onClick={() => {
-					window && window.location.reload();
+					reload();
 				}}
 			>
 				OK
@@ -431,16 +426,6 @@ const Inner = styled.div`
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: flex-end;
-`;
-
-const Title = styled(HeadingSuperXXS)`
-	flex: 0 1 auto;
-	font-family: "Lexend";
-	font-size: 32px;
-	font-style: normal;
-	font-weight: 400;
-	line-height: 24px;
-	color: #e1e3e0;
 `;
 
 const LinkWrap = styled.div`
@@ -490,4 +475,4 @@ const StyledInputGroup = styled(InputGroup)`
 	}
 `;
 
-export default DepositRES;
+export default Deposit;

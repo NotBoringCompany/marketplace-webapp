@@ -97,6 +97,7 @@ export const AppProvider = ({ children }) => {
 		if (chainId && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) {
 			setShowWrongNetworkModal(true);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isAuthenticated, router.pathname, chainId]);
 
 	useEffect(() => {
@@ -104,8 +105,6 @@ export const AppProvider = ({ children }) => {
 			if (chainId && chainId !== process.env.NEXT_PUBLIC_CHAIN_ID) {
 				setShowWrongNetworkModal(true);
 			}
-			console.log("CID", chainId);
-			console.log("chain", chain);
 		}
 	}, [chainId, chain, isWeb3Enabled]);
 

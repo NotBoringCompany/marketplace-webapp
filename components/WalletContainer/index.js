@@ -41,7 +41,6 @@ const WalletContainer = () => {
 		{
 			onSuccess: async (res) => {
 				const data = await res.json();
-				console.log(data);
 				setWebAppData(data);
 				setCooldownUntil(Date.now() + data.claimCooldown.xRESCooldown * 1000);
 			},
