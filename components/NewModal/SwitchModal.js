@@ -24,6 +24,7 @@ import ConfirmBuyNBMon from "components/NewModalContents/BuyNBMon/ConfirmBuyNBMo
 import Deposit from "components/NewModalContents/Deposit";
 import IncreaseAllowanceSuccess from "components/NewModalContents/Deposit/IncreaseAllowanceSuccess";
 import IncreaseAllowanceLoading from "components/NewModalContents/Deposit/IncreaseAllowanceLoading";
+import Claim from "components/NewModalContents/Claim";
 
 const StyledModal = styled(Modal)`
 	& .modal-dialog {
@@ -95,12 +96,17 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 			centered
 			show={show}
 			bigger={
-				newPasswordModals.includes(content) || content === "deposit" ? 1 : 0
+				newPasswordModals.includes(content) ||
+				content === "deposit" ||
+				content === "claim"
+					? 1
+					: 0
 			}
 			nominheight={
 				newPasswordModals.includes(content) ||
 				content === "cancelListNBmon" ||
-				content === "deposit"
+				content === "deposit" ||
+				content === "claim"
 					? 1
 					: 0
 			}
@@ -116,7 +122,8 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					content === "cancelListNBmon" ||
 					content === "buyNBmon" ||
 					content === "confirmBuyNBmon" ||
-					content === "deposit"
+					content === "deposit" ||
+					content === "claim"
 						? 1
 						: 0
 				}
@@ -156,6 +163,8 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 					<Deposit switchId="deposit" stateUtils={stateUtils} />
 					<IncreaseAllowanceLoading switchId="increaseAllowanceLoading" />
 					<IncreaseAllowanceSuccess switchId="increaseAllowanceSuccess" />
+
+					<Claim switchId="claim" stateUtils={stateUtils} />
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>

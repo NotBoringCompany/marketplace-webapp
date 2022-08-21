@@ -6,19 +6,15 @@ import { TextSecondary } from "components/Typography/Texts";
 import MyButton from "components/Buttons/Button";
 
 const RealmTokens = ({
-	loading = false,
 	recOwned = 0,
 	resOwned = 0,
 	xrecOwned = 0,
 	xresOwned = 0,
+	claimingInfo,
+	claimCooldown,
 	...props
 }) => {
 	const {
-		setTokenContainer,
-		showClaimContainer,
-		setShowClaimContainer,
-		showDepositContainer,
-		setShowDepositContainer,
 		// tokenName,
 		setTokenName,
 		statesSwitchModal,
@@ -41,9 +37,7 @@ const RealmTokens = ({
 							height={40}
 							alt="Image"
 						/>
-						<TextActive className="mt-1">
-							{loading ? `...` : `${resOwned} RES`}
-						</TextActive>
+						<TextActive className="mt-1">{resOwned} RES</TextActive>
 
 						<MyButton
 							onClick={() => {
@@ -73,15 +67,22 @@ const RealmTokens = ({
 							height={40}
 							alt="Image"
 						/>
-						<TextActive className="mt-1">
-							{loading ? `...` : `${xresOwned} xRES`}
-						</TextActive>
+						<TextActive className="mt-1">{`${xresOwned} xRES`}</TextActive>
 						<MyButton
 							onClick={() => {
-								setTokenContainer("Claim");
-								setShowClaimContainer(!showClaimContainer);
-								setShowDepositContainer(false);
-								setTokenName("xRES");
+								statesSwitchModal.setter({
+									content: "claim",
+									availableAmount: xresOwned,
+									tokenName: "xRES",
+									resAllowance,
+									show: true,
+									statesSwitchModal,
+									minimumTokenClaim: claimingInfo.minimumxRESClaim,
+									maximumTokenClaim: claimingInfo.maximumxRESClaim,
+									claimCooldown: claimCooldown.xRESCooldown,
+									claimFee: claimingInfo.claimFee,
+									playfabId,
+								});
 							}}
 							text="Claim"
 							pill

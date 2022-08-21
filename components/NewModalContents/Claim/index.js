@@ -21,7 +21,7 @@ const reload = () =>
 		window.location.reload();
 	}, 5000);
 
-const DepositRES = ({ stateUtils }) => {
+const Claim = ({ stateUtils }) => {
 	const { getter } = stateUtils;
 
 	const {
@@ -30,21 +30,24 @@ const DepositRES = ({ stateUtils }) => {
 		resAllowance,
 		statesSwitchModal,
 		playfabId,
+		minimumTokenClaim,
+		maximumTokenClaim,
+		claimFee,
+		claimCooldown,
 	} = getter;
 
 	const resAllowanceInt = parseFloat(resAllowance);
 
-	console.log({ resAllowanceInt: parseFloat(resAllowance) });
+	const claimLimits = { minimumTokenClaim, maximumTokenClaim };
 
-	const [depositAmount, setDepositAmount] = useState(1);
+	const claimData = { claimCooldown, claimFee, claimLimits };
+	const [claimAmount, setClaimAmount] = useState(minimumTokenClaim);
 	const { user, Moralis } = useMoralis();
 	const [success, setSuccess] = useState(false);
 
 	const [gasFeeTrxLoading, setGasFeeTrxLoading] = useState(false);
 
-	const resAllowanceAmountTooLow = resAllowanceInt < depositAmount;
-	const availableAmountTooLow = availableAmount < depositAmount;
-	const depositAmountTooLow = depositAmount <= 0;
+	const calculatedValue = claimAmount - (claimFee / 100) * claimAmount;
 
 	const trfDepositGasFee = useWeb3Transfer({
 		amount: Moralis.Units.ETH(process.env.NEXT_PUBLIC_RES_GAS_FEE),
@@ -60,8 +63,8 @@ const DepositRES = ({ stateUtils }) => {
 		params: {
 			spender: process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS,
 			addedValue:
-				depositAmount > 0
-					? Web3.utils.toWei(depositAmount.toString(), "ether")
+				claimAmount > 0
+					? Web3.utils.toWei(claimAmount.toString(), "ether")
 					: Web3.utils.toWei("100", "ether"), //safeguard -> just in-case
 		},
 	});
@@ -73,63 +76,10 @@ const DepositRES = ({ stateUtils }) => {
 		});
 	};
 
-	const handleIncreaseAllowance = async () => {
-		try {
-			statesSwitchModal.setter({
-				show: true,
-				content: "metamaskConfirmation",
-			});
-
-			const increasedAllowance = await increaseAllowance.runContractFunction({
-				throwOnError: true,
-			});
-
-			statesSwitchModal.setter({
-				show: true,
-				content: "increaseAllowanceLoading",
-			});
-
-			await increasedAllowance.wait();
-
-			statesSwitchModal.setter({
-				show: true,
-				content: "increaseAllowanceSuccess",
-			});
-
-			reload();
-		} catch (e) {
-			statesSwitchModal.setter({
-				content: "txError",
-				show: false,
-			});
-			if (e.code === "INSUFFICIENT_FUNDS") {
-				statesSwitchModal.setter({
-					show: true,
-					content: "txError",
-					detail: {
-						title: "Transaction Error",
-						text: `You have insufficient funds to \n make this transaction`,
-					},
-				});
-				// code 4001 is user cancellation
-			} else if (!e.code || (e.code && e.code !== 4001)) {
-				console.log({ e });
-				statesSwitchModal.setter({
-					show: true,
-					content: "txError",
-					detail: {
-						title: "Increase Allowance Error",
-						text: "We are sorry, an unexpected \n error occured. \n \n Please contact us to let us \n know the details.",
-					},
-				});
-			}
-		}
-	};
-
-	const depositMutation = useMutation(
+	const claimMutation = useMutation(
 		(data) =>
 			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/currencies/deposit${tokenName}`,
+				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/currencies/claim${tokenName}`,
 				{
 					method: "POST",
 					headers: {
@@ -164,132 +114,124 @@ const DepositRES = ({ stateUtils }) => {
 		}
 	);
 
-	const depositDisabled =
-		resAllowanceAmountTooLow ||
-		availableAmountTooLow ||
-		depositAmountTooLow ||
-		depositMutation.isLoading ||
-		gasFeeTrxLoading ||
+	const claimDisabled =
+		claimAmount > availableAmount ||
+		claimAmount < minimumTokenClaim ||
+		claimAmount > maximumTokenClaim ||
+		claimMutation.isLoading ||
+		claimCooldown > 0 ||
 		!playfabId;
 
-	const handleDeposit = async () => {
-		if (!depositDisabled) {
-			setGasFeeTrxLoading(true);
-			await trfDepositGasFee.fetch({
-				onSuccess: async (tx) => {
-					const txRes = await tx.wait();
-					depositMutation.mutate({
-						amount: depositAmount,
-						playfabId,
-						purchaserAddress: user.attributes.ethAddress,
-						txHash: txRes.transactionHash,
-					});
-					setGasFeeTrxLoading(false);
-				},
-				onError: (e) => {
-					statesSwitchModal.setter({
-						content: "txError",
-						show: false,
-					});
-					if (e.code === "INSUFFICIENT_FUNDS") {
-						statesSwitchModal.setter({
-							show: true,
-							content: "txError",
-							detail: {
-								title: "Transaction Error",
-								text: `You have insufficient funds to \n make this transaction`,
-							},
-						});
-						// code 4001 is user cancellation
-					} else if (!e.code || (e.code && e.code !== 4001)) {
-						console.log({ e });
-						statesSwitchModal.setter({
-							show: true,
-							content: "txError",
-							detail: {
-								title: "Deposit Gas Fee Error",
-								text: "We are sorry, an unexpected \n error occured. \n \n Please contact us to let us \n know the details.",
-							},
-						});
-					}
-					setGasFeeTrxLoading(false);
-				},
+	const handleClaim = async () => {
+		if (!claimDisabled) {
+			// setGasFeeTrxLoading(true);
+
+			claimMutation.mutate({
+				amount: claimAmount,
+				playfabId,
+				purchaserAddress: user.attributes.ethAddress,
+				txHash: "lalallaa",
 			});
+
+			// await trfDepositGasFee.fetch({
+			// 	onSuccess: async (tx) => {
+			// 		const txRes = await tx.wait();
+			// 		claimMutation.mutate({
+			// 			amount: claimAmount,
+			// 			playfabId,
+			// 			purchaserAddress: user.attributes.ethAddress,
+			// 			txHash: "lalallaa",
+			// 		});
+			// 		setGasFeeTrxLoading(false);
+			// 	},
+			// 	onError: (e) => {
+			// 		statesSwitchModal.setter({
+			// 			content: "txError",
+			// 			show: false,
+			// 		});
+			// 		if (e.code === "INSUFFICIENT_FUNDS") {
+			// 			statesSwitchModal.setter({
+			// 				show: true,
+			// 				content: "txError",
+			// 				detail: {
+			// 					title: "Transaction Error",
+			// 					text: `You have insufficient funds to \n make this transaction`,
+			// 				},
+			// 			});
+			// 			// code 4001 is user cancellation
+			// 		} else if (!e.code || (e.code && e.code !== 4001)) {
+			// 			console.log({ e });
+			// 			statesSwitchModal.setter({
+			// 				show: true,
+			// 				content: "txError",
+			// 				detail: {
+			// 					title: "Deposit Gas Fee Error",
+			// 					text: "We are sorry, an unexpected \n error occured. \n \n Please contact us to let us \n know the details.",
+			// 				},
+			// 			});
+			// 		}
+			// 		setGasFeeTrxLoading(false);
+			// 	},
+			// });
 		}
 	};
 
 	return (
 		<OuterContainer>
-			<TitleWithLink title={"Deposit RES"} className="mb-2" />
+			<TitleWithLink title={`Claim xRES`} className="mb-2" />
 
 			{!success ? (
 				<MainContent
-					resAllowanceAmountTooLow={resAllowanceAmountTooLow}
-					availableAmountTooLow={availableAmountTooLow}
 					tokenName={tokenName}
 					availableAmount={availableAmount}
-					depositAmount={depositAmount}
-					onDepositAmountChanged={setDepositAmount}
-					handleDeposit={handleDeposit}
+					claimAmount={claimAmount}
+					onclaimAmountChanged={setClaimAmount}
+					handleClaim={handleClaim}
 					playfabId={playfabId}
-					handleIncreaseAllowance={handleIncreaseAllowance}
-					depositMutationLoading={depositMutation.isLoading}
+					claimMutationLoading={claimMutation.isLoading}
 					trfDepositGasFeeLoading={gasFeeTrxLoading}
-					depositDisabled={depositDisabled}
+					claimDisabled={claimDisabled}
 					handleCloseModal={handleCloseModal}
+					claimData={claimData}
+					calculatedValue={calculatedValue}
 				/>
 			) : (
-				<SuccessMessage depositAmount={depositAmount} tokenName={tokenName} />
+				<SuccessMessage
+					claimAmount={claimAmount}
+					calculatedValue={calculatedValue}
+					tokenName={tokenName}
+				/>
 			)}
 		</OuterContainer>
 	);
 };
 
 const MainContent = ({
-	resAllowanceAmountTooLow,
-	availableAmountTooLow,
 	tokenName,
 	availableAmount,
-	depositAmount,
-	onDepositAmountChanged,
-	handleDeposit,
+	claimAmount,
+	onclaimAmountChanged,
+	handleClaim,
 	playfabId,
-	handleIncreaseAllowance,
 	trfDepositGasFeeLoading = false,
-	depositMutationLoading = false,
-	depositDisabled = false,
+	claimMutationLoading = false,
+	claimDisabled = false,
 	handleCloseModal,
+	claimData,
+	calculatedValue = 0,
 }) => {
-	const isLoading = trfDepositGasFeeLoading || depositMutationLoading;
+	const isLoading = trfDepositGasFeeLoading || claimMutationLoading;
+	const { claimLimits, claimFee, claimCooldown } = claimData;
+	const { minimumTokenClaim, maximumTokenClaim } = claimLimits;
+
+	const outsideLimit =
+		claimAmount < minimumTokenClaim || claimAmount > maximumTokenClaim;
+
 	let buttonText = isLoading
-		? `${
-				trfDepositGasFeeLoading
-					? `Transferring gas fee...`
-					: `Processing deposit...`
-		  }`
-		: `Deposit`;
+		? `${trfDepositGasFeeLoading ? `Transferring gas fee...` : `Claiming...`}`
+		: `Claim`;
 	return (
 		<>
-			{resAllowanceAmountTooLow && (
-				<div className="d-flex flex-column">
-					<WarningContainer className="my-3">
-						<p className="m-0 small text-black">
-							WARNING: Your allowance to our wallet is too low for your deposit
-							amount. Please increase your allowance before continuing.
-						</p>
-					</WarningContainer>
-
-					<MyButton
-						onClick={handleIncreaseAllowance}
-						thinText
-						className="mt-0 mb-3 w-100 py-2"
-						text="Increase Allowance"
-						pill
-					/>
-					<hr />
-				</div>
-			)}
-
 			{!playfabId && (
 				<div className="d-flex flex-column">
 					<WarningContainer className="my-3">
@@ -303,63 +245,72 @@ const MainContent = ({
 					</WarningContainer>
 				</div>
 			)}
-
 			<ParText className="mt-1">
-				You are about to deposit {tokenName} in exchange for x{tokenName}.
+				You are about to claim {tokenName} in exchange for {tokenName.slice(1)}.
 			</ParText>
-
 			<DepositFieldsText className="mt-4">Amount</DepositFieldsText>
 			<AvailableText className="mt-1">
 				Available {tokenName}: {availableAmount}
 			</AvailableText>
-
+			<AvailableText className="mt-1">
+				Minimum {tokenName} claim: {claimLimits.minimumTokenClaim}
+			</AvailableText>
+			<AvailableText className="mt-1">
+				Maximum {tokenName} claim: {claimLimits.maximumTokenClaim}
+			</AvailableText>
+			<AvailableText className="mt-1">Claim fee: {claimFee}%</AvailableText>
 			<StyledInputGroup className="my-3">
 				<FormControl
 					type="number"
 					readOnly={!playfabId}
-					value={depositAmount}
-					placeholder={`1`}
-					onChange={(e) => onDepositAmountChanged(e.target.value)}
+					value={claimAmount}
+					placeholder={claimLimits.minimumTokenClaim}
+					onChange={(e) => onclaimAmountChanged(e.target.value)}
 				/>
 				<InputGroup.Text id="basic-addon2">{tokenName}</InputGroup.Text>
 			</StyledInputGroup>
-
 			<p className="my-2 small text-center">in exchange for</p>
-
 			<StyledInputGroup className="my-3">
 				<FormControl
 					type="number"
-					value={depositAmount}
-					readOnly={!playfabId}
-					placeholder={`1`}
-					onChange={(e) => onDepositAmountChanged(e.target.value)}
+					value={calculatedValue}
+					readOnly
+					placeholder={claimLimits.minimumTokenClaim}
 				/>
-				<InputGroup.Text id="basic-addon2">x{tokenName}</InputGroup.Text>
+				<InputGroup.Text id="basic-addon2">
+					{tokenName.slice(1)}
+				</InputGroup.Text>
 			</StyledInputGroup>
-			{availableAmountTooLow && (
+			{claimCooldown > 0 && (
 				<WarningContainer className="my-3">
 					<p className="m-0 small text-black">
-						Oops, you don{`'`}t have enough amount of {tokenName} to be
-						exchanged for x{tokenName}.
+						You can{"'"}t claim now. Try again in {claimCooldown}
+					</p>
+				</WarningContainer>
+			)}
+			{outsideLimit && (
+				<WarningContainer className="my-3">
+					<p className="m-0 small text-black">
+						Your claim value is not within the specified limits. Make sure you
+						are claiming between {minimumTokenClaim} and {maximumTokenClaim}{" "}
+						{tokenName}.
 					</p>
 				</WarningContainer>
 			)}
 
 			<div className="d-flex flex-column">
 				<MyButton
-					onClick={handleDeposit}
+					onClick={handleClaim}
 					thinText
-					disabled={depositDisabled}
+					disabled={claimDisabled}
 					className="mt-4 w-100 py-2"
 					text={buttonText}
 					pill
 				/>
 
-				{!isLoading && (
-					<ModalButton className="mx-auto mt-3" onClick={handleCloseModal}>
-						Cancel
-					</ModalButton>
-				)}
+				<ModalButton className="mx-auto mt-3" onClick={handleCloseModal}>
+					Cancel
+				</ModalButton>
 			</div>
 		</>
 	);
@@ -382,13 +333,13 @@ const TitleWithLink = ({ title, textLink, href = "#", className = "" }) => {
 	);
 };
 
-const SuccessMessage = ({ depositAmount, tokenName }) => {
+const SuccessMessage = ({ claimAmount, calculatedValue, tokenName }) => {
 	return (
 		<div className="d-flex flex-column">
 			<p className="mt-4 fw-light small">
-				<b>Congratulations!</b> You have successfully deposited{" "}
+				<b>Congratulations!</b> You have successfully claimed{" "}
 				<span className="text-secondary">
-					{depositAmount} {tokenName} for {depositAmount} x{tokenName}{" "}
+					{claimAmount} {tokenName} for {calculatedValue} {tokenName.slice(1)}{" "}
 				</span>
 				.<br />
 				<br /> This page will automatically reload in a moment...
@@ -490,4 +441,4 @@ const StyledInputGroup = styled(InputGroup)`
 	}
 `;
 
-export default DepositRES;
+export default Claim;
