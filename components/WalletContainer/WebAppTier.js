@@ -10,7 +10,7 @@ import WebAppTierRequirements from "utils/blockchain-services/WebAppTiers/WebApp
 import InputGroup from "react-bootstrap/InputGroup";
 import NextWebAppTierRequirements from "utils/blockchain-services/WebAppTiers/NextWebAppTierRequirements";
 
-const WebAppTier = ({ loading = false, tier }) => {
+const WebAppTier = ({ tier }) => {
 	return (
 		<div className="px-3 mt-5">
 			<TitleWithLinkAlt title="Web App Tier" />
@@ -19,11 +19,7 @@ const WebAppTier = ({ loading = false, tier }) => {
 					Your current web app tier is:
 				</ParTextLarger>
 
-				{loading ? (
-					`...`
-				) : (
-					<DepositFieldsText className="mt-3">{tier}</DepositFieldsText>
-				)}
+				<DepositFieldsText className="mt-3">{tier}</DepositFieldsText>
 				<ParTextLarger className="mt-5">Current requirements:</ParTextLarger>
 				<WebAppTierRequirements tier={tier} />
 				<ParTextLarger className="mt-5">

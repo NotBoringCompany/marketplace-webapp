@@ -4,40 +4,33 @@ import { useMoralis } from "react-moralis";
 import AppContext from "context/AppContext";
 import styled from "styled-components";
 import RealmTokens from "./RealmTokens";
-import ClaimTokens from "./ClaimTokens";
 import WebAppTier from "./WebAppTier";
 import Loading from "components/Loading";
 
 const WalletContainer = () => {
 	const { user, isInitializing, isLoading: moralisLoading } = useMoralis();
-	const [webAppTier, setWebAppTier] = useState("");
-	const [tokenContainer, setTokenContainer] = useState("");
-	const [tokenName, setTokenName] = useState("");
-	const [resAllowance, setResAllowance] = useState(0);
 	const [playfabId, setPlayfabId] = useState(null);
+	const [coolDownUntil, setCooldownUntil] = useState(0);
 
-	const [webAppData, setWebAppData] = useState({});
+	const [webAppData, setWebAppData] = useState({
+		resAllowance: null,
+		ownedRes: null,
+		ownedxRES: null,
+		claimingInfo: null,
+		claimCooldown: null,
+		webAppTier: null,
+	});
 
-	const { ownedRES, ownedxRES, claimingInfo, claimCooldown } = webAppData;
+	const {
+		ownedRES,
+		ownedxRES,
+		claimingInfo,
+		claimCooldown,
+		resAllowance,
+		webAppTier,
+	} = webAppData;
 
 	const { statesSwitchModal } = useContext(AppContext);
-
-	const getRESAllowance = useQuery(
-		"resAllowance",
-		() =>
-			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/currencies/getRESAllowance/${user.attributes.ethAddress}`
-			),
-		{
-			onSuccess: async (res) => {
-				const allowance = await res.json();
-				setResAllowance(allowance);
-			},
-			enabled: user && !isInitializing && !moralisLoading,
-			retry: 0,
-			refetchOnWindowFocus: false,
-		}
-	);
 
 	const getWalletData = useQuery(
 		"walletData",
@@ -50,23 +43,7 @@ const WalletContainer = () => {
 				const data = await res.json();
 				console.log(data);
 				setWebAppData(data);
-			},
-			enabled: user && !isInitializing && !moralisLoading,
-			retry: 0,
-			refetchOnWindowFocus: false,
-		}
-	);
-
-	const getWebAppTier = useQuery(
-		"webAppTier",
-		() =>
-			fetch(
-				`${process.env.NEXT_PUBLIC_NEW_REST_API_URL}/tierSystem/getWebAppTier/${user.attributes.ethAddress}`
-			),
-		{
-			onSuccess: async (res) => {
-				const tier = await res.json();
-				setWebAppTier(tier);
+				setCooldownUntil(Date.now() + data.claimCooldown.xRESCooldown * 1000);
 			},
 			enabled: user && !isInitializing && !moralisLoading,
 			retry: 0,
@@ -98,13 +75,12 @@ const WalletContainer = () => {
 			refetchOnWindowFocus: false,
 		}
 	);
-
 	return (
 		<Wrapper>
-			{getWalletData.isFetching && <Loading />}
-			{!getWalletData.isLoading && (
+			{(getWalletData.isLoading || getPlayfabId.isLoading) && <Loading />}
+			{!getWalletData.isLoading && !getPlayfabId.isLoading && (
 				<>
-					<WebAppTier loading={getWebAppTier.isLoading} tier={webAppTier} />
+					<WebAppTier tier={webAppTier} />
 					<RealmTokens
 						resOwned={ownedRES}
 						xresOwned={ownedxRES}
@@ -113,9 +89,8 @@ const WalletContainer = () => {
 						playfabId={playfabId}
 						claimingInfo={claimingInfo}
 						claimCooldown={claimCooldown}
+						coolDownUntil={coolDownUntil}
 					/>
-
-					<ClaimTokens tokenName={"xRES"} availableAmount={ownedxRES} />
 				</>
 			)}
 		</Wrapper>

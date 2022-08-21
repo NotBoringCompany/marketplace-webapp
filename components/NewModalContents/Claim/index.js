@@ -15,6 +15,7 @@ import { HeadingSuperXXS } from "components/Typography/Headings";
 import MyButton from "components/Buttons/Button";
 import ModalButton from "components/Buttons/ModalButton";
 import RealmShardsABI from "abis/RealmShards.json";
+import Countdown from "react-countdown";
 
 const reload = () =>
 	setTimeout(() => {
@@ -27,20 +28,18 @@ const Claim = ({ stateUtils }) => {
 	const {
 		availableAmount,
 		tokenName,
-		resAllowance,
 		statesSwitchModal,
 		playfabId,
 		minimumTokenClaim,
 		maximumTokenClaim,
 		claimFee,
 		claimCooldown,
+		coolDownUntil,
 	} = getter;
-
-	const resAllowanceInt = parseFloat(resAllowance);
 
 	const claimLimits = { minimumTokenClaim, maximumTokenClaim };
 
-	const claimData = { claimCooldown, claimFee, claimLimits };
+	const claimData = { claimCooldown, claimFee, claimLimits, coolDownUntil };
 	const [claimAmount, setClaimAmount] = useState(minimumTokenClaim);
 	const { user, Moralis } = useMoralis();
 	const [success, setSuccess] = useState(false);
@@ -53,20 +52,6 @@ const Claim = ({ stateUtils }) => {
 		amount: Moralis.Units.ETH(process.env.NEXT_PUBLIC_RES_GAS_FEE),
 		receiver: process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS,
 		type: "native",
-	});
-
-	const increaseAllowance = useWeb3Contract({
-		contractAddress: process.env.NEXT_PUBLIC_REALM_SHARDS_CONTRACT,
-		functionName: "increaseAllowance",
-		abi: RealmShardsABI,
-
-		params: {
-			spender: process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS,
-			addedValue:
-				claimAmount > 0
-					? Web3.utils.toWei(claimAmount.toString(), "ether")
-					: Web3.utils.toWei("100", "ether"), //safeguard -> just in-case
-		},
 	});
 
 	const handleCloseModal = () => {
@@ -179,7 +164,6 @@ const Claim = ({ stateUtils }) => {
 	return (
 		<OuterContainer>
 			<TitleWithLink title={`Claim xRES`} className="mb-2" />
-
 			{!success ? (
 				<MainContent
 					tokenName={tokenName}
@@ -206,6 +190,26 @@ const Claim = ({ stateUtils }) => {
 	);
 };
 
+const renderer = ({ days, hours, minutes, seconds, completed }) => {
+	if (completed) {
+		window.location.reload();
+
+		return <></>;
+	} else {
+		// Render a countdown
+		return (
+			<b>
+				{days >= 1 ? `${days} day(s) and  ` : ``}
+				{hours > 9 ? hours : `0${hours}`}
+				{":"}
+				{minutes > 9 ? minutes : `0${minutes}`}
+				{":"}
+				{seconds > 9 ? seconds : `0${seconds}`}
+			</b>
+		);
+	}
+};
+
 const MainContent = ({
 	tokenName,
 	availableAmount,
@@ -221,7 +225,7 @@ const MainContent = ({
 	calculatedValue = 0,
 }) => {
 	const isLoading = trfDepositGasFeeLoading || claimMutationLoading;
-	const { claimLimits, claimFee, claimCooldown } = claimData;
+	const { claimLimits, claimFee, claimCooldown, coolDownUntil } = claimData;
 	const { minimumTokenClaim, maximumTokenClaim } = claimLimits;
 
 	const outsideLimit =
@@ -245,20 +249,35 @@ const MainContent = ({
 					</WarningContainer>
 				</div>
 			)}
+
+			<WarningContainer className="my-3 bg-secondary">
+				<p className="m-0 small text-black">Claiming Limits</p>
+				<AvailableText className="mt-2 text-black">
+					<b>Minimum</b> {tokenName} claim: {claimLimits.minimumTokenClaim}
+				</AvailableText>
+				<AvailableText className="mt-1 text-black">
+					<b>Maximum</b> {tokenName} claim: {claimLimits.maximumTokenClaim}
+				</AvailableText>
+			</WarningContainer>
+
+			{claimCooldown > 0 && (
+				<WarningContainer className="my-3">
+					<p className="m-0 small text-black">
+						You can{"'"}t claim now. You will be able to claim more {tokenName}{" "}
+						in <Countdown date={coolDownUntil} renderer={renderer} />
+					</p>
+				</WarningContainer>
+			)}
+
 			<ParText className="mt-1">
 				You are about to claim {tokenName} in exchange for {tokenName.slice(1)}.
 			</ParText>
-			<DepositFieldsText className="mt-4">Amount</DepositFieldsText>
+			<DepositFieldsText className="mt-4">Claiming Amount</DepositFieldsText>
+
 			<AvailableText className="mt-1">
 				Available {tokenName}: {availableAmount}
 			</AvailableText>
-			<AvailableText className="mt-1">
-				Minimum {tokenName} claim: {claimLimits.minimumTokenClaim}
-			</AvailableText>
-			<AvailableText className="mt-1">
-				Maximum {tokenName} claim: {claimLimits.maximumTokenClaim}
-			</AvailableText>
-			<AvailableText className="mt-1">Claim fee: {claimFee}%</AvailableText>
+
 			<StyledInputGroup className="my-3">
 				<FormControl
 					type="number"
@@ -270,7 +289,7 @@ const MainContent = ({
 				<InputGroup.Text id="basic-addon2">{tokenName}</InputGroup.Text>
 			</StyledInputGroup>
 			<p className="my-2 small text-center">in exchange for</p>
-			<StyledInputGroup className="my-3">
+			<StyledInputGroup className="mt-3 mb-2">
 				<FormControl
 					type="number"
 					value={calculatedValue}
@@ -281,13 +300,8 @@ const MainContent = ({
 					{tokenName.slice(1)}
 				</InputGroup.Text>
 			</StyledInputGroup>
-			{claimCooldown > 0 && (
-				<WarningContainer className="my-3">
-					<p className="m-0 small text-black">
-						You can{"'"}t claim now. Try again in {claimCooldown}
-					</p>
-				</WarningContainer>
-			)}
+			<AvailableText className="mt-1">Claim fee: {claimFee}%</AvailableText>
+
 			{outsideLimit && (
 				<WarningContainer className="my-3">
 					<p className="m-0 small text-black">
@@ -360,6 +374,7 @@ const WarningContainer = styled.div`
 	background: #ffcc00;
 	border-radius: 10px;
 `;
+
 const OuterContainer = styled.div`
 	padding: 36px 32px;
 `;

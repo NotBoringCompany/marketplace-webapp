@@ -12,6 +12,7 @@ const RealmTokens = ({
 	xresOwned = 0,
 	claimingInfo,
 	claimCooldown,
+	coolDownUntil,
 	...props
 }) => {
 	const {
@@ -74,7 +75,6 @@ const RealmTokens = ({
 									content: "claim",
 									availableAmount: xresOwned,
 									tokenName: "xRES",
-									resAllowance,
 									show: true,
 									statesSwitchModal,
 									minimumTokenClaim: claimingInfo.minimumxRESClaim,
@@ -82,6 +82,7 @@ const RealmTokens = ({
 									claimCooldown: claimCooldown.xRESCooldown,
 									claimFee: claimingInfo.claimFee,
 									playfabId,
+									coolDownUntil,
 								});
 							}}
 							text="Claim"
