@@ -255,6 +255,8 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 					});
 					// code 4001 is user cancellation
 				} else if (!e.code || (e.code && e.code !== 4001)) {
+					console.log({ e });
+					console.log("Error paying hatching fee");
 					statesSwitchModal.setter({
 						show: true,
 						content: "txError",
@@ -309,6 +311,8 @@ const HatchButtonContainer = ({ mine, isHatchable, hatchesAt, nbmonId }) => {
 						});
 						// code 4001 is user cancellation
 					} else if (e.code !== 4001) {
+						console.log({ e });
+						console.log("Error actual hatching egg");
 						setter({
 							show: true,
 							content: "txError",

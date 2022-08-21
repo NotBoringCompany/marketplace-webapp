@@ -35,13 +35,14 @@ const StyledModal = styled(Modal)`
 		border-radius: 30px;
 		width: ${(props) => (props.bigger ? `365px` : `312px`)};
 		min-height: ${(props) => (props.nominheight ? `unset` : `320px;`)};
+		border: 0;
 	}
 `;
 const StyledModalBody = styled(Modal.Body)`
 	padding: ${(props) => (props.nopadding ? `0` : `32px`)};
 	margin: 0;
 	border: ${(props) =>
-		props.withborder ? `3px solid ${props.bordercolor};` : `auto`};
+		props.withborder ? `3px solid ${props.bordercolor};` : `0`};
 	border-radius: 24px;
 	background: ${(props) =>
 		props.cardpreview
