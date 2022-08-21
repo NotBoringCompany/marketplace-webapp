@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { HeadingSuperXXS } from "components/Typography/Headings";
-import { mediaBreakpoint } from "utils/breakpoints";
 import { TextSecondary } from "components/Typography/Texts";
 import GenesisTag from "./GenesisTag";
 import { data } from "configs";

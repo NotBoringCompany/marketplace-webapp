@@ -32,7 +32,9 @@ const DepositRES = ({ stateUtils }) => {
 		playfabId,
 	} = getter;
 
-	const resAllowanceInt = parseInt(resAllowance.hex, 16) * Math.pow(10, -18);
+	const resAllowanceInt = parseFloat(resAllowance);
+
+	console.log({ resAllowanceInt: parseFloat(resAllowance) });
 
 	const [depositAmount, setDepositAmount] = useState(1);
 	const { user, Moralis } = useMoralis();
@@ -63,6 +65,13 @@ const DepositRES = ({ stateUtils }) => {
 					: Web3.utils.toWei("100", "ether"), //safeguard -> just in-case
 		},
 	});
+
+	const handleCloseModal = () => {
+		statesSwitchModal.setter({
+			...getter,
+			show: false,
+		});
+	};
 
 	const handleIncreaseAllowance = async () => {
 		try {
@@ -227,6 +236,7 @@ const DepositRES = ({ stateUtils }) => {
 					depositMutationLoading={depositMutation.isLoading}
 					trfDepositGasFeeLoading={gasFeeTrxLoading}
 					depositDisabled={depositDisabled}
+					handleCloseModal={handleCloseModal}
 				/>
 			) : (
 				<SuccessMessage depositAmount={depositAmount} tokenName={tokenName} />
@@ -248,6 +258,7 @@ const MainContent = ({
 	trfDepositGasFeeLoading = false,
 	depositMutationLoading = false,
 	depositDisabled = false,
+	handleCloseModal,
 }) => {
 	const isLoading = trfDepositGasFeeLoading || depositMutationLoading;
 	let buttonText = isLoading
@@ -334,14 +345,20 @@ const MainContent = ({
 				</WarningContainer>
 			)}
 
-			<MyButton
-				onClick={handleDeposit}
-				thinText
-				disabled={depositDisabled}
-				className="mt-4 w-100 py-2"
-				text={buttonText}
-				pill
-			/>
+			<div className="d-flex flex-column">
+				<MyButton
+					onClick={handleDeposit}
+					thinText
+					disabled={depositDisabled}
+					className="mt-4 w-100 py-2"
+					text={buttonText}
+					pill
+				/>
+
+				<ModalButton className="mx-auto mt-3" onClick={handleCloseModal}>
+					Cancel
+				</ModalButton>
+			</div>
 		</>
 	);
 };

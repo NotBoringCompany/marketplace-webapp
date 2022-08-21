@@ -72,7 +72,7 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 	const { show, content } = getter;
 
 	const close = () => {
-		//cant click outside to close modal
+		//can click outside to close modal
 		if (canClickOutside(content)) setter({ ...getter, show: false });
 
 		return;
@@ -84,7 +84,6 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 			"emailSent",
 			"newPasswordSet",
 			"resetPassword",
-			"deposit",
 		].includes(content);
 	};
 
@@ -155,14 +154,10 @@ const SwitchModal = ({ stateUtils, children, ...props }) => {
 
 					{/*Wallet page modals*/}
 					<Deposit switchId="deposit" stateUtils={stateUtils} />
-					<IncreaseAllowanceLoading
-						switchId="increaseAllowanceLoading"
-						stateUtils={stateUtils}
-					/>
-					<IncreaseAllowanceSuccess
-						switchId="increaseAllowanceSuccess"
-						stateUtils={stateUtils}
-					/>
+					<IncreaseAllowanceLoading switchId="increaseAllowanceLoading" />
+					<IncreaseAllowanceSuccess switchId="increaseAllowanceSuccess" />
+
+					<div switchId="none"></div>
 				</Switch>
 			</StyledModalBody>
 		</StyledModal>
