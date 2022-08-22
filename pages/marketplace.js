@@ -394,7 +394,7 @@ const Marketplace = () => {
 
 				{totalPage < 0 && (
 					<TextPrimary className="mt-4 text-white text-center">
-						No results found 😔
+						No results found 🧐
 					</TextPrimary>
 				)}
 			</StyledContainer>

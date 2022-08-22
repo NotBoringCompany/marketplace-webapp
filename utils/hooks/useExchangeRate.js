@@ -1,10 +1,9 @@
 import { useQuery } from "react-query";
-import { useState, useEffect } from "react";
 
 const useExchangeRate = (isLoading = false) => {
 	const q = useQuery(
 		"exchangeRates",
-		() => fetch(`https://api.coinbase.com/v2/exchange-rates?currency=LINK`),
+		() => fetch(`https://api.coinbase.com/v2/exchange-rates?currency=MATIC`),
 		{
 			enabled: !isLoading,
 			retry: 0,

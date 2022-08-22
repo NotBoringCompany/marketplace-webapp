@@ -28,7 +28,7 @@ const OverviewWallet = ({ addressEth, totalEth1, totalEthUsd1 }) => {
 					</ImageWrap>
 
 					<AddressContent>
-						<AddressTitle className="mb-1">Ethereum Address</AddressTitle>
+						<AddressTitle className="mb-1">Wallet Address</AddressTitle>
 
 						<CopyAddress>
 							<AddressText>{addressEth}</AddressText>
@@ -62,7 +62,7 @@ const OverviewWallet = ({ addressEth, totalEth1, totalEthUsd1 }) => {
 							<TextTotalCrypto className="text-white">
 								{totalEth1}
 							</TextTotalCrypto>
-							<TextUsd>{totalEthUsd1}</TextUsd>
+							<TextUsd>~${totalEthUsd1}</TextUsd>
 						</CryptoDetail>
 					</CryptoItem>
 				</ListCrypto>
