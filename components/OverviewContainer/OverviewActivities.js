@@ -13,7 +13,7 @@ const OverviewActivies = ({ activities }) => {
 	const activityText = (transactionType, price) => {
 		switch (transactionType) {
 			case "genesisMinting":
-				return `You bought and minted an egg for ${price} ETH`;
+				return `You bought and minted an egg for ${price} WCRO`;
 			case "genesisHatching":
 				return `You hatched your egg!`;
 			default:

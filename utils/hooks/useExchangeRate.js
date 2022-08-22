@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 const useExchangeRate = (isLoading = false) => {
 	const q = useQuery(
 		"exchangeRates",
-		() => fetch(`https://api.coinbase.com/v2/exchange-rates?currency=MATIC`),
+		() => fetch(`https://api.coinbase.com/v2/exchange-rates?currency=CRO`),
 		{
 			enabled: !isLoading,
 			retry: 0,

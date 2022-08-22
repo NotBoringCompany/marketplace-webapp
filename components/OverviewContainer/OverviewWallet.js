@@ -20,8 +20,8 @@ const OverviewWallet = ({ addressEth, totalEth1, totalEthUsd1 }) => {
 				<AddressWrap>
 					<ImageWrap>
 						<Image
-							alt="Matic Logo"
-							src="/images/matic-logo.png"
+							alt="Cronos Logo"
+							src="/images/cronos.svg"
 							width={32.04}
 							height={32.04}
 						/>
@@ -51,8 +51,8 @@ const OverviewWallet = ({ addressEth, totalEth1, totalEthUsd1 }) => {
 					<CryptoItem>
 						<CryptoIcon className="me-1">
 							<Image
-								alt="Eth Logo"
-								src="/images/matic-logo.png"
+								alt="Cronos Logo"
+								src="/images/cronos.svg"
 								width={24}
 								height={24}
 							/>

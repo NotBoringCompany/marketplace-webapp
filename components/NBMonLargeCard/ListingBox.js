@@ -208,8 +208,8 @@ const ListingBox = ({
 
 							<div className="d-flex align-items-center mt-3">
 								<Image
-									alt="Matic"
-									src="/images/matic-logo.png"
+									alt="Cronos Logo"
+									src="/images/cronos.svg"
 									width={24}
 									height={24}
 								/>
