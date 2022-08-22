@@ -328,8 +328,8 @@ const Marketplace = () => {
 
 							<FilterInfo className="mx-lg-0 mx-auto align-items-center d-flex mt-lg-0 mt-4">
 								<Image
-									alt="Eth Logo"
-									src="/images/link-logo.png"
+									alt="Matic Logo"
+									src="/images/matic-logo.png"
 									width={21}
 									height={21}
 								/>

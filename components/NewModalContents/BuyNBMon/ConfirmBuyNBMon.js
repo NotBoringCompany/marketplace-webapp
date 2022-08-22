@@ -101,8 +101,8 @@ const ConfirmBuyNBMon = ({ stateUtils }) => {
 						<Image
 							width={19}
 							height={19}
-							alt="LOGO"
-							src="/images/link-logo.png"
+							alt="Matic Logo"
+							src="/images/matic-logo.png"
 						/>
 						<StyledText className="ms-2">
 							{process.env.NEXT_PUBLIC_CURRENCY_NAME}

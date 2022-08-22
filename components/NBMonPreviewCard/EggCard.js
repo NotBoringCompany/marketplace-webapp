@@ -95,7 +95,7 @@ const EggCard = ({ nbMon, showPriceIfOnSale = false, usdToEth, ...props }) => {
 					style={{ width: "16px", height: "16px" }}
 					className="position-relative mt-2"
 				>
-					<Image src="/images/link-logo.png" layout="fill" alt="ETH Logo" />
+					<Image src="/images/matic-logo.png" layout="fill" alt="Matic Logo" />
 				</div>
 
 				<IDContainer className="mt-2">
@@ -116,8 +116,8 @@ const EggCard = ({ nbMon, showPriceIfOnSale = false, usdToEth, ...props }) => {
 				{nbMon.listingData && nbMon.listingData.price && showPriceIfOnSale && (
 					<div className="mx-auto d-flex mt-4 align-items-center">
 						<Image
-							alt="LINK Logo"
-							src="/images/link-logo.png"
+							alt="Matic Logo"
+							src="/images/matic-logo.png"
 							width={24}
 							height={24}
 						/>

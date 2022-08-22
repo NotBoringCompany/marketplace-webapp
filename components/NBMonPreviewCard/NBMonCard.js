@@ -174,7 +174,7 @@ const NBMonCard = ({
 						style={{ width: "16px", height: "16px" }}
 						className="position-relative mt-2"
 					>
-						<Image src="/images/link-logo.png" layout="fill" alt="ETH Logo" />
+						<Image src="/images/matic-logo.png" layout="fill" alt="ETH Logo" />
 					</div>
 
 					<IDContainer className="mt-2">
@@ -252,9 +252,9 @@ const NBMonCard = ({
 								className="position-relative"
 							>
 								<Image
-									src="/images/link-logo.png"
+									src="/images/matic-logo.png"
 									layout="fill"
-									alt="ETH Logo"
+									alt="Matic Logo"
 								/>
 							</div>
 							<div className="ms-2 d-flex flex-column">
